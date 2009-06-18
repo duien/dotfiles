@@ -65,7 +65,7 @@ hi taskTodo guibg=#DA4939 ctermfg=167 guifg=#111111 gui=bold cterm=bold,reverse
 hi taskLater guibg=#FFC66D ctermfg=221 guifg=#111111 gui=bold cterm=bold,reverse
 hi taskWaiting guibg=grey40 ctermfg=240 guifg=#111111 gui=bold cterm=bold,reverse
 hi taskCancel guifg=grey40 ctermfg=240 gui=bold cterm=bold
-hi taskDone guifg=grey40 ctermfg=240 gui=bold cterm=bold
+hi taskDone guifg=#DA4939 ctermfg=167 gui=bold cterm=bold
 hi taskQuestion guibg=#6D9CBE ctermfg=73 guifg=#111111 gui=bold cterm=bold,reverse
 hi taskAnswer guifg=#6D9CBE ctermfg=73 gui=bold cterm=bold
 hi taskReport guibg=#A5C261 ctermfg=107 guifg=#111111 gui=bold cterm=bold,reverse
