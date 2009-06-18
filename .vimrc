@@ -20,6 +20,8 @@ autocmd BufRead *.rake set filetype=ruby
 autocmd BufRead Rakefile set filetype=ruby
 autocmd BufRead *.erb set filetype=eruby
 autocmd BufRead Capfile set filetype=ruby
+" also recognize todo files
+autocmd BufRead *.todo set filetype=tasks
 
 " toggle display of scratch
 function! ToggleScratch()

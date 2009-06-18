@@ -79,9 +79,9 @@ highlight rubyBlockParameter        guifg=#FFFFFF ctermfg=15
 highlight rubyClass                 guifg=#FFFFFF ctermfg=15
 highlight rubyConstant              guifg=#DA4939 ctermfg=167
 highlight rubyInstanceVariable      guifg=#D0D0FF ctermfg=189
-highlight rubyInterpolation         guifg=#519F50 ctermfg=107
-highlight rubyInterpolationDelimiter guifg=#519F50 ctermfg=107
-highlight rubyStringEscape          guifg=#519F50 ctermfg=107
+highlight rubyInterpolation         guifg=#519F50 ctermfg=29
+highlight rubyInterpolationDelimiter guifg=#519F50 ctermfg=29
+highlight rubyStringEscape          guifg=#519F50 ctermfg=29
 highlight rubyLocalVariableOrMethod guifg=#D0D0FF ctermfg=189
 highlight rubyPredefinedConstant    guifg=#DA4939 ctermfg=167
 highlight rubyPseudoVariable        guifg=#FFC66D ctermfg=221
