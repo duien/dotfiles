@@ -6,7 +6,7 @@
 	status = auto
 	branch = auto
 [core]
-	excludesfile = /Users/eprice/.gitignore
+	excludesfile = ~/.gitignore
 [diff "fmdiff"]
   command = fmdiff
 [push]
