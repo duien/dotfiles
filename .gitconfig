@@ -8,4 +8,6 @@
 [core]
 	excludesfile = /Users/eprice/.gitignore
 [diff "fmdiff"]
-        command = fmdiff
+  command = fmdiff
+[push]
+  default = matching
