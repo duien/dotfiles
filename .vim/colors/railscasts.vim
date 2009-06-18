@@ -51,7 +51,6 @@ highlight NonText                   guifg=grey20 ctermfg=235
 
 highlight Comment                   guifg=grey40 ctermfg=240 gui=italic
 highlight Constant                  guifg=#6D9CBE ctermfg=73
-highlight Constant                  guifg=#6D9CBE ctermfg=73
 highlight Define                    guifg=#CC7833 ctermfg=173
 highlight Error                     guifg=#FFC66D ctermfg=221 guibg=#990000 ctermbg=88
 highlight Function                  guifg=#FFC66D ctermfg=221 gui=NONE cterm=NONE
@@ -61,7 +60,6 @@ highlight PreCondit                 guifg=#CC7833 ctermfg=173 gui=NONE cterm=NON
 highlight Keyword                   guifg=#CC7833 ctermfg=173 cterm=NONE
 highlight LineNr                    guifg=#C0C0FF ctermfg=159 
 highlight Number                    guifg=#A5C261 ctermfg=107
-highlight Number                    guifg=#A5C261 ctermfg=107
 highlight PreProc                   guifg=#E6E1DC ctermfg=103
 highlight Search                    guifg=NONE ctermfg=NONE guibg=#2b2b2b ctermbg=235 gui=italic cterm=underline
 highlight Statement                 guifg=#CC7833 ctermfg=173 gui=NONE cterm=NONE
@@ -69,6 +67,8 @@ highlight String                    guifg=#A5C261 ctermfg=107
 highlight Title                     guifg=#FFFFFF ctermfg=15
 highlight Type                      guifg=#DA4939 ctermfg=167 gui=NONE cterm=NONE
 highlight Visual                    guibg=#5A647E ctermbg=60
+highlight Todo                      guibg=#FFC66D ctermbg=221 guifg=#000000 ctermfg=0
+highlight Directory                 guifg=#6D9CBE ctermfg=73
 
 highlight DiffAdd                   guifg=#E6E1DC ctermfg=7 guibg=#519F50 ctermbg=71
 highlight DiffDelete                guifg=#E6E1DC ctermfg=7 guibg=#660000 ctermbg=52
@@ -80,6 +80,8 @@ highlight rubyClass                 guifg=#FFFFFF ctermfg=15
 highlight rubyConstant              guifg=#DA4939 ctermfg=167
 highlight rubyInstanceVariable      guifg=#D0D0FF ctermfg=189
 highlight rubyInterpolation         guifg=#519F50 ctermfg=107
+highlight rubyInterpolationDelimiter guifg=#519F50 ctermfg=107
+highlight rubyStringEscape          guifg=#519F50 ctermfg=107
 highlight rubyLocalVariableOrMethod guifg=#D0D0FF ctermfg=189
 highlight rubyPredefinedConstant    guifg=#DA4939 ctermfg=167
 highlight rubyPseudoVariable        guifg=#FFC66D ctermfg=221
