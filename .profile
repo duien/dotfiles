@@ -40,3 +40,8 @@ alias show="SetFile -a v"
 export PATH="$PATH:/usr/local/bin:/usr/local/graphviz-2.14/bin:/usr/local/mysql/bin:"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 export MANPATH="/opt/local/share/man:$MANPATH"
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
