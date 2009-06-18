@@ -67,7 +67,7 @@ highlight String                    guifg=#A5C261 ctermfg=107
 highlight Title                     guifg=#FFFFFF ctermfg=15
 highlight Type                      guifg=#DA4939 ctermfg=167 gui=NONE cterm=NONE
 highlight Visual                    guibg=#5A647E ctermbg=60
-highlight Todo                      guibg=#FFC66D ctermbg=221 guifg=#000000 ctermfg=0
+highlight Todo                      guibg=#FFC66D ctermbg=221 guifg=#111111 ctermfg=0 gui=bold
 highlight Directory                 guifg=#6D9CBE ctermfg=73
 
 highlight DiffAdd                   guifg=#E6E1DC ctermfg=7 guibg=#519F50 ctermbg=71
