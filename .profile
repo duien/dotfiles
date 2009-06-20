@@ -30,9 +30,6 @@ function hspec {
 alias ls='ls -GF'
 alias la='ls -a'
 alias ll='ls -l'
-alias sshqa='ssh eprice@172.31.64.98'
-alias jboss-start='/xpartner/software/jboss-4.2.2.GA/bin/run.sh &'
-alias jboss-stop='/xpartner/software/jboss-4.2.2.GA/bin/shutdown.sh -S &'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 alias hide="SetFile -a V"
 alias show="SetFile -a v"

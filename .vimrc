@@ -13,7 +13,7 @@ set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P " various fancy status line stu
 " taken from jamis buck, tabbing related
 set tabstop=2
 set smarttab
-set backspace=start,indent
+set backspace=start,indent,eol
 
 " recognize more kinds of ruby files
 autocmd BufRead *.rake set filetype=ruby
@@ -36,6 +36,7 @@ endfunction
 map <leader>s :call ToggleScratch()<CR>
 " \d will show or refresh nerd tree
 map <leader>d :NERDTreeToggle code<CR>
-
+" \t will mark task 'DONE'
+map <leader>t :s/TODO\\|LATER\\|WAITING/DONE<CR>:noh<CR>
 
 
