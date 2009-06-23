@@ -73,19 +73,23 @@ highlight Directory                 guifg=#6D9CBE ctermfg=73
 highlight DiffAdd                   guifg=#E6E1DC ctermfg=7 guibg=#519F50 ctermbg=71
 highlight DiffDelete                guifg=#E6E1DC ctermfg=7 guibg=#660000 ctermbg=52
 highlight Special                   guifg=#DA4939 ctermfg=167 
+" highlight Special                   guifg=#519F50 ctermfg=29
 
 highlight pythonBuiltin             guifg=#6D9CBE ctermfg=73 gui=NONE cterm=NONE
 highlight rubyBlockParameter        guifg=#FFFFFF ctermfg=15
-highlight rubyClass                 guifg=#FFFFFF ctermfg=15
+" highlight rubyClass                 guifg=#FFFFFF ctermfg=15
 highlight rubyConstant              guifg=#DA4939 ctermfg=167
 highlight rubyInstanceVariable      guifg=#D0D0FF ctermfg=189
 highlight rubyInterpolation         guifg=#519F50 ctermfg=29
-highlight rubyInterpolationDelimiter guifg=#519F50 ctermfg=29
-highlight rubyStringEscape          guifg=#519F50 ctermfg=29
+" highlight rubyInterpolationDelimiter guifg=#519F50 ctermfg=29
+" highlight rubyStringEscape          guifg=#519F50 ctermfg=29
 highlight rubyLocalVariableOrMethod guifg=#D0D0FF ctermfg=189
 highlight rubyPredefinedConstant    guifg=#DA4939 ctermfg=167
-highlight rubyPseudoVariable        guifg=#FFC66D ctermfg=221
+" highlight rubyPseudoVariable        guifg=#FFC66D ctermfg=221
 highlight rubyStringDelimiter       guifg=#A5C261 ctermfg=143
+highlight rubyBlockParameter        guifg=#D0D0FF ctermfg=189
+
+hi def link rubyInterpolationDelimiter Special
 
 highlight xmlTag                    guifg=#E8BF6A ctermfg=179
 highlight xmlTagName                guifg=#E8BF6A ctermfg=179

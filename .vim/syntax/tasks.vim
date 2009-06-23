@@ -1,43 +1,44 @@
 syntax clear
 syntax case match
+syntax sync minlines=20
 
 syntax cluster taskKeyword contains=taskTodo,taskLater,taskWaiting,taskCancel,taskDone,taskQuestion,taskAnswer,taskBug,taskReport,taskSmell,taskFixed
 syntax cluster taskText contains=taskTodoText,taskLaterText,taskWaitingText,taskCancelText,taskDoneText,taskQuestionText,taskAnswerText,taskBugText,taskSmellText,taskFixed
 
-syntax match taskLine /^\s*- .*\(\n\s*[^\-].*\)*/ contains=@taskKeyword
+syntax match taskLine /^\s*- .*\(\n\(\s*\)\@>[^\-].*\)*/ contains=@taskKeyword
 
 syntax keyword taskTodo TODO nextgroup=taskTodoText contained
-syntax match taskTodoText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskTodoText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskLater LATER nextgroup=taskLaterText contained
-syntax match taskLaterText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskLaterText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskWaiting WAITING nextgroup=taskWaitingText contained
-syntax match taskWaitingText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskWaitingText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskCancel CANCEL CANCELED nextgroup=taskCancelText contained
-syntax match taskCanceLText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskCancelText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskDone DONE nextgroup=taskDoneText contained
-syntax match taskDoneText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskDoneText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskQuestion QUESTION nextgroup=taskQuestionText contained
-syntax match taskQuestionText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskQuestionText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskAnswer ANSWER ANSWERED nextgroup=taskAnswerText contained
-syntax match taskAnswerText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskAnswerText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskBug BUG nextgroup=taskBugText contained
-syntax match taskBugText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskBugText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskSmell SMELL nextgroup=taskSmellText contained
-syntax match taskSmellText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskSmellText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskReport REPORT nextgroup=taskReportText contained
-syntax match taskReportText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskReportText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax keyword taskFixed FIXED nextgroup=taskFixedText contained
-syntax match taskFixedText / .*\(\n\s*[^\-].*\)*/ contained
+syntax match taskFixedText / .*\(\n\(\s*\)\@>[^\-].*\)*/ contained
 
 syntax match taskProject /^\w.*:$/
 
