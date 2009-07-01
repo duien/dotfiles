@@ -27,7 +27,7 @@ function hspec {
   fi
 }
 
-alias ls='ls -GF'
+alias ls='ls -GF --color'
 alias la='ls -a'
 alias ll='ls -l'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"

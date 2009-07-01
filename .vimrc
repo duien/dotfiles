@@ -28,6 +28,7 @@ autocmd BufRead *.rake set filetype=ruby
 autocmd BufRead Rakefile set filetype=ruby
 autocmd BufRead *.erb set filetype=eruby
 autocmd BufRead Capfile set filetype=ruby
+autocmd BufRead config.ru set filetype=ruby
 
 " toggle display of scratch
 function! ToggleScratch()
