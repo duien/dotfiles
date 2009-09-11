@@ -10,6 +10,7 @@ set laststatus=2    " always show the status line
 set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P " various fancy status line stuff
 " set cursorline      " highlight the line with the cursor
 set backspace=start,indent,eol
+set linebreak       " wrap lines at word boundaries
 
 let ruby_operators=1 " highlight operators in ruby
 
@@ -29,6 +30,7 @@ autocmd BufRead Rakefile set filetype=ruby
 autocmd BufRead *.erb set filetype=eruby
 autocmd BufRead Capfile set filetype=ruby
 autocmd BufRead config.ru set filetype=ruby
+autocmd Filetype * set formatoptions-=o
 
 " toggle display of scratch
 function! ToggleScratch()

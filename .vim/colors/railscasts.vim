@@ -52,6 +52,7 @@ highlight NonText                   guifg=grey20 ctermfg=235
 highlight Comment                   guifg=grey40 ctermfg=240 gui=italic
 highlight Constant                  guifg=#6D9CBE ctermfg=73
 highlight Define                    guifg=#CC7833 ctermfg=173
+highlight Macro                     guifg=#CC7833 ctermfg=173
 highlight Error                     guifg=#FFC66D ctermfg=221 guibg=#990000 ctermbg=88
 highlight Function                  guifg=#FFC66D ctermfg=221 gui=NONE cterm=NONE
 highlight Identifier                guifg=#6D9CBE ctermfg=73 gui=NONE cterm=NONE

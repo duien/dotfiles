@@ -27,16 +27,16 @@ function hspec {
   fi
 }
 
-alias ls='ls -GF --color'
+alias ls='ls -GF'
 alias la='ls -a'
 alias ll='ls -l'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 alias hide="SetFile -a V"
 alias show="SetFile -a v"
 
-export PATH="$PATH:/usr/local/bin:/usr/local/graphviz-2.14/bin:/usr/local/mysql/bin:"
+export PATH="/usr/local/bin:/usr/local/graphviz-2.14/bin:/usr/local/mysql/bin:$PATH"
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-export MANPATH="/opt/local/share/man:$MANPATH"
+export MANPATH="/opt/local/share/man:/usr/local/man:$MANPATH"
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
