@@ -1,0 +1,77 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+require 'commandline'
+
+class Installer < CommandLine::Application
+  def initialize
+    synopsis "[-fqvnh]"
+    options :help, :debug
+    option :flag, :names => %w(--force -f),
+      :opt_description => "Force installation of all files"
+    option :flag, :names => %w(--quiet -q),
+      :opt_description => "Make the output as quiet as possible"
+    option :flag, :names => %w(--verbose -v),
+      :opt_description => "Be more verbose"
+    option :flag, :names => %w(--dry-run, -n),
+      :opt_description => "Prints out results without running"
+  end
+
+  def main
+    dotfile_path = File.dirname( __FILE__ )
+    home_path = File.expand_path( '~' )
+
+    debug dotfile_path
+    debug home_path
+
+    files_to_install = Dir.glob( File.join( dotfile_path, '*' ) )
+    files_to_install.each do |file|
+
+      next if file == __FILE__
+
+      debug file
+      always_print = nil
+      verbose_print = nil
+      case
+      when File.file?(file)
+        debug "#{file} is a file"
+        if File.exists? File.join( home_path, ".#{File.basename file}")
+          copy_dot_file( file, home_path )#( :force => opt.force, :  
+        else
+          # verbose_print = "Installed .#{file_name}"
+          # copy the file unless dry-run
+        end
+      when File.directory?(file)
+        # debug "#{file_name} is a directory"
+      else
+        # debug "#{file_name} is something else"
+      end
+    end
+  end
+
+
+  def copy_dot_file( file, destination, options={} )
+    file_name = File.basename file
+    if opt.force
+      always_print = "Replaced .#{file_name}"
+      verbose_print = "The original has been moved to .old_dotfiles/"
+      # copy the file unless dry-run
+    else
+      if true # different
+        always_print = "File .#{file_name} exists"
+      else
+        verbose_print = "File .#{file_name} already installed"
+      end
+    end
+    print_messages( always_print, verbose_print )
+  end
+  
+  def print_messages( always_print, verbose_print )
+    debug always_print
+    puts always_print if always_print and not opt.quiet
+    debug verbose_print
+    puts verbose_print if verbose_print and not opt.quiet and opt.verbose
+  end
+
+end
+
