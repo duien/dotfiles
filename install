@@ -11,12 +11,26 @@ files.each do |file|
   if File.exists? dest_path
     if File.symlink? dest_path
       if File.readlink( dest_path ) == source_path
-        # we're good
+        puts "Symlink already in place for #{dest_path}"
       else
         puts "ERROR: #{dest_path} is linked to #{File.readlink( dest_path )}"
+        if `diff #{dest_path} #{source_path}`.empty?
+          puts "Files are identical. Overwriting."
+          res = `rm #{dest_path}`
+          puts res unless res.empty?
+          res = `ln -s #{source_path} #{dest_path}`
+          puts res unless res.empty?
+        end
       end
     else
       puts "ERROR: #{dest_path} already exists"
+      if `diff #{dest_path} #{source_path}`.empty?
+        puts "Files are identical. Overwriting."
+        res = `rm #{dest_path}`
+        puts res unless res.empty?
+        res = `ln -s #{source_path} #{dest_path}`
+        puts res unless res.empty?
+      end
     end
   else
     puts "Linking #{dest_path}"
