@@ -1,11 +1,12 @@
 #!/usr/bin/ruby
 
 exclude_files = [ 'install', 'Capfile' ]
+base_path = File.expand_path( File.dirname( __FILE__) )
 
-files = Dir['*']
-files.each do |file|
+files = Dir[ File.join( base_path, '*' ) ]
+files.each do |source_path|
+  file = File.basename( source_path )
   next if exclude_files.include? file
-  source_path = File.expand_path( './' + file )
   dest_path = File.expand_path( '~/.' + file )
 
   if File.exists? dest_path
