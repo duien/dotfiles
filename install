@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-exclude_files = [ 'install', 'Capfile' ]
+exclude_files = [ 'install', 'Capfile', 'REVISION' ]
 base_path = File.expand_path( File.dirname( __FILE__) )
 
 files = Dir[ File.join( base_path, '*' ) ]
