@@ -35,6 +35,7 @@ esac
 alias ll='ls -l'
 alias la='ls -A'
 alias lc="clear;ls"
+alias screen="screen -T xterm-256color"
 alias grep='grep --color=auto'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 
