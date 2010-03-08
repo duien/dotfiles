@@ -32,7 +32,7 @@ case "`uname`" in
     *) alias ls='ls --color=auto -F';;
 esac
 
-alias ll='ls -l'
+alias ll='ls -lh'
 alias la='ls -A'
 alias lc="clear;ls"
 alias screen="screen -T xterm-256color"
