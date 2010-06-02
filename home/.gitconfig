@@ -1,0 +1,14 @@
+[user]
+  name = Emily Price
+  email = price.emily@gmail.com
+[color]
+  ui = auto
+[push]
+  default = matching
+[core]
+	excludes = /Users/eprice/.gitignore
+  ; excludes = /home/eprice/.gitignore
+  ; excludes = /home/duien/.gitignore
+[alias]
+  vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
+	co = checkout

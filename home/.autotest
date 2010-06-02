@@ -1,10 +1,6 @@
 require 'autotest/growl'
 require 'autotest/fsevent'
 
-# Set autotest options
-Autotest::Growl.one_notification_per_run = true
-Autotest::Growl.clear_terminal = false
-
 Autotest.add_hook :initialize do |at|
   %w{.svn .hg .git vendor tmp log}.each {|exception| at.add_exception(exception)}
 end

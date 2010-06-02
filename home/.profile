@@ -40,10 +40,9 @@ alias gpr='git pull --rebase'
 alias sc='script/console'
 
 # BASICS
-alias ll='ls -lh'
+alias ll='ls -l'
 alias la='ls -A'
 alias lc="clear;ls"
-alias screen="screen -T xterm-256color"
 alias grep='grep --color=auto'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 alias gemi='sudo gem install --no-ri'
