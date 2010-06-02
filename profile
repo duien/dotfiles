@@ -32,10 +32,19 @@ case "`uname`" in
     *) alias ls='ls --color=auto -F';;
 esac
 
+# GIT
+alias gst='git status'
+alias gpr='git pull --rebase'
+
+# RAILS
+alias sc='script/console'
+
+# BASICS
 alias ll='ls -lh'
 alias la='ls -A'
 alias lc="clear;ls"
 alias screen="screen -T xterm-256color"
 alias grep='grep --color=auto'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
+alias gemi='sudo gem install --no-ri'
 
