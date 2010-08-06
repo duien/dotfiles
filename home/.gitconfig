@@ -6,9 +6,9 @@
 [push]
   default = matching
 [core]
-	excludes = /Users/eprice/.gitignore
-  ; excludes = /home/eprice/.gitignore
-  ; excludes = /home/duien/.gitignore
+	excludesfile = /Users/eprice/.gitignore
+  ; excludesfile = /home/eprice/.gitignore
+  ; excludesfile = /home/duien/.gitignore
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
 	co = checkout
@@ -18,3 +18,5 @@
   prompt = false
 [diff]
   tool = Kaleidoscope
+[github]
+  user = duien
