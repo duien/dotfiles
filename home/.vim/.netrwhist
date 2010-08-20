@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/Users/eprice/source/rentals'
+let g:netrw_dirhist_2='/Users/eprice/source/rentlist'
+let g:netrw_dirhist_3='/Users/eprice/source/apartmentguide'
+let g:netrw_dirhist_4='/Users/eprice/source/rentalhouses'
+let g:netrw_dirhist_5='/Library/Ruby/Gems/1.8/gems/capistrano-2.5.18'

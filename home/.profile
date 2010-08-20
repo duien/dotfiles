@@ -34,6 +34,8 @@ alias gpr='git pull --rebase'
 
 # RAILS
 alias sc='script/console'
+alias ss='script/server'
+alias rs='rake spec'
 
 # BASICS
 alias ll='ls -l'

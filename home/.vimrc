@@ -30,7 +30,7 @@ autocmd BufRead Rakefile set filetype=ruby
 autocmd BufRead *.erb set filetype=eruby
 autocmd BufRead Capfile set filetype=ruby
 autocmd BufRead config.ru set filetype=ruby
-autocmd Filetype * set formatoptions-=o
+autocmd Filetype * set formatoptions-=o noeol
 
 " toggle display of scratch
 function! ToggleScratch()
@@ -45,3 +45,5 @@ endfunction
 map <leader>s :call ToggleScratch()<CR>
 " \d will show or refresh nerd tree
 map <leader>d :NERDTreeToggle<CR>
+map <leader>n :NERDTreeToggle<CR>
+map <leader>a :Ack 
