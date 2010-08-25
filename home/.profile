@@ -1,7 +1,9 @@
 source ~/.bashrc
 
  rvm_version_string () {
-  test "$(~/.rvm/bin/rvm-prompt i)" != "ruby" && echo "$(~/.rvm/bin/rvm-prompt i v g)" || echo "$(~/.rvm/bin/rvm-prompt v g)"
+  if [[ -s /Users/eprice/.rvm/scripts/rvm ]] ; then
+    test "$(~/.rvm/bin/rvm-prompt i)" != "ruby" && echo "$(~/.rvm/bin/rvm-prompt i v g)" || echo "$(~/.rvm/bin/rvm-prompt v g)"
+  fi
 }
 
 rvm_prompt () {
