@@ -1,9 +1,12 @@
 require 'rubygems'
-require 'wirble'
 require 'pp'
+begin
+  require 'wirble'
+  Wirble.init
+  Wirble.colorize
+rescue LoadError
+end
 
-Wirble.init
-Wirble.colorize
 
 IRB.conf[:AUTO_INDENT] = true
 
@@ -23,4 +26,10 @@ def gen_password(num_chars, strength=[:lower, :upper, :digit])
   passwd = ''
   num_chars.times { passwd << chars[rand(chars.length)] }
   passwd
+end
+
+class Symbol
+  def <=> other
+    self.to_s <=> other.to_s
+  end
 end
