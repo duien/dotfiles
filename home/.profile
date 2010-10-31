@@ -63,5 +63,3 @@ alias grep='grep --color=auto'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 alias gemi='sudo gem install --no-ri'
 
-# rvm-install added line:
-if [[ -s /Users/eprice/.rvm/scripts/rvm ]] ; then source /Users/eprice/.rvm/scripts/rvm ; fi
