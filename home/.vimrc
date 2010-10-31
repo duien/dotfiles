@@ -30,6 +30,7 @@ autocmd BufRead Rakefile set filetype=ruby
 autocmd BufRead *.erb set filetype=eruby
 autocmd BufRead Capfile set filetype=ruby
 autocmd BufRead config.ru set filetype=ruby
+autocmd BufRead Gemfile set filetype=ruby
 autocmd Filetype * set formatoptions-=o noeol
 
 " toggle display of scratch
