@@ -20,3 +20,5 @@
   tool = Kaleidoscope
 [github]
   user = duien
+[branch]
+  autosetupmerge = always
