@@ -1,6 +1,9 @@
 export RUBYOPT='rubygems'
 export PATH="/usr/local/mongodb/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 export PYTHONPATH='/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/site-packages/'
+export CDPATH=.:~:~/Code/Work/Highgroove
+export VISUAL=mvim
+export GEMEDITOR=mvim
 
 source ~/.git_completion.sh
 
