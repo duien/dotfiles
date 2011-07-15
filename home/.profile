@@ -23,7 +23,7 @@ function parse_git_dirty () {
 }
 
 case "$TERM" in xterm-*color)
-    PS1='\[\e]2;\u@\h\a\]\[\e[30;44m\]\w\[\e[00m\]$(rvm_prompt "[\[\e[0;33m\]%s\[\e[m\]]")$(__git_ps1 "[\[\e[0;32m\]%s\[\e[0m\]\[\e[0;33m\]$(parse_git_dirty)\[\e[0m\]]") \$ '
+    PS1='\[\e]2;\u@\h:\W\a\]\[\e[30;44m\]\w\[\e[00m\]$(rvm_prompt "[\[\e[0;33m\]%s\[\e[m\]]")$(__git_ps1 "[\[\e[0;32m\]%s\[\e[0m\]\[\e[0;33m\]$(parse_git_dirty)\[\e[0m\]]") \$ '
     ;;
 xterm*)
    	PS1='\[\e]2;\u@\h\a\]\[\[0;34m\]\w \[\[00m\]\$ '
@@ -63,3 +63,7 @@ alias grep='grep --color=auto'
 alias flip="perl -pi -e 's/\r\n?/\n/g'"
 alias gemi='sudo gem install --no-ri'
 
+alias cdhg='cd ~/Code/Work/Highgroove'
+
+alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
+alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
