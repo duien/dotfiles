@@ -14,7 +14,10 @@ set linebreak       " wrap lines at word boundaries
 
 let ruby_operators=1 " highlight operators in ruby
 
-colorscheme railscasts
+" colorscheme railscasts
+set background=dark
+let g:solarized_termcolors=16
+colorscheme solarized
 syntax on           " syntax highlighting, please
 
 filetype on           " Enable filetype detection
