@@ -14,7 +14,7 @@ if !exists("no_plugin_maps") && !exists("no_tasks_maps")
   endif
 
   if !hasmapto("<Plug>TasksMarkComplete")
-    map <buffer> <unique> <LocalLeader>t :TasksMarkComplete<CR>
+    map <buffer> <unique> <LocalLeader>x :TasksMarkComplete<CR>
   endif
   noremap <buffer> <unique> <Plug>TasksMarkComplete <SID>TasksMarkComplete()<CR>
 endif
