@@ -1,6 +1,6 @@
 [user]
-  name = Emily Price
-  email = price.emily@gmail.com
+	name = Emily Price
+	email = price.emily@gmail.com
 [color]
   ui = auto
 [pull]
@@ -11,9 +11,12 @@
 	excludesfile = /Users/eprice/.gitignore
   ; excludesfile = /home/eprice/.gitignore
   ; excludesfile = /home/duien/.gitignore
+  editor = vim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
 	co = checkout
+[format]
+  pretty = format:%C(yellow)%h%Creset %C(red)%aN%Creset %s
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]
@@ -24,3 +27,8 @@
   user = duien
 [branch]
   autosetupmerge = always
+[mailmap]
+  file = /Users/eprice/.gitmailmap
+[pivotal]
+	api-token = 1723eb6614a78b06d351c2eec4601df4
+	full-name = Emily Price
