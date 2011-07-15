@@ -11,6 +11,14 @@ set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P " various fancy status line stu
 " set cursorline      " highlight the line with the cursor
 set backspace=start,indent,eol
 set linebreak       " wrap lines at word boundaries
+set cursorline      " highlight the line with the cursor
+set incsearch       " show search as you type
+
+" Search highlighting and and clearning
+" Diabled until I find a non-awful way of clearing
+" set hlsearch        " highlight all search matches
+" nnoremap <esc> :noh<return><esc>
+" nnoremap <CR> :noh<return><CR>
 
 let ruby_operators=1 " highlight operators in ruby
 
@@ -23,8 +31,6 @@ syntax on           " syntax highlighting, please
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
-
-compiler ruby         " Enable compiler support for ruby
 
 
 " recognize more kinds of ruby files
@@ -51,3 +57,17 @@ map <leader>s :call ToggleScratch()<CR>
 map <leader>d :NERDTreeToggle<CR>
 map <leader>n :NERDTreeToggle<CR>
 map <leader>a :Ack 
+
+" Show syntax highlighting groups for word under cursor
+nmap <C-S-P> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+" Source the vimrc file after saving it
+if has("autocmd")
+  autocmd bufwritepost .vimrc source $MYVIMRC
+endif
