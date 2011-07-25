@@ -34,6 +34,7 @@ export PYTHONPATH='/Library/Frameworks/Python.framework/Versions/2.5/lib/python2
 export CDPATH=.:~:~/Code
 export VISUAL=mvim
 export GEMEDITOR=mvim
+export CC=gcc-4.2
 
 
 # GIT
