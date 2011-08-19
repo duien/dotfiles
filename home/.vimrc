@@ -23,8 +23,11 @@ set incsearch       " show search as you type
 let ruby_operators=1 " highlight operators in ruby
 
 " colorscheme railscasts
-set background=dark
-let g:solarized_termcolors=16
+if has('gui_running')
+  set background=light
+else
+  set background=dark
+endif
 colorscheme solarized
 syntax on           " syntax highlighting, please
 
