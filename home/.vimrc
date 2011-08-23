@@ -1,3 +1,6 @@
+source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
+call pathogen#infect()
+
 set number          " show line numbers
 set softtabstop=2   " tabs are 2 spaces
 set shiftwidth=2    " auto-indent is 2 spaces
@@ -59,7 +62,10 @@ map <leader>s :call ToggleScratch()<CR>
 " \d will show or refresh nerd tree
 map <leader>d :NERDTreeToggle<CR>
 map <leader>n :NERDTreeToggle<CR>
+
 map <leader>a :Ack 
+
+call togglebg#map("<F5>")
 
 " Show syntax highlighting groups for word under cursor
 nmap <C-S-P> :call <SID>SynStack()<CR>
