@@ -1,6 +1,7 @@
 require 'autotest/growl'
 require 'autotest/fsevent'
 
+Autotest::Growl::image_dir = File.join(ENV['HOME'], '.autotest-growl')
 Autotest.add_hook :initialize do |at|
   %w{.svn .hg .git vendor tmp log}.each {|exception| at.add_exception(exception)}
 end
