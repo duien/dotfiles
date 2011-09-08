@@ -65,6 +65,7 @@ map <leader>d :NERDTreeToggle<CR>
 map <leader>n :NERDTreeToggle<CR>
 
 map <leader>a :Ack 
+nmap <Leader>c <Plug>ToggleAutoCloseMappings
 
 call togglebg#map("<F5>")
 
