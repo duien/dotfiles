@@ -36,6 +36,11 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+export RUBYOPT='rubygems'
+export VISUAL=mvim
+export GEMEDITOR=mvim
+export CC=gcc-4.2
+
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 
