@@ -43,3 +43,6 @@
 [submodule "home/.vim/bundle/vim-markdown"]
 	path = home/.vim/bundle/vim-markdown
 	url = https://github.com/duien/vim-markdown.git
+[submodule "home/.vim/bundle/VimClojure"]
+	path = home/.vim/bundle/VimClojure
+	url = https://github.com/vim-scripts/VimClojure.git
