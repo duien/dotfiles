@@ -34,9 +34,6 @@
 [submodule "home/.oh-my-zsh"]
 	path = home/.oh-my-zsh
 	url = git@github.com:duien/oh-my-zsh.git
-[submodule "home/.vim/bundle/AutoClose"]
-	path = home/.vim/bundle/AutoClose
-	url = https://github.com/vim-scripts/AutoClose.git
 [submodule "home/.vim/bundle/vim-markdown"]
 	path = home/.vim/bundle/vim-markdown
 	url = https://github.com/duien/vim-markdown.git
