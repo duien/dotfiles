@@ -14,9 +14,10 @@
   editor = vim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
+  history = "log --all --graph"
 	co = checkout
 [format]
-  pretty = format:%C(yellow)%h%Creset %C(red)%aN%Creset %s
+  pretty = format:%C(yellow)%h%C(blue)%d%Creset %C(red)%aN%Creset %s
 [difftool "Kaleidoscope"]
   cmd = ksdiff-wrapper git \"$LOCAL\" \"$REMOTE\"
 [difftool]
