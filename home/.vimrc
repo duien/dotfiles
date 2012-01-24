@@ -47,6 +47,8 @@ filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
 
+" Plugin settings
+let NERDTreeDirArrows=0
 
 " recognize more kinds of ruby files
 autocmd BufRead,BufNewFile {*.rake,Rakefile,Capfile,config.ru,Gemfile} set filetype=ruby
