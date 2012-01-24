@@ -49,6 +49,7 @@ filetype plugin on    " Enable filetype-specific plugins
 
 " Plugin settings
 let NERDTreeDirArrows=0
+autocmd vimenter * if !argc() | NERDTree | endif
 
 " recognize more kinds of ruby files
 autocmd BufRead,BufNewFile {*.rake,Rakefile,Capfile,config.ru,Gemfile} set filetype=ruby
