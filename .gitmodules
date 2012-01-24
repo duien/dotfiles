@@ -40,3 +40,6 @@
 [submodule "home/.vim/bundle/VimClojure"]
 	path = home/.vim/bundle/VimClojure
 	url = https://github.com/vim-scripts/VimClojure.git
+[submodule "home/.vim/bundle/vim-less"]
+	path = home/.vim/bundle/vim-less
+	url = https://github.com/groenewege/vim-less.git
