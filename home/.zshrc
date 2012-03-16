@@ -45,6 +45,7 @@ alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/serv
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 
 alias mark='open -a Marked'
+[[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
 PATH="/usr/local/bin:$PATH"
 if [ -d "$HOME/bin" ] ; then
