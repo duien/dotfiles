@@ -37,8 +37,8 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 
 export RUBYOPT='rubygems'
-export VISUAL=mvim
-export GEMEDITOR=mvim
+export VISUAL=subl
+export GEMEDITOR=subl
 export CC=gcc-4.2
 
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
@@ -58,4 +58,4 @@ case $TERM in
     ;;
 esac
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
