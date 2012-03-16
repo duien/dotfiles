@@ -46,6 +46,7 @@ alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 
 alias mark='open -a Marked'
 
+PATH="/usr/local/bin:$PATH"
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
