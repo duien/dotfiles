@@ -15,7 +15,9 @@
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
   history = "log --oneline --decorate --all --graph"
+  hist = "log --oneline --decorate --all --graph"
 	co = checkout
+  pr = "pull --rebase"
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s
 [difftool "Kaleidoscope"]
