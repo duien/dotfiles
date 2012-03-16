@@ -34,17 +34,20 @@ plugins=(git brew gem github heroku pow rails rails3 ruby rvm vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
-
 export RUBYOPT='rubygems'
 export VISUAL=subl
 export GEMEDITOR=subl
 export CC=gcc-4.2
 
+# If `private.sh` exsits, load it
+# This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
+[[ -s "$HOME/.private.sh" ]] && source "$HOME/.private.sh"
+
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
-
 alias mark='open -a Marked'
+
+# Wrap `git` in `hub` if it's installed
 [[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
 PATH="/usr/local/bin:$PATH"
