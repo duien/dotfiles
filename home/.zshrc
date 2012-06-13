@@ -38,8 +38,14 @@ export RUBYOPT='rubygems'
 export VISUAL=subl
 export GEMEDITOR=subl
 export CC=gcc-4.2
+export CDPATH=.:~:~/Code
 
-# If `private.sh` exsits, load it
+# RDS CLI Configuration
+export AWS_RDS_HOME='/usr/local/rds'
+export JAVA_HOME=`/usr/libexec/java_home`
+# EC2_CERT and EC2_PRIVATE_KEY need to bet set up in ~/.private.sh
+
+# If `.private.sh` exsits, load it
 # This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
 [[ -s "$HOME/.private.sh" ]] && source "$HOME/.private.sh"
 
@@ -51,6 +57,9 @@ alias mark='open -a Marked'
 [[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
 PATH="/usr/local/bin:$PATH"
+if [ -d "$AWS_RDS_HOME" ] ; then
+  PATH="$AWS_RDS_HOME/bin:$PATH"
+fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
@@ -62,3 +71,5 @@ case $TERM in
 esac
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
