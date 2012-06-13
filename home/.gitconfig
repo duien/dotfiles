@@ -32,6 +32,3 @@
   autosetupmerge = always
 [mailmap]
   file = /Users/eprice/.gitmailmap
-[pivotal]
-	api-token = 1723eb6614a78b06d351c2eec4601df4
-	full-name = Emily Price
