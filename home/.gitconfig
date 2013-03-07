@@ -32,3 +32,5 @@
   autosetupmerge = always
 [mailmap]
   file = /Users/eprice/.gitmailmap
+[credential]
+	helper = osxkeychain
