@@ -5,7 +5,9 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="duien"
+# ZSH_THEME="duien"
+ZSH_THEME="agnoster"
+DEFAULT_USER="eprice"
 
 # Theme Notes
 # kolo is cool for git status
@@ -52,11 +54,12 @@ export JAVA_HOME=`/usr/libexec/java_home`
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 alias mark='open -a Marked'
+alias ql='qlmanage -p'
 
 # Wrap `git` in `hub` if it's installed
 [[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
-PATH="/usr/local/bin:$PATH"
+PATH="/usr/local/share/npm/bin:/usr/local/bin:$PATH"
 if [ -d "$AWS_RDS_HOME" ] ; then
   PATH="$AWS_RDS_HOME/bin:$PATH"
 fi
