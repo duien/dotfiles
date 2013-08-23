@@ -35,11 +35,11 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-case $TERM in
-  xterm*)
-    chpwd () {print -Pn "\e]0;%n@%m: %~\a"}
-    ;;
-esac
+# case $TERM in
+#   xterm*)
+#     chpwd () {print -Pn "\e]0;%n@%m: %~\a"}
+#     ;;
+# esac
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
 
