@@ -24,6 +24,10 @@ alias mark='open -a Marked'
 alias ql='qlmanage -p'
 alias 'gst'='git status'
 
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+
 # Wrap `git` in `hub` if it's installed
 [[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
