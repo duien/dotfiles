@@ -9,6 +9,9 @@ export CC=gcc-4.2
 export CDPATH=.:~:~/Code:~/Code/Work
 export CLICOLOR=1
 
+# Build Ruby with readline support
+export RUBY_CONFIGURE_OPTS=--with-readline-dir=`brew --prefix readline`
+
 # RDS CLI Configuration
 export AWS_RDS_HOME='/usr/local/rds'
 export JAVA_HOME=`/usr/libexec/java_home`
