@@ -8,9 +8,7 @@
  [push]
    default = simple
 [core]
-	excludesfile = /Users/eprice/.gitignore
-  ; excludesfile = /home/eprice/.gitignore
-  ; excludesfile = /home/duien/.gitignore
+  excludesfile = ~/.gitignore
   editor = vim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
