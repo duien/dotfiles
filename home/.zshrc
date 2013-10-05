@@ -49,6 +49,8 @@ fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
+if declare -f rbenv >/dev/null ; then eval "$(rbenv init -)"; fi
+
 source "$HOME/.zsh/setopt.zsh"
 source "$HOME/.zsh/prompt.zsh"
 source "$HOME/.zsh/completion.zsh"
