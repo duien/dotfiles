@@ -1,6 +1,7 @@
 # http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
 
-export DEFAULT_USER='eprice'
+# export DEFAULT_USER='eprice'
+export DEFAULT_USERS='ehyland eprice duien'
 
 export RUBYOPT='rubygems'
 export VISUAL=subl
