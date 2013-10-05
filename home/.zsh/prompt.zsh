@@ -36,7 +36,7 @@
 # U+E0B3   Leftwards arrowhead
 
 CURRENT_BG='NONE'
-SEGMENT_SEPARATOR='⮀'
+SEGMENT_SEPARATOR=''
 SEGMENT_INNER_SEPARATOR=''
 
 # Begin a segment
@@ -109,7 +109,7 @@ prompt_git() {
     else
       prompt_segment green black
     fi
-    echo -n "${ref/refs\/heads\//⭠ }"
+    echo -n "${ref/refs\/heads\// }"
   fi
 }
 
