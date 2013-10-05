@@ -17,6 +17,7 @@
 	co = checkout
   pr = "pull --rebase"
   wdiff = "diff --color-words"
+  ammend = commit --amend
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s
 [difftool "Kaleidoscope"]
