@@ -31,7 +31,7 @@ alias -g .....='../../../..'
 # Wrap `git` in `hub` if it's installed
 [[ -s "$HOME/bin/hub" ]] && function git(){hub "$@"}
 
-PATH="/usr/local/share/npm/bin:/usr/local/bin:$PATH"
+PATH="/usr/local/heroku/bin:/usr/local/share/npm/bin:/usr/local/bin:$PATH:/usr/local/mysql/bin"
 if [ -d "$AWS_RDS_HOME" ] ; then
   PATH="$AWS_RDS_HOME/bin:$PATH"
 fi
