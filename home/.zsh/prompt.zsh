@@ -94,6 +94,13 @@ prompt_rvm() {
   fi
 }
 
+# RBENV: ruby version info
+prompt_rbenv() {
+  if declare -f rbenv >/dev/null ; then
+    echo -n `rbenv version-name`
+  fi
+}
+
 function parse_git_dirty {
   [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit, working directory clean" ]] && echo "*"
 }
@@ -145,4 +152,4 @@ build_prompt() {
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
-RPROMPT='%{%F{red}%}$(prompt_rvm)%{%f%}'
+RPROMPT='%{%F{red}%}$(prompt_rbenv)$(prompt_rvm)%{%f%}'
