@@ -1,6 +1,7 @@
 source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect()
 
+set t_Co=256
 set number          " show line numbers
 
 " Whitespace
@@ -14,8 +15,8 @@ set list listchars=tab:\ \ ,trail:·  " show trailing whitespace as ·
 set ai              " always autoindent
 set ruler           " always show cursor position
 set laststatus=2    " always show the status line
-set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P " various fancy status line stuff
-" set cursorline      " highlight the line with the cursor
+set noshowmode
+" set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P " various fancy status line stuff
 set backspace=start,indent,eol
 set linebreak       " wrap lines at word boundaries
 set cursorline      " highlight the line with the cursor
@@ -85,6 +86,10 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
 
 " Source the vimrc file after saving it
 if has("autocmd")
