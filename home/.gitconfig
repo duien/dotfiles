@@ -12,8 +12,7 @@
   editor = vim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
-  history = "log --oneline --decorate --all --graph"
-  hist = "log --oneline --decorate --all --graph"
+  hist = "log --oneline --decorate --graph"
 	co = checkout
   pr = "pull --rebase"
   wdiff = "diff --color-words"
@@ -26,6 +25,7 @@
 	prompt = false
 [diff]
 	tool = Kaleidoscope
+  algorithm = patience
 [github]
   user = duien
 [branch]
