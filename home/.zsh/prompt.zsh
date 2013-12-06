@@ -39,6 +39,8 @@ CURRENT_BG='NONE'
 SEGMENT_SEPARATOR=''
 SEGMENT_INNER_SEPARATOR=''
 
+RIGHT_SEGMENT_SEPARATOR=''
+
 # Begin a segment
 # Takes two arguments, background and foreground. Both can be omitted,
 # rendering default background/foreground.
@@ -69,6 +71,14 @@ prompt_end() {
 ### Prompt components
 # Each component will draw itself, and hide itself if no information needs to be shown
 
+prompt_time() {
+  if [[ "$(date +%p)" == "AM" ]] ; then
+    prompt_segment white black "$(date +%l:%M:%S | tr -d ' ')"
+  else
+    prompt_segment black white "$(date +%l:%M:%S | tr -d ' ')"
+  fi
+}
+
 # Context: user@hostname (who am I and where am I)
 # Will be hidden if the username is in the space-separated list $DEFAULT_USERS
 prompt_context() {
@@ -97,9 +107,15 @@ prompt_rvm() {
 
 # RBENV: ruby version info
 prompt_rbenv() {
+  local version
   if declare -f rbenv >/dev/null ; then
-    echo -n `rbenv version-name`
+    # echo -n `rbenv version-name`
+    version=$(rbenv version-name)
   fi
+  if [[ -n $version ]] ; then
+      # prompt_segment red black
+      echo -n "$version"
+    fi
 }
 
 function parse_git_dirty {
@@ -113,7 +129,7 @@ prompt_git() {
     dirty=$(parse_git_dirty)
     ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git show-ref --head -s --abbrev |head -n1 2> /dev/null)"
     if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+      prompt_segment red black
     else
       prompt_segment green black
     fi
@@ -126,11 +142,7 @@ prompt_dir() {
   prompt_segment blue black '%~'
 }
 
-# Status:
-# - was there an error
-# - am I root
-# - are there background jobs?
-prompt_status() {
+status_symbols(){
   local symbols
   symbols=()
   [[ $RETVAL -ne 0 ]] && symbols+="%{%F{red}%}➥ $RETVAL"
@@ -138,18 +150,32 @@ prompt_status() {
   [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⇧"
   [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}◷"
 
-  [[ -n "$symbols" ]] && prompt_segment black default "$symbols"
+  echo -n $symbols
+}
+
+# Status:
+# - was there an error
+# - am I root
+# - are there background jobs?
+prompt_status() {
+  [[ -n "$(status_symbols)" ]] && prompt_segment black default "$(status_symbols)"
 }
 
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_time
   prompt_context
   prompt_dir
   # prompt_rvm
   prompt_git
   prompt_end
+}
+
+TMOUT=1
+TRAPALRM() {
+    zle reset-prompt
 }
 
 PROMPT='%{%f%b%k%}$(build_prompt) '
