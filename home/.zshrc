@@ -24,6 +24,9 @@ export JAVA_HOME=`/usr/libexec/java_home`
 
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
+pgsetup() {
+  createuser -d -R -P $1 && createdb -O $1 $1
+}
 alias mark='open -a Marked'
 alias ql='qlmanage -p'
 alias 'gst'='git status'
@@ -53,8 +56,9 @@ fi
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 
-if declare -f rbenv >/dev/null ; then eval "$(rbenv init -)"; fi
+if which rbenv >/dev/null ; then eval "$(rbenv init -)"; fi
 
 source "$HOME/.zsh/setopt.zsh"
-source "$HOME/.zsh/prompt.zsh"
+# source "$HOME/.zsh/prompt.zsh"
+. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
 source "$HOME/.zsh/completion.zsh"
