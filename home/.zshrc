@@ -1,12 +1,14 @@
 # http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
 
+# module_path=($module_path /usr/local/lib/zpython)
+
 # export DEFAULT_USER='eprice'
 export DEFAULT_USERS='ehyland eprice duien'
 
 export RUBYOPT='rubygems'
 export VISUAL=subl
 export GEMEDITOR=subl
-export CC=gcc-4.2
+# export CC=gcc-4.2
 export CDPATH=.:~:~/Code:~/Code/Work
 export CLICOLOR=1
 
@@ -59,6 +61,9 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 if which rbenv >/dev/null ; then eval "$(rbenv init -)"; fi
 
 source "$HOME/.zsh/setopt.zsh"
-# source "$HOME/.zsh/prompt.zsh"
-. /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+if [[ -s /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh ]] ; then
+  source /usr/local/lib/python2.7/site-packages/powerline/bindings/zsh/powerline.zsh
+else
+  source "$HOME/.zsh/prompt.zsh"
+fi
 source "$HOME/.zsh/completion.zsh"

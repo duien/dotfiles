@@ -44,6 +44,10 @@
 		],
 		"right": [
       {
+          "module": "powerlinex.segment.rvm",
+          "name": "version"
+      },
+      {
           "module": "powerlinex.segment.rbenv",
           "name": "version"
       }

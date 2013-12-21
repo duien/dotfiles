@@ -11,7 +11,8 @@
 				"soft": " "
 			}
 		},
-		"spaces": 1
+		"spaces": 1,
+    "reload_config": false
 	},
 	"ext": {
 		"ipython": {
