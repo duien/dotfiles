@@ -5,6 +5,12 @@ alias gst "git status"
 # __fish_git_prompt_showstashstate
 
 set CDPATH . $HOME $HOME/Code $CDPATH
+set PATH /usr/local/bin $PATH
+if test -d "$HOME/bin"
+  set PATH $HOME/bin $PATH
+end
+set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
+set fish_color_virtualenv red
 
 # If `.private.sh` exsits, load it
 # This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
