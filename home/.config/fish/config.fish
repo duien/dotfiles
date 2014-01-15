@@ -1,5 +1,9 @@
 alias gst "git status"
 
+alias ... ../..
+alias .... ../../..
+alias ..... ../../../..
+
 # echo $PWD | sed -e "s|^$HOME|~|" -e 's|^/private||'
 
 # __fish_git_prompt_showstashstate
