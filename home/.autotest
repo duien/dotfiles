@@ -1,4 +1,5 @@
-require 'autotest/fsevent'
+begin ; require 'autotest/fsevent' ; rescue LoadError ; end
+
 begin
   require 'autotest/growl'
 
