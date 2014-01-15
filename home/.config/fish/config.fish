@@ -9,6 +9,11 @@ set PATH /usr/local/bin $PATH
 if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
+
+set -x EDITOR vim
+set -x VISUAL subl
+set -x GEMEDITOR subl
+
 set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
 set fish_color_virtualenv red
 
