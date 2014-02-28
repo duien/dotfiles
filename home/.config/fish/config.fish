@@ -18,6 +18,8 @@ set -x EDITOR vim
 set -x VISUAL subl
 set -x GEMEDITOR subl
 
+set -x DOCKER_HOST 127.0.0.1:32000
+
 set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
 set fish_color_virtualenv red
 
