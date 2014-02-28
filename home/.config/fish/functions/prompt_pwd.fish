@@ -1,5 +1,5 @@
 function prompt_pwd --description "Print the current working directory, shortened to fit the prompt"
-  set -l directory_parts (echo $PWD | sed -e "s|^$HOME|~|" -e 's|^/private||' | tr / \n)
+  set -l directory_parts (pwd_home)
   # echo $directory_parts[-3 -2 -1]
 
   # set -l background_color 005F87

@@ -1,6 +1,8 @@
 function fish_title
 	if [ $_ = 'fish' ]
-        echo (pwd)
+        for part in (pwd_home)
+          echo -n "$part/"
+        end
     else
         echo $_
     end
