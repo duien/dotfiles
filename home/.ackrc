@@ -1,4 +1,4 @@
 --type-add=ruby=.haml,.rake,.rsel,.ru
---type-add=css=.sass
+--type-add=css=.sass,.scss
 --ignore-dir=tmp
 --ignore-dir=log
