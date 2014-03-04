@@ -1,0 +1,27 @@
+{
+  "name": "language-rust",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Rust language grammar for Atom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheHydroImpulse/language-rust"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# language-rust package\n\nA short description of your package.\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/TheHydroImpulse/language-rust/issues"
+  },
+  "homepage": "https://github.com/TheHydroImpulse/language-rust",
+  "_id": "language-rust@0.0.1",
+  "dist": {
+    "shasum": "a606dc1e5b50ebf990ee68ffe52c56a9ed77ab33"
+  },
+  "_resolved": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114127-30329-e29gxt/package.tgz",
+  "_from": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114127-30329-e29gxt/package.tgz"
+}

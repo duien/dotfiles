@@ -1,0 +1,30 @@
+{
+  "name": "angularjs",
+  "main": "./lib/angularjs",
+  "version": "0.0.3",
+  "description": "An AngularJS package for Atom",
+  "activationEvents": [
+    "angularjs:toggle"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular-ui/AngularJS-Atom"
+  },
+  "readmeFilename": "README.md",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# AngularJS support in Atom\n\nAdds syntax highlighting and snippets to AngularJS in Atom.\n\nOriginally [converted](http://atom.io/docs/latest/converting-a-text-mate-bundle)\nfrom the [AngularJS TextMate bundle](https://github.com/angular-ui/AngularJs.tmbundle).\n\nContributions are greatly appreciated. Please fork this repository and open a\npull request to add snippets, make grammar tweaks, etc.\n",
+  "bugs": {
+    "url": "https://github.com/angular-ui/AngularJS-Atom/issues"
+  },
+  "homepage": "https://github.com/angular-ui/AngularJS-Atom",
+  "_id": "angularjs@0.0.3",
+  "dist": {
+    "shasum": "53e40034d2fa65b584cdfc1b258044209a5693a4"
+  },
+  "_resolved": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114128-76123-1wv7j27/package.tgz",
+  "_from": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114128-76123-1wv7j27/package.tgz"
+}

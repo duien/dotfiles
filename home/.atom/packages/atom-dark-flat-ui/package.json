@@ -1,0 +1,26 @@
+{
+  "name": "atom-dark-flat-ui",
+  "theme": "ui",
+  "version": "2.1.0",
+  "description": "Fork of the default Dark theme (but with flat tabs) for interface components",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sdegutis/atom-dark-flat-ui"
+  },
+  "engines": {
+    "atom": ">0.40.0"
+  },
+  "readme": "# Atom Dark/Flat UI theme\n\nFork of Atom's default dark UI theme, but with flat tabs.\n\nThis theme is installed by default with Atom and can be activated by going to\nthe _Themes_ section in the Settings view (`cmd-,`) and selecting it from the\n_UI Themes_ drop-down menu.\n\n![](https://raw.github.com/sdegutis/atom-dark-flat-ui/master/darkflat.png)\n\nIf you prefer less space between tabs, add that to your `style.less`:\n\n```css\n.tab-bar .tab {\n  margin-right: 1px;\n}\n```\n\n![](https://raw.github.com/sdegutis/atom-dark-flat-ui/master/darkflat-alt.png)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/sdegutis/atom-dark-flat-ui/issues"
+  },
+  "homepage": "https://github.com/sdegutis/atom-dark-flat-ui",
+  "_id": "atom-dark-flat-ui@2.1.0",
+  "dist": {
+    "shasum": "d72f14ad67061a94a040b9539978bf5ab9772bea"
+  },
+  "_resolved": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114128-73267-rvez8o/package.tgz",
+  "_from": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-114128-73267-rvez8o/package.tgz"
+}

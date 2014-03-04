@@ -1,0 +1,26 @@
+{
+  "name": "twilight-syntax-spacegray-ui",
+  "theme": "syntax",
+  "version": "0.3.0",
+  "description": "Twilight syntax theme for GitHub's Atom IDE, optimized for the Spacegray UI theme.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cannikin/twilight-syntax-spacegray-ui"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "readme": "twilight-syntax-spacegray-ui\n============================\n\nTwilight theme for GitHub's Atom IDE optimized for the [Spacegray UI theme](http://atom.io/packages/spacegray-dark-ui).\n\nPorted from the Twilight TextMate theme.\n\n![screenshot](http://ridingtheclutch.com.s3.amazonaws.com/images/twilight-syntax-spacegray-ui.png)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/cannikin/twilight-syntax-spacegray-ui/issues"
+  },
+  "homepage": "https://github.com/cannikin/twilight-syntax-spacegray-ui",
+  "_id": "twilight-syntax-spacegray-ui@0.3.0",
+  "dist": {
+    "shasum": "ca82c743cbbe5d89d9ce38ed01a86fb0bbc02c4a"
+  },
+  "_resolved": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11423-81346-gd3jds/package.tgz",
+  "_from": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11423-81346-gd3jds/package.tgz"
+}
