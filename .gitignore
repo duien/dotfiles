@@ -3,3 +3,5 @@ home/.zsh/cache
 home/.config/fish/fish_history
 home/.config/fish/fish_read_history
 home/.config/fish/fishd.*
+home/.atom/storage
+home/.atom/.node-gyp
