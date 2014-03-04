@@ -1,0 +1,343 @@
+'fileTypes': [
+  'haml'
+]
+'foldingStartMarker': '^\\s*([-%#\\:\\.\\w\\=].*)\\s$'
+'foldingStopMarker': '^\\s*$'
+'name': 'Ruby Haml'
+'patterns': [
+  {
+    'captures':
+      '1':
+        'name': 'punctuation.definition.prolog.haml'
+    'match': '^(!!!)($|\\s.*)'
+    'name': 'meta.prolog.haml'
+  }
+  {
+    'captures':
+      '1':
+        'name': 'punctuation.section.comment.haml'
+    'match': '^ *(/)\\s*\\S.*$\\n?'
+    'name': 'comment.line.slash.haml'
+  }
+  {
+    'begin': '^( *)(/)\\s*$'
+    'beginCaptures':
+      '2':
+        'name': 'punctuation.section.comment.haml'
+    'end': '^(?!\\1  )'
+    'name': 'comment.block.haml'
+    'patterns': [
+      {
+        'include': 'text.haml'
+      }
+    ]
+  }
+  {
+    'captures':
+      '0':
+        'name': 'punctuation.section.embedded.ruby'
+      '1':
+        'name': 'source.ruby.embedded.source.empty'
+    'match': '#\\{\\s*(\\})'
+    'name': 'source.ruby.rails.embedded.source'
+  }
+  {
+    'begin': '#\\{'
+    'captures':
+      '0':
+        'name': 'punctuation.section.embedded.ruby'
+    'end': '(?<!\\\\)\\}'
+    'name': 'source.ruby.rails.embedded.source'
+    'patterns': [
+      {
+        'include': '#nest_curly_and_self'
+      }
+      {
+        'include': 'source.ruby.rails'
+      }
+    ]
+  }
+  {
+    'begin': '^\\s*(?:((%)([\\w:]+))|(?=\\.|#[^\\{]))'
+    'captures':
+      '1':
+        'name': 'meta.tag.haml'
+      '2':
+        'name': 'punctuation.definition.tag.haml'
+      '3':
+        'name': 'entity.name.tag.haml'
+    'end': '$|(?!\\.|#|\\{|\\[|\\(|=|-|~|/)'
+    'patterns': [
+      {
+        'match': '\\.[\\w-]+'
+        'name': 'entity.name.tag.class.haml'
+      }
+      {
+        'match': '#[\\w-]+'
+        'name': 'entity.name.tag.id.haml'
+      }
+      {
+        'begin': '\\{(?=.*\\}|.*\\|\\s*$)'
+        'end': '\\}|$|^(?!.*\\|\\s*$)'
+        'name': 'meta.section.attributes.haml'
+        'patterns': [
+          {
+            'include': 'source.ruby.rails'
+          }
+          {
+            'include': '#continuation'
+          }
+        ]
+      }
+      {
+        'begin': '\\((?=.*\\)|.*\\|\\s*$)'
+        'end': '\\)|$|^(?!.*\\|\\s*$)'
+        'name': 'meta.section.attributes.html-style.haml'
+        'patterns': [
+          {
+            'include': '#html-style-attributes'
+          }
+          {
+            'include': '#continuation'
+          }
+        ]
+      }
+      {
+        'begin': '\\[(?=.*\\]|.*\\|\\s*$)'
+        'end': '\\]|$|^(?!.*\\|\\s*$)'
+        'name': 'meta.section.object.haml'
+        'patterns': [
+          {
+            'include': 'source.ruby.rails'
+          }
+          {
+            'include': '#continuation'
+          }
+        ]
+      }
+      {
+        'include': '#rubyline'
+      }
+      {
+        'match': '/'
+        'name': 'punctuation.terminator.tag.haml'
+      }
+    ]
+  }
+  {
+    'captures':
+      '1':
+        'name': 'meta.escape.haml'
+    'match': '^\\s*(\\\\.)'
+  }
+  {
+    'begin': '^\\s*(?==|-|~|!=)'
+    'end': '$'
+    'patterns': [
+      {
+        'include': '#rubyline'
+      }
+    ]
+  }
+  {
+    'match': '<(?!(?i:a|abbr|access|acronym|action|address|applet|area|article|aside|audio|b|base|basefont|big|blockcode|blockquote|body|br|button|canvas|caption|center|cite|code|col|colgroup|command|datalist|dd|del|delete|details|di|dir|dispatch|div|dl|dt|em|embed|fieldset|figure|font|footer|form|frame|frameset|group|h|h1|h2|h3|h4|h5|h6|handler|head|header|hgroup|hr|html|i|iframe|img|input|ins|insert|l|label|legend|li|link|listing|load|map|mark|menu|message|meta|meter|nav|noframes|noscript|object|ol|optgroup|option|output|p|param|plaintext|pre|progress|samp|script|secret|section|select|separator|small|source|span|strike|strong|style|sub|submit|summary|switch|table|tbody|td|textarea|tfoot|th|thead|title|tr|trigger|tt|u|ul|upload|video|/|%))'
+    'name': 'keyword.other.angle-bracket.haml'
+  }
+  {
+    'include': 'text.html.basic'
+  }
+  {
+    'match': '>'
+    'name': 'keyword.other.angle-bracket.haml'
+  }
+  {
+    'include': '#ruby'
+  }
+  {
+    'include': '#erb'
+  }
+  {
+    'include': '#javascript'
+  }
+  {
+    'include': '#coffeescript'
+  }
+  {
+    'include': '#sass'
+  }
+  {
+    'include': '#css'
+  }
+]
+'repository':
+  'coffeescript':
+    'begin': '^(\\s*):coffeescript'
+    'end': '^(?!\\1\\s)'
+    'name': 'source.coffee'
+    'patterns': [
+      {
+        'include': 'source.coffee'
+      }
+    ]
+  'continuation':
+    'captures':
+      '1':
+        'name': 'punctuation.separator.continuation.haml'
+    'match': '(\\|)\\s*\\n'
+  'css':
+    'begin': '^(\\s*):css'
+    'end': '^(?!\\1\\s)'
+    'name': 'source.css'
+    'patterns': [
+      {
+        'include': 'source.css'
+      }
+    ]
+  'entities':
+    'patterns': [
+      {
+        'captures':
+          '1':
+            'name': 'punctuation.definition.entity.html'
+          '3':
+            'name': 'punctuation.definition.entity.html'
+        'match': '(&)([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+)(;)'
+        'name': 'constant.character.entity.html'
+      }
+      {
+        'match': '&'
+        'name': 'invalid.illegal.bad-ampersand.html'
+      }
+    ]
+  'erb':
+    'begin': '^(\\s*):erb'
+    'end': '^(?!\\1\\s)'
+    'name': 'text.html.ruby.embedded.haml'
+    'patterns': [
+      {
+        'include': 'text.html.ruby'
+      }
+    ]
+  'html-style-attributes':
+    'patterns': [
+      {
+        'include': '#html-tag-generic-attribute'
+      }
+      {
+        'include': '#string-double-quoted'
+      }
+      {
+        'include': '#string-single-quoted'
+      }
+      {
+        'include': '#html-unquoted-attribute'
+      }
+    ]
+  'html-tag-generic-attribute':
+    'captures':
+      '2':
+        'name': 'punctuation.separator'
+    'match': '(?<=[^=])\\b([a-zA-Z0-9:-]+)(=)?'
+    'name': 'entity.other.attribute-name.haml'
+  'html-unquoted-attribute':
+    'match': '(?<==)(?:[^\\s<>/\'"]|/(?!>))+'
+    'name': 'string.unquoted.haml'
+  'javascript':
+    'begin': '^(\\s*):javascript'
+    'end': '^(?!\\1\\s)'
+    'name': 'source.js'
+    'patterns': [
+      {
+        'include': 'source.js'
+      }
+    ]
+  'nest_curly_and_self':
+    'patterns': [
+      {
+        'begin': '\\{'
+        'captures':
+          '0':
+            'name': 'punctuation.section.scope.ruby'
+        'end': '\\}'
+        'patterns': [
+          {
+            'include': '#nest_curly_and_self'
+          }
+        ]
+      }
+      {
+        'include': 'source.ruby'
+      }
+    ]
+  'ruby':
+    'begin': '^(\\s*):ruby'
+    'end': '^(?!\\1\\s)'
+    'name': 'source.ruby.rails.embedded.haml'
+    'patterns': [
+      {
+        'include': 'source.ruby.rails'
+      }
+    ]
+  'rubyline':
+    'begin': '=|-|~'
+    'contentName': 'source.ruby.rails.embedded.haml'
+    'end': '((do|\\{)( \\|[^|]+\\|)?)$|$|^(?!.*\\|\\s*$)'
+    'endCaptures':
+      '1':
+        'name': 'source.ruby.rails.embedded.html'
+      '2':
+        'name': 'keyword.control.ruby.start-block'
+    'name': 'meta.line.ruby.haml'
+    'patterns': [
+      {
+        'comment': 'Hack to let ruby comments work in this context properly'
+        'match': '#.*$'
+        'name': 'comment.line.number-sign.ruby'
+      }
+      {
+        'include': 'source.ruby.rails'
+      }
+      {
+        'include': '#continuation'
+      }
+    ]
+  'sass':
+    'begin': '^(\\s*):sass'
+    'end': '^(?!\\1 )'
+    'name': 'source.sass'
+    'patterns': [
+      {
+        'include': 'source.sass'
+      }
+    ]
+  'string-double-quoted':
+    'begin': '"'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.haml'
+    'end': '"'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.haml'
+    'name': 'string.quoted.double.haml'
+    'patterns': [
+      {
+        'include': '#entities'
+      }
+    ]
+  'string-single-quoted':
+    'begin': '\''
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.haml'
+    'end': '\''
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.haml'
+    'name': 'string.quoted.single.haml'
+    'patterns': [
+      {
+        'include': '#entities'
+      }
+    ]
+'scopeName': 'text.haml'
