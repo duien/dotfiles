@@ -6,7 +6,7 @@
 [pull]
   default = matching
  [push]
-   default = simple
+	default = simple
 [core]
   excludesfile = ~/.gitignore
   editor = vim
@@ -21,7 +21,7 @@
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(cyan)(%ar)
 [difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+	cmd = "ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\""
 [difftool]
 	prompt = false
 [diff]
@@ -38,7 +38,7 @@
 [hub]
 	protocol = https
 [mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = "ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot"
 	trustExitCode = true
 [mergetool]
 	prompt = false
