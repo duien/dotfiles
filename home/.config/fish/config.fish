@@ -1,4 +1,5 @@
 alias gst "git status"
+alias d todo2
 
 alias ... ../..
 alias .... ../../..
@@ -15,8 +16,8 @@ if test -d "$HOME/bin"
 end
 
 set -x EDITOR vim
-set -x VISUAL subl
-set -x GEMEDITOR subl
+set -x VISUAL atom
+set -x GEMEDITOR atom
 
 set -x DOCKER_HOST 127.0.0.1:32000
 
