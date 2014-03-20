@@ -1,279 +1,303 @@
-'comment': 'Rust Syntax: version 0.1'
+'name': 'Rust'
+'scopeName': 'source.rust'
 'fileTypes': [
   'rs'
-  'jc'
 ]
-'foldingStartMarker': '^.*\\bfn\\s*(\\w+\\s*)?\\([^\\)]*\\)(\\s*\\{[^\\}]*)?\\s*$'
-'foldingStopMarker': '^\\s*\\}'
-'name': 'Rust'
-'patterns': [
-  {
-    'captures':
-      '1':
-        'name': 'support.class.rs'
-      '2':
-        'name': 'support.constant.rs'
-      '3':
-        'name': 'keyword.operator.rs'
-    'comment': 'match stuff like: Sound.prototype = { … } when extending an object'
-    'match': '([a-zA-Z_?.$][\\w?.$]*)\\.(prototype)\\s*(=)\\s*'
-    'name': 'meta.class.rs'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'storage.type.fn.rs'
-      '2':
-        'name': 'entity.name.fn.rs'
-      '3':
-        'name': 'punctuation.definition.parameters.begin.rs'
-      '4':
-        'name': 'variable.parameter.fn.rs'
-      '5':
-        'name': 'punctuation.definition.parameters.end.rs'
-    'comment': 'match regular fn like: fn myFunc(arg : type,...) { … }'
-    'match': '\\b(fn)\\s+([a-zA-Z_$]\\w*)?\\s*(\\()((.*?)\\s?\\:\\s?(.*?))?(\\))'
-    'name': 'meta.fnargs.rs'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'storage.type.fn.rs'
-      '2':
-        'name': 'entity.name.fn.rs'
-      '3':
-        'name': 'punctuation.definition.parameters.begin.rs'
-      '4':
-        'name': 'variable.parameter.fn.rs'
-      '5':
-        'name': 'punctuation.definition.parameters.end.rs'
-    'comment': 'match regular fn like: fn myFunc(arg) { … }'
-    'match': '\\b(fn)\\s+([a-zA-Z_$]\\w*)?\\s*(\\()(?!\\:.*?)(\\))'
-    'name': 'meta.fn.rs'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'storage.type.fn.rs'
-      '2':
-        'name': 'entity.name.fn.rs'
-      '3':
-        'name': 'punctuation.definition.parameters.begin.rs'
-      '4':
-        'name': 'variable.parameter.fn.rs'
-      '5':
-        'name': 'punctuation.definition.parameters.end.rs'
-    'comment': 'match regular fn like: fn myFunc(arg) { … }'
-    'match': '\\b(mod|enum)\\s+([a-zA-Z_$]\\w*)?\\s?\\{'
-    'name': 'meta.extras.rs'
-  }
-  {
-    'captures':
-      '1':
-        'name': 'keyword.operator.new.rs'
-      '2':
-        'name': 'entity.name.type.instance.rs'
-    'match': '(new)\\s+(\\w+(?:\\.\\w*)?)'
-    'name': 'meta.class.instance.constructor'
-  }
-  {
-    'match': '\\b((0(x|X)[0-9a-fA-F]+)|([0-9]+(\\.[0-9]+)?))\\b'
-    'name': 'constant.numeric.rs'
-  }
-  {
-    'match': '\\s?(\\#([a-zA-Z]+))'
-    'name': 'constant.special.rs'
-  }
-  {
-    'begin': '\''
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.rs'
-    'end': '\''
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.rs'
-    'name': 'string.quoted.single.rs'
-    'patterns': [
-      {
-        'match': '\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)'
-        'name': 'constant.character.escape.rs'
-      }
-    ]
-  }
-  {
-    'begin': '"'
-    'beginCaptures':
-      '0':
-        'name': 'punctuation.definition.string.begin.rs'
-    'end': '"'
-    'endCaptures':
-      '0':
-        'name': 'punctuation.definition.string.end.rs'
-    'name': 'string.quoted.double.rs'
-    'patterns': [
-      {
-        'match': '\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)'
-        'name': 'constant.character.escape.rs'
-      }
-    ]
-  }
-  {
-    'begin': '/\\*\\*(?!/)'
-    'captures':
-      '0':
-        'name': 'punctuation.definition.comment.rs'
+
+'repository': {
+  'block_doc_comment': {
+    'comment': 'Block documentation comment'
+    'name': 'comment.block.documentation.rust'
+    'begin': '/\\*[!\\*][^\\*]'
     'end': '\\*/'
-    'name': 'comment.block.documentation.rs'
+    'patterns': [
+      { 'include': '#block_doc_comment' }
+      { 'include': '#block_comment' }
+    ]
   }
-  {
+  'block_comment': {
+    'comment': 'Block comment'
+    'name': 'comment.block.rust'
     'begin': '/\\*'
-    'captures':
-      '0':
-        'name': 'punctuation.definition.comment.rs'
     'end': '\\*/'
-    'name': 'comment.block.rs'
-  }
-  # {
-  #   'captures':
-  #     '1':
-  #       'name': 'punctuation.definition.comment.rs'
-  #   'match': '(//).*$\\n?'
-  #   'name': 'comment.line.double-slash.rs'
-  # }
-  {
-    "begin": "(^[ \\t]+)?(?=//)",
-    "beginCaptures": {
-      "1": {
-        "name": "punctuation.whitespace.comment.leading.rs"
-      }
-    },
-    "end": "(?!\\G)",
-    "patterns": [
-      {
-        "begin": "//",
-        "beginCaptures": {
-          "0": {
-            "name": "punctuation.definition.comment.rs"
-          }
-        },
-        "end": "\\n",
-        "name": "comment.line.double-slash.rs"
-      }
-    ]
-  },
-  {
-    'match': '\\b(bool|byte|char|class|double|enum|float|f([0-9]+)|fn|int|use|uint|([0-9]+)i|([0-9]+)u|u([0-9]+)|i([0-9]+)|iface|impl|interface|long|type|short|ret|resource|str|var|mod|native|let|void)\\b'
-    'name': 'storage.type.rs'
-  }
-  {
-    'match': '\\b(const|export|extends|final|implements|native|private|protected|public|static|synchronized|throws|transient|volatile)\\b'
-    'name': 'storage.modifier.rs'
-  }
-  {
-    'match': '\\b(\\||break|alt|catch|continue|default|do|else|finally|for|to|if|import|package|return|switch|throw|try|while)\\b'
-    'name': 'keyword.control.rs'
-  }
-  {
-    'match': '\\b(delete|in|instanceof|new|typeof|with|as)\\b'
-    'name': 'keyword.operator.rs'
-  }
-  {
-    'match': '\\btrue\\b'
-    'name': 'constant.language.boolean.true.rs'
-  }
-  {
-    'match': '\\bfalse\\b'
-    'name': 'constant.language.boolean.false.rs'
-  }
-  {
-    'match': '\\bnull\\b'
-    'name': 'constant.language.null.rs'
-  }
-  {
-    'match': '\\b(self)\\b'
-    'name': 'variable.language.rs'
-  }
-  {
-    'match': '\\b(log,assert)\\b'
-    'name': 'keyword.other.rs'
-  }
-  {
-    'match': '\\b(std|str|io|float|consts|crypto|vec|unsafe|ptr)\\b'
-    'name': 'support.class.rs'
-  }
-  {
-    'match': '\\b(s(h(ift|ow(Mod(elessDialog|alDialog)|Help))|croll(X|By(Pages|Lines)?|Y|To)?|t(op|rike)|i(n|zeToContent|debar|gnText)|ort|u(p|b(str(ing)?)?)|pli(ce|t)|e(nd|t(Re(sizable|questHeader)|M(i(nutes|lliseconds)|onth)|Seconds|Ho(tKeys|urs)|Year|Cursor|Time(out)?|Interval|ZOptions|Date|UTC(M(i(nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(ome|andleEvent)|navigate|c(har(CodeAt|At)|o(s|n(cat|textual|firm)|mpile)|eil|lear(Timeout|Interval)?|a(ptureEvents|ll)|reate(StyleSheet|Popup|EventObject))|t(o(GMTString|S(tring|ource)|U(TCString|pperCase)|Lo(caleString|werCase))|est|a(n|int(Enabled)?))|i(s(NaN|Finite)|ndexOf|talics)|d(isableExternalCapture|ump|etachEvent)|u(n(shift|taint|escape|watch)|pdateCommands)|j(oin|avaEnabled)|p(o(p|w)|ush|lugins.refresh|a(ddings|rse(Int|Float)?)|r(int|ompt|eference))|e(scape|nableExternalCapture|val|lementFromPoint|x(p|ec(Script|Command)?))|valueOf|UTC|queryCommand(State|Indeterm|Enabled|Value)|f(i(nd|le(ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(nt(size|color)|rward)|loor|romCharCode)|watch|l(ink|o(ad|g)|astIndexOf)|a(sin|nchor|cos|t(tachEvent|ob|an(2)?)|pply|lert|b(s|ort))|r(ou(nd|teEvents)|e(size(By|To)|calc|turnValue|place|verse|l(oad|ease(Capture|Events)))|andom)|g(o|et(ResponseHeader|M(i(nutes|lliseconds)|onth)|Se(conds|lection)|Hours|Year|Time(zoneOffset)?|Da(y|te)|UTC(M(i(nutes|lliseconds)|onth)|Seconds|Hours|Da(y|te)|FullYear)|FullYear|A(ttention|llResponseHeaders)))|m(in|ove(B(y|elow)|To(Absolute)?|Above)|ergeAttributes|a(tch|rgins|x))|b(toa|ig|o(ld|rderWidths)|link|ack))\\b(?=\\()'
-    'name': 'support.fn.rs'
-  }
-  {
-    'match': '(?<=\\.)(s(ystemLanguage|cr(ipts|ollbars|een(X|Y|Top|Left))|t(yle(Sheets)?|atus(Text|bar)?)|ibling(Below|Above)|ource|uffixes|e(curity(Policy)?|l(ection|f)))|h(istory|ost(name)?|as(h|Focus))|y|X(MLDocument|SLDocument)|n(ext|ame(space(s|URI)|Prop))|M(IN_VALUE|AX_VALUE)|c(haracterSet|o(n(structor|trollers)|okieEnabled|lorDepth|mp(onents|lete))|urrent|puClass|l(i(p(boardData)?|entInformation)|osed|asses)|alle(e|r)|rypto)|t(o(olbar|p)|ext(Transform|Indent|Decoration|Align)|ags)|SQRT(1_2|2)|i(n(ner(Height|Width)|put)|ds|gnoreCase)|zIndex|o(scpu|n(readystatechange|Line)|uter(Height|Width)|p(sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(i(splay|alog(Height|Top|Width|Left|Arguments)|rectories)|e(scription|fault(Status|Ch(ecked|arset)|View)))|u(ser(Profile|Language|Agent)|n(iqueID|defined)|pdateInterval)|_content|p(ixelDepth|ort|ersonalbar|kcs11|l(ugins|atform)|a(thname|dding(Right|Bottom|Top|Left)|rent(Window|Layer)?|ge(X(Offset)?|Y(Offset)?))|r(o(to(col|type)|duct(Sub)?|mpter)|e(vious|fix)))|e(n(coding|abledPlugin)|x(ternal|pando)|mbeds)|v(isibility|endor(Sub)?|Linkcolor)|URLUnencoded|P(I|OSITIVE_INFINITY)|f(ilename|o(nt(Size|Family|Weight)|rmName)|rame(s|Element)|gColor)|E|whiteSpace|l(i(stStyleType|n(eHeight|kColor))|o(ca(tion(bar)?|lName)|wsrc)|e(ngth|ft(Context)?)|a(st(M(odified|atch)|Index|Paren)|yer(s|X)|nguage))|a(pp(MinorVersion|Name|Co(deName|re)|Version)|vail(Height|Top|Width|Left)|ll|r(ity|guments)|Linkcolor|bove)|r(ight(Context)?|e(sponse(XML|Text)|adyState))|global|x|m(imeTypes|ultiline|enubar|argin(Right|Bottom|Top|Left))|L(N(10|2)|OG(10E|2E))|b(o(ttom|rder(Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(Color|Image)))\\b'
-    'name': 'support.constant.rs'
-  }
-  {
-    'match': '!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|-->|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|(?<!\\()/=|%=|\\+=|\\-=|&=|\\^=|\\b(in|instanceof|new|delete|typeof|void)\\b'
-    'name': 'keyword.operator.rs'
-  }
-  {
-    'match': '\\b(Infinity|NaN|undefined)\\b'
-    'name': 'constant.language.rs'
-  }
-  {
-    'begin': '(?<=[=(:]|^|ret)\\s*(/)(?![/*+{}?])'
-    'beginCaptures':
-      '1':
-        'name': 'punctuation.definition.string.begin.rs'
-    'end': '(/)[igm]*'
-    'endCaptures':
-      '1':
-        'name': 'punctuation.definition.string.end.rs'
-    'name': 'string.regexp.rs'
     'patterns': [
-      {
-        'match': '\\\\.'
-        'name': 'constant.character.escape.rs'
-      }
+      { 'include': '#block_doc_comment' }
+      { 'include': '#block_comment' }
+    ]
+  }
+  'line_doc_comment': {
+    'comment': 'Single-line documentation comment'
+    'name': 'comment.line.documentation.rust'
+    'match': '//[!/][^/].*$'
+  }
+  'line_comment': {
+    'comment': 'Single-line comment'
+    'name': 'comment.line.double-slash.rust'
+    'match': '//.*$'
+  }
+  'escaped_character': {
+    'name': 'constant.character.escape.rust'
+    'match': '\\\\(x\\h{2}|[0-2][0-7]{,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)'
+  }
+  'sigils': {
+    'comment': 'Sigil'
+    'name': 'keyword.operator.sigil.rust'
+    'match': '[&~@*](?=[a-zA-Z0-9_\\(\\[\\|\\"]+)'
+  }
+  'types': {
+    'comment': 'Built-in type'
+    'name': 'storage.type.rust'
+    'match': '\\b(bool|char|uint|int|u8|u16|u32|u64|i8|i16|i32|i64|f32|f64|str|Self)\\b'
+  }
+  'std_types': {
+    'comment': 'Standard library type'
+    'name': 'support.class.std.rust'
+    'match': '\\b(Cell|RefCell|Option|Result|IoResult|Any)'
+  }
+  'kinds': {
+    'comment': 'Built-in trait (kind)'
+    'name': 'support.type.kind.rust'
+    'match': '\\b(Freeze|Pod|Send|Sized)\\b'
+  }
+  'self': {
+    'comment': 'Self variable'
+    'name': 'variable.language.rust'
+    'match': '\\bself\\b'
+  }
+  'mut': {
+    'comment': 'Mutable storage modifier'
+    'name': 'storage.modifier.mut.rust'
+    'match': '\\bmut\\b'
+  }
+  'lifetime': {
+    'comment': 'Named lifetime'
+    'name': 'storage.modifier.lifetime.rust'
+    'match': '\'([a-zA-Z_][a-zA-Z0-9_]*)\\b'
+    'captures': {
+      '1': { 'name': 'entity.name.lifetime.rust' }
+    }
+  }
+  'ref_lifetime': {
+    'comment': 'Reference with named lifetime'
+    'match': '&(\'([a-zA-Z_][a-zA-Z0-9_]*))\\b'
+    'captures': {
+      '1': { 'name': 'storage.modifier.lifetime.rust' }
+      '2': { 'name': 'entity.name.lifetime.rust' }
+    }
+  }
+  'type_params': {
+    'comment': 'Type parameters'
+    'name': 'meta.type_params.rust'
+    'begin': '<'
+    'end': '>'
+    'patterns': [
+      { 'include': '#block_comment' }
+      { 'include': '#line_comment' }
+      { 'include': '#sigils' }
+      { 'include': '#types' }
+      { 'include': '#std_types' }
+      { 'include': '#kinds' }
+      { 'include': '#mut' }
+      { 'include': '#lifetime' }
+      { 'include': '#type_params' }
+    ]
+  }
+}
+
+'patterns': [
+  # Comments
+  { 'include': '#block_doc_comment' }
+  { 'include': '#block_comment' }
+  { 'include': '#line_doc_comment' }
+  { 'include': '#line_comment' }
+  # Attributes
+  {
+    'comment': 'Attribute'
+    'name': 'meta.attribute.rust'
+    'begin': '#\\['
+    'end': '\\];?'
+  }
+  # Strings
+  {
+    'comment': 'Single-quote string'
+    'name': 'string.quoted.single.rust'
+    'begin': '\''
+    'end': '\''
+    'patterns': [
+      { 'include': '#escaped_character' }
     ]
   }
   {
-    'match': '\\;'
-    'name': 'punctuation.terminator.statement.rs'
+    'comment': 'Double-quote string'
+    'name': 'string.quoted.double.rust'
+    'begin': '"'
+    'end': '"'
+    'patterns': [
+      { 'include': '#escaped_character' }
+    ]
+  }
+  # Numbers
+  {
+    'comment': 'Floating point number (fraction)'
+    'name': 'constant.numeric.float.rust'
+    'match': '\\b[0-9][0-9_]*\\.[0-9][0-9_]*([eE][+-][0-9_]+)?(f32|f64)?\\b'
   }
   {
-    'match': ',[ |\\t]*'
-    'name': 'meta.delimiter.object.comma.rs'
+    'comment': 'Floating point number (exponent)'
+    'name': 'constant.numeric.float.rust'
+    'match': '\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?[eE][+-][0-9_]+(f32|f64)?\\b'
   }
   {
-    'match': '\\.'
-    'name': 'meta.delimiter.method.period.rs'
+    'comment': 'Floating point number (typed)'
+    'name': 'constant.numeric.float.rust'
+    'match': '\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-][0-9_]+)?(f32|f64)\\b'
   }
   {
-    'match': '\\{|\\}'
-    'name': 'meta.brace.curly.rs'
+    'comment': 'Integer number (decimal)'
+    'name': 'constant.numeric.integer.decimal.rust'
+    'match': '\\b[0-9][0-9_]*([ui](8|16|32|64)?)?\\b'
   }
   {
-    'match': '\\(|\\)'
-    'name': 'meta.brace.round.rs'
+    'comment': 'Integer number (hexadecimal)'
+    'name': 'constant.numeric.integer.hexadecimal.rust'
+    'match': '\\b0x[a-fA-F0-9_]+([ui](8|16|32|64)?)?\\b'
   }
   {
-    'match': '\\[|\\]'
-    'name': 'meta.brace.square.rs'
+    'comment': 'Integer number (octal)'
+    'name': 'constant.numeric.integer.octal.rust'
+    'match': '\\b0o[0-7_]+([ui](8|16|32|64)?)?\\b'
   }
   {
-    'match': '(#)[a-zA-Z][a-zA-Z0-9_-]*'
-    'name': 'meta.fn.rs'
+    'comment': 'Integer number (binary)'
+    'name': 'constant.numeric.integer.binary.rust'
+    'match': '\\b0b[01_]+([ui](8|16|32|64)?)?\\b'
+  }
+  # Language
+  {
+    'comment': 'Static storage modifier'
+    'name': 'storage.modifier.static.rust'
+    'match': '\\bstatic\\b'
   }
   {
-    'match': '(use)\\s+(\\w+)'
-    'name': 'meta.use.rs'
+    'comment': 'Visibility modifier'
+    'name': 'storage.modifier.visibility.rust'
+    'match': '\\b(priv|pub)\\b'
   }
   {
-    'match': '(import)\\s+(\\w+)((::)?(\\w+)?)'
-    'name': 'meta.import.rs'
+    'comment': 'Boolean constant'
+    'name': 'constant.language.boolean.rust'
+    'match': '\\b(true|false)\\b'
   }
   {
-    'match': '\\b(println)\\b'
-    'name': 'entity.mod.fn.rs'
+    'comment': 'Control keyword'
+    'name': 'keyword.control.rust'
+    'match': '\\b(break|continue|do|else|if|in|for|loop|match|return|while)\\b'
+  }
+  {
+    'comment': 'Keyword'
+    'name': 'keyword.other.rust'
+    'match': '\\b(crate|extern|mod|let|proc|ref|use)\\b'
+  }
+  {
+    'comment': 'Unsafe code keyword'
+    'name': 'keyword.other.unsafe.rust'
+    'match': '\\bunsafe\\b'
+  }
+  # TODO: _
+  { 'include': '#sigils' }
+  { 'include': '#types' }
+  { 'include': '#std_types' }
+  { 'include': '#kinds' }
+  { 'include': '#self' }
+  { 'include': '#mut' }
+  { 'include': '#ref_lifetime' }
+  # Operators
+  {
+    'comment': 'Operator'
+    'name': 'keyword.operator.rust'
+    'match': '(\\+|-|/|\\*|=|\\^|&|\\||!|>|<|%|::|\\bas\\b)'
+  }
+  # TODO: procs and closures
+  # Standard library
+  {
+    'comment': 'Standard library macro'
+    'name': 'support.function.std.rust'
+    'match': '\\b(log|error|warn|info|debug|log_enabled|fail|assert|assert_eq|unreachable|unimplemented|format|write|writeln|print|println|local_data_key|try|vec|select)!'
+  }
+  {
+    'comment': 'Standard library type variant'
+    'name': 'support.type.std.rust'
+    'match': '\\b(Some|None|Ok|Err)\\b'
+  }
+  {
+    'comment': 'Standard library constant'
+    'name': 'support.constant.std.rust'
+    'match': '\\b(Some|None|Ok|Err)\\b'
+  }
+  # Function and macro calls
+  {
+    'comment': 'Invokation of a macro'
+    'match': '\\b([a-zA-Z_][a-zA-Z0-9_]*\\!)\\s*\\('
+    'captures': {
+      '1': { 'name': 'entity.name.function.macro.rust' }
+    }
+  }
+  {
+    'comment': 'Function call'
+    'match': '\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\('
+    'captures': {
+      '1': { 'name': 'entity.name.function.rust' }
+    }
+  }
+  # Function definition
+  {
+    'comment': 'Function definition'
+    'begin': '\\b(fn)\\s+([a-zA-Z_][a-zA-Z0-9_]*)'
+    'end': '[\\{;]'
+    'beginCaptures': {
+      '1': { 'name': 'keyword.other.fn.rust' }
+      '2': { 'name': 'entity.name.function.rust' }
+    }
+    'patterns': [
+      { 'include': '#type_params' }
+      { 'include': '$self' }
+    ]
+  }
+  # Type declaration
+  {
+    'comment': 'Type declaration'
+    'begin': '\\b(enum|struct|trait|type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)'
+    'end': '[\\{;]'
+    'beginCaptures': {
+      '1': { 'name': 'storage.type.rust' }
+      '2': { 'name': 'entity.name.type.rust' }
+    }
+    'patterns': [
+      { 'include': '#type_params' }
+      { 'include': '$self' }
+    ]
+  }
+  # Implementation
+  {
+    'comment': 'Implementation'
+    'begin': '\\b(impl)\\b'
+    'end': '\\{'
+    'beginCaptures': {
+      '1': { 'name': 'storage.type.rust' }
+    }
+    'patterns': [
+      { 'include': '#type_params' }
+      { 'include': '$self' }
+    ]
+  }
+  # Variable declaration
+  {
+    'comment': 'Variable declaration'
+    'begin': ':'
+    'end': '[=;,\\)\\|]'
+    'patterns': [
+      { 'include': '#type_params' }
+      { 'include': '$self' }
+    ]
   }
 ]
-'scopeName': 'source.rs'
