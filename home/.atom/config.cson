@@ -1,13 +1,12 @@
 'exception-reporting':
   'userId': '71c26210-a1a7-6854-55d6-2e6d25f32095'
 'release-notes':
-  'viewedVersion': '0.65.0'
+  'viewedVersion': '0.73.0'
 'welcome':
   'showOnStartup': false
 'metrics':
   'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
 'editor':
-  'fontSize': 16
   'fontFamily': 'Source Code Pro for Powerline'
 'core':
   'themes': [
@@ -31,3 +30,6 @@
   ]
 'tree-view':
   'hideIgnoredNames': true
+'whitespace':
+  'removeTrailingWhitespace': false
+'find-and-replace': {}
