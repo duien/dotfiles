@@ -1,7 +1,7 @@
 'exception-reporting':
   'userId': '71c26210-a1a7-6854-55d6-2e6d25f32095'
 'release-notes':
-  'viewedVersion': '0.73.0'
+  'viewedVersion': '0.81.0'
 'welcome':
   'showOnStartup': false
 'metrics':
@@ -22,6 +22,7 @@
   'disabledPackages': [
     'language-haml'
   ]
+  'destroyEmptyPanes': false
 'spell-check':
   'grammars': [
     'source.gfm'
