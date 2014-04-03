@@ -1,6 +1,6 @@
 {
   "name": "language-rust",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Rust language support in Atom",
   "license": "MIT",
   "engines": {
@@ -17,10 +17,10 @@
   },
   "readme": "# Rust language support in Atom\n\nAdds syntax highlighting and snippets to [Rust](http://www.rust-lang.org/) files in [Atom](http://atom.io/).\n\n## Install\n\nInstall the package `language-rust` in Atom (Preferences->Packages) or Atom's package manager from a shell:\n\n```bash\n$ apm install language-rust\n```\n\n## Bugs\n\nGrammar rules were written from scratch. They seem to work for most cases. However there are most certainly still a few cases that result in wrong syntax highlighting. Feel free to fix it and send a pull request, or open an issue to report it.\n\n## Links\n\n* [Rust](http://www.rust-lang.org/) -- a safe, concurrent, practical language\n* [Atom](http://atom.io/) -- a hackable text editor for the 21st Century\n",
   "readmeFilename": "README.md",
-  "_id": "language-rust@0.2.1",
+  "_id": "language-rust@0.2.3",
   "dist": {
-    "shasum": "d557c20b7f591291a0c8eced13f14c4ee35555e3"
+    "shasum": "86a8390dea6e538a1740ba9e8a87b8dafac9d036"
   },
-  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114220-24532-15257lm/package.tgz",
-  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114220-24532-15257lm/package.tgz"
+  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11432-51818-19gvlx5/package.tgz",
+  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11432-51818-19gvlx5/package.tgz"
 }

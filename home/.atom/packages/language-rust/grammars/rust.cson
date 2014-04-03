@@ -52,12 +52,12 @@
   'std_types': {
     'comment': 'Standard library type'
     'name': 'support.class.std.rust'
-    'match': '\\b(Cell|RefCell|Option|Result|IoResult|Any)'
+    'match': '\\b(Cell|RefCell|Option|Result|IoResult|Sender|SyncSender|Receiver|Any)'
   }
   'kinds': {
     'comment': 'Built-in trait (kind)'
     'name': 'support.type.kind.rust'
-    'match': '\\b(Freeze|Pod|Send|Sized)\\b'
+    'match': '\\b(Send|Sized|Copy|Share)\\b'
   }
   'self': {
     'comment': 'Self variable'
@@ -114,8 +114,8 @@
   {
     'comment': 'Attribute'
     'name': 'meta.attribute.rust'
-    'begin': '#\\['
-    'end': '\\];?'
+    'begin': '#\\!?\\['
+    'end': '\\]'
   }
   # Strings
   {

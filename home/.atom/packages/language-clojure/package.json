@@ -1,6 +1,6 @@
 {
   "name": "language-clojure",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Clojure language support in Atom",
   "engines": {
     "atom": "*",
@@ -16,10 +16,10 @@
   },
   "readme": "# Clojure language support in Atom\n\nAdds syntax highlighting to Clojure files in Atom.\n\nOriginally [converted](http://atom.io/docs/latest/converting-a-text-mate-bundle)\nfrom the [Clojure TextMate bundle](https://github.com/mmcgrana/textmate-clojure).\n\nContributions are greatly appreciated. Please fork this repository and open a\npull request to add snippets, make grammar tweaks, etc.\n",
   "readmeFilename": "README.md",
-  "_id": "language-clojure@0.6.0",
+  "_id": "language-clojure@0.7.0",
   "dist": {
-    "shasum": "6ab3753cf0140f7c0557d503c780e029af931205"
+    "shasum": "f134af1fb19fabe1e3880a3d7a750866b31c9368"
   },
-  "_resolved": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11423-81307-et7tle/package.tgz",
-  "_from": "/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11423-81307-et7tle/package.tgz"
+  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11432-51808-13iavxk/package.tgz",
+  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11432-51808-13iavxk/package.tgz"
 }
