@@ -17,5 +17,5 @@
 #   'ctrl-p': 'core:move-down'
 #
 
-'.editor':
+'.workspace':
   'cmd-\'': 'toggle-quotes:toggle'
