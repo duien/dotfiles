@@ -1,0 +1,30 @@
+{
+  "name": "ruby-string-interpolation",
+  "main": "./lib/ruby-string-interpolation",
+  "version": "0.1.2",
+  "description": "Keypress handling for # to wrap the selection in interpolation",
+  "activationEvents": [
+    "ruby-string-interpolation:insert"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andyjeffries/ruby-string-interpolation"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# ruby-string-interpolation package\n\nType # within a double quoted string to insert #{} or wrap the selection in it.\n\nHow it works (aside from cursor movements, the only key I press is #):\n\n![Screencase](https://raw.githubusercontent.com/andyjeffries/ruby-string-interpolation/master/example.gif)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/andyjeffries/ruby-string-interpolation/issues"
+  },
+  "homepage": "https://github.com/andyjeffries/ruby-string-interpolation",
+  "_id": "ruby-string-interpolation@0.1.2",
+  "dist": {
+    "shasum": "ad7b04e23d19b1ed1d86d33e24aa02e7d56acc68"
+  },
+  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11438-37883-e3nk02/package.tgz",
+  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11438-37883-e3nk02/package.tgz"
+}
