@@ -22,11 +22,16 @@ text #![main] text
 text #![allow(great_algorithms)] text
 text #![!resolve_unexported] text
 text #[deny(silly_comments)] text
+#[doc = "This attribute contains ] a attribute ending character"]
 
-text 'single-quote string' text
 text "double-quote string" text
 text "string\nwith\x20escaped\"characters" text
 text "string with // comment /* inside" text
+
+text 'c' text
+text '\n' text
+text '\x20' text
+text '\'' text
 
 text 42f32 text
 text 42e+18 text
@@ -54,7 +59,7 @@ text let text proc text ref text
 text
 extern crate foo;
 text
-use std::vec;
+use std::slice;
 text
 use std::{num, str};
 text
@@ -89,7 +94,7 @@ pub trait MyTrait {
   text
   fn create_something (param: &str, mut other_param: u32) -> Option<Self>;
   text
-  fn do_whatever<T: Send+Pod+Whatever, U: Freeze> (param: &T, other_param: u32) -> Option<U>;
+  fn do_whatever<T: Send+Share+Whatever, U: Freeze> (param: &T, other_param: u32) -> Option<U>;
   text
   fn do_all_the_work (&mut self, param: &str, mut other_param: u32) -> bool;
   text
@@ -107,7 +112,7 @@ impl<'foo> MyTrait for MyStruct<'foo> {
     text
   }
   text
-  fn do_whatever<T: Send+Pod+Whatever, U: Freeze> (param: &T, other_param: u32) -> Option<U> {
+  fn do_whatever<T: Send+Share+Whatever, U: Freeze> (param: &T, other_param: u32) -> Option<U> {
     assert!(1 != 2);
     text
     self.with_something(param, |arg1, arg2| {
@@ -118,6 +123,10 @@ impl<'foo> MyTrait for MyStruct<'foo> {
   fn do_all_the_work (&mut self, param: &str, mut other_param: u32) -> bool {
     announce!("There's no cake");
     if !test_subject.under_control() {
+      text
+      let list: Vec<item> = some_iterator.map(|elem| elem.dosomething()).collect();
+      text
+      let boxed_list = box list;
       text
       self.announce_warning();
       text
@@ -156,3 +165,9 @@ impl MyStruct<'foo> {
   text
 }
 text
+
+'infinity: loop {
+  do_serious_stuff();
+  use_a_letter('Z');
+  break 'infinity;
+}
