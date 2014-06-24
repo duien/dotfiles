@@ -18,6 +18,7 @@
   wdiff = "diff --color-words"
   amend = commit --amend
   cached = diff --cached
+  stat = diff --stat
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(cyan)(%ar)
 [difftool "Kaleidoscope"]
