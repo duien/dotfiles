@@ -1,0 +1,26 @@
+{
+  "name": "language-thrift",
+  "version": "1.0.0",
+  "description": "Syntax highlighting and snippets for Thrift files.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidcelis/language-thrift"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {},
+  "readme": "# language-thrift package\n\nAtom syntax highlighting and snippets for [Thrift][thrift] files. Originally imported from [thrift.tmbundle][thrift-tmbundle]\n\n![screenshot](https://i.cloudup.com/70mT3AJ1Go-3000x3000.png)\n\n[thrift]: http://thrift.apache.org/\n[thrift-tmbundle]: https://github.com/textmate/thrift.tmbundle\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/davidcelis/language-thrift/issues"
+  },
+  "homepage": "https://github.com/davidcelis/language-thrift",
+  "_id": "language-thrift@1.0.0",
+  "dist": {
+    "shasum": "51e884d873b00879e80d310a73b8531bfda91a3e"
+  },
+  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11456-29555-ircm8m/package.tgz",
+  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-11456-29555-ircm8m/package.tgz"
+}
