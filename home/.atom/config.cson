@@ -10,6 +10,7 @@
   'fontFamily': 'mplus-2m-light'
   'softWrapAtPreferredLineLength': true
   'showInvisibles': true
+  'fontSize': 14
 'core':
   'themes': [
     'atom-dark-flat-ui'
@@ -22,6 +23,7 @@
     'language-haml'
   ]
   'destroyEmptyPanes': false
+  'useReactEditor': true
 'spell-check':
   'grammars': [
     'source.gfm'
