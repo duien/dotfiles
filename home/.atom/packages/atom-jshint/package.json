@@ -1,7 +1,7 @@
 {
   "name": "atom-jshint",
   "main": "./index.js",
-  "version": "1.2.0",
+  "version": "1.4.3",
   "private": true,
   "description": "Validates your JS against JSHint as you type. The original and most used.",
   "repository": {
@@ -22,9 +22,10 @@
     "url": "https://github.com/Joezo/atom-jshint/issues"
   },
   "homepage": "https://github.com/Joezo/atom-jshint",
-  "_id": "atom-jshint@1.2.0",
+  "_id": "atom-jshint@1.4.3",
   "dist": {
-    "shasum": "e9e5bb7bc5f066a16ba3060ec8e04e6410e3eee8"
+    "shasum": "c83088ebf69405fe382b11e5f14474071a711b78"
   },
-  "_from": "/Users/ehyland/.atom/.node-gyp/.atom/.apm/atom-jshint/1.2.0/package.tgz"
+  "_resolved": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114527-10582-1c0q6zj/package.tgz",
+  "_from": "/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114527-10582-1c0q6zj/package.tgz"
 }
