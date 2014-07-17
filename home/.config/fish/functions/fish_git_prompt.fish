@@ -18,9 +18,9 @@ function fish_git_prompt -d "Display the actual git state"
   set dirty (parse_git_dirty)
   set -l branch (echo $branch | sed  "s-refs/heads/--")
   if [ "$dirty" != "" ]
-    fish_prompt_segment black yellow "$status_symbol $branch"
+    fish_prompt_segment black yellow "$status_symbol$branch"
   else
-    fish_prompt_segment black green "$status_symbol $branch"
+    fish_prompt_segment black green "$status_symbol$branch"
   end
 end
 
@@ -43,17 +43,18 @@ function parse_git_dirty
   end
 end
 
-set -g fish_git_prompt_char_branch        ""
-set -g fish_git_prompt_char_rebase        "⤻"
+# set -g fish_git_prompt_char_branch        ""
+set -e fish_git_prompt_char_branch
+set -g fish_git_prompt_char_rebase        "⤻ "
 set -g fish_git_prompt_char_rebase_i      "$fish_git_prompt_char_rebase i"
 set -g fish_git_prompt_char_rebase_m      "$fish_git_prompt_char_rebase m"
 
-set -g fish_git_prompt_char_am            "AM"
-set -g fish_git_prompt_char_am_rebase     "AM/REBASE"
-set -g fish_git_prompt_char_merging       "⑃"
-set -g fish_git_prompt_char_cherrypicking "∷"
-set -g fish_git_prompt_char_reverting     "↩"
-set -g fish_git_prompt_char_bisecting     "⁒"
+set -g fish_git_prompt_char_am            "AM "
+set -g fish_git_prompt_char_am_rebase     "AM/REBASE "
+set -g fish_git_prompt_char_merging       "⑃ "
+set -g fish_git_prompt_char_cherrypicking "∷ "
+set -g fish_git_prompt_char_reverting     "↩ "
+set -g fish_git_prompt_char_bisecting     "⁒ "
 
 function fish_git_prompt_operation_branch --description "__fish_git_prompt helper, returns the current Git operation and branch"
   # This function is passed the full repo_info array

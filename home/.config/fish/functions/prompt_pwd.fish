@@ -1,4 +1,6 @@
 function prompt_pwd --description "Print the current working directory, shortened to fit the prompt"
+  set -l separator ' 〉'
+  
   set -l directory_parts (pwd_home)
   # echo $directory_parts[-3 -2 -1]
 
@@ -15,7 +17,7 @@ function prompt_pwd --description "Print the current working directory, shortene
   if set -q directory_parts[-5]
     echo -n '⋯ '
     set_color $separator_color
-    echo -n '  '
+    echo -n $separator
     set_color $segment_color
     set start -3
   end
@@ -25,7 +27,7 @@ function prompt_pwd --description "Print the current working directory, shortene
       set -l part $directory_parts[$i]
       echo -n "$part"
       set_color $separator_color
-      echo -n '  '
+      echo -n $separator
       set_color $segment_color
     end
   end
