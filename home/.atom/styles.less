@@ -9,31 +9,28 @@
  */
 
 .tree-view {
-  // font-family: 'Source Code Pro for Powerline';
   font-family: 'M+ 2m';
+  font-weight: 300;
 
-  // .list-tree {
-    li.list-nested-item.directory > .list-item {
-      font-weight: 600;
-    }
-    
-    
-  // }
-  
+  li.list-nested-item.directory > .list-item {
+    font-weight: 600;
+  }
 }
 
 .editor {
-  // font-weight:300;
+  font-weight:300;
   .gfm .heading {
     font-weight: 800;
   }
 }
 
 .gutter {
-  .line-number.cursor-line {
-    // font-weight: 600;
-    font-family: 'M+ 2m';
-    font-weight: 600;
+  .line-number {
+    font-weight: 100;
+
+    &.cursor-line {
+      font-weight: 500;
+    }
   }
 }
 

@@ -7,10 +7,10 @@
 'metrics':
   'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
 'editor':
-  'fontFamily': 'mplus-2m-light'
   'softWrapAtPreferredLineLength': true
   'showInvisibles': true
   'fontSize': 14
+  'fontFamily': '\'M+ 2m\''
 'core':
   'themes': [
     'atom-dark-flat-ui'
