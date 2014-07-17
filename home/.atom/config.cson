@@ -7,7 +7,7 @@
 'metrics':
   'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
 'editor':
-  'fontFamily': 'Source Code Pro for Powerline'
+  'fontFamily': 'mplus-2m-light'
   'softWrapAtPreferredLineLength': true
   'showInvisibles': true
 'core':
