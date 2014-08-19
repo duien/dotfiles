@@ -1,7 +1,7 @@
-{child} = require 'child_process'
 {XRegExp} = require 'xregexp'
 path = require 'path'
-{Range, Point, BufferedProcess, BufferedNodeProcess} = require 'atom'
+{Range, Point, BufferedProcess} = require 'atom'
+{log, warn} = require './utils'
 
 # Public: The base class for linters.
 # Subclasses must at a minimum define the attributes syntax, cmd, and regex.
@@ -41,6 +41,7 @@ class Linter
 
   isNodeExecutable: no
 
+  # TODO: what does this mean?
   errorStream: 'stdout'
 
   # Public: Construct a linter passing it's base editor
@@ -51,11 +52,16 @@ class Linter
   getCmdAndArgs: (filePath) ->
     cmd = @cmd
 
-    # here guarantee `cmd` does not have space or quote mark issue
-    cmd_list = cmd.split(' ').concat [filePath]
+    if not Array.isArray(cmd)
+      cmd_list = cmd.split(' ').concat [filePath]
+    else
+      cmd_list = cmd.concat [filePath]
 
     if @executablePath
-      cmd_list[0] = "#{@executablePath}/#{cmd_list[0]}"
+      cmd_list[0] = path.join @executablePath, cmd_list[0]
+
+    if @isNodeExecutable
+      cmd_list.unshift(@getNodeExecutablePath())
 
     # if there are "@filename" placeholders, replace them with real file path
     cmd_list = cmd_list.map (cmd_item) ->
@@ -64,8 +70,7 @@ class Linter
       else
         return cmd_item
 
-    if atom.config.get('linter.lintDebug')
-      console.log 'command and arguments', cmd_list
+    log 'command and arguments', cmd_list
 
     {
       command: cmd_list[0],
@@ -75,9 +80,9 @@ class Linter
   # Private: Provide the node executable path for use when executing a node
   #          linter
   getNodeExecutablePath: ->
-    path.join require.resolve('package'),
-      '..',
-      'apm/node_modules/atom-package-manager/bin/node'
+    path.join atom.packages.apmPath,
+      '..'
+      'node'
 
   # Public: Primary entry point for a linter, executes the linter then calls
   #         processMessage in order to handle standard output
@@ -87,31 +92,28 @@ class Linter
     # build the command with arguments to lint the file
     {command, args} = @getCmdAndArgs(filePath)
 
-    if atom.config.get('linter.lintDebug')
-      console.log 'is node executable: ' + @isNodeExecutable
-
-    # use BufferedNodeProcess if the linter is node executable
-    if @isNodeExecutable
-      Process = BufferedNodeProcess
-    else
-      Process = BufferedProcess
+    log 'is node executable: ' + @isNodeExecutable
 
     # options for BufferedProcess, same syntax with child_process.spawn
     options = {cwd: @cwd}
 
-    stdout = (output) =>
-      if atom.config.get('linter.lintDebug')
-        console.log 'stdout', output
-      if @errorStream is 'stdout'
-        @processMessage(output, callback)
+    dataStdout = []
+    dataStderr = []
 
-    stderr = (output) =>
-      if atom.config.get('linter.lintDebug')
-        console.warn 'stderr', output
-      if @errorStream is 'stderr'
-        @processMessage(output, callback)
+    stdout = (output) ->
+      log 'stdout', output
+      dataStdout += output
 
-    process = new Process({command, args, options, stdout, stderr})
+    stderr = (output) ->
+      warn 'stderr', output
+      dataStderr += output
+
+    exit = =>
+      data = if @errorStream is 'stdout' then dataStdout else dataStderr
+      @processMessage data, callback
+
+    process = new BufferedProcess({command, args, options,
+                                   stdout, stderr, exit})
 
     # Don't block UI more than 5seconds, it's really annoying on big files
     setTimeout ->
@@ -155,17 +157,25 @@ class Linter
       line: match.line,
       col: match.col,
       level: level,
-      message: match.message,
+      message: @formatMessage(match),
       linter: @linterName,
       range: @computeRange match
     }
 
+  # Public: This is the method to override if you want to set a custom message
+  #         not only the match.message but maybe concatenate an error|warning code
+  #
+  # By default it returns the message field.
+  formatMessage: (match) ->
+    match.message
 
   lineLengthForRow: (row) ->
     return @editor.lineLengthForBufferRow row
 
   getEditorScopesForPosition: (position) ->
-    return @editor.displayBuffer.tokenizedBuffer.scopesForPosition(position)
+    # Easy fix when line is removed before it can get lighted
+    try
+      @editor.displayBuffer.tokenizedBuffer.scopesForPosition position
 
   getGetRangeForScopeAtPosition: (innerMostScope, position) ->
     return @editor
@@ -193,27 +203,32 @@ class Linter
   #   colEnd: column to end highlight (optional)
   computeRange: (match) ->
     match.line ?= 0 # Assume if no line is found that it denotes a full file error.
-    rowStart = parseInt(match.lineStart ? match.line) - 1
-    rowEnd = parseInt(match.lineEnd ? match.line) - 1
 
-    # some linters utilize line 0 to denote full file errors, position these
-    # errors on line 1
-    if (rowStart == -1)
-      rowStart = rowEnd = 0
+    decrementParse = (x) ->
+      Math.max 0, parseInt(x) - 1
+
+    rowStart = decrementParse match.lineStart ? match.line
+    rowEnd = decrementParse match.lineEnd ? match.line
 
     match.col ?=  0
     unless match.colStart
       position = new Point(rowStart, match.col)
       scopes = @getEditorScopesForPosition(position)
 
-      while innerMostScope = scopes.pop()
+      while innerMostScope = scopes?.pop()
         range = @getGetRangeForScopeAtPosition(innerMostScope, position)
-        if range?
-          return range
+        return range if range?
 
     match.colStart ?= match.col
-    colStart = parseInt(match.colStart ? 0)
-    colEnd = if match.colEnd then parseInt(match.colEnd) else parseInt(@lineLengthForRow(rowEnd))
+    colStart = decrementParse match.colStart
+    colEnd = if match.colEnd?
+      decrementParse match.colEnd
+    else
+      parseInt @lineLengthForRow(rowEnd)
+
+    # if range has no width, nudge the start back one column
+    colStart = decrementParse colStart if colStart is colEnd
+
     return new Range(
       [rowStart, colStart],
       [rowEnd, colEnd]

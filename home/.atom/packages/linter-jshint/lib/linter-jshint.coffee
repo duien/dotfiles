@@ -1,6 +1,6 @@
 linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
-findFile = require "#{linterPath}/lib/util"
+{findFile, warn} = require "#{linterPath}/lib/utils"
 
 class LinterJshint extends Linter
   # The syntax that the linter handles. May be a string or
@@ -9,7 +9,7 @@ class LinterJshint extends Linter
 
   # A string, list, tuple or callable that returns a string, list or tuple,
   # containing the command line (with arguments) used to lint.
-  cmd: 'jshint --verbose --extract=auto'
+  cmd: ['jshint', '--verbose', '--extract=auto']
 
   linterName: 'jshint'
 
@@ -20,7 +20,6 @@ class LinterJshint extends Linter
     '(?<message>.+) ' +
     # capture error, warning and code
     '\\(((?<error>E)|(?<warning>W))(?<code>[0-9]+)\\)'+
-    # '\\((?<warning>.).+\\)'
     ')'
 
   isNodeExecutable: yes
@@ -30,13 +29,24 @@ class LinterJshint extends Linter
 
     config = findFile @cwd, ['.jshintrc']
     if config
-      @cmd += " -c #{config}"
+      @cmd = @cmd.concat ['-c', config]
 
     atom.config.observe 'linter-jshint.jshintExecutablePath', @formatShellCmd
 
   formatShellCmd: =>
     jshintExecutablePath = atom.config.get 'linter-jshint.jshintExecutablePath'
     @executablePath = "#{jshintExecutablePath}"
+
+  formatMessage: (match) ->
+    type = if match.error
+      "E"
+    else if match.warning
+      "W"
+    else
+      warn "Regex does not match lint output", match
+      ""
+
+    "#{match.message} (#{type}#{match.code})"
 
   destroy: ->
     atom.config.unobserve 'linter-jshint.jshintExecutablePath'
