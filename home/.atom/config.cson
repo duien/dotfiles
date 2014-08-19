@@ -9,7 +9,6 @@
 'editor':
   'softWrapAtPreferredLineLength': true
   'showInvisibles': true
-  'fontSize': 14
   'fontFamily': '\'M+ 2m\''
   'lineHeight': 1.4
 'core':
@@ -22,7 +21,8 @@
     'atom-jshint'
     'linter-rubocop'
     'language-haml'
-    'angularjs'
+    'angularjs',
+    'atom-handlebars'
   ]
   'destroyEmptyPanes': false
   'useReactEditor': true
