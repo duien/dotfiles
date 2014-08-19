@@ -22,6 +22,7 @@
     'atom-jshint'
     'linter-rubocop'
     'language-haml'
+    'angularjs'
   ]
   'destroyEmptyPanes': false
   'useReactEditor': true
