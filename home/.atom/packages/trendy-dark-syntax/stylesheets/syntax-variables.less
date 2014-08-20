@@ -1,0 +1,35 @@
+@import "colors";
+
+// This defines all syntax variables that syntax themes must implement when they
+// include a syntax-variables.less file.
+
+// General colors
+@syntax-text-color: @CLOUDS;
+@syntax-cursor-color: @CLOUDS;
+@syntax-selection-color: @WET_ASPHALT;
+@syntax-background-color: @MIDNIGHT_BLUE;
+
+// Guide colors
+@syntax-wrap-guide-color: @WET_ASPHALT;
+@syntax-indent-guide-color: @WET_ASPHALT;
+@syntax-invisible-character-color: @WET_ASPHALT;
+
+// For find and replace markers
+@syntax-result-marker-color: @WET_ASPHALT;
+@syntax-result-marker-color-selected: @WET_ASPHALT;
+
+// Gutter colors
+@syntax-gutter-text-color: @CLOUDS;
+@syntax-gutter-text-color-selected: @syntax-gutter-text-color;
+@syntax-gutter-background-color: @ALIZARIN;
+@syntax-gutter-background-color-selected: @POMEGRANATE;
+
+// For git diff info. i.e. in the gutter
+@syntax-color-renamed: @CLOUDS;
+@syntax-color-added: @CLOUDS;
+@syntax-color-modified: @CLOUDS;
+@syntax-color-removed: @CLOUDS;
+
+// Scrollbar colors
+@editor-scrollbar-background-color: transparent;
+@editor-scrollbar-color: @SUN_FLOWER;
