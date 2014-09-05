@@ -21,7 +21,7 @@
     'atom-jshint'
     'linter-rubocop'
     'language-haml'
-    'angularjs',
+    'angularjs'
     'atom-handlebars'
   ]
   'destroyEmptyPanes': false
