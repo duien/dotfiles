@@ -1,3 +1,60 @@
+# v0.7.3
+
+### Bug fixes
+
+* Removed dependency on copy-paste module, hopefully fixing Windows
+  installation problems. See [#223][223], [#210][210], and [#186][186].
+
+[223]: https://github.com/AtomLinter/Linter/issues/223
+[210]: https://github.com/AtomLinter/Linter/issues/210
+[186]: https://github.com/AtomLinter/Linter/issues/186
+
+# v0.7.2
+
+### Bug fixes
+* Fix error when message is on final line of file (See [#165][165])
+
+[165]: https://github.com/AtomLinter/Linter/issues/165
+
+# v0.7.1
+
+### Bug fixes
+* Fix ENOTEMPTY error (See [#218][218])
+* Minor tweaks to inline view (See [#215][215])
+
+[215]: https://github.com/AtomLinter/Linter/pull/215
+[218]: https://github.com/AtomLinter/Linter/issues/218
+
+# v0.7.0
+
+### New features
+* Option to display linter messages inline with code (See [#195][195])
+
+### Bug fixes
+* Clean up temporary directories (See [#212][212])
+
+[195]: https://github.com/AtomLinter/Linter/pull/195
+[212]: https://github.com/AtomLinter/Linter/issues/212
+
+# v0.6.1
+
+### Bug fixes
+* Fix keyboard shortcuts not working on lines containing lint messages
+  (See [#84][84], [#194][194])
+
+[84]: https://github.com/AtomLinter/Linter/issues/84
+[194]: https://github.com/AtomLinter/Linter/issues/194
+
+# v0.6.0
+
+### New features
+* Option to always show all messages in status bar (See [#196][196])
+
+### New linters
+* htmlhint, pylama, squirrel, CoDscript
+
+[196]: https://github.com/AtomLinter/Linter/pull/196
+
 # v0.5.18
 
 ### Bug Fixes
