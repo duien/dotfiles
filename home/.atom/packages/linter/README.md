@@ -3,7 +3,7 @@
 
 Lint your code with ease in [Atom](http://atom.io).
 
-![linter-jscs](https://github.com/AtomLinter/linter-jscs/raw/master/example.gif)
+![atom-inline-messages](inline-comments.gif)
 
 The idea is to stop the linter plugins war, by providing a top level API for linters to parse and display errors in the Atom editor.
 
@@ -15,12 +15,14 @@ The idea is to stop the linter plugins war, by providing a top level API for lin
 - [linter-pyflakes](https://atom.io/packages/linter-pyflakes), for Python, using `pyflakes`
 - [linter-pep8](https://atom.io/packages/linter-pep8), for Python, using `pep8`.
 - [linter-flake8](https://atom.io/packages/linter-flake8), for Python, using `flake8`
+- [linter-pylama](https://atom.io/packages/linter-pylama), for Python, using `pylama`
 - [linter-javac](https://atom.io/packages/linter-javac), for Java, using `javac`
 - [linter-jshint](https://atom.io/packages/linter-jshint), for JavaScript and JSON, using `jshint`
 - [linter-jscs](https://atom.io/packages/linter-jscs), for JavaScript, using `jscs`
 - [linter-jsxhint](https://atom.io/packages/linter-jsxhint), for JSX (React.js), using `jsxhint`
 - [linter-eslint](https://atom.io/packages/linter-eslint), for JavaScript, using `eslint`
 - [linter-scss-lint](https://atom.io/packages/linter-scss-lint), for SASS/SCSS, using `scss-lint`
+- [linter-less](https://atom.io/packages/linter-less), for LESS, using `less`
 - [linter-coffeelint](https://atom.io/packages/linter-coffeelint), for CoffeeScript, using `coffeelint`
 - [linter-csslint](https://atom.io/packages/linter-csslint), for CSS, using `csslint`
 - [linter-rubocop](https://atom.io/packages/linter-rubocop), for Ruby and Ruby on Rails, using `rubocop`
@@ -29,6 +31,7 @@ The idea is to stop the linter plugins war, by providing a top level API for lin
 - [linter-shellcheck](https://atom.io/packages/linter-shellcheck), for Bash, using `shellcheck`
 - [linter-scalac](https://atom.io/packages/linter-scalac), for Scala, using `scalac`
 - [linter-clang](https://atom.io/packages/linter-clang), for C / C++, using `clang`
+- [linter-cpplint](https://atom.io/packages/linter-cpplint), for C++, using `cpplint`
 - [linter-ruby](https://atom.io/packages/linter-ruby), for Ruby, using `ruby -wc`
 - [linter-lua](https://atom.io/packages/linter-lua), for Lua, using `luac -p`
 - [linter-clojure](https://atom.io/packages/linter-clojure), for Clojure, using `clojure`
@@ -37,6 +40,13 @@ The idea is to stop the linter plugins war, by providing a top level API for lin
 - [linter-erb](https://atom.io/packages/linter-erb), for .erb files, using `erb -x`
 - [linter-hlint](https://atom.io/packages/linter-hlint), for Haskell files, using `hlint`
 - [linter-tidy](https://atom.io/packages/linter-tidy), for HTML, using `tidy`
+- [linter-htmlhint](https://atom.io/packages/linter-htmlhint), for html, using `htmlhint`
+- [linter-squirrel](https://atom.io/packages/linter-squirrel), for squirrel, using `squirrel-compiler`
+- [linter-codscriptizer](https://atom.io/packages/linter-codscriptizer), for CoDScript, using `codscriptizer -l`
+- [linter-harbour](https://atom.io/packages/linter-harbour), for Harbour, using `harbour`
+- [linter-rust](https://atom.io/packages/linter-rust), for Rust, using `rustc`
+- [linter-dartanalyzer](https://atom.io/packages/linter-dartanalyzer), for Dart using `dartanalyzer`
+
 
 ## Features
 
@@ -57,6 +67,7 @@ The idea is to stop the linter plugins war, by providing a top level API for lin
 * **Show gutters**: [On / Off] - Show dot in the gutter on line error
 * **Show messages around cursor** [On / Off] - Show error description in the status bar
 * **Show status bar when cursor is in error range** [On / Off] - Either show status bar when the cursor is on the error line, or show it when the cursor is focus the range of wrong code
+* **Show error inline** [On / Off] - Shows the error or warning message next to the code as opposed to in the status bar.
 * **Lint on change interval** [in ms] - Interval between two lints while you are writing code
 
 ## Common errors

@@ -1,0 +1,26 @@
+{
+  "name": "pen-paper-coffee-syntax",
+  "theme": "syntax",
+  "version": "0.1.0",
+  "description": "A syntax theme specifically for writing papers in markdown. Featuring a paper like color scheme and increased font-size for headings",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nylki/pen-paper-coffee-syntax"
+  },
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "readme": "# Pen Paper Coffee\n\n*Pen Paper Coffee* is a syntax theme for the editor [atom](http://atom.io/), which is designed specifically for writing papers, essays etc. in [markdown](https://en.wikipedia.org/wiki/Markdown).\nThe theme features increased font-sizes for each level of headers, several useful, but not distracting syntax highlightings.\nThe overall colors are inspired by the soft beige paper you would find in a notebook. While the ink (text color) is a dark blue, all quotes and citations are in a warm brownish orange to contrast them better to your own words.\n\nAlthough the theme was designed for markdown usage, I paid attention that it still looks good and clear if you open other documents (eg. javascript, C).\n\n\n![A screenshot of your theme](https://raw.githubusercontent.com/nylki/PenPaperCoffee-atom-syntax/master/screenshots/penPaperCoffe_1.png)\n\n![A screenshot of your theme](https://raw.githubusercontent.com/nylki/PenPaperCoffee-atom-syntax/master/screenshots/penPaperCoffe_2.png)\n\n![A screenshot of your theme](https://raw.githubusercontent.com/nylki/PenPaperCoffee-atom-syntax/master/screenshots/penPaperCoffe_3.png)\n\n![A screenshot of your theme](https://raw.githubusercontent.com/nylki/PenPaperCoffee-atom-syntax/master/screenshots/penPaperCoffe_4.png)\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/nylki/pen-paper-coffee-syntax/issues"
+  },
+  "homepage": "https://github.com/nylki/pen-paper-coffee-syntax",
+  "_id": "pen-paper-coffee-syntax@0.1.0",
+  "dist": {
+    "shasum": "de4c0aff56ad8568a26e206b5b31b17206fd7a8c"
+  },
+  "_resolved": "/private/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114817-53123-ggiz1y/package.tgz",
+  "_from": "/private/var/folders/12/2_k4tsy503x45z3fm68pqbxw0000gn/T/d-114817-53123-ggiz1y/package.tgz"
+}

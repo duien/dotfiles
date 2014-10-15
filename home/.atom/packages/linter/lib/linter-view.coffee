@@ -2,7 +2,8 @@ _ = require 'lodash'
 fs = require 'fs'
 temp = require 'temp'
 path = require 'path'
-{log} = require './utils'
+{log, warn} = require './utils'
+rimraf = require 'rimraf'
 
 
 temp.track()
@@ -22,28 +23,31 @@ class LinterView
   #              annotations
   # statusBarView - shared StatusBarView between all linters
   # linters - global linter set to utilize for linting
-  constructor: (editorView, statusBarView, linters) ->
+  constructor: (@editorView, @statusBarView, @inlineView, @linters = []) ->
 
-    @editor = editorView.editor
-    @editorView = editorView
-    @statusBarView = statusBarView
+    @editor = @editorView.getModel()
+    unless @editor?
+      warn "No editor instance on this editorView"
     @markers = null
 
-    @initLinters(linters)
+    @initLinters(@linters)
 
     @subscriptions.push atom.workspaceView.on 'pane:item-removed', =>
       @statusBarView.hide()
+      @inlineView.hide()
 
     @subscriptions.push atom.workspaceView.on 'pane:active-item-changed', =>
-      @statusBarView.hide()
       if @editor.id is atom.workspace.getActiveEditor()?.id
-        @displayStatusBar()
+        @updateViews()
+      else
+        @statusBarView.hide()
+        @inlineView.hide()
 
     @handleBufferEvents()
     @handleConfigChanges()
 
     @subscriptions.push @editorView.on 'cursor:moved', =>
-      @displayStatusBar()
+      @updateViews()
 
   # Public: Initialize new linters (used on grammar chagne)
   #
@@ -83,7 +87,12 @@ class LinterView
     @subscriptions.push atom.config.observe 'linter.showErrorInStatusBar',
       (showMessagesAroundCursor) =>
         @showMessagesAroundCursor = showMessagesAroundCursor
-        @displayStatusBar()
+        @updateViews()
+
+    @subscriptions.push atom.config.observe 'linter.showErrorInline',
+      (showErrorInline) =>
+        @showErrorInline = showErrorInline
+        @updateViews()
 
     @subscriptions.push atom.config.observe 'linter.showHighlighting',
       (showHighlighting) =>
@@ -116,7 +125,6 @@ class LinterView
     @totalProcessed = 0
     @messages = []
     @destroyMarkers()
-
     # create temp dir because some linters are sensitive to file names
     temp.mkdir
       prefix: 'AtomLinter'
@@ -144,7 +152,8 @@ class LinterView
 
     tempFileInfo.completedLinters++
     if tempFileInfo.completedLinters == @linters.length
-      fs.unlink tempFileInfo.path
+      rimraf tempFileInfo.path, (err) ->
+        throw err if err?
 
     @messages = @messages.concat(messages)
     @display()
@@ -159,31 +168,38 @@ class LinterView
   display: ->
     @destroyMarkers()
 
-    @markers ?= []
-    for message in @messages
-      klass = if message.level == 'error'
-        'linter-error'
-      else if message.level == 'warning'
-        'linter-warning'
-      continue unless klass?  # skip other messages
+    if @showGutters or @showHighlighting
+      @markers ?= []
+      for message in @messages
+        klass = if message.level == 'error'
+          'linter-error'
+        else if message.level == 'warning'
+          'linter-warning'
+        continue unless klass?  # skip other messages
 
-      marker = @editor.markBufferRange message.range, invalidate: 'never'
-      @markers.push marker
+        marker = @editor.markBufferRange message.range, invalidate: 'never'
+        @markers.push marker
 
-      if @showGutters
-        @editor.decorateMarker marker, type: 'gutter', class: klass
+        if @showGutters
+          @editor.decorateMarker marker, type: 'gutter', class: klass
 
-      if @showHighlighting
-        @editor.decorateMarker marker, type: 'highlight', class: klass
+        if @showHighlighting
+          @editor.decorateMarker marker, type: 'highlight', class: klass
 
-    @displayStatusBar()
+    @updateViews()
 
-  # Internal: Update the status bar for new messages
-  displayStatusBar: ->
+  # Internal: Update the views for new messages
+  updateViews: ->
     if @showMessagesAroundCursor
       @statusBarView.render @messages, @editor
     else
       @statusBarView.render [], @editor
+
+    if @showErrorInline
+      @inlineView.render @messages, @editorView
+    else
+      @inlineView.render [], @editorView
+
 
   # Public: remove this view and unregister all it's subscriptions
   remove: ->

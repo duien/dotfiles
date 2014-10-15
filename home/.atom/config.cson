@@ -11,6 +11,7 @@
   'showInvisibles': true
   'fontFamily': '\'M+ 2m\''
   'lineHeight': 1.4
+  'invisibles': {}
 'core':
   'themes': [
     'atom-dark-flat-ui'
@@ -39,3 +40,7 @@
 'find-and-replace': {}
 'linter':
   'showHightlighting': false
+  'showHighlighting': false
+'linter-jshint': {}
+'git-log':
+  'fontScale': 1
