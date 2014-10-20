@@ -1,10 +1,19 @@
 function prompt_ruby
-  # set_color d70000
-  echo -n (ruby -v | cut -f 2 -d ' ' | cut -f 1 -d 'p') # ruby version
-  # set_color 870000
-  # echo -n '  '
-  # echo -n p
-  # set_color d70000
-  # echo -n (ruby -v | cut -f 2 -d ' ' | cut -f 2 -d 'p') # ruby patch
-  # echo -n (ruby -v | cut -f 2 -d ' ') # full ruby version and patch
+  if which rbenv | grep 'rbenv' > /dev/null
+    for env in local global
+      set -l ruby_version (rbenv $env ^ /dev/null)
+      if [ -n "$ruby_version" ]
+        echo -n $ruby_version \($env\)
+        break
+      end
+      # if rbenv $env | grep 'version configured' > /dev/null ^ /dev/null
+      #   # no version configured
+      #   echo -n "no $env"
+      # else
+      #   echo -n "yes $env"
+      # end
+    end
+  else
+    echo -n (ruby -v | cut -f 2 -d ' ' | cut -f 1 -d 'p') # ruby version
+  end
 end
