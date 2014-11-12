@@ -4,19 +4,21 @@ function prompt_pwd --description "Print the current working directory, shortene
   set -l directory_parts (pwd_home)
   # echo $directory_parts[-3 -2 -1]
 
-  # set -l background_color 005F87
-  set -l background_color blue
-  set -l segment_color white
-  # set -l separator_color blue
-  set -l separator_color cyan
+  # set -l background_color blue
+  # set -l segment_color white
+  # set -l separator_color cyan
+
+  set -l background_color purple
+  set -l separator_color white
+  set -l segment_color black
 
   set_color --background $background_color $segment_color
 
   set -l start -4
 
   if set -q directory_parts[-5]
-    echo -n '⋯ '
     set_color $separator_color
+    echo -n '⋯ '
     echo -n $separator
     set_color $segment_color
     set start -3
