@@ -16,7 +16,7 @@
   'core':
     'themes': [
       'atom-dark-flat-ui'
-      'bird-of-paradise-theme'
+      'paraiso-light'
     ]
     'projectHome': '/Users/eprice/Code'
     'disabledPackages': [
