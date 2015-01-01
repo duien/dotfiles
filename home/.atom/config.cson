@@ -11,6 +11,8 @@
   'showInvisibles': true
   'fontFamily': '\'M+ 2m\''
   'lineHeight': 1.4
+  'fontSize': 18
+  'invisibles': {}
 'core':
   'themes': [
     'atom-dark-flat-ui'
@@ -21,7 +23,7 @@
     'atom-jshint'
     'linter-rubocop'
     'language-haml'
-    'angularjs',
+    'angularjs'
     'atom-handlebars'
   ]
   'destroyEmptyPanes': false
@@ -36,6 +38,5 @@
   'hideIgnoredNames': true
 'whitespace':
   'removeTrailingWhitespace': false
-'find-and-replace': {}
 'linter':
   'showHightlighting': false
