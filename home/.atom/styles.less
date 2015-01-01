@@ -44,13 +44,18 @@
   @added: #48b685;
   @modified: #f99b15;
   @removed: #ef6155;
-  
+
   .invisible-character {
+
+    // Whitespace
     &.trailing-whitespace {
       color: #ef6155;
     }
   }
+
+  // Line numbering and active line
   .gutter .line-number {
+    &.cursor-line { background: #b9b6b0; }
     &.git-line-added {
       border: none;
       padding-left: 0.5em;
@@ -67,6 +72,27 @@
       border-left-color: @removed;
     }
   }
+
+  // General style tweaking
+  .entity.name.function {
+    color: #5bc4bf;
+  }
+
+  .constant.other.symbol {
+    color: #06b6ef;
+    .punctuation { 
+      color: #06b6ef;
+    }
+  }
+
+  .string.quoted .punctuation.definition {
+    color: #48b685;
+  }
+  
+  .variable .punctuation {
+    color: #ef6155;
+  }
+
 }
 
 .editor .cursor {

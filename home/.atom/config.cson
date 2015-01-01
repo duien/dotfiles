@@ -12,7 +12,6 @@
     'showInvisibles': true
     'fontFamily': '\'M+ 2m\''
     'lineHeight': 1.4
-    'invisibles': {}
   'core':
     'themes': [
       'atom-dark-flat-ui'
@@ -25,6 +24,7 @@
       'language-haml'
       'angularjs'
       'atom-handlebars'
+      'language-todo'
     ]
     'destroyEmptyPanes': false
     'useReactEditor': true
@@ -43,3 +43,5 @@
     'showHighlighting': false
   'git-log':
     'fontScale': 1
+'.text.todo':
+  'editor': {}
