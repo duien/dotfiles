@@ -26,7 +26,8 @@ elsif Pry.config.prompt_name == 'pry'
 end
 
 def rails_sym
-  defined?(Rails) ? '⌗ ' : ''
+  # defined?(Rails) ? '⌗ ' : ''
+  defined?(Rails) ? '# ' : ''
 end
 
 Pry.prompt = [

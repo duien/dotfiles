@@ -1,3 +1,0 @@
-'.source.thrift':
-  'editor':
-    'foldEndPattern': '^\\s*\\}'

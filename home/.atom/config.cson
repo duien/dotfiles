@@ -1,42 +1,45 @@
-'exception-reporting':
-  'userId': '71c26210-a1a7-6854-55d6-2e6d25f32095'
-'release-notes':
-  'viewedVersion': '0.95.0'
-'welcome':
-  'showOnStartup': false
-'metrics':
-  'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
-'editor':
-  'softWrapAtPreferredLineLength': true
-  'showInvisibles': true
-  'fontFamily': '\'M+ 2m\''
-  'lineHeight': 1.4
-  'fontSize': 18
-  'invisibles': {}
-'core':
-  'themes': [
-    'atom-dark-flat-ui'
-    'bird-of-paradise-theme'
-  ]
-  'projectHome': '/Users/eprice/Code'
-  'disabledPackages': [
-    'atom-jshint'
-    'linter-rubocop'
-    'language-haml'
-    'angularjs'
-    'atom-handlebars'
-  ]
-  'destroyEmptyPanes': false
-  'useReactEditor': true
-'spell-check':
-  'grammars': [
-    'source.gfm'
-    'text.git-commit'
-    'text.plain'
-  ]
-'tree-view':
-  'hideIgnoredNames': true
-'whitespace':
-  'removeTrailingWhitespace': false
-'linter':
-  'showHightlighting': false
+'global':
+  'exception-reporting':
+    'userId': '71c26210-a1a7-6854-55d6-2e6d25f32095'
+  'release-notes':
+    'viewedVersion': '0.95.0'
+  'welcome':
+    'showOnStartup': false
+  'metrics':
+    'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
+  'editor':
+    'softWrapAtPreferredLineLength': true
+    'showInvisibles': true
+    'fontFamily': '\'M+ 2m\''
+    'lineHeight': 1.4
+    'invisibles': {}
+  'core':
+    'themes': [
+      'atom-dark-flat-ui'
+      'paraiso-light'
+    ]
+    'projectHome': '/Users/eprice/Code'
+    'disabledPackages': [
+      'atom-jshint'
+      'linter-rubocop'
+      'language-haml'
+      'angularjs'
+      'atom-handlebars'
+    ]
+    'destroyEmptyPanes': false
+    'useReactEditor': true
+  'spell-check':
+    'grammars': [
+      'source.gfm'
+      'text.git-commit'
+      'text.plain'
+    ]
+  'tree-view':
+    'hideIgnoredNames': true
+  'whitespace':
+    'removeTrailingWhitespace': false
+  'linter':
+    'showHightlighting': false
+    'showHighlighting': false
+  'git-log':
+    'fontScale': 1

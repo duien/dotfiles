@@ -29,6 +29,9 @@ set fish_color_virtualenv red
 if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 
 # Enable RBENV
-set PATH $HOME/.rbenv/bin $PATH
-set PATH $HOME/.rbenv/shims $PATH
-rbenv rehash >/dev/null ^&1
+# set PATH $HOME/.rbenv/bin $PATH
+# set PATH $HOME/.rbenv/shims $PATH
+# rbenv rehash >/dev/null ^&1
+
+set -gx RBENV_ROOT /usr/local/var/rbenv
+. (rbenv init -|psub)

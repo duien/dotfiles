@@ -32,6 +32,7 @@
   user = duien
 [branch]
   autosetupmerge = always
+	autosetuprebase = always
 [mailmap]
   file = /Users/eprice/.gitmailmap
 [credential]

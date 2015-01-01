@@ -39,6 +39,36 @@
   }
 }
 
+// THEME-SPECIFIC SETTINGS
+.theme-paraiso-light {
+  @added: #48b685;
+  @modified: #f99b15;
+  @removed: #ef6155;
+  
+  .invisible-character {
+    &.trailing-whitespace {
+      color: #ef6155;
+    }
+  }
+  .gutter .line-number {
+    &.git-line-added {
+      border: none;
+      padding-left: 0.5em;
+      background: fade(@added, 50%);
+      &.cursor-line { background: fade(@added, 75%); }
+    }
+    &.git-line-modified {
+      border: none;
+      padding-left: 0.5em;
+      background: fade(@modified, 50%);
+      &.cursor-line { background: fade(@modified, 75%); }
+    }
+    &.git-line-removed:before {
+      border-left-color: @removed;
+    }
+  }
+}
+
 .editor .cursor {
 
 }
