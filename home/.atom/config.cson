@@ -16,7 +16,7 @@
   'core':
     'themes': [
       'flanderized-ui'
-      'solarized-dark-syntax'
+      'solarized-light-syntax'
     ]
     'projectHome': '/Users/eprice/Code'
     'disabledPackages': [
@@ -44,6 +44,5 @@
     'showHighlighting': false
   'git-log':
     'fontScale': 1
-  'file-icons': {}
 '.text.todo':
   'editor': {}
