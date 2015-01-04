@@ -11,9 +11,11 @@ function fish_prompt_segment --description 'Print out a segment of the prompt'
   end
 
   if test $previous_background != 'start'
-    echo -n " "
-  #   set_color --background $background $previous_background
-  #   echo -n ""
+    # echo -n " "
+    # set_color --background $background $previous_background
+    # echo -n ""
+    set_color white
+    echo -n ' |'
   end
 
   set_color --background $background $foreground
