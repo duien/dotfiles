@@ -8,24 +8,29 @@
  * http://www.lesscss.org
  */
 
+
 .tree-view {
   font-family: 'M+ 2m';
-  font-weight: 300;
+  font-size: 14px;
+  // font-weight: 300;
 
   li.list-nested-item.directory > .list-item {
-    font-weight: 600;
+    font-weight: 800;
   }
 }
 
 .editor {
-  font-weight: 300;
+  // font-weight: 300;
   .gfm {
-    font-weight: 300;
+    // font-weight: 300;
     .heading {
       font-weight: 600;
     }
     .source {
     }
+  }
+  .comment {
+    font-style: italic;
   }
 }
 
@@ -34,12 +39,13 @@
     font-weight: 100;
 
     &.cursor-line {
-      font-weight: 500;
+      font-weight: 600;
     }
   }
 }
 
 // THEME-SPECIFIC SETTINGS
+
 .theme-paraiso-light {
   @added: #48b685;
   @modified: #f99b15;
