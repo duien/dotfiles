@@ -12,10 +12,11 @@
     'showInvisibles': true
     'fontFamily': '\'M+ 2m\''
     'lineHeight': 1.4
+    'invisibles': {}
   'core':
     'themes': [
-      'atom-dark-flat-ui'
-      'paraiso-light'
+      'flanderized-ui'
+      'solarized-dark-syntax'
     ]
     'projectHome': '/Users/eprice/Code'
     'disabledPackages': [
@@ -43,5 +44,6 @@
     'showHighlighting': false
   'git-log':
     'fontScale': 1
+  'file-icons': {}
 '.text.todo':
   'editor': {}
