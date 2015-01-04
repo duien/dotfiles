@@ -1,0 +1,25 @@
+@import "ui-variables";
+@import "ui-mixins";
+
+.editor {
+	.mini {
+		color: @text-color-highlight;
+		background-color: @input-background-color;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+		border-radius: @component-border-radius;
+		line-height: @input-line-height;
+		padding-left: @component-padding/2;
+	}
+
+	&.mini {
+		padding-left: @component-padding/2;
+		padding-right: @component-padding/2;
+	}
+
+	.cursor { border-color: #fff; }
+	.selection .region { background-color: @selection-color; }
+
+	// .gutter {
+	// 	background-color: @editor-background-color;
+	// }
+}
