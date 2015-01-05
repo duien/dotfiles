@@ -15,8 +15,8 @@
     'invisibles': {}
   'core':
     'themes': [
-      'atom-dark-flat-ui'
-      'paraiso-light'
+      'flanderized-ui'
+      'solarized-light-syntax'
     ]
     'projectHome': '/Users/eprice/Code'
     'disabledPackages': [
@@ -25,6 +25,7 @@
       'language-haml'
       'angularjs'
       'atom-handlebars'
+      'language-todo'
     ]
     'destroyEmptyPanes': false
     'useReactEditor': true
@@ -43,3 +44,5 @@
     'showHighlighting': false
   'git-log':
     'fontScale': 1
+'.text.todo':
+  'editor': {}

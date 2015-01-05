@@ -18,9 +18,11 @@ function fish_git_prompt -d "Display the actual git state"
   set dirty (parse_git_dirty)
   set -l branch (echo $branch | sed  "s-refs/heads/--")
   if [ "$dirty" != "" ]
-    fish_prompt_segment black yellow "$status_symbol$branch"
+    # fish_prompt_segment black yellow "$status_symbol$branch"
+    fish_prompt_segment yellow black "$status_symbol$branch"
   else
-    fish_prompt_segment black green "$status_symbol$branch"
+    # fish_prompt_segment black green "$status_symbol$branch"
+    fish_prompt_segment green black "$status_symbol$branch"
   end
 end
 

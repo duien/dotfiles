@@ -4,3 +4,4 @@ set guifont=Consolas:h16
 set vb
 " set noantialias
 set colorcolumn=80  " mark 80 characters
+set guifont=M+\ 2m:h16

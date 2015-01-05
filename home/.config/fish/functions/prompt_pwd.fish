@@ -5,12 +5,16 @@ function prompt_pwd --description "Print the current working directory, shortene
   # echo $directory_parts[-3 -2 -1]
 
   # set -l background_color blue
-  # set -l segment_color white
-  # set -l separator_color cyan
+  # set -l segment_color black
+  # set -l separator_color white
 
-  set -l background_color purple
-  set -l separator_color white
-  set -l segment_color black
+  # set -l background_color purple
+  # set -l separator_color purple
+  # set -l segment_color white
+  
+  set -l background_color black
+  set -l separator_color blue
+  set -l segment_color blue
 
   set_color --background $background_color $segment_color
 
@@ -20,6 +24,8 @@ function prompt_pwd --description "Print the current working directory, shortene
     set_color $separator_color
     echo -n '⋯ '
     echo -n $separator
+    # set_color normal
+    # set_color --background $background_color $segment_color
     set_color $segment_color
     set start -3
   end
@@ -30,6 +36,8 @@ function prompt_pwd --description "Print the current working directory, shortene
       echo -n "$part"
       set_color $separator_color
       echo -n $separator
+      # set_color normal
+      # set_color --background $background_color $segment_color
       set_color $segment_color
     end
   end

@@ -1,0 +1,36 @@
+{
+  "name": "flanderized-ui",
+  "theme": "ui",
+  "version": "0.3.0",
+  "description": "Outlander + Solarized Dark",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrimifi/flanderized-ui"
+  },
+  "engines": {
+    "atom": ">0.145.0"
+  },
+  "readme": "# Flanderized\n\nOutlander is a dark, flat UI theme for [Atom](https://atom.io/).\nFlanderized combines the elegant simplicity of [Outlander](https://atom.io/themes/outlander-ui) with the tranquil-yet-vivid\ncolorset we call [Solarized](http://ethanschoonover.com/solarized) Dark.\n\n![screenshot.png](https://raw.githubusercontent.com/chrimifi/flanderized-ui/master/screenshot.png)\n\nBest used with the Solarized Dark syntax theme that comes included with Atom.\nWell, that's what I like to use it with. You have to live your own life. Make\nyour own choices. Decide what's best for **you**. And sometimes I won't agree.\nEven if I'm right, I still have to let you make your own mistakes.\n\n## Installation\nRun the following in a terminal:\n```sh\n$ apm install flanderized-ui\n```\nAlternatively, the theme can be installed from the settings menu at **_preferences -> themes_**, from where the theme itself can also be applied.\n\n## To Do\n* Fix selected file highlighting being interrupted by scroll bar in tree view\n* Change remaining gray areas to a more Solarized-compatible shade.\n* Decide whether I'm comfortable with a UI theme that changes the color of the\n  gutter and selection, which is more of a syntax decision.\n\n#### What's with the name?\nAn excellent question. <strong>F</strong>ork of Out<strong>lander</strong> incorporating Sola<strong>rized</strong> = **Flanderized**\n\nIt's also a reference to the TV Tropes concept of [Flanderization](http://tvtropes.org/pmwiki/pmwiki.php/Main/Flanderization).\n*This is a TV Tropes link and should be clicked with extreme caution. If you\nbegin reading the article, you become highly likely to fritter away the rest of\nyour day clicking from article to article the same way one does when first\ndiscovering Wikipedia.*\n\n#### Miscellaneous Credits\n* Ethan Schoonover's [Solarized](http://ethanschoonover.com/solarized) color scheme\n* Michael Hadley's [Outlander](https://atom.io/themes/outlander-ui) UI theme for Atom\n* File icons in the screenshot are powered by Dan Brooker's [file-icons](https://atom.io/packages/file-icons) package.\n* The editor font in the screenshot is Jany Belluz's [Fantasque Sans Mono](http://openfontlibrary.org/en/font/fantasque-sans-mono).\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/chrimifi/flanderized-ui/issues"
+  },
+  "homepage": "https://github.com/chrimifi/flanderized-ui",
+  "_id": "flanderized-ui@0.3.0",
+  "dist": {
+    "shasum": "c08957e812e1eb9c6416b26660803db0dd8c399f"
+  },
+  "_resolved": "/private/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11504-2236-1l2nmmw/package.tgz",
+  "_from": "/private/var/folders/pv/_r1r0v910j7cp3mg5wq9xw6w0000gn/T/d-11504-2236-1l2nmmw/package.tgz",
+  "_atomModuleCache": {
+    "version": 1,
+    "dependencies": [],
+    "extensions": {
+      ".json": [
+        "package.json"
+      ]
+    },
+    "folders": []
+  }
+}
