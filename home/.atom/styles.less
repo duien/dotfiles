@@ -1,3 +1,6 @@
+@import "ui-variables";
+@import "syntax-variables";
+
 /*
  * Your Stylesheet
  *
@@ -8,51 +11,132 @@
  * http://www.lesscss.org
  */
 
-
 .tree-view {
-  font-family: 'M+ 2m';
-  font-size: 14px;
+  font-family: 'Source Code Pro'; // TODO Find a way to reference configured font
+  font-size: 12px;
   // font-weight: 300;
 
   li.list-nested-item.directory > .list-item {
-    font-weight: 800;
+    font-weight: 600;
   }
 }
 
-.editor {
-  // font-weight: 300;
+.editor, .editor::shadow {
+  font-weight: 300;
+  .lines {
+    margin-left: 0.25em;
+  }
   .gfm {
-    // font-weight: 300;
+  //   // font-weight: 300;
     .heading {
       font-weight: 600;
     }
-    .source {
-    }
+  //   .source {
+  //   }
   }
   .comment {
     font-style: italic;
   }
-}
 
-.gutter {
-  .line-number {
-    font-weight: 100;
+  .gutter {
+    .line-number {
+      font-weight: 100;
 
-    &.cursor-line {
-      font-weight: 600;
+      &.cursor-line {
+        font-weight: 600;
+      }
     }
   }
 }
 
+.editor, .editor::shadow {
+  @indent-offset: -4px; // This might need tweaking depending on font and size
+
+  .indent-guide {
+    position: relative;
+    right: @indent-offset;
+    color: transparent;
+    box-shadow: inset 1px 0 @syntax-indent-guide-color;
+  }
+  .invisible-character { // hide most invisibles
+    color: transparent;
+  }
+  .trailing-whitespace { // Just show trailing whitespace
+    color: fade(red, 50);
+  }
+}
+
+// Don't color icons in the tree view (but do color them elsewhere)
+.tree-view .icon-file-text:before {
+  color: inherit !important;
+}
+
+// More visible coloring of added/changed lines
+.editor.is-focused, .editor.is-focused::shadow {
+  .gutter .line-number {
+    &.git-line-added {
+      background: fade(@syntax-color-added, 10);
+      &.cursor-line { background: fade(@syntax-color-added, 25); }
+    }
+    &.git-line-modified {
+      background: fade(@syntax-color-modified, 20);
+      &.cursor-line { background: fade(@syntax-color-modified, 50); }
+    }
+    &.git-line-removed:before {
+      border-left-color: @syntax-color-removed;
+    }
+  }
+}
+
+
 // THEME-SPECIFIC SETTINGS
 
-.theme-solarized-light-syntax.theme-flanderized-ui {
-  .tab-bar .tab.active, .tab-bar .tab.active:before, .tab-bar .tab.active:after {
-    background-color: #fdf6e3;
+// Match the tab in Flanderized to the syntax theme
+.theme-flanderized-ui {
+  .tab-bar .tab.active, .tab-bar .tab.active::before, .tab-bar .tab.active::after, .tab-bar::after {
+    background-color: @syntax-background-color;
+    // background-color: red;
   }
-  
-  .tab-bar::after {
-    background-color: #fdf6e3;
+}
+
+.theme-summerfruit-theme {
+  .editor, .editor::shadow {
+    // An indented comment
+    .comment {
+      background-color: transparent;
+      &:not(.leading) {
+        background-color: #dbf3cd;
+        // background-color: lighten(#FFF92D, 25);
+        // color: gray;
+      }
+    }
+  }
+}
+.theme-solarized-light-syntax.theme-flanderized-ui {
+  @yellow:  #b58900;
+  @orange:  #cb4b16;
+  @red:     #dc322f;
+  @magenta: #d33682;
+  @purple:  #6c71c4;
+  @blue:    #268bd2;
+  @cyan:    #2aa198;
+  @green:   #859900;
+
+  .editor, .editor::shadow {
+    .indent-guide {
+      &:nth-child(1)    { box-shadow: none !important; }
+      &:nth-child(8n-6) { box-shadow: inset 1px 0 fade(@yellow,  15); }
+      &:nth-child(8n-5) { box-shadow: inset 1px 0 fade(@blue,    15); }
+      &:nth-child(8n-4) { box-shadow: inset 1px 0 fade(@red,     15); }
+      &:nth-child(8n-3) { box-shadow: inset 1px 0 fade(@green,   15); }
+      &:nth-child(8n-2) { box-shadow: inset 1px 0 fade(@purple,  15); }
+      &:nth-child(8n-1) { box-shadow: inset 1px 0 fade(@orange,  15); }
+      &:nth-child(8n)   { box-shadow: inset 1px 0 fade(@cyan,    15); }
+      &:nth-child(8n+1) { box-shadow: inset 1px 0 fade(@magenta, 15); }
+    }
+    .trailing-whitespace {
+      color: fade(@red, 50);
+    }
   }
 }
 
@@ -108,9 +192,5 @@
   .variable .punctuation {
     color: #ef6155;
   }
-
-}
-
-.editor .cursor {
 
 }

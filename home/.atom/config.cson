@@ -1,48 +1,58 @@
-'global':
-  'exception-reporting':
-    'userId': '71c26210-a1a7-6854-55d6-2e6d25f32095'
-  'release-notes':
-    'viewedVersion': '0.95.0'
-  'welcome':
-    'showOnStartup': false
-  'metrics':
-    'userId': '6162d00349c199248ff6e716be3f500e5d2c0ac1'
-  'editor':
-    'softWrapAtPreferredLineLength': true
-    'showInvisibles': true
-    'fontFamily': '\'M+ 2m\''
-    'lineHeight': 1.4
-    'invisibles': {}
-  'core':
-    'themes': [
-      'flanderized-ui'
-      'solarized-light-syntax'
+"*":
+  "exception-reporting":
+    userId: "71c26210-a1a7-6854-55d6-2e6d25f32095"
+  "release-notes":
+    viewedVersion: "0.95.0"
+  welcome:
+    showOnStartup: false
+  metrics:
+    userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
+  editor:
+    fontFamily: "'Source Code Pro'"
+    lineHeight: 1.4
+    showInvisibles: true
+    showIndentGuide: true
+    softWrapAtPreferredLineLength: true
+    scrollPastEnd: true
+    invisibles: {}
+  core:
+    disabledPackages: [
+      "atom-jshint"
+      "linter-rubocop"
+      "language-haml"
+      "angularjs"
+      "atom-handlebars"
+      "language-todo"
     ]
-    'projectHome': '/Users/eprice/Code'
-    'disabledPackages': [
-      'atom-jshint'
-      'linter-rubocop'
-      'language-haml'
-      'angularjs'
-      'atom-handlebars'
-      'language-todo'
+    themes: [
+      "flanderized-ui"
+      "solarized-light-syntax"
     ]
-    'destroyEmptyPanes': false
-    'useReactEditor': true
-  'spell-check':
-    'grammars': [
-      'source.gfm'
-      'text.git-commit'
-      'text.plain'
+    projectHome: "/Users/eprice/Code"
+    destroyEmptyPanes: false
+  "spell-check":
+    grammars: [
+      "source.gfm"
+      "text.git-commit"
+      "text.plain"
     ]
-  'tree-view':
-    'hideIgnoredNames': true
-  'whitespace':
-    'removeTrailingWhitespace': false
-  'linter':
-    'showHightlighting': false
-    'showHighlighting': false
-  'git-log':
-    'fontScale': 1
-'.text.todo':
-  'editor': {}
+  "tree-view":
+    hideIgnoredNames: true
+  whitespace:
+    removeTrailingWhitespace: false
+  linter:
+    showHightlighting: false
+    showHighlighting: false
+  "git-log":
+    fontScale: 1
+  "atom-color-highlight":
+    hideMarkersInComments: true
+  "file-icons": {}
+  "isotope-ui":
+    fontFamily: "System Default"
+    compactLayout: true
+    colorTreeSelection: false
+    backgroundColor: "#073642"
+    gutterStyle: false
+".text.todo":
+  editor: {}
