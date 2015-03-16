@@ -12,15 +12,15 @@
  */
 
 .tree-view {
-  font-family: 'Source Code Pro'; // TODO Find a way to reference configured font
-  font-size: 12px;
-  // font-weight: 300;
-
+//   font-family: 'Source Code Pro'; // TODO Find a way to reference configured font
+//   font-size: 12px;
+//   // font-weight: 300;
+// 
   li.list-nested-item.directory > .list-item {
     font-weight: 600;
   }
 }
-
+  
 .editor, .editor::shadow {
   font-weight: 300;
   .lines {
@@ -43,20 +43,23 @@
       font-weight: 100;
 
       &.cursor-line {
-        font-weight: 600;
+        // font-weight: 600;
       }
     }
   }
 }
 
 .editor, .editor::shadow {
-  @indent-offset: -4px; // This might need tweaking depending on font and size
+  @indent-offset: 4px; // This might need tweaking depending on font and size
 
   .indent-guide {
-    position: relative;
-    right: @indent-offset;
-    color: transparent;
-    box-shadow: inset 1px 0 @syntax-indent-guide-color;
+    box-shadow: none;
+    background: linear-gradient(90deg, // replace box-shadow with gradient
+      transparent,
+      transparent @indent-offset,
+      @syntax-indent-guide-color @indent-offset,
+      @syntax-indent-guide-color @indent-offset + 1px,
+      transparent @indent-offset + 1px)
   }
   .invisible-character { // hide most invisibles
     color: transparent;
@@ -92,7 +95,7 @@
 // THEME-SPECIFIC SETTINGS
 
 // Match the tab in Flanderized to the syntax theme
-.theme-flanderized-ui {
+.theme-flanderized-ui, .theme-outlander-ui {
   .tab-bar .tab.active, .tab-bar .tab.active::before, .tab-bar .tab.active::after, .tab-bar::after {
     background-color: @syntax-background-color;
     // background-color: red;
@@ -194,3 +197,9 @@
   }
 
 }
+
+// While developing packages, a failure won't render
+// everything unreadable
+// atom-pane.pane {
+//   background-color: white;
+// }
