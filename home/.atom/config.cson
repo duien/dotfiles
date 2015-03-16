@@ -10,11 +10,12 @@
   editor:
     fontFamily: "'Source Code Pro'"
     lineHeight: 1.4
-    showInvisibles: true
-    showIndentGuide: true
     softWrapAtPreferredLineLength: true
     scrollPastEnd: true
     invisibles: {}
+    showInvisibles: true
+    showIndentGuide: true
+    fontSize: 15
   core:
     disabledPackages: [
       "atom-jshint"
@@ -22,11 +23,11 @@
       "language-haml"
       "angularjs"
       "atom-handlebars"
-      "language-todo"
+      "minimap"
     ]
     themes: [
-      "flanderized-ui"
-      "solarized-light-syntax"
+      "isotope-ui"
+      "kuali-light-syntax"
     ]
     projectHome: "/Users/eprice/Code"
     destroyEmptyPanes: false
@@ -43,6 +44,8 @@
   linter:
     showHightlighting: false
     showHighlighting: false
+    showErrorInline: false
+    statusBar: "Show error of the selected line"
   "git-log":
     fontScale: 1
   "atom-color-highlight":
@@ -51,8 +54,15 @@
   "isotope-ui":
     fontFamily: "System Default"
     compactLayout: true
-    colorTreeSelection: false
-    backgroundColor: "#073642"
+    customBackgroundColorPicker:
+      red: 39
+      green: 46
+      blue: 56
+      alpha: 1
     gutterStyle: false
-".text.todo":
-  editor: {}
+    colorTreeSelection: false
+  "isotope-light-ui":
+    gutterStyle: false
+    lowContrastTooltip: true
+  minimap: {}
+  "project-palette-finder": {}
