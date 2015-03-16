@@ -8,6 +8,14 @@ module Colorer
     "\e[30m#{str}\e[0m"
   end
   
+  def red(str)
+    "\e[31m#{str}\e[0m"
+  end
+  
+  def green(str)
+    "\e[32m#{str}\e[0m"
+  end
+  
   def on_red(str)
     "\e[41m#{str}\e[0m"
   end
@@ -18,6 +26,45 @@ module Colorer
 end
 
 include Colorer
+
+# Require a gem, even if we're inside Bundler and the gem is not. This is handy for colorizers and other
+# little bits that make your life easier, but you don't want to require your team to use.
+#
+# Since there's often setup you do only if you load a gem in that situation, you can also pass a block to
+# the require and it'll execute it only if the gem was succcessfully loaded.
+#
+def require_maybe_outside_bundler(gem)
+  begin
+    require gem
+  rescue LoadError => e
+    print "Looking for #{gem}... "
+
+    if defined? Bundler
+      Bundler.with_clean_env do
+        to_load = [gem]
+        to_load += `gem dependency #{gem} --pipe`.lines.map{ |l| l.match(/([\w_-]+) --/){ |m| m[1]  } }.compact
+        to_load.each do |g|
+          which = `gem which #{g} 2>/dev/null`
+          if which.empty?
+            return puts red("Could not locate dependency #{g}.")
+          end
+          $LOAD_PATH << File.dirname(which)
+        end
+        begin
+          require gem
+          puts green("Success!")
+        rescue LoadError
+          return puts red("Failed to require after updating LOAD_PATH.")
+        end
+      end
+    else
+      return puts red('Nowhere else to look.')
+    end
+  end
+  yield if block_given?
+end
+
+require_maybe_outside_bundler 'pbcopy'
 
 if `git rev-parse --is-inside-work-tree 2>&1`.strip == "true"
   Pry.config.prompt_name = `basename \`git rev-parse --show-toplevel\``.strip
