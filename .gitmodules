@@ -46,3 +46,6 @@
 [submodule "home/.oh-my-zsh"]
 	path = home/.oh-my-zsh
 	url = https://github.com/duien/oh-my-zsh.git
+[submodule "home/.emacs.d"]
+	path = home/.emacs.d
+	url = http://github.com/syl20bnr/spacemacs
