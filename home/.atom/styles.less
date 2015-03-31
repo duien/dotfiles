@@ -198,6 +198,27 @@
 
 }
 
+.theme-kuali-light-syntax {
+  .editor, .editor::shadow {
+    // TODO Make todo comments stand out
+    // FIXME It's hard to see fixme comments
+    .comment .type {
+      text-decoration: underline;
+      
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: fade(#f39c12, 10%);
+        // height: @font-size * 5/3;
+      }
+    }
+  }
+}
+
 // While developing packages, a failure won't render
 // everything unreadable
 // atom-pane.pane {

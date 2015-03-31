@@ -115,6 +115,9 @@ before layers configuration."
   ;; Configuration for org-mode
   (setq org-directory "~/Org/")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-agenda-files
+        (append '("~/Org/inbox.org")
+                (file-expand-wildcards "~/Org/*.org")))
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
   (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
@@ -126,19 +129,39 @@ before layers configuration."
   ;;       '(("TODO" . (:box t))
   ;;         ("DONE" . (:strike-through t))
   ;;         ("CANCEL" . (:strike-through t))))
+  (setq org-todo-keyword-faces
+        '(("QUESTION" . (:inherit org-todo :foreground "#268bd2"))
+          ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
+          ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
 
   (toggle-word-wrap 1)
   (add-hook 'text-mode-hook
-            (lambda () (toggle-truncate-lines -1)))
+            ;; (lambda () (toggle-truncate-lines -1))
+            (lambda () (visual-line-mode t)))
   )
 
 (defun dotspacemacs/config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  ;; http://stackoverflow.com/a/27043756
+  (defun org-archive-done-tasks ()
+    (interactive)
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+       (setq org-map-continue-from (outline-previous-heading)))
+     "/DONE|CANCEL" 'tree))
+
+  (defun org-capture/todo ()
+      (interactive)
+    (org-capture nil "t"))
+  (evil-leader/set-key-for-mode 'org-mode
+    "oA" 'org-archive-done-tasks)
   (evil-leader/set-key
-    "oC"  'org-capture
-    "oc" (lambda () "org capture todo" (interactive) (org-capture nil "t")))
+    "oC" 'org-capture
+    "oc" 'org-capture/todo
+    "oa" 'org-agenda)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -157,11 +180,8 @@ layers configuration."
  '(expand-region-contract-fast-key "V")
  '(expand-region-reset-fast-key "r")
  '(magit-use-overlays nil)
- '(org-agenda-files
-   (quote
-    ("~/Org/inbox.org" "~/Org/insights.org" "~/Org/spacemacs.org")))
  '(org-agenda-sticky t)
- '(org-agenda-window-setup (quote other-frame))
+ '(org-agenda-window-setup (quote current-window))
  '(org-cycle-level-faces nil)
  '(org-emphasis-alist
    (quote
@@ -177,6 +197,7 @@ layers configuration."
  '(org-hide-emphasis-markers nil)
  '(org-hide-leading-stars t)
  '(org-level-color-stars-only nil)
+ '(org-n-level-faces 2)
  '(org-refile-targets (quote ((org-agenda-files :level . 0))))
  '(rainbow-identifiers-cie-l*a*b*-lightness 70)
  '(rainbow-identifiers-cie-l*a*b*-saturation 20)
@@ -187,15 +208,16 @@ layers configuration."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-checkbox ((t (:box nil))))
- '(org-code ((t (:background "#eee8d5" :foreground "#93a1a1"))))
+ '(org-code ((t (:background "#eee8d5" :foreground "#586e75"))))
  '(org-done ((t (:foreground "#93a1a1" :strike-through t :weight bold))))
  '(org-headline-done ((t (:foreground "#93a1a1" :strike-through t))))
- '(org-level-1 ((t (:inherit default :foreground "#cb4b16" :underline t :weight bold :height 1.0))))
- '(org-level-2 ((t (:inherit default :foreground "#859900" :height 1.0))))
- '(org-level-3 ((t (:inherit default :foreground "#268bd2" :height 1.0))))
- '(org-level-4 ((t (:inherit default :foreground "#b58900" :height 1.0))))
- '(org-level-5 ((t (:inherit default :foreground "#2aa198"))))
+ '(org-level-1 ((t (:inherit default :foreground "#cb4b16" :underline t :weight bold :height 1.1))))
+ '(org-level-2 ((t (:inherit default :foreground "#586e75" :height 1.0))))
+ '(org-level-3 ((t (:inherit default :foreground "#586e75" :height 1.0))))
+ '(org-level-4 ((t (:inherit default :foreground "#586e75" :height 1.0))))
+ '(org-level-5 ((t (:inherit default :foreground "#586e75"))))
  '(org-level-6 ((t (:inherit default :foreground "#859900"))))
  '(org-level-7 ((t (:inherit default :foreground "#dc322f"))))
  '(org-level-8 ((t (:inherit default :foreground "#268bd2"))))
+ '(org-table ((t (:foreground "#586e75"))))
  '(org-todo ((t (:foreground "#859900" :inverse-video t :weight bold)))))
