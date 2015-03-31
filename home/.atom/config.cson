@@ -24,6 +24,8 @@
       "angularjs"
       "atom-handlebars"
       "minimap"
+      "minimap-bookmarks"
+      "org"
     ]
     themes: [
       "isotope-ui"
@@ -64,5 +66,7 @@
   "isotope-light-ui":
     gutterStyle: false
     lowContrastTooltip: true
-  minimap: {}
+  minimap:
+    plugins:
+      bookmarks: true
   "project-palette-finder": {}
