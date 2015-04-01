@@ -115,24 +115,36 @@ before layers configuration."
   ;; Configuration for org-mode
   (setq org-directory "~/Org/")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
-  (setq org-agenda-files
-        (append '("~/Org/inbox.org")
-                (file-expand-wildcards "~/Org/*.org")))
+  (setq org-agenda-files (file-expand-wildcards (concat org-directory "/*.org")))
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
   (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
              "** TODO %?\nCAPTURED: %u %a\n%i")))
   (setq org-todo-keywords
-        '((sequence "WAIT(w)" "LATER(l)" "TODO(t)" "|" "DONE(d)" "CANCEL(c)")
+        '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
           (sequence "QUESTION(q)" "|" "ANSWER(a)")))
-  ;; (setq org-todo-keyword-faces
-  ;;       '(("TODO" . (:box t))
-  ;;         ("DONE" . (:strike-through t))
-  ;;         ("CANCEL" . (:strike-through t))))
   (setq org-todo-keyword-faces
         '(("QUESTION" . (:inherit org-todo :foreground "#268bd2"))
           ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
           ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
+  (setq org-agenda-custom-commands
+        '(("w" "Agenda and work tasks"
+           ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
+            ;; (agenda "" ((org-agenda-time-grid nil)
+            ;;             (org-agenda-ndays 0)
+            ;;             (org-deadline-warning-days 7)
+            ;;             (org-agenda-entry-types '(:deadline))
+            ;;             (org-agenda-overriding-header "Upcoming deadlines")
+            ;;             ))
+            (tags-todo "WORK+TODO=\"TODO\""
+                       ((org-agenda-overriding-header "Work Tasks")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (todo "QUESTION" ((org-agenda-overriding-header "Questions")))
+            (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
+            (tags-todo "WORK+TODO=\"LATER\""
+                       ((org-agenda-overriding-header "Work Tasks : Later")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            ))))
 
   (toggle-word-wrap 1)
   (add-hook 'text-mode-hook
