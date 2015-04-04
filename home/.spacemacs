@@ -159,6 +159,8 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
   (setq powerline-default-separator 'arrow)
+  (global-unset-key [swipe-left])
+  (global-unset-key [swipe-right])
 
   ;; http://stackoverflow.com/a/27043756
   (defun org-archive-done-tasks ()
