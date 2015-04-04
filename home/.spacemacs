@@ -111,6 +111,8 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default git-enable-github-support t)
+  (setq powerline-display-buffer-size nil)
+  (setq powerline-display-hud nil)
 
   ;; Configuration for org-mode
   (setq org-directory "~/Org/")
@@ -156,6 +158,8 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (setq powerline-default-separator 'arrow)
+
   ;; http://stackoverflow.com/a/27043756
   (defun org-archive-done-tasks ()
     (interactive)
