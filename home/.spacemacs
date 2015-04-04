@@ -162,6 +162,13 @@ layers configuration."
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
+
+  (setq tab-width 2) ; or any other preferred value
+  (defvaralias 'c-basic-offset 'tab-width)
+  (defvaralias 'cperl-indent-level 'tab-width)
+
+  (setq js2-strict-missing-semi-warning nil)
+
   ;; http://stackoverflow.com/a/27043756
   (defun org-archive-done-tasks ()
     (interactive)
