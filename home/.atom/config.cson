@@ -26,6 +26,7 @@
       "minimap"
       "minimap-bookmarks"
       "org"
+      "language-jsx"
     ]
     themes: [
       "isotope-ui"
@@ -70,3 +71,4 @@
     plugins:
       bookmarks: true
   "project-palette-finder": {}
+  react: {}
