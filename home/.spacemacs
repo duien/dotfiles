@@ -111,6 +111,7 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default git-enable-github-support t)
+  ;; These two settings do nothing right now, unfortunately
   (setq powerline-display-buffer-size nil)
   (setq powerline-display-hud nil)
 
@@ -188,6 +189,8 @@ layers configuration."
     "oC" 'org-capture
     "oc" 'org-capture/todo
     "oa" 'org-agenda)
+
+  (add-to-list 'auto-mode-alist '("\\.es6\\'" . js2-mode))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
