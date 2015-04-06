@@ -9,6 +9,8 @@ alias ..... ../../../..
 
 # __fish_git_prompt_showstashstate
 
+. $HOME/.config/fish/solarized.fish
+
 set CDPATH . $HOME $HOME/Code $CDPATH
 set PATH /usr/local/bin $PATH
 if test -d "$HOME/bin"

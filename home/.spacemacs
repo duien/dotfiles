@@ -111,6 +111,8 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default git-enable-github-support t)
+  (setq powerline-display-buffer-size nil)
+  (setq powerline-display-hud nil)
 
   ;; Configuration for org-mode
   (setq org-directory "~/Org/")
@@ -156,6 +158,18 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (setq powerline-default-separator 'arrow)
+  (global-unset-key [swipe-left])
+  (global-unset-key [swipe-right])
+
+
+  (setq indent-tabs-mode nil)
+  (setq tab-width 2) ; or any other preferred value
+  (defvaralias 'c-basic-offset 'tab-width)
+  (defvaralias 'cperl-indent-level 'tab-width)
+
+  (setq js2-strict-missing-semi-warning nil)
+
   ;; http://stackoverflow.com/a/27043756
   (defun org-archive-done-tasks ()
     (interactive)
