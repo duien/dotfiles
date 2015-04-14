@@ -213,9 +213,9 @@ function __bobthefish_prompt_status -d 'Display symbols for a non zero exit stat
   set -l bg_jobs
 
   # Last exit was nonzero
-  if [ $status -ne 0 ]
-    set nonzero $__bobthefish_nonzero_exit_glyph
-  end
+  # if [ $status -ne 0 ]
+  #   set nonzero $__bobthefish_nonzero_exit_glyph
+  # end
 
   # if superuser (uid == 0)
   set -l uid (id -u $USER)

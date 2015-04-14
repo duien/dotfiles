@@ -19,6 +19,7 @@
   amend = commit --amend
   cached = diff --cached
   stat = diff --stat
+	patch = add --patch
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ar)
 [difftool "Kaleidoscope"]
@@ -53,4 +54,8 @@
 [filter "hawser"]
 	clean = git hawser clean %f
 	smudge = git hawser smudge %f
+	required = true
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
 	required = true
