@@ -111,6 +111,8 @@ before layers configuration."
    dotspacemacs-default-package-repository nil)
   ;; User initialization goes here
   (setq-default git-enable-github-support t)
+
+
   ;; These two settings do nothing right now, unfortunately
   (setq powerline-display-buffer-size nil)
   (setq powerline-display-hud nil)
@@ -118,8 +120,11 @@ before layers configuration."
   ;; Configuration for org-mode
   (setq org-directory "~/Org/")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
-  (setq org-agenda-files (file-expand-wildcards (concat org-directory "/*.org")))
+  (setq org-agenda-files (append
+        (file-expand-wildcards (concat org-directory "*.org"))
+        (file-expand-wildcards (concat org-directory "**/*.org"))))
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+  (setq org-insert-heading-respect-content t)
   (setq org-capture-templates
       '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
              "** TODO %?\nCAPTURED: %u %a\n%i")))
@@ -142,7 +147,7 @@ before layers configuration."
             (tags-todo "WORK+TODO=\"TODO\""
                        ((org-agenda-overriding-header "Work Tasks")
                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-            (todo "QUESTION" ((org-agenda-overriding-header "Questions")))
+            (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
             (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
             (tags-todo "WORK+TODO=\"LATER\""
                        ((org-agenda-overriding-header "Work Tasks : Later")
@@ -163,6 +168,27 @@ layers configuration."
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
+  (spacemacs|add-toggle local-line-numbers
+                      :status linum-mode
+                      :on (linum-mode)
+                      :off (linum-mode -1)
+                      :documentation "Show the line numbers in this buffer."
+                      :evil-leader "tN")
+
+  ;; get rid of the annoying double neo-tree (hopefully)
+  (when neo-persist-show
+    (add-hook 'popwin:before-popup-hook
+              (lambda () (setq neo-persist-show nil)))
+    (add-hook 'popwin:after-popup-hook
+              (lambda () (setq neo-persist-show t))))
+
+  ;; alter the default behavior of which buffers will get line numbers when they're turned on globally
+  (defun linum-on ()
+    (unless (or
+             (minibufferp) ;; the default -- no line numbers in minibuffer
+             (equal (buffer-name) neo-buffer-name) ;; disable numbers in neo-tree
+             (string-prefix-p "*Org Agenda" (buffer-name))) ;; disable numbers in the agenda buffer
+      (linum-mode 1)))
 
   (setq indent-tabs-mode nil)
   (setq tab-width 2) ; or any other preferred value
