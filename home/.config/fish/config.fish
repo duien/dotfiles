@@ -17,6 +17,10 @@ if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
 
+# apparently necessary for larger node builds, since it tries
+# to open all files at once
+ulimit -n 4096
+
 set -x EDITOR vim
 set -x VISUAL atom
 set -x GEMEDITOR atom
