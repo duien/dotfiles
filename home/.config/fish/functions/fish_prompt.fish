@@ -76,10 +76,12 @@ set __bobthefish_med_red red
 set __bobthefish_dk_red 7E1614 # 8A1816 # 951A18
 set __bobthefish_ruby_red red
 
-set __bobthefish_dk_grey black
-set __bobthefish_med_grey 586E75
-set __bobthefish_lt_grey 93A1A1
-
+# set __bobthefish_dk_grey black
+# set __bobthefish_med_grey 586E75
+# set __bobthefish_lt_grey 93A1A1
+set __bobthefish_dk_grey blue
+set __bobthefish_med_grey white
+set __bobthefish_lt_grey white
 
 # ===========================
 # Helper methods
