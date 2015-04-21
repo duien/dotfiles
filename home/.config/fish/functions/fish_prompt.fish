@@ -80,7 +80,7 @@ set __bobthefish_ruby_red red
 # set __bobthefish_med_grey 586E75
 # set __bobthefish_lt_grey 93A1A1
 set __bobthefish_dk_grey blue
-set __bobthefish_med_grey white
+set __bobthefish_med_grey 5fafd7 # 00afd7 # 005f87
 set __bobthefish_lt_grey white
 
 # ===========================
@@ -327,7 +327,9 @@ function __bobthefish_prompt_git -d 'Display the actual git state'
   set -l project_pwd  (__bobthefish_project_pwd $argv[1])
   if [ "$project_pwd" ]
     if [ -w "$PWD" ]
-      __bobthefish_start_segment $__bobthefish_dk_grey white
+      # __bobthefish_start_segment $__bobthefish_dk_grey white
+      __bobthefish_start_segment $__bobthefish_dk_grey $__bobthefish_med_grey
+
     else
       __bobthefish_start_segment $__bobthefish_med_red $__bobthefish_lt_red
     end
