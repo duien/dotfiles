@@ -1,27 +1,56 @@
+# coding: utf-8
 module Colorer
   COLORED_REGEXP = /\e\[(?:(?:[349]|10)[0-7]|[0-9]|[34]8;5;\d{1,3})?m/
   def uncolor(str)
     str.gsub(COLORED_REGEXP, '')
   end
-  
+
+  def dim(str)
+    "\e[2m#{str}\e[22m"
+  end
+
   def black(str)
     "\e[30m#{str}\e[0m"
   end
-  
+
+  def white(str)
+    "\e[37m#{str}\e[0m"
+  end
+
   def red(str)
     "\e[31m#{str}\e[0m"
   end
-  
+
   def green(str)
     "\e[32m#{str}\e[0m"
   end
-  
+
+  def cyan(str)
+    "\e[36m#{str}\e[0m"
+  end
+
+  def num(num, str)
+    "\e[38;5;#{num}m#{str}\e[0m"
+  end
+
   def on_red(str)
     "\e[41m#{str}\e[0m"
   end
-  
+
   def on_black(str)
     "\e[40m#{str}\e[0m"
+  end
+
+  def on_white(str)
+    "\e[47m#{str}\e[0m"
+  end
+
+  def on_cyan(str)
+    "\e[46m#{str}\e[0m"
+  end
+
+  def on_num(num, str)
+    "\e[48;5;#{num}m#{str}\e[0m"
   end
 end
 
@@ -77,20 +106,44 @@ def rails_sym
   defined?(Rails) ? '# ' : ''
 end
 
+use_powerline = true
+powerline_symbols = {
+  right_arrow: "\uE0B0",
+  right_separator: "\uE0B1",
+  left_arrow: "\uE0B2",
+  left_separator: "\uE0B3"
+}
+
+prompt_name_color = 88 # 124
+prompt = proc { |target_self, nest_level, pry|
+  tree = pry.binding_stack.map { |b| Pry.view_clip(b.eval("self")) }
+  current = tree.pop
+  tree.push('')
+  tree = ["⋯ "] + tree.last(3) if tree.length > 4
+
+  [
+    on_white(black(" #{pry.input_array.size} ")),
+    Pry.config.prompt_name ? [
+      white(on_num(prompt_name_color, powerline_symbols[:right_arrow])),
+      on_num(prompt_name_color, " "),
+      on_num(prompt_name_color, white("#{rails_sym}#{Pry.config.prompt_name} ")),
+      num(prompt_name_color, on_red(powerline_symbols[:right_arrow])),
+    ] : [
+      white(on_red(powerline_symbols[:right_arrow]))
+    ],
+    on_red(" "),
+    on_red(num(88, tree.join(" #{powerline_symbols[:right_separator]} "))),
+    on_red(white("#{Pry.view_clip(target_self)} ")),
+    red(powerline_symbols[:right_arrow]),
+    " "
+  ].flatten.join
+}
+
 Pry.prompt = [
+  prompt,
   proc { |target_self, nest_level, pry|
-    on_black(" #{pry.input_array.size} ") + # line number on black
-    black(on_red(" #{rails_sym + Pry.config.prompt_name + ' 〉' if Pry.config.prompt_name}")) + # optional prompt name
-    black(on_red("#{Pry.view_clip(target_self)}#{":#{nest_level}" unless nest_level.zero?} ")) +
-    " "
-  },
-  proc { |target_self, nest_level, pry|
-    regular_prompt = " #{pry.input_array.size} " + # line number on black
-                     " #{rails_sym + Pry.config.prompt_name + ' 〉' if Pry.config.prompt_name}" + # optional prompt name
-                     "#{Pry.view_clip(target_self)}#{":#{nest_level}" unless nest_level.zero?} "
-    prompt_length = uncolor(regular_prompt).length + regular_prompt.scan('〉').length - 1
-    " " * (prompt_length) +
-    on_red(" ") +
-    " "
+    prompt_str = uncolor(prompt.call(target_self, nest_level, pry))[0...-2]
+    prompt_str.gsub!(powerline_symbols[:right_arrow], powerline_symbols[:right_separator])
+    "#{dim(prompt_str)}#{red(powerline_symbols[:right_separator])} "
   }
 ]
