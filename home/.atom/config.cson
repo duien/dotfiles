@@ -27,6 +27,7 @@
       "minimap-bookmarks"
       "org"
       "language-jsx"
+      "react"
     ]
     themes: [
       "isotope-ui"
