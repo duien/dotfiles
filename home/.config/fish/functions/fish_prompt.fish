@@ -47,40 +47,57 @@ set __bobthefish_lt_green   addc10 # scm clean bg
 set __bobthefish_med_green  189303 # super user
 set __bobthefish_dk_green   0c4801 # scm clean fg
 
-# set __bobthefish_lt_red     C99     # non-writeable dir fg, something in scm status?
-# set __bobthefish_med_red    ce000f  # non-0 exit, scm dirty bg
-# set __bobthefish_dk_red     600     # non-writeable dir bg
-# set __bobthefish_ruby_red   af0000  # ruby version bg
+set __bobthefish_lt_red     C99     # non-writeable dir fg, something in scm status?
+set __bobthefish_med_red    ce000f  # non-0 exit, scm dirty bg
+set __bobthefish_dk_red     600     # non-writeable dir bg
+set __bobthefish_ruby_red   af0000  # ruby version bg
 
 set __bobthefish_slate_blue 255e87 # bg jobs, other user
 set __bobthefish_med_blue   005faf # python version
 
-# set __bobthefish_lt_orange  f6b117 # git stashed fg
-# set __bobthefish_dk_orange  3a2a03 # git stashed bg
+set __bobthefish_lt_orange  f6b117 # git stashed fg
+set __bobthefish_dk_orange  3a2a03 # git stashed bg
 
-# set __bobthefish_dk_grey    333    # directory bg
-# set __bobthefish_med_grey   999    # directory fg
-# set __bobthefish_lt_grey    ccc    # user bg, python, ruby fg
+set __bobthefish_dk_grey    333    # directory bg
+set __bobthefish_med_grey   999    # directory fg
+set __bobthefish_lt_grey    ccc    # user bg, python, ruby fg
 
 set __bobthefish_dk_brown   4d2600 # nothing?
 set __bobthefish_med_brown  803F00 # also nothign?
 set __bobthefish_lt_brown   BF5E00 # and also nothing
 
 
-# bob the solarized fish
+# # bob the solarized fish
+# set __bobthefish_lt_orange yellow
+# set __bobthefish_dk_orange black
+
+# set __bobthefish_lt_red red
+# set __bobthefish_med_red red
+# set __bobthefish_dk_red 7E1614 # 8A1816 # 951A18
+# set __bobthefish_ruby_red red
+
+# # set __bobthefish_dk_grey black
+# # set __bobthefish_med_grey 586E75
+# # set __bobthefish_lt_grey 93A1A1
+# set __bobthefish_dk_grey blue
+# set __bobthefish_med_grey 5fafd7 # 00afd7 # 005f87
+# set __bobthefish_lt_grey white
+
+## BOB THE SHELLFISH ##
+set __bobthefish_lt_green green
+set __bobthefish_med_green green
+set __bobthefish_dk_green black
+
+set __bobthefish_lt_red white
+set __bobthefish_med_red red
+set __bobthefish_dk_red red
+set __bobthefish_ruby_red red
+
 set __bobthefish_lt_orange yellow
 set __bobthefish_dk_orange black
 
-set __bobthefish_lt_red red
-set __bobthefish_med_red red
-set __bobthefish_dk_red 7E1614 # 8A1816 # 951A18
-set __bobthefish_ruby_red red
-
-# set __bobthefish_dk_grey black
-# set __bobthefish_med_grey 586E75
-# set __bobthefish_lt_grey 93A1A1
 set __bobthefish_dk_grey blue
-set __bobthefish_med_grey 5fafd7 # 00afd7 # 005f87
+set __bobthefish_med_grey white
 set __bobthefish_lt_grey white
 
 # ===========================
