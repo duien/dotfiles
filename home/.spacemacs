@@ -43,7 +43,7 @@ before layers configuration."
    ;;                       leuven
    ;;                       monokai
    ;;                       zenburn)
-   dotspacemacs-themes '(solarized-light solarized-dark)
+   dotspacemacs-themes '(flatui)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -175,13 +175,6 @@ layers configuration."
                       :documentation "Show the line numbers in this buffer."
                       :evil-leader "tN")
 
-  ;; get rid of the annoying double neo-tree (hopefully)
-  (when neo-persist-show
-    (add-hook 'popwin:before-popup-hook
-              (lambda () (setq neo-persist-show nil)))
-    (add-hook 'popwin:after-popup-hook
-              (lambda () (setq neo-persist-show t))))
-
   ;; alter the default behavior of which buffers will get line numbers when they're turned on globally
   (defun linum-on ()
     (unless (or
@@ -194,6 +187,8 @@ layers configuration."
   (setq tab-width 2) ; or any other preferred value
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
+  ;; (defvaralias 'evil-shift-width 'tab-width)
+  (setq evil-shift-width 2)
 
   (setq js2-strict-missing-semi-warning nil)
 
