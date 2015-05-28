@@ -21,8 +21,9 @@
   }
 }
   
-.editor, .editor::shadow {
+atom-text-editor, atom-text-editor::shadow, :host {
   font-weight: 300;
+
   .lines {
     margin-left: 0.25em;
   }
@@ -47,20 +48,20 @@
       }
     }
   }
-}
 
-.editor, .editor::shadow {
-  @indent-offset: 4px; // This might need tweaking depending on font and size
-
+  // Shift indent guides to align vertically with center of column
   .indent-guide {
+    @indent-offset: 4px; // This might need tweaking depending on font and size
+    @guide-width: 1px;
     box-shadow: none;
     background: linear-gradient(90deg, // replace box-shadow with gradient
       transparent,
       transparent @indent-offset,
       @syntax-indent-guide-color @indent-offset,
-      @syntax-indent-guide-color @indent-offset + 1px,
-      transparent @indent-offset + 1px)
+      @syntax-indent-guide-color @indent-offset + @guide-width,
+      transparent @indent-offset + @guide-width)
   }
+
   .invisible-character { // hide most invisibles
     color: transparent;
   }
@@ -70,23 +71,22 @@
 }
 
 // Don't color icons in the tree view (but do color them elsewhere)
-.tree-view .icon-file-text:before {
-  color: inherit !important;
+.tree-view {
+  .icon:before {
+    color: inherit !important;
+  }
 }
 
 // More visible coloring of added/changed lines
-.editor.is-focused, .editor.is-focused::shadow {
+atom-text-editor.is-focused,
+atom-text-editor.is-focused::shadow,
+:host(.is-focused) {
   .gutter .line-number {
     &.git-line-added {
       background: fade(@syntax-color-added, 10);
-      &.cursor-line { background: fade(@syntax-color-added, 25); }
     }
     &.git-line-modified {
-      background: fade(@syntax-color-modified, 20);
-      &.cursor-line { background: fade(@syntax-color-modified, 50); }
-    }
-    &.git-line-removed:before {
-      border-left-color: @syntax-color-removed;
+      background: fade(@syntax-color-modified, 10);
     }
   }
 }
@@ -94,8 +94,16 @@
 
 // THEME-SPECIFIC SETTINGS
 
-// Match the tab in Flanderized to the syntax theme
+.theme-isotope-ui {
+  .tab-bar {
+    // Tabs were escaping their visual bounds by 1px on each side of the tab bar,
+    // and it was driving me nuts
+    margin: 0 1px;
+  }
+}
+
 .theme-flanderized-ui, .theme-outlander-ui {
+  // Match the tab in Flanderized to the syntax theme
   .tab-bar .tab.active, .tab-bar .tab.active::before, .tab-bar .tab.active::after, .tab-bar::after {
     background-color: @syntax-background-color;
     // background-color: red;
@@ -103,7 +111,7 @@
 }
 
 .theme-summerfruit-theme {
-  .editor, .editor::shadow {
+  atom-text-editor, atom-text-editor::shadow, :host {
     // An indented comment
     .comment {
       background-color: transparent;
@@ -115,6 +123,7 @@
     }
   }
 }
+
 .theme-solarized-light-syntax.theme-flanderized-ui {
   @yellow:  #b58900;
   @orange:  #cb4b16;
@@ -125,7 +134,7 @@
   @cyan:    #2aa198;
   @green:   #859900;
 
-  .editor, .editor::shadow {
+  atom-text-editor, atom-text-editor::shadow, :host {
     .indent-guide {
       &:nth-child(1)    { box-shadow: none !important; }
       &:nth-child(8n-6) { box-shadow: inset 1px 0 fade(@yellow,  15); }
@@ -199,9 +208,10 @@
 }
 
 .theme-kuali-light-syntax {
-  .editor, .editor::shadow {
+  atom-text-editor, atom-text-editor::shadow, :host {
     // TODO Make todo comments stand out
     // FIXME It's hard to see fixme comments
+    // And the continaution isnt' fancy
     .comment .type {
       text-decoration: underline;
       
@@ -218,9 +228,3 @@
     }
   }
 }
-
-// While developing packages, a failure won't render
-// everything unreadable
-// atom-pane.pane {
-//   background-color: white;
-// }

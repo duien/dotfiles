@@ -8,13 +8,13 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "'Source Code Pro'"
-    lineHeight: 1.4
-    softWrapAtPreferredLineLength: true
+    fontFamily: "Input"
     scrollPastEnd: true
-    invisibles: {}
+    invisibles:
+      {}
     showInvisibles: true
     showIndentGuide: true
+    lineHeight: 1.4
     fontSize: 15
   core:
     disabledPackages: [
@@ -28,13 +28,28 @@
       "org"
       "language-jsx"
       "react"
+      "merge-conflicts"
+      "linter"
+      "linter-jshint"
+      "project-palette-finder"
+      "autocomplete-plus"
+      "omni-ruler"
     ]
     themes: [
       "isotope-ui"
-      "kuali-light-syntax"
+      "princess-syntax"
     ]
     projectHome: "/Users/eprice/Code"
     destroyEmptyPanes: false
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      ".projectile"
+    ]
   "spell-check":
     grammars: [
       "source.gfm"
@@ -52,24 +67,24 @@
     statusBar: "Show error of the selected line"
   "git-log":
     fontScale: 1
-  "atom-color-highlight":
-    hideMarkersInComments: true
-  "file-icons": {}
-  "isotope-ui":
-    fontFamily: "System Default"
-    compactLayout: true
-    customBackgroundColorPicker:
-      red: 39
-      green: 46
-      blue: 56
-      alpha: 1
-    gutterStyle: false
-    colorTreeSelection: false
-  "isotope-light-ui":
-    gutterStyle: false
-    lowContrastTooltip: true
+  "file-icons":
+    {}
   minimap:
     plugins:
       bookmarks: true
-  "project-palette-finder": {}
-  react: {}
+  "isotope-ui":
+    fontFamily: "System Default"
+    customBackgroundColorPicker:
+      red: 36
+      green: 2
+      blue: 25
+      alpha: 1
+  pigments:
+    markerType: "underline"
+  "omni-ruler":
+    columns: [
+      73
+      80
+      80
+      100
+    ]
