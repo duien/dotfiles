@@ -17,5 +17,5 @@
 #   'ctrl-p': 'core:move-down'
 #
 
-'.workspace':
+'atom-workspace':
   'cmd-\'': 'toggle-quotes:toggle'
