@@ -27,9 +27,13 @@ set -x GEMEDITOR atom
 
 # set -x DOCKER_HOST 127.0.0.1:32000
 if type boot2docker >/dev/null 2>&1
-  set -x DOCKER_HOST tcp://(boot2docker ip 2>/dev/null):2376
-  set -x DOCKER_CERT_PATH /Users/ehyland/.boot2docker/certs/boot2docker-vm
-  set -x DOCKER_TLS_VERIFY 1
+  # set -x DOCKER_HOST tcp://(boot2docker ip 2>/dev/null):2376
+  # set -x DOCKER_CERT_PATH /Users/ehyland/.boot2docker/certs/boot2docker-vm
+  # set -x DOCKER_TLS_VERIFY 1
+
+  # Do boot2docker setup by using its `shellinit` function, which adapts to the
+  # actual env that it's setting up
+  eval (boot2docker shellinit | tr \n \;)
 end
 
 set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
