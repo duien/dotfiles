@@ -8,14 +8,13 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "Input"
+    fontFamily: "Courier Prime Source"
     scrollPastEnd: true
     invisibles:
       {}
     showInvisibles: true
     showIndentGuide: true
-    lineHeight: 1.4
-    fontSize: 15
+    softWrapAtPreferredLineLength: true
   core:
     disabledPackages: [
       "atom-jshint"
@@ -88,3 +87,5 @@
       80
       100
     ]
+  tabs:
+    usePreviewTabs: true
