@@ -15,6 +15,7 @@
     showInvisibles: true
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
+    lineHeight: 1.4
   core:
     disabledPackages: [
       "atom-jshint"
