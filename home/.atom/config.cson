@@ -8,13 +8,13 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "Courier Prime Source"
+    fontFamily: "Input Mono Narrow"
     scrollPastEnd: true
-    invisibles:
-      {}
+    invisibles: {}
     showInvisibles: true
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
+    lineHeight: 1.4
   core:
     disabledPackages: [
       "atom-jshint"
@@ -66,8 +66,7 @@
     statusBar: "Show error of the selected line"
   "git-log":
     fontScale: 1
-  "file-icons":
-    {}
+  "file-icons": {}
   minimap:
     plugins:
       bookmarks: true
@@ -78,6 +77,7 @@
       green: 2
       blue: 25
       alpha: 1
+    fontWeight: "Regular"
   pigments:
     markerType: "underline"
   "omni-ruler":
