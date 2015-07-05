@@ -1,4 +1,4 @@
-;; -*- mode: dotspacemacs -*-
+;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
@@ -6,13 +6,48 @@
   "Configuration Layers declaration."
   (setq-default
    ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (ie. `~/.mycontribs/')
+   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
-   dotspacemacs-configuration-layers '(osx themes-megapack git colors javascript ruby markdown html org)
+   dotspacemacs-configuration-layers
+   '(
+     ;; ----------------------------------------------------------------
+     ;; Example of useful layers you may want to use right away.
+     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
+     ;; <M-m f e R> (Emacs style) to install them.
+     ;; ----------------------------------------------------------------
+     auto-completion
+     ;; better-defaults
+     emacs-lisp
+     (git :variables
+          git-magit-status-fullscreen t)
+     markdown
+     org
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom)
+     syntax-checking
+     version-control
+     osx
+
+     ;; Things not in the original list
+     (colors :variables
+             colors-enable-rainbow-identifiers t)
+     dash
+     emacs-lisp
+     html
+     javascript
+     shell-scripts
+     github
+     )
+   ;; List of additional packages that will be installed without being
+   ;; wrapped in a layer. If you need some configuration for these
+   ;; packages then consider to create a layer, you can also put the
+   ;; configuration in `dotspacemacs/config'.
+   dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(auto-complete org-bullets)
+   dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -28,47 +63,61 @@ before layers configuration."
    ;; Either `vim' or `emacs'. Evil is always enabled but if the variable
    ;; is `emacs' then the `holy-mode' is enabled at startup.
    dotspacemacs-editing-style 'vim
+   ;; If non nil output loading progress in `*Messages*' buffer.
+   dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
-   ;; directory. A string value must be a path to a .PNG file.
+   ;; directory. A string value must be a path to an image format supported
+   ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed.
-   ;; dotspacemacs-startup-banner 'official
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner 3
+   ;; List of items to show in the startup buffer. If nil it is disabled.
+   ;; Possible values are: `recents' `bookmarks' `projects'."
+   dotspacemacs-startup-lists '(recents projects)
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    ;; dotspacemacs-themes '(solarized-light
    ;;                       solarized-dark
+   ;;                       spacemacs-light
+   ;;                       spacemacs-dark
    ;;                       leuven
    ;;                       monokai
    ;;                       zenburn)
-   ;; dotspacemacs-themes '(flatui)
    dotspacemacs-themes '(spacemacs-dark spacemacs-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Input"
+   dotspacemacs-default-font '("M+ 2m"
                                :size 18
-                               :weight normal
+                               :weight light
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
-   dotspacemacs-emacs-leader-key "C-c"
+   dotspacemacs-emacs-leader-key "M-m"
    ;; Major mode leader key is a shortcut key which is the equivalent of
    ;; pressing `<leader> m`. Set it to `nil` to disable it.
    dotspacemacs-major-mode-leader-key ","
    ;; Major mode leader key accessible in `emacs state' and `insert state'
-   dotspacemacs-major-mode-emacs-leader-key "C-,"
+   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    ;; The command key used for Evil commands (ex-commands) and
    ;; Emacs commands (M-x).
    ;; By default the command key is `:' so ex-commands are executed like in Vim
    ;; with `:' and Emacs commands are executed with `<leader> :'.
    dotspacemacs-command-key ":"
-   ;; If non nil the paste micro-state is enabled. While enabled pressing `p`
+   ;; Location where to auto-save files. Possible values are `original' to
+   ;; auto-save the file in-place, `cache' to auto-save the file to another
+   ;; file stored in the cache directory and `nil' to disable auto-saving.
+   ;; Default value is `cache'.
+   dotspacemacs-auto-save-file-location 'cache
+   ;; If non nil then `ido' replaces `helm' for some commands. For now only
+   ;; `find-files' (SPC f f) is replaced.
+   dotspacemacs-use-ido nil
+   ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content.
    dotspacemacs-enable-paste-micro-state t
    ;; Guide-key delay in seconds. The Guide-key is the popup buffer listing
@@ -87,7 +136,7 @@ before layers configuration."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'.
@@ -104,56 +153,20 @@ before layers configuration."
    dotspacemacs-smooth-scrolling t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    dotspacemacs-smartparens-strict-mode nil
+   ;; Select a scope to highlight delimiters. Possible value is `all',
+   ;; `current' or `nil'. Default is `all'
+   dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
    dotspacemacs-persistent-server nil
+   ;; List of search tool executable names. Spacemacs uses the first installed
+   ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
    ;; Not used for now.
-   dotspacemacs-default-package-repository nil)
+   dotspacemacs-default-package-repository nil
+   )
   ;; User initialization goes here
-  (setq-default git-enable-github-support t)
-
-
-  ;; These two settings do nothing right now, unfortunately
-  (setq powerline-display-buffer-size nil)
-  (setq powerline-display-hud nil)
-
-  ;; Configuration for org-mode
-  (setq org-directory "~/Org/")
-  (setq org-default-notes-file (concat org-directory "/inbox.org"))
-  (setq org-agenda-files (append
-        (file-expand-wildcards (concat org-directory "*.org"))
-        (file-expand-wildcards (concat org-directory "**/*.org"))))
-  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
-  (setq org-insert-heading-respect-content t)
-  (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-             "** TODO %?\nCAPTURED: %u %a\n%i")))
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
-          (sequence "QUESTION(q)" "|" "ANSWER(a)")))
-  (setq org-todo-keyword-faces
-        '(("QUESTION" . (:inherit org-todo :foreground "#268bd2"))
-          ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
-          ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
-  (setq org-agenda-custom-commands
-        '(("w" "Agenda and work tasks"
-           ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
-            ;; (agenda "" ((org-agenda-time-grid nil)
-            ;;             (org-agenda-ndays 0)
-            ;;             (org-deadline-warning-days 7)
-            ;;             (org-agenda-entry-types '(:deadline))
-            ;;             (org-agenda-overriding-header "Upcoming deadlines")
-            ;;             ))
-            (tags-todo "WORK+TODO=\"TODO\""
-                       ((org-agenda-overriding-header "Work Tasks")
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-            (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
-            (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
-            (tags-todo "WORK+TODO=\"LATER\""
-                       ((org-agenda-overriding-header "Work Tasks : Later")
-                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-            ))))
 
   (toggle-word-wrap 1)
   (add-hook 'text-mode-hook
@@ -165,27 +178,19 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
-  (setq powerline-default-separator 'arrow)
+
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
   (spacemacs|add-toggle local-line-numbers
-                      :status linum-mode
-                      :on (linum-mode)
-                      :off (linum-mode -1)
-                      :documentation "Show the line numbers in this buffer."
-                      :evil-leader "tN")
-
-  ;; alter the default behavior of which buffers will get line numbers when they're turned on globally
-  (defun linum-on ()
-    (unless (or
-             (minibufferp) ;; the default -- no line numbers in minibuffer
-             (equal (buffer-name) neo-buffer-name) ;; disable numbers in neo-tree
-             (string-prefix-p "*Org Agenda" (buffer-name))) ;; disable numbers in the agenda buffer
-      (linum-mode 1)))
+                        :status linum-mode
+                        :on (linum-mode)
+                        :off (linum-mode -1)
+                        :documentation "Show the line numbers in this buffer."
+                        :evil-leader "tN")
 
   (setq indent-tabs-mode nil)
-  (setq tab-width 2) ; or any other preferred value
+  (setq tab-width 2)
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
   ;; (defvaralias 'evil-shift-width 'tab-width)
@@ -193,82 +198,16 @@ layers configuration."
 
   (setq js2-strict-missing-semi-warning nil)
 
-  ;; http://stackoverflow.com/a/27043756
-  (defun org-archive-done-tasks ()
-    (interactive)
-    (org-map-entries
-     (lambda ()
-       (org-archive-subtree)
-       (setq org-map-continue-from (outline-previous-heading)))
-     "/DONE|CANCEL" 'tree))
+  (setq neo-theme 'nerd)
+  (setq powerline-default-separator 'arrow-fade)
 
-  (defun org-capture/todo ()
-      (interactive)
-    (org-capture nil "t"))
-  (evil-leader/set-key-for-mode 'org-mode
-    "oA" 'org-archive-done-tasks)
-  (evil-leader/set-key
-    "oC" 'org-capture
-    "oc" 'org-capture/todo
-    "oa" 'org-agenda)
-
-  (add-to-list 'auto-mode-alist '("\\.es6\\'" . js2-mode))
+  ;; Assorted config for org-mode
+  (setq org-fontify-done-headline t)
+  (setq org-hide-leading-stars t)
+  (setq org-bullets-bullet-list '("*"))
+  (setq org-startup-folded nil)
+  (setq org-cycle-level-faces nil)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ac-ispell-requires 4)
- '(ahs-case-fold-search nil)
- '(ahs-default-range (quote ahs-range-whole-buffer))
- '(ahs-idle-interval 0.25)
- '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
- '(expand-region-contract-fast-key "V")
- '(expand-region-reset-fast-key "r")
- '(magit-use-overlays nil)
- '(org-agenda-sticky t)
- '(org-agenda-window-setup (quote current-window))
- '(org-cycle-level-faces nil)
- '(org-emphasis-alist
-   (quote
-    (("*" bold)
-     ("/" italic)
-     ("_" underline)
-     ("=" org-verbatim verbatim)
-     ("`" org-code verbatim)
-     ("+"
-      (:strike-through t)))))
- '(org-fontify-done-headline t)
- '(org-fontify-whole-heading-line nil)
- '(org-hide-emphasis-markers nil)
- '(org-hide-leading-stars t)
- '(org-level-color-stars-only nil)
- '(org-n-level-faces 2)
- '(org-refile-targets (quote ((org-agenda-files :level . 0))))
- '(rainbow-identifiers-cie-l*a*b*-lightness 70)
- '(rainbow-identifiers-cie-l*a*b*-saturation 20)
- '(ring-bell-function (quote ignore) t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-checkbox ((t (:box nil))))
- '(org-code ((t (:background "#eee8d5" :foreground "#586e75"))))
- '(org-done ((t (:foreground "#93a1a1" :strike-through t :weight bold))))
- '(org-headline-done ((t (:foreground "#93a1a1" :strike-through t))))
- '(org-level-1 ((t (:inherit default :foreground "#cb4b16" :underline t :weight bold :height 1.1))))
- '(org-level-2 ((t (:inherit default :foreground "#586e75" :height 1.0))))
- '(org-level-3 ((t (:inherit default :foreground "#586e75" :height 1.0))))
- '(org-level-4 ((t (:inherit default :foreground "#586e75" :height 1.0))))
- '(org-level-5 ((t (:inherit default :foreground "#586e75"))))
- '(org-level-6 ((t (:inherit default :foreground "#859900"))))
- '(org-level-7 ((t (:inherit default :foreground "#dc322f"))))
- '(org-level-8 ((t (:inherit default :foreground "#268bd2"))))
- '(org-table ((t (:foreground "#586e75"))))
- '(org-todo ((t (:foreground "#859900" :inverse-video t :weight bold)))))
