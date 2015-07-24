@@ -8,13 +8,15 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "Input Mono Narrow"
+    fontFamily: "'Fantasque Sans Mono'"
     scrollPastEnd: true
     invisibles: {}
     showInvisibles: true
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
     lineHeight: 1.4
+    fontSize: 18
+    softWrapHangingIndent: 4
   core:
     disabledPackages: [
       "atom-jshint"
@@ -34,10 +36,6 @@
       "autocomplete-plus"
       "omni-ruler"
     ]
-    themes: [
-      "isotope-ui"
-      "princess-syntax"
-    ]
     projectHome: "/Users/eprice/Code"
     destroyEmptyPanes: false
     ignoredNames: [
@@ -48,6 +46,10 @@
       "._*"
       "Thumbs.db"
       ".projectile"
+    ]
+    themes: [
+      "nucleus-dark-ui"
+      "one-dark-syntax"
     ]
   "spell-check":
     grammars: [
