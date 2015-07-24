@@ -8,13 +8,14 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "Input Mono Narrow"
+    fontFamily: "'Fantasque Sans Mono'"
     scrollPastEnd: true
     invisibles: {}
     showInvisibles: true
     showIndentGuide: true
     softWrapAtPreferredLineLength: true
     lineHeight: 1.4
+    fontSize: 17
   core:
     disabledPackages: [
       "atom-jshint"
