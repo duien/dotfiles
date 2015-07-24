@@ -14,7 +14,9 @@ Plugin 'theme'
 Plugin 'msg'
 
 # Help the theme work
-set -x default_user duien
+if contains (whoami) duien ehyland
+	set -x default_user (whoami)
+end
 
 # Load my aliases and environment
 source ~/.config/fish/more.fish
