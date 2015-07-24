@@ -31,7 +31,6 @@
       "react"
       "merge-conflicts"
       "linter"
-      "linter-jshint"
       "project-palette-finder"
       "autocomplete-plus"
       "omni-ruler"
@@ -80,8 +79,7 @@
       blue: 25
       alpha: 1
     fontWeight: "Regular"
-  pigments:
-    markerType: "underline"
+  pigments: {}
   "omni-ruler":
     columns: [
       73

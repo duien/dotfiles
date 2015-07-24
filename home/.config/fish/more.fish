@@ -17,6 +17,10 @@ set -x GEMEDITOR atom
 
 # Setting up other random crap
 
+# apparently necessary for larger node builds, since it tries
+# to open all files at once
+ulimit -n 4096
+
 if type boot2docker >/dev/null 2>&1
   eval (boot2docker shellinit | tr \n \;)
 end
