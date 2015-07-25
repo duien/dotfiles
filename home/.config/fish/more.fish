@@ -11,6 +11,10 @@ if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
 
+if test -d "$HOME/.bin"
+  set PATH $HOME/.bin $PATH
+end
+
 set -x EDITOR vim
 set -x VISUAL atom
 set -x GEMEDITOR atom
@@ -23,6 +27,10 @@ ulimit -n 4096
 
 if type boot2docker >/dev/null 2>&1
   eval (boot2docker shellinit | tr \n \;)
+end
+
+if test -s  ~/.config/fish/nvm-wrapper/nvm.fish
+  source ~/.config/fish/nvm-wrapper/nvm.fish
 end
 
 set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
