@@ -23,10 +23,12 @@
      (git :variables
           git-magit-status-fullscreen t)
      markdown
-     org
+     (org :variables
+          org-enable-github-support t)
      (shell :variables
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-default-shell 'eshell)
      syntax-checking
      version-control
      osx
@@ -43,6 +45,8 @@
      github
      rust
      themes-megapack
+     emoji
+     ruby-on-rails
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -97,7 +101,7 @@ before layers configuration."
                                :size 20
                                :weight light
                                :width normal
-                               :powerline-scale 1)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -175,15 +179,6 @@ before layers configuration."
   ;; (when (memq window-system '(mac ns))
   ;;   (exec-path-from-shell-initialize))
 
-  ;; adjust indents for web-mode to 2 spaces
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode. Adjust indents"
-    ;;; http://web-mode.org/
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2))
-  (add-hook 'web-mode-hook  'my-web-mode-hook)
-
   (add-hook 'text-mode-hook
             ;; (lambda () (toggle-truncate-lines -1))
             (lambda () (visual-line-mode t)))
@@ -194,19 +189,39 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
-  (toggle-word-wrap 1)
-
+  ;; Turn off the `swipe-left' and `swipe-right' gestures that used to
+  ;; annoyingly switch between files when I tried to scroll
+  ;;
+  ;; I could see turning them back on if there were an indicator (maybe
+  ;; additional modeline at the top of the screen?) of what files they'd jump
+  ;; too. And maybe if I could turn the sensitivity down, but that might not be
+  ;; doable.
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
-  (add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
-  (defadvice web-mode-highlight-part (around tweak-jsx activate)
-    (if (equal web-mode-content-type "jsx")
-        (let ((web-mode-enable-part-face nil))
-          ad-do-it)
-      ad-do-it))
 
+  ;; -------------------------------------------------------
+  ;;  Lots of setup for getting `js' and `jsx' passable
+  ;; -------------------------------------------------------
 
+  ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
+  ;; semi-colons. 
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+
+  ;; When loading web-mode in a js/jsx file, use the jsx content type.
+  (setq web-mode-content-types-alist
+        '(("jsx" . "\\.js[x]?\\'")))
+
+  ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
+  ;; what I'm mostly working on in a React file
+  (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
+  (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
+
+  ;; It's OK to leave semicolons out of JavaScript.
+  (setq js2-strict-missing-semi-warning nil)
+
+  ;; Allow toggling line numbers in just the current buffer
   (spacemacs|add-toggle local-line-numbers
                         :status linum-mode
                         :on (linum-mode)
@@ -214,17 +229,24 @@ layers configuration."
                         :documentation "Show the line numbers in this buffer."
                         :evil-leader "tN")
 
-  (setq indent-tabs-mode nil)
+  (toggle-word-wrap 1) ;; Wrap at word boundaries instead of end of breaking inside words
+
+  ;; Show enabled minor modes in plain ASCII so it's easier to tell the correct key to toggle
+  (setq dotspacemacs-mode-line-unicode-symbols nil)
+
+  ;; Attempt to set up auto-indent in a sane way. This is surprisingly difficult.
+  (setq indent-tabs-mode nil) ;; Always indent with spaces
+  (setq standard-indent 2)
   (setq tab-width 2)
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
   ;; (defvaralias 'evil-shift-width 'tab-width)
   (setq evil-shift-width 2)
 
-  (setq js2-strict-missing-semi-warning nil)
 
   (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'arrow-fade)
+  (setq neo-smart-open t)
+  (setq powerline-default-separator 'arrow)
 
   ;; Assorted config for org-mode
   (setq org-fontify-done-headline t)
@@ -247,6 +269,7 @@ layers configuration."
  '(ahs-idle-timer 0 t)
  '(ahs-inhibit-face-list nil)
  '(evil-shift-width 2)
+ '(neo-vc-integration nil)
  '(ring-bell-function (quote ignore) t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
