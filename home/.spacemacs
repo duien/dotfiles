@@ -98,7 +98,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 20
+                               :size 18
                                :weight light
                                :width normal
                                :powerline-scale 1.3)
@@ -199,7 +199,6 @@ layers configuration."
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
-
   ;; -------------------------------------------------------
   ;;  Lots of setup for getting `js' and `jsx' passable
   ;; -------------------------------------------------------
@@ -229,6 +228,7 @@ layers configuration."
                         :documentation "Show the line numbers in this buffer."
                         :evil-leader "tN")
 
+  (setq vc-follow-symlinks t)
   (toggle-word-wrap 1) ;; Wrap at word boundaries instead of end of breaking inside words
 
   ;; Show enabled minor modes in plain ASCII so it's easier to tell the correct key to toggle
@@ -245,7 +245,6 @@ layers configuration."
 
 
   (setq neo-theme 'nerd)
-  (setq neo-smart-open t)
   (setq powerline-default-separator 'arrow)
 
   ;; Assorted config for org-mode
