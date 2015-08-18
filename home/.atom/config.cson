@@ -8,7 +8,6 @@
   metrics:
     userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   editor:
-    fontFamily: "'Fantasque Sans Mono'"
     scrollPastEnd: true
     invisibles: {}
     showInvisibles: true
@@ -16,7 +15,7 @@
     softWrapAtPreferredLineLength: true
     lineHeight: 1.4
     fontSize: 18
-    softWrapHangingIndent: 4
+    fontFamily: "'Fantasque Sans Mono'"
   core:
     disabledPackages: [
       "atom-jshint"
@@ -28,7 +27,6 @@
       "minimap-bookmarks"
       "org"
       "language-jsx"
-      "react"
       "merge-conflicts"
       "linter"
       "project-palette-finder"
@@ -48,7 +46,7 @@
     ]
     themes: [
       "nucleus-dark-ui"
-      "one-dark-syntax"
+      "gruvbox"
     ]
   "spell-check":
     grammars: [
@@ -89,3 +87,4 @@
     ]
   tabs:
     usePreviewTabs: true
+  react: {}

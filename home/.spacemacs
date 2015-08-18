@@ -23,23 +23,30 @@
      (git :variables
           git-magit-status-fullscreen t)
      markdown
-     org
+     (org :variables
+          org-enable-github-support t)
      (shell :variables
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-default-shell 'eshell)
      syntax-checking
      version-control
      osx
 
      ;; Things not in the original list
-     (colors :variables
-             colors-enable-rainbow-identifiers t)
+     ;; (colors :variables
+     ;;         colors-enable-rainbow-identifiers t)
+     colors
      dash
      emacs-lisp
      html
      javascript
      shell-scripts
      github
+     rust
+     themes-megapack
+     emoji
+     ruby-on-rails
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -85,7 +92,7 @@ before layers configuration."
    ;;                       leuven
    ;;                       monokai
    ;;                       zenburn)
-   dotspacemacs-themes '(spacemacs-dark spacemacs-light)
+   dotspacemacs-themes '(gruvbox)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -94,7 +101,7 @@ before layers configuration."
                                :size 18
                                :weight light
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -136,7 +143,7 @@ before layers configuration."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup t
+   dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'.
@@ -168,7 +175,10 @@ before layers configuration."
    )
   ;; User initialization goes here
 
-  (toggle-word-wrap 1)
+  ;; This just seems to break everything
+  ;; (when (memq window-system '(mac ns))
+  ;;   (exec-path-from-shell-initialize))
+
   (add-hook 'text-mode-hook
             ;; (lambda () (toggle-truncate-lines -1))
             (lambda () (visual-line-mode t)))
@@ -179,9 +189,38 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  ;; Turn off the `swipe-left' and `swipe-right' gestures that used to
+  ;; annoyingly switch between files when I tried to scroll
+  ;;
+  ;; I could see turning them back on if there were an indicator (maybe
+  ;; additional modeline at the top of the screen?) of what files they'd jump
+  ;; too. And maybe if I could turn the sensitivity down, but that might not be
+  ;; doable.
   (global-unset-key [swipe-left])
   (global-unset-key [swipe-right])
 
+  ;; -------------------------------------------------------
+  ;;  Lots of setup for getting `js' and `jsx' passable
+  ;; -------------------------------------------------------
+
+  ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
+  ;; semi-colons. 
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+
+  ;; When loading web-mode in a js/jsx file, use the jsx content type.
+  (setq web-mode-content-types-alist
+        '(("jsx" . "\\.js[x]?\\'")))
+
+  ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
+  ;; what I'm mostly working on in a React file
+  (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
+  (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
+
+  ;; It's OK to leave semicolons out of JavaScript.
+  (setq js2-strict-missing-semi-warning nil)
+
+  ;; Allow toggling line numbers in just the current buffer
   (spacemacs|add-toggle local-line-numbers
                         :status linum-mode
                         :on (linum-mode)
@@ -189,17 +228,24 @@ layers configuration."
                         :documentation "Show the line numbers in this buffer."
                         :evil-leader "tN")
 
-  (setq indent-tabs-mode nil)
+  (setq vc-follow-symlinks t)
+  (toggle-word-wrap 1) ;; Wrap at word boundaries instead of end of breaking inside words
+
+  ;; Show enabled minor modes in plain ASCII so it's easier to tell the correct key to toggle
+  (setq dotspacemacs-mode-line-unicode-symbols nil)
+
+  ;; Attempt to set up auto-indent in a sane way. This is surprisingly difficult.
+  (setq indent-tabs-mode nil) ;; Always indent with spaces
+  (setq standard-indent 2)
   (setq tab-width 2)
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
   ;; (defvaralias 'evil-shift-width 'tab-width)
   (setq evil-shift-width 2)
 
-  (setq js2-strict-missing-semi-warning nil)
 
   (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'arrow-fade)
+  (setq powerline-default-separator 'arrow)
 
   ;; Assorted config for org-mode
   (setq org-fontify-done-headline t)
@@ -211,3 +257,24 @@ layers configuration."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range (quote ahs-range-whole-buffer))
+ '(ahs-idle-interval 0.25)
+ '(ahs-idle-timer 0 t)
+ '(ahs-inhibit-face-list nil)
+ '(evil-shift-width 2)
+ '(neo-vc-integration nil)
+ '(ring-bell-function (quote ignore) t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background "#282828" :foreground "#fdf4c1"))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
