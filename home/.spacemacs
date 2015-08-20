@@ -99,7 +99,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 18
+                               :size 20
                                :weight light
                                :width normal
                                :powerline-scale 1.3)
@@ -254,6 +254,41 @@ layers configuration."
   (setq org-bullets-bullet-list '("*"))
   (setq org-startup-folded nil)
   (setq org-cycle-level-faces nil)
+
+
+
+  ;; -------------------------------------------------------
+  ;; Some WIP things
+  ;; -------------------------------------------------------
+
+  (setq dotspacemacs-persistent-server t)
+
+  (font-lock-add-keywords
+   'org-mode
+   '(("^\*+ \\(TODO\\|DONE\\) .*$" 1 'org-default)))
+
+  ;; Trying to get a smarter keyword face
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             ;; (setq org-my-defont-regexp (format org-heading-keyword-regexp-format org-todo-regexp))
+  ;;             (font-lock-add-keywords
+  ;;              'org-mode
+  ;;              `(
+  ;;                (,(format org-heading-keyword-regexp-format org-todo-regexp) 1 'org-default)
+  ;;                ))
+  ;;             ))
+
+
+  ;; Here's a wrapper for make-frame-command that allows you to customize how
+  ;; emacs starts up between GUI and terminal environments, while sharing a
+  ;; server.
+  ;; From http://emacs.stackexchange.com/a/92
+  ;; (defadvice make-frame-command (after make-frame-change-background-color last activate)
+  ;;   "Adjusts the background color for different frame types. 
+  ;; Graphical (X) frames should have the theme color, while terminal frames should match the terminal color (which matches the theme color...but terminal frames can't directly render this color)"
+  ;;   (if (display-graphic-p)
+  ;;       (set-background-color "#202020")
+  ;;     (set-background-color "black")))
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
