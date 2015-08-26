@@ -265,7 +265,10 @@ layers configuration."
 
   (font-lock-add-keywords
    'org-mode
-   '(("^\*+ \\(TODO\\|DONE\\) .*$" 1 'org-default)))
+   '(("^\**\\(\*\\) \\(TODO\\|DONE\\) \\(.*\\)$"
+      (1 'org-default)
+      (2 'org-default)
+      )))
 
   ;; Trying to get a smarter keyword face
   ;; (add-hook 'org-mode-hook
