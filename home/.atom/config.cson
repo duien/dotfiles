@@ -23,12 +23,9 @@
       "language-haml"
       "angularjs"
       "atom-handlebars"
-      "minimap"
       "minimap-bookmarks"
       "org"
       "language-jsx"
-      "merge-conflicts"
-      "linter"
       "project-palette-finder"
       "autocomplete-plus"
       "omni-ruler"
@@ -46,7 +43,7 @@
     ]
     themes: [
       "nucleus-dark-ui"
-      "gruvbox"
+      "retro-gruvbox"
     ]
   "spell-check":
     grammars: [

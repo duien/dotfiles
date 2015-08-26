@@ -52,7 +52,7 @@
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(groovy-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -98,8 +98,9 @@ before layers configuration."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
+   ;; TODO Find some way to make this work across macs
    dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 20
+                               :size 18 
                                :weight light
                                :width normal
                                :powerline-scale 1.3)
@@ -221,6 +222,10 @@ layers configuration."
   ;; It's OK to leave semicolons out of JavaScript.
   (setq js2-strict-missing-semi-warning nil)
 
+  ;; -------------------------------------------------------
+  ;; Various toggles and defaults and settings and things
+  ;; -------------------------------------------------------
+
   ;; Allow toggling line numbers in just the current buffer
   (spacemacs|add-toggle local-line-numbers
                         :status linum-mode
@@ -235,18 +240,19 @@ layers configuration."
   ;; Show enabled minor modes in plain ASCII so it's easier to tell the correct key to toggle
   (setq dotspacemacs-mode-line-unicode-symbols nil)
 
+  (setq neo-theme 'nerd)
+  (setq powerline-default-separator 'arrow)
+  (spacemacs/toggle-visual-line-navigation-on) ;; up/down within wrapped lines
+  (spacemacs/toggle-highlight-current-line-globally-off)
+  (spacemacs/toggle-fill-column-indicator-on)
+
   ;; Attempt to set up auto-indent in a sane way. This is surprisingly difficult.
   (setq indent-tabs-mode nil) ;; Always indent with spaces
   (setq standard-indent 2)
   (setq tab-width 2)
   (defvaralias 'c-basic-offset 'tab-width)
   (defvaralias 'cperl-indent-level 'tab-width)
-  ;; (defvaralias 'evil-shift-width 'tab-width)
   (setq evil-shift-width 2)
-
-
-  (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'arrow)
 
   ;; Assorted config for org-mode
   (setq org-fontify-done-headline t)
@@ -254,6 +260,45 @@ layers configuration."
   (setq org-bullets-bullet-list '("*"))
   (setq org-startup-folded nil)
   (setq org-cycle-level-faces nil)
+
+  ;; More advanced config for org-mode
+    (setq org-directory "~/Org/")
+    (setq org-default-notes-file (concat org-directory "/inbox.org"))
+    (setq org-agenda-files (append
+          (file-expand-wildcards (concat org-directory "*.org"))
+          (file-expand-wildcards (concat org-directory "**/*.org"))))
+    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+    (setq org-insert-heading-respect-content t)
+    (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+               "** TODO %?\nCAPTURED: %u %a\n%i")))
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
+            (sequence "QUESTION(q)" "|" "ANSWER(a)")))
+    (setq org-todo-keyword-faces
+          '(
+            ("TODO" . (:inherit org-todo :inverse-video t))
+            ("QUESTION" . (:inherit org-todo :foreground "#268bd2" :inverse-video t))
+            ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
+            ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
+    (setq org-agenda-custom-commands
+          '(("w" "Agenda and work tasks"
+             ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
+              ;; (agenda "" ((org-agenda-time-grid nil)
+              ;;             (org-agenda-ndays 0)
+              ;;             (org-deadline-warning-days 7)
+              ;;             (org-agenda-entry-types '(:deadline))
+              ;;             (org-agenda-overriding-header "Upcoming deadlines")
+              ;;             ))
+              (tags-todo "WORK+TODO=\"TODO\""
+                         ((org-agenda-overriding-header "Work Tasks")
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+              (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
+              (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
+              (tags-todo "WORK+TODO=\"LATER\""
+                         ((org-agenda-overriding-header "Work Tasks : Later")
+                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+              ))))
 
 
 
@@ -263,11 +308,39 @@ layers configuration."
 
   (setq dotspacemacs-persistent-server t)
 
+  ;; TODO This is a first shot at fontifying task-tagged org headlines as
+  ;; "normal" text instead of big colored headlines. There's some weird font
+  ;; issues happening, and it's not doing quite everything I want, but I don't
+  ;; think most of the problems I'm seeing are actually its fault
   (font-lock-add-keywords
    'org-mode
-   '(("^\*+ \\(TODO\\|DONE\\) .*$" 1 'org-default)))
+   '(("^\**\\(\*\\) \\(TODO\\|WAIT\\|LATER\\|DONE\\|CANCEL\\|QUESTION\\|ANSWER\\) \\(.*\\)$"
+      (1 'org-default)
+      (2 'org-default)
+      )))
+  ;; This one works, but doesn't colorize quite how I want
+  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "chocolate1" :bold t :overline t :background "moccasin") t)
 
-  ;; Trying to get a smarter keyword face
+  ;; This one only works if org-mode has previously been loaded (LOL)
+  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 'org-todo t)
+
+  ;; This one is a manual re-implementation of org-todo, but I don't think if the variables are available
+  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground (if (display-graphic-p) "#dc752f" "#dc752f") :bold t :overline t :background (if (display-graphic-p) "#f6f1e1" "#ffffff")) t)
+  (add-hook 'prog-mode-hook
+
+            (lambda ()
+              (setq my-todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
+              (if (display-graphic-p)
+                  (font-lock-add-keywords nil '(
+                                                ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#f6f1e1" :inverse-video t :weight bold) t)
+                                                ))
+                (font-lock-add-keywords nil '(
+                                              ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#ffffff" :inverse-video t :weight bold) t)
+                                              ))
+                )
+              ))
+
+  ;; Trying to get a smarter keyword face for org-mode headlines
   ;; (add-hook 'org-mode-hook
   ;;           (lambda ()
   ;;             ;; (setq org-my-defont-regexp (format org-heading-keyword-regexp-format org-todo-regexp))
@@ -305,4 +378,12 @@ layers configuration."
  '(ahs-inhibit-face-list nil)
  '(evil-shift-width 2)
  '(neo-vc-integration nil)
- '(ring-bell-function (quote ignore) t))
+ '(ring-bell-function (quote ignore) t)
+ '(sp-highlight-pair-overlay nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab")))))
