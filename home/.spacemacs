@@ -46,6 +46,7 @@
      rust
      themes-megapack
      emoji
+     react
      ruby-on-rails
      )
    ;; List of additional packages that will be installed without being
@@ -205,22 +206,29 @@ layers configuration."
   ;;  Lots of setup for getting `js' and `jsx' passable
   ;; -------------------------------------------------------
 
-  ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
-  ;; semi-colons. 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+  (setq-default
+   js2-basic-offset 2
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-attr-indent-offset 2)
 
-  ;; When loading web-mode in a js/jsx file, use the jsx content type.
-  (setq web-mode-content-types-alist
-        '(("jsx" . "\\.js[x]?\\'")))
+  ;; ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
+  ;; ;; semi-colons. 
+  ;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
 
-  ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
-  ;; what I'm mostly working on in a React file
-  (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
-  (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
+  ;; ;; When loading web-mode in a js/jsx file, use the jsx content type.
+  ;; (setq web-mode-content-types-alist
+  ;;       '(("jsx" . "\\.js[x]?\\'")))
 
-  ;; It's OK to leave semicolons out of JavaScript.
-  (setq js2-strict-missing-semi-warning nil)
+  ;; ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
+  ;; ;; what I'm mostly working on in a React file
+  ;; (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
+  ;; (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
+
+  ;; ;; It's OK to leave semicolons out of JavaScript.
+  ;; (setq js2-strict-missing-semi-warning nil)
 
   ;; -------------------------------------------------------
   ;; Various toggles and defaults and settings and things
