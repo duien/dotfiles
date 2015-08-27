@@ -276,43 +276,43 @@ layers configuration."
   (setq org-cycle-level-faces nil)
 
   ;; More advanced config for org-mode
-    (setq org-directory "~/Org/")
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-agenda-files (append
-          (file-expand-wildcards (concat org-directory "*.org"))
-          (file-expand-wildcards (concat org-directory "**/*.org"))))
-    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
-    (setq org-insert-heading-respect-content t)
-    (setq org-capture-templates
+  (setq org-directory "~/Org/")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-agenda-files (append
+                          (file-expand-wildcards (concat org-directory "*.org"))
+                          (file-expand-wildcards (concat org-directory "**/*.org"))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+  (setq org-insert-heading-respect-content t)
+  (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-               "** TODO %?\nCAPTURED: %u %a\n%i")))
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
-            (sequence "QUESTION(q)" "|" "ANSWER(a)")))
-    (setq org-todo-keyword-faces
-          '(
-            ("TODO" . (:inherit org-todo :inverse-video t))
-            ("QUESTION" . (:inherit org-todo :foreground "#268bd2" :inverse-video t))
-            ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
-            ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
-    (setq org-agenda-custom-commands
-          '(("w" "Agenda and work tasks"
-             ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
-              ;; (agenda "" ((org-agenda-time-grid nil)
-              ;;             (org-agenda-ndays 0)
-              ;;             (org-deadline-warning-days 7)
-              ;;             (org-agenda-entry-types '(:deadline))
-              ;;             (org-agenda-overriding-header "Upcoming deadlines")
-              ;;             ))
-              (tags-todo "WORK+TODO=\"TODO\""
-                         ((org-agenda-overriding-header "Work Tasks")
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-              (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
-              (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
-              (tags-todo "WORK+TODO=\"LATER\""
-                         ((org-agenda-overriding-header "Work Tasks : Later")
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-              ))))
+           "** TODO %?\nCAPTURED: %u %a\n%i")))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
+          (sequence "QUESTION(q)" "|" "ANSWER(a)")))
+  (setq org-todo-keyword-faces
+        '(
+          ("TODO" . (:inherit org-todo :inverse-video t))
+          ("QUESTION" . (:inherit org-todo :foreground "#268bd2" :inverse-video t))
+          ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
+          ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
+  (setq org-agenda-custom-commands
+        '(("w" "Agenda and work tasks"
+           ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
+            ;; (agenda "" ((org-agenda-time-grid nil)
+            ;;             (org-agenda-ndays 0)
+            ;;             (org-deadline-warning-days 7)
+            ;;             (org-agenda-entry-types '(:deadline))
+            ;;             (org-agenda-overriding-header "Upcoming deadlines")
+            ;;             ))
+            (tags-todo "WORK+TODO=\"TODO\""
+                       ((org-agenda-overriding-header "Work Tasks")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
+            (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
+            (tags-todo "WORK+TODO=\"LATER\""
+                       ((org-agenda-overriding-header "Work Tasks : Later")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            ))))
 
 
 
@@ -321,7 +321,24 @@ layers configuration."
   ;; -------------------------------------------------------
 
   ;; TODO How to I set the background for a default part of the modeline?
-  ;; (setq powerline-active2 'state-face)
+  ;; Ok, working on powerline, here's some info:
+  ;;
+  ;; Here's the link to the init, where most everything can be found
+  ;;    [[file:~/.emacs.d/spacemacs/packages.el::(defun%20spacemacs/init-powerline%20()]]
+  ;;
+  ;; What I'd like to accomplish
+  ;; - [ ] Only highlight the `TODO' keyword when it's actually at the start of a comment
+  ;; - [ ] Set the background of the powerline to the `state-face' in the center fill area
+  ;; - [ ] Get more useful git status info (changed/etc. with color, maybe
+  ;;       commits ahead/behind instead of just the branch, which is actually not
+  ;;       super-useful)
+  ;; - [ ] ^^ Get org-mode to lay out that nicely
+  ;;
+  ;; I'm curious about the "literate programming" sort of thing a lot of folks
+  ;; seem to do with their emacs config files. I ... feel like maybe this says
+  ;; something about how hard it is to understand emacs lisp, and also something
+  ;; about how very /deeply/ people customize emacs
+
   (setq spacemacs-mode-line-left
         '(
           ((workspace-number window-number)
