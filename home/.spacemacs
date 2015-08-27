@@ -306,6 +306,32 @@ layers configuration."
   ;; Some WIP things
   ;; -------------------------------------------------------
 
+  ;; TODO How to I set the background for a default part of the modeline?
+  ;; (setq powerline-active2 'state-face)
+  (setq spacemacs-mode-line-left
+        '(
+          ((workspace-number window-number)
+            :fallback state-tag
+            :separator "|"
+            :face state-face)
+          (buffer-modified buffer-id)
+          (major-mode
+            :face state-face)
+          ((flycheck-errors flycheck-warnings flycheck-infos)
+            :when active)
+          ))
+  (setq spacemacs-mode-line-right
+        '(
+          ;; (selection-info) ;; seems to not really work?
+          (version-control :when active)
+          (line-column :when active :face state-face)
+          ((global-mode new-version) :when active)
+          ))
+
+
+
+
+
   (setq dotspacemacs-persistent-server t)
 
   ;; TODO This is a first shot at fontifying task-tagged org headlines as
