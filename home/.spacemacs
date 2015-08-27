@@ -55,7 +55,7 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(groovy-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(toxi-theme)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -242,6 +242,12 @@ layers configuration."
                         :documentation "Show the line numbers in this buffer."
                         :evil-leader "tN")
 
+  ;; Add the (probably inadvisable for updates) keybinding "hh"
+  (evil-leader/set-key "hh" 'helm-apropos)
+
+  ;; TODO Hmm... what is `ort'? It is found in SPC C menu
+  (evil-leader/set-key "os" 'org-store-link)
+
   (setq vc-follow-symlinks t)
   (toggle-word-wrap 1) ;; Wrap at word boundaries instead of end of breaking inside words
 
@@ -249,7 +255,7 @@ layers configuration."
   (setq dotspacemacs-mode-line-unicode-symbols nil)
 
   (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'arrow)
+  (setq powerline-default-separator 'wave)
   (spacemacs/toggle-visual-line-navigation-on) ;; up/down within wrapped lines
   (spacemacs/toggle-highlight-current-line-globally-off)
   (spacemacs/toggle-fill-column-indicator-on)
@@ -342,48 +348,35 @@ layers configuration."
 
   (setq dotspacemacs-persistent-server t)
 
-  ;; TODO This is a first shot at fontifying task-tagged org headlines as
-  ;; "normal" text instead of big colored headlines. There's some weird font
-  ;; issues happening, and it's not doing quite everything I want, but I don't
-  ;; think most of the problems I'm seeing are actually its fault
-  (font-lock-add-keywords
-   'org-mode
-   '(("^\**\\(\*\\) \\(TODO\\|WAIT\\|LATER\\|DONE\\|CANCEL\\|QUESTION\\|ANSWER\\) \\(.*\\)$"
-      (1 'org-default)
-      (2 'org-default)
-      )))
-  ;; This one works, but doesn't colorize quite how I want
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "chocolate1" :bold t :overline t :background "moccasin") t)
-
-  ;; This one only works if org-mode has previously been loaded (LOL)
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 'org-todo t)
-
-  ;; This one is a manual re-implementation of org-todo, but I don't think if the variables are available
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground (if (display-graphic-p) "#dc752f" "#dc752f") :bold t :overline t :background (if (display-graphic-p) "#f6f1e1" "#ffffff")) t)
+  ;; In any programming mode, highlight the isolated string TODO BUG XXX or FIXME (which mysteriously stopped working again?)
+  ;; Ideally, we'd want this to happen only when the keyword appears at the beginning of a comment, but that's harder
   (add-hook 'prog-mode-hook
-
             (lambda ()
-              (setq my-todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
-              (if (display-graphic-p)
-                  (font-lock-add-keywords nil '(
-                                                ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#f6f1e1" :inverse-video t :weight bold) t)
-                                                ))
-                (font-lock-add-keywords nil '(
-                                              ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#ffffff" :inverse-video t :weight bold) t)
-                                              ))
-                )
+              (defvar todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
+              (defvar-local todo-comment-graphic '(:inherit font-lock-comment-face :foreground "#715ab1" :weight bold :underline t))
+              (defvar-local todo-comment-term    '(:inherit font-lock-comment-face :foreground "#af5fd7" :weight bold :underline t))
+
+              (font-lock-add-keywords
+               nil
+               `((,todo-comment-regexp 1 ',(if (display-graphic-p) todo-comment-graphic todo-comment-term) t
+                                      )))
               ))
 
-  ;; Trying to get a smarter keyword face for org-mode headlines
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             ;; (setq org-my-defont-regexp (format org-heading-keyword-regexp-format org-todo-regexp))
-  ;;             (font-lock-add-keywords
-  ;;              'org-mode
-  ;;              `(
-  ;;                (,(format org-heading-keyword-regexp-format org-todo-regexp) 1 'org-default)
-  ;;                ))
-  ;;             ))
+  ;; If an org headline also contains a TODO (or similar) keyword, then remove all the fancy color and size styling
+  ;; and fall back to `org-default' which is the same as notes
+  ;; TODO I think maybe we want to do a little something with the face, rather than just default (darker?) but this
+  ;; at least gets rid of the stuff I don't want
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (defvar alternate-heading-keyword-regexp-format "^\\**\\(\\*\\)\\(?: +%s\\)\\(?: +\\(.*?\\)\\)?[ 	]*$")
+              (defvar org-keyword-headline-regexp (format alternate-heading-keyword-regexp-format org-todo-regexp))
+              (font-lock-add-keywords
+               'org-mode
+               `((,org-keyword-headline-regexp
+                  (1 'org-default t)
+                  (2 'org-default t)
+                  ))
+              )))
 
 
   ;; Here's a wrapper for make-frame-command that allows you to customize how
@@ -419,5 +412,5 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-lock-comment-face ((t (:slant italic))))
+ '(font-lock-comment-face ((t (:slant italic :foreground "#9f8fbd" :background "#f1eeed"))))
  '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab")))))
