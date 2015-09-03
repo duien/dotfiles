@@ -46,7 +46,10 @@
      rust
      themes-megapack
      emoji
+     react
      ruby-on-rails
+     dockerfile
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -54,7 +57,7 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(groovy-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(toxi-theme)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'
@@ -100,7 +103,7 @@ before layers configuration."
    ;; size to make separators look not too crappy.
    ;; TODO Find some way to make this work across macs
    dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 18 
+                               :size 20
                                :weight light
                                :width normal
                                :powerline-scale 1.3)
@@ -186,7 +189,7 @@ before layers configuration."
             (lambda () (visual-line-mode t)))
   )
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
@@ -205,19 +208,26 @@ layers configuration."
   ;;  Lots of setup for getting `js' and `jsx' passable
   ;; -------------------------------------------------------
 
-  ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
-  ;; semi-colons. 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+  (setq-default
+   js2-basic-offset 2
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-attr-indent-offset 2)
 
-  ;; When loading web-mode in a js/jsx file, use the jsx content type.
-  (setq web-mode-content-types-alist
-        '(("jsx" . "\\.js[x]?\\'")))
+  ;; ;; Use js2-mode for `.js' and `.jsx' files, since it handles code without
+  ;; ;; semi-colons. 
+  ;; (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
 
-  ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
-  ;; what I'm mostly working on in a React file
-  (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
-  (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
+  ;; ;; When loading web-mode in a js/jsx file, use the jsx content type.
+  ;; (setq web-mode-content-types-alist
+  ;;       '(("jsx" . "\\.js[x]?\\'")))
+
+  ;; ;; Custom binding to switch between `web-mode' and `js2-mode' depending on
+  ;; ;; what I'm mostly working on in a React file
+  ;; (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
+  ;; (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
 
   ;; It's OK to leave semicolons out of JavaScript.
   (setq js2-strict-missing-semi-warning nil)
@@ -234,6 +244,12 @@ layers configuration."
                         :documentation "Show the line numbers in this buffer."
                         :evil-leader "tN")
 
+  ;; Add the (probably inadvisable for updates) keybinding "hh"
+  (evil-leader/set-key "hh" 'helm-apropos)
+
+  ;; TODO Hmm... what is `ort'? It is found in SPC C menu
+  (evil-leader/set-key "os" 'org-store-link)
+
   (setq vc-follow-symlinks t)
   (toggle-word-wrap 1) ;; Wrap at word boundaries instead of end of breaking inside words
 
@@ -241,7 +257,7 @@ layers configuration."
   (setq dotspacemacs-mode-line-unicode-symbols nil)
 
   (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'arrow)
+  (setq powerline-default-separator 'wave)
   (spacemacs/toggle-visual-line-navigation-on) ;; up/down within wrapped lines
   (spacemacs/toggle-highlight-current-line-globally-off)
   (spacemacs/toggle-fill-column-indicator-on)
@@ -262,43 +278,43 @@ layers configuration."
   (setq org-cycle-level-faces nil)
 
   ;; More advanced config for org-mode
-    (setq org-directory "~/Org/")
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-agenda-files (append
-          (file-expand-wildcards (concat org-directory "*.org"))
-          (file-expand-wildcards (concat org-directory "**/*.org"))))
-    (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
-    (setq org-insert-heading-respect-content t)
-    (setq org-capture-templates
+  (setq org-directory "~/Org/")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-agenda-files (append
+                          (file-expand-wildcards (concat org-directory "*.org"))
+                          (file-expand-wildcards (concat org-directory "**/*.org"))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+  (setq org-insert-heading-respect-content t)
+  (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-               "** TODO %?\nCAPTURED: %u %a\n%i")))
-    (setq org-todo-keywords
-          '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
-            (sequence "QUESTION(q)" "|" "ANSWER(a)")))
-    (setq org-todo-keyword-faces
-          '(
-            ("TODO" . (:inherit org-todo :inverse-video t))
-            ("QUESTION" . (:inherit org-todo :foreground "#268bd2" :inverse-video t))
-            ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
-            ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
-    (setq org-agenda-custom-commands
-          '(("w" "Agenda and work tasks"
-             ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
-              ;; (agenda "" ((org-agenda-time-grid nil)
-              ;;             (org-agenda-ndays 0)
-              ;;             (org-deadline-warning-days 7)
-              ;;             (org-agenda-entry-types '(:deadline))
-              ;;             (org-agenda-overriding-header "Upcoming deadlines")
-              ;;             ))
-              (tags-todo "WORK+TODO=\"TODO\""
-                         ((org-agenda-overriding-header "Work Tasks")
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-              (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
-              (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
-              (tags-todo "WORK+TODO=\"LATER\""
-                         ((org-agenda-overriding-header "Work Tasks : Later")
-                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-              ))))
+           "** TODO %?\nCAPTURED: %u %a\n%i")))
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
+          (sequence "QUESTION(q)" "|" "ANSWER(a)")))
+  (setq org-todo-keyword-faces
+        '(
+          ("TODO" . (:inherit org-todo :inverse-video t))
+          ("QUESTION" . (:inherit org-todo :foreground "#268bd2" :inverse-video t))
+          ("ANSWER" . (:inherit org-todo :foreground "#268bd2"  :inverse-video nil))
+          ("LATER" . (:inherit org-todo :foreground "#b58900" :inverse-video nil))))
+  (setq org-agenda-custom-commands
+        '(("w" "Agenda and work tasks"
+           ((agenda "" ((org-agenda-ndays 1) (org-deadline-warning-days 7)))
+            ;; (agenda "" ((org-agenda-time-grid nil)
+            ;;             (org-agenda-ndays 0)
+            ;;             (org-deadline-warning-days 7)
+            ;;             (org-agenda-entry-types '(:deadline))
+            ;;             (org-agenda-overriding-header "Upcoming deadlines")
+            ;;             ))
+            (tags-todo "WORK+TODO=\"TODO\""
+                       ((org-agenda-overriding-header "Work Tasks")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            (tags-todo "WORK+TODO=\"QUESTION\"|INBOX+TODO=\"QUESTION\"" ((org-agenda-overriding-header "Questions")))
+            (tags-todo "INBOX" ((org-agenda-overriding-header "Inbox")))
+            (tags-todo "WORK+TODO=\"LATER\""
+                       ((org-agenda-overriding-header "Work Tasks : Later")
+                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+            ))))
 
 
 
@@ -306,50 +322,80 @@ layers configuration."
   ;; Some WIP things
   ;; -------------------------------------------------------
 
+  ;; TODO How to I set the background for a default part of the modeline?
+  ;; Ok, working on powerline, here's some info:
+  ;;
+  ;; Here's the link to the init, where most everything can be found
+  ;;    [[file:~/.emacs.d/spacemacs/packages.el::(defun%20spacemacs/init-powerline%20()]]
+  ;;
+  ;; What I'd like to accomplish
+  ;; - [ ] Only highlight the `TODO' keyword when it's actually at the start of a comment
+  ;; - [ ] Set the background of the powerline to the `state-face' in the center fill area
+  ;; - [ ] Get more useful git status info (changed/etc. with color, maybe
+  ;;       commits ahead/behind instead of just the branch, which is actually not
+  ;;       super-useful)
+  ;; - [ ] ^^ Get org-mode to lay out that nicely
+  ;;
+  ;; I'm curious about the "literate programming" sort of thing a lot of folks
+  ;; seem to do with their emacs config files. I ... feel like maybe this says
+  ;; something about how hard it is to understand emacs lisp, and also something
+  ;; about how very /deeply/ people customize emacs
+
+  (setq spacemacs-mode-line-left
+        '(
+          ((workspace-number window-number)
+            :fallback state-tag
+            :separator "|"
+            :face state-face)
+          (buffer-modified buffer-id)
+          (major-mode
+            :face state-face)
+          ((flycheck-errors flycheck-warnings flycheck-infos)
+            :when active)
+          ))
+  (setq spacemacs-mode-line-right
+        '(
+          ;; (selection-info) ;; seems to not really work?
+          (version-control :when active)
+          (line-column :when active :face state-face)
+          ((global-mode new-version) :when active)
+          ))
+
+
+
+
+
   (setq dotspacemacs-persistent-server t)
 
-  ;; TODO This is a first shot at fontifying task-tagged org headlines as
-  ;; "normal" text instead of big colored headlines. There's some weird font
-  ;; issues happening, and it's not doing quite everything I want, but I don't
-  ;; think most of the problems I'm seeing are actually its fault
-  (font-lock-add-keywords
-   'org-mode
-   '(("^\**\\(\*\\) \\(TODO\\|WAIT\\|LATER\\|DONE\\|CANCEL\\|QUESTION\\|ANSWER\\) \\(.*\\)$"
-      (1 'org-default)
-      (2 'org-default)
-      )))
-  ;; This one works, but doesn't colorize quite how I want
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "chocolate1" :bold t :overline t :background "moccasin") t)
-
-  ;; This one only works if org-mode has previously been loaded (LOL)
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 'org-todo t)
-
-  ;; This one is a manual re-implementation of org-todo, but I don't think if the variables are available
-  ;; ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground (if (display-graphic-p) "#dc752f" "#dc752f") :bold t :overline t :background (if (display-graphic-p) "#f6f1e1" "#ffffff")) t)
+  ;; In any programming mode, highlight the isolated string TODO BUG XXX or FIXME (which mysteriously stopped working again?)
+  ;; Ideally, we'd want this to happen only when the keyword appears at the beginning of a comment, but that's harder
   (add-hook 'prog-mode-hook
-
             (lambda ()
-              (setq my-todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
-              (if (display-graphic-p)
-                  (font-lock-add-keywords nil '(
-                                                ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#f6f1e1" :inverse-video t :weight bold) t)
-                                                ))
-                (font-lock-add-keywords nil '(
-                                              ("\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>" 1 '(:foreground "#dc752f" :background "#ffffff" :inverse-video t :weight bold) t)
-                                              ))
-                )
+              (defvar todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
+              (defvar-local todo-comment-graphic '(:inherit font-lock-comment-face :foreground "#715ab1" :weight bold :underline t))
+              (defvar-local todo-comment-term    '(:inherit font-lock-comment-face :foreground "#af5fd7" :weight bold :underline t))
+
+              (font-lock-add-keywords
+               nil
+               `((,todo-comment-regexp 1 ',(if (display-graphic-p) todo-comment-graphic todo-comment-term) t
+                                      )))
               ))
 
-  ;; Trying to get a smarter keyword face for org-mode headlines
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             ;; (setq org-my-defont-regexp (format org-heading-keyword-regexp-format org-todo-regexp))
-  ;;             (font-lock-add-keywords
-  ;;              'org-mode
-  ;;              `(
-  ;;                (,(format org-heading-keyword-regexp-format org-todo-regexp) 1 'org-default)
-  ;;                ))
-  ;;             ))
+  ;; If an org headline also contains a TODO (or similar) keyword, then remove all the fancy color and size styling
+  ;; and fall back to `org-default' which is the same as notes
+  ;; TODO I think maybe we want to do a little something with the face, rather than just default (darker?) but this
+  ;; at least gets rid of the stuff I don't want
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (defvar alternate-heading-keyword-regexp-format "^\\**\\(\\*\\)\\(?: +%s\\)\\(?: +\\(.*?\\)\\)?[ 	]*$")
+              (defvar org-keyword-headline-regexp (format alternate-heading-keyword-regexp-format org-todo-regexp))
+              (font-lock-add-keywords
+               'org-mode
+               `((,org-keyword-headline-regexp
+                  (1 'org-default t)
+                  (2 'org-default t)
+                  ))
+              )))
 
 
   ;; Here's a wrapper for make-frame-command that allows you to customize how
@@ -378,6 +424,7 @@ layers configuration."
  '(ahs-inhibit-face-list nil)
  '(evil-shift-width 2)
  '(neo-vc-integration nil)
+ '(org-inlinetask-show-first-star t)
  '(ring-bell-function (quote ignore) t)
  '(sp-highlight-pair-overlay nil))
 (custom-set-faces
@@ -385,5 +432,7 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(font-lock-comment-face ((t (:slant italic))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(font-lock-comment-face ((t (:slant italic :foreground "#9f8fbd" :background "#f1eeed"))))
  '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab")))))

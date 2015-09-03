@@ -26,7 +26,8 @@ set -x GEMEDITOR atom
 ulimit -n 4096
 
 if type boot2docker >/dev/null 2>&1
-  eval (boot2docker shellinit | tr \n \;)
+  set -x DOCKER_HOST tcp://192.168.59.103:2375
+  # eval (boot2docker shellinit | tr \n \;)
 end
 
 if test -s  ~/.config/fish/nvm-wrapper/nvm.fish
