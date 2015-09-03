@@ -48,6 +48,8 @@
      emoji
      react
      ruby-on-rails
+     dockerfile
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -101,7 +103,7 @@ before layers configuration."
    ;; size to make separators look not too crappy.
    ;; TODO Find some way to make this work across macs
    dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 18 
+                               :size 20
                                :weight light
                                :width normal
                                :powerline-scale 1.3)
@@ -187,7 +189,7 @@ before layers configuration."
             (lambda () (visual-line-mode t)))
   )
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
@@ -227,8 +229,8 @@ layers configuration."
   ;; (evil-leader/set-key-for-mode 'web-mode "or" 'js2-mode)
   ;; (evil-leader/set-key-for-mode 'js2-mode "or" 'web-mode)
 
-  ;; ;; It's OK to leave semicolons out of JavaScript.
-  ;; (setq js2-strict-missing-semi-warning nil)
+  ;; It's OK to leave semicolons out of JavaScript.
+  (setq js2-strict-missing-semi-warning nil)
 
   ;; -------------------------------------------------------
   ;; Various toggles and defaults and settings and things
@@ -422,6 +424,7 @@ layers configuration."
  '(ahs-inhibit-face-list nil)
  '(evil-shift-width 2)
  '(neo-vc-integration nil)
+ '(org-inlinetask-show-first-star t)
  '(ring-bell-function (quote ignore) t)
  '(sp-highlight-pair-overlay nil))
 (custom-set-faces
@@ -429,5 +432,7 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
  '(font-lock-comment-face ((t (:slant italic :foreground "#9f8fbd" :background "#f1eeed"))))
  '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab")))))
