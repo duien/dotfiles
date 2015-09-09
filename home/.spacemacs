@@ -59,7 +59,7 @@ values."
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(groovy-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(toxi-theme)
+   dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -95,25 +95,17 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   ;; dotspacemacs-themes '(solarized-light
-   ;;                       solarized-dark
-   ;;                       spacemacs-light
-   ;;                       spacemacs-dark
-   ;;                       leuven
-   ;;                       monokai
-   ;;                       zenburn)
-   ;; dotspacemacs-themes '(gruvbox)
-   dotspacemacs-themes '(spacemacs-light)
+   dotspacemacs-themes '(spacemacs-light gruvbox)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    ;; TODO Find some way to make this work across macs
-   dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 20
-                               :weight light
+   dotspacemacs-default-font '("Input";; "Fantasque Sans Mono" ;; M+ 2m"
+                               :size 18
+                               :weight regular
                                :width normal
-                               :powerline-scale 1.3)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -178,8 +170,8 @@ values."
    ;; emphasis the current one). (default 'all)
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
-   dotspacemacs-persistent-server nil
    ;; (default nil)
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -218,7 +210,6 @@ layers configuration."
   ;; -------------------------------------------------------
   ;;  Lots of setup for getting `js' and `jsx' passable
   ;; -------------------------------------------------------
-
   (setq-default
    js2-basic-offset 2
    css-indent-offset 2
@@ -258,7 +249,6 @@ layers configuration."
   ;; Add the (probably inadvisable for updates) keybinding "hh"
   (evil-leader/set-key "hh" 'helm-apropos)
 
-  ;; TODO Hmm... what is `ort'? It is found in SPC C menu
   (evil-leader/set-key "os" 'org-store-link)
 
   (setq vc-follow-symlinks t)
@@ -291,6 +281,7 @@ layers configuration."
   ;; More advanced config for org-mode
   (setq org-directory "~/Org/")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-default-log-file (concat org-directory "/logbook.org"))
   (setq org-agenda-files (append
                           (file-expand-wildcards (concat org-directory "*.org"))
                           (file-expand-wildcards (concat org-directory "**/*.org"))))
@@ -298,7 +289,10 @@ layers configuration."
   (setq org-insert-heading-respect-content t)
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-           "** TODO %?\nCAPTURED: %u %a\n%i")))
+           "** TODO %?\nCAPTURED: %u %a\n%i")
+          ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+           "%? (logged from [[%l][%f]])")
+          ))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
           (sequence "QUESTION(q)" "|" "ANSWER(a)")))
@@ -366,17 +360,9 @@ layers configuration."
           ))
   (setq spacemacs-mode-line-right
         '(
-          ;; (selection-info) ;; seems to not really work?
-          (version-control :when active)
           (line-column :when active :face state-face)
           ((global-mode new-version) :when active)
           ))
-
-
-
-
-
-  (setq dotspacemacs-persistent-server t)
 
   ;; In any programming mode, highlight the isolated string TODO BUG XXX or FIXME (which mysteriously stopped working again?)
   ;; Ideally, we'd want this to happen only when the keyword appears at the beginning of a comment, but that's harder
