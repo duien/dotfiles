@@ -7,6 +7,10 @@
 You should not put any user code in this function besides modifying the variable
 values."
   (setq-default
+   ;; Base distribution to use. This is a layer contained in the directory
+   ;; `!distribution'. For now available distributions are `spacemacs-core'
+   ;; or `spacemacs'. (default 'spacemacs)
+   dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -128,6 +132,14 @@ values."
    ;; If non nil then `ido' replaces `helm' for some commands. For now only
    ;; `find-files' (SPC f f) is replaced.
    dotspacemacs-use-ido nil
+   ;; If non nil, `helm' will try to miminimize the space it uses. (default nil)
+   dotspacemacs-helm-resize nil
+   ;; if non nil, the helm header is hidden when there is only one source.
+   ;; (default nil)
+   dotspacemacs-helm-no-header nil
+   ;; define the position to display `helm', options are `bottom', `top',
+   ;; `left', or `right'. (default 'bottom)
+   dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
    dotspacemacs-enable-paste-micro-state nil
