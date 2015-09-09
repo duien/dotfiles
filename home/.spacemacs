@@ -186,14 +186,18 @@ values."
    ;; Not used for now. (default nil)
    dotspacemacs-default-package-repository nil
    )
-  ;; User initialization goes here
 
-  ;; This just seems to break everything
-  ;; (when (memq window-system '(mac ns))
-  ;;   (exec-path-from-shell-initialize))
 
+  )
+
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code.
+It is called immediately after `dotspacemacs/init'.  You are free to put any
+user code."
+
+  ;; FIXME If this hook is removed, the recent files and projects list in the
+  ;; Spacemacs startup buffer go away. It is truly a mystery.
   (add-hook 'text-mode-hook
-            ;; (lambda () (toggle-truncate-lines -1))
             (lambda () (visual-line-mode t)))
   )
 
