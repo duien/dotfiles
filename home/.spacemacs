@@ -3,8 +3,14 @@
 ;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration."
+  "Configuration Layers declaration.
+You should not put any user code in this function besides modifying the variable
+values."
   (setq-default
+   ;; Base distribution to use. This is a layer contained in the directory
+   ;; `!distribution'. For now available distributions are `spacemacs-core'
+   ;; or `spacemacs'. (default 'spacemacs)
+   dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
@@ -57,56 +63,53 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(groovy-mode)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(toxi-theme)
+   dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
-   ;; the list `dotspacemacs-configuration-layers'
+   ;; the list `dotspacemacs-configuration-layers'. (default t)
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
   "Initialization function.
 This function is called at the very startup of Spacemacs initialization
-before layers configuration."
+before layers configuration.
+You should not put any user code in there besides modifying the variable
+values."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; Either `vim' or `emacs'. Evil is always enabled but if the variable
-   ;; is `emacs' then the `holy-mode' is enabled at startup.
+   ;; One of `vim', `emacs' or `hybrid'. Evil is always enabled but if the
+   ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
+   ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
+   ;; unchanged. (default 'vim)
    dotspacemacs-editing-style 'vim
-   ;; If non nil output loading progress in `*Messages*' buffer.
+   ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
-   ;; If the value is nil then no banner is displayed.
+   ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
-   ;; Possible values are: `recents' `bookmarks' `projects'."
+   ;; Possible values are: `recents' `bookmarks' `projects'.
+   ;; (default '(recents projects))
    dotspacemacs-startup-lists '(recents projects)
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   ;; dotspacemacs-themes '(solarized-light
-   ;;                       solarized-dark
-   ;;                       spacemacs-light
-   ;;                       spacemacs-dark
-   ;;                       leuven
-   ;;                       monokai
-   ;;                       zenburn)
-   ;; dotspacemacs-themes '(gruvbox)
-   dotspacemacs-themes '(spacemacs-light)
+   dotspacemacs-themes '(spacemacs-light gruvbox)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    ;; TODO Find some way to make this work across macs
-   dotspacemacs-default-font '("Fantasque Sans Mono" ;; M+ 2m"
-                               :size 20
-                               :weight light
+   dotspacemacs-default-font '("Input";; "Fantasque Sans Mono" ;; M+ 2m"
+                               :size 18
+                               :weight regular
                                :width normal
-                               :powerline-scale 1.3)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -129,68 +132,89 @@ before layers configuration."
    ;; If non nil then `ido' replaces `helm' for some commands. For now only
    ;; `find-files' (SPC f f) is replaced.
    dotspacemacs-use-ido nil
+   ;; If non nil, `helm' will try to miminimize the space it uses. (default nil)
+   dotspacemacs-helm-resize nil
+   ;; if non nil, the helm header is hidden when there is only one source.
+   ;; (default nil)
+   dotspacemacs-helm-no-header nil
+   ;; define the position to display `helm', options are `bottom', `top',
+   ;; `left', or `right'. (default 'bottom)
+   dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
-   ;; several times cycle between the kill ring content.
-   dotspacemacs-enable-paste-micro-state t
-   ;; Guide-key delay in seconds. The Guide-key is the popup buffer listing
-   ;; the commands bound to the current keystrokes.
-   dotspacemacs-guide-key-delay 0.4
+   ;; several times cycle between the kill ring content. (default nil)
+   dotspacemacs-enable-paste-micro-state nil
+   ;; Which-key delay in seconds. The which-key buffer is the popup listing
+   ;; the commands bound to the current keystroke sequence. (default 0.4)
+   dotspacemacs-which-key-delay 0.4
+   ;; Which-key frame position. Possible values are `right', `bottom' and
+   ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
+   ;; right; if there is insufficient space it displays it at the bottom.
+   ;; (default 'bottom)
+   dotspacemacs-which-key-position 'bottom
    ;; If non nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
-   ;; nil ;; to boost the loading time.
+   ;; nil to boost the loading time. (default t)
    dotspacemacs-loading-progress-bar t
-   ;; If non nil the frame is fullscreen when Emacs starts up.
+   ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
    dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
-   ;; Use to disable fullscreen animations in OSX."
+   ;; Use to disable fullscreen animations in OSX. (default nil)
    dotspacemacs-fullscreen-use-non-native nil
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (Emacs 24.4+ only)
+   ;; (default nil) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
-   ;; Transparency can be toggled through `toggle-transparency'.
+   ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-active-transparency 90
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
-   ;; Transparency can be toggled through `toggle-transparency'.
+   ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
-   ;; If non nil unicode symbols are displayed in the mode line.
+   ;; If non nil unicode symbols are displayed in the mode line. (default t)
    dotspacemacs-mode-line-unicode-symbols t
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
-   ;; point when it reaches the top or bottom of the screen.
+   ;; point when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
+   ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
-   ;; Select a scope to highlight delimiters. Possible value is `all',
-   ;; `current' or `nil'. Default is `all'
+   ;; Select a scope to highlight delimiters. Possible values are `any',
+   ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
+   ;; emphasis the current one). (default 'all)
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
-   dotspacemacs-persistent-server nil
+   ;; (default nil)
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
+   ;; (default '("ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    ;; The default package repository used if no explicit repository has been
    ;; specified with an installed package.
-   ;; Not used for now.
+   ;; Not used for now. (default nil)
    dotspacemacs-default-package-repository nil
    )
-  ;; User initialization goes here
 
-  ;; This just seems to break everything
-  ;; (when (memq window-system '(mac ns))
-  ;;   (exec-path-from-shell-initialize))
 
+  )
+
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code.
+It is called immediately after `dotspacemacs/init'.  You are free to put any
+user code."
+
+  ;; FIXME If this hook is removed, the recent files and projects list in the
+  ;; Spacemacs startup buffer go away. It is truly a mystery.
   (add-hook 'text-mode-hook
-            ;; (lambda () (toggle-truncate-lines -1))
             (lambda () (visual-line-mode t)))
   )
 
 (defun dotspacemacs/user-config ()
-  "Configuration function.
+  "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
@@ -207,7 +231,6 @@ layers configuration."
   ;; -------------------------------------------------------
   ;;  Lots of setup for getting `js' and `jsx' passable
   ;; -------------------------------------------------------
-
   (setq-default
    js2-basic-offset 2
    css-indent-offset 2
@@ -247,7 +270,6 @@ layers configuration."
   ;; Add the (probably inadvisable for updates) keybinding "hh"
   (evil-leader/set-key "hh" 'helm-apropos)
 
-  ;; TODO Hmm... what is `ort'? It is found in SPC C menu
   (evil-leader/set-key "os" 'org-store-link)
 
   (setq vc-follow-symlinks t)
@@ -280,6 +302,7 @@ layers configuration."
   ;; More advanced config for org-mode
   (setq org-directory "~/Org/")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-default-log-file (concat org-directory "/logbook.org"))
   (setq org-agenda-files (append
                           (file-expand-wildcards (concat org-directory "*.org"))
                           (file-expand-wildcards (concat org-directory "**/*.org"))))
@@ -287,7 +310,10 @@ layers configuration."
   (setq org-insert-heading-respect-content t)
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-           "** TODO %?\nCAPTURED: %u %a\n%i")))
+           "** TODO %?\nCAPTURED: %u %a\n%i")
+          ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+           "%? (logged from [[%l][%f]])")
+          ))
   (setq org-todo-keywords
         '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
           (sequence "QUESTION(q)" "|" "ANSWER(a)")))
@@ -355,17 +381,9 @@ layers configuration."
           ))
   (setq spacemacs-mode-line-right
         '(
-          ;; (selection-info) ;; seems to not really work?
-          (version-control :when active)
           (line-column :when active :face state-face)
           ((global-mode new-version) :when active)
           ))
-
-
-
-
-
-  (setq dotspacemacs-persistent-server t)
 
   ;; In any programming mode, highlight the isolated string TODO BUG XXX or FIXME (which mysteriously stopped working again?)
   ;; Ideally, we'd want this to happen only when the keyword appears at the beginning of a comment, but that's harder
