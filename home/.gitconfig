@@ -16,7 +16,7 @@
 	co = checkout
   pr = "pull --rebase"
   wdiff = "diff --color-words"
-  amend = commit --amend
+  amend = commit --amend --no-edit
   cached = diff --cached
   stat = diff --stat
 	patch = add --patch
