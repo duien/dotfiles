@@ -33,7 +33,7 @@
       "itg-light-syntax"
     ]
   editor:
-    fontFamily: "'Operator Mono SSm'"
+    fontFamily: "'Monoid'"
     fontSize: 16
     invisibles: {}
     scrollPastEnd: true

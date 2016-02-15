@@ -361,6 +361,14 @@ layers configuration. You are free to put any user code."
                             (file-expand-wildcards (concat org-directory "**/*.org"))))
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
 
+    ;; Set up org capture templates
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+             "** TODO %?\nCAPTURED: %u %a\n%i")
+            ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+             "%? (logged from [[%l][%f]])")
+            ))
+
     ;; Set up org keywords
     (setq org-todo-keywords
           '((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
