@@ -67,3 +67,6 @@ alias cdhg='cd ~/Code/Work/Highgroove'
 
 alias pgstart='pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
+
+export NVM_DIR="/Users/ehyland/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

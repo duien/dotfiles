@@ -52,6 +52,10 @@ module Colorer
   def on_num(num, str)
     "\e[48;5;#{num}m#{str}\e[0m"
   end
+
+  def italic(str)
+    "\e[3m#{str}\e[0m"
+  end
 end
 
 include Colorer
@@ -66,7 +70,7 @@ def require_maybe_outside_bundler(gem)
   begin
     require gem
   rescue LoadError => e
-    print "Looking for #{gem}... "
+    print italic("Looking for #{gem}... ")
 
     if defined? Bundler
       Bundler.with_clean_env do
@@ -94,6 +98,7 @@ def require_maybe_outside_bundler(gem)
 end
 
 require_maybe_outside_bundler 'pbcopy'
+require_maybe_outside_bundler 'pry-doc'
 
 if `git rev-parse --is-inside-work-tree 2>&1`.strip == "true"
   Pry.config.prompt_name = `basename \`git rev-parse --show-toplevel\``.strip
@@ -102,7 +107,6 @@ elsif Pry.config.prompt_name == 'pry'
 end
 
 def rails_sym
-  # defined?(Rails) ? '⌗ ' : ''
   defined?(Rails) ? '# ' : ''
 end
 

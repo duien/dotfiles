@@ -4,3 +4,4 @@
 .powenv
 .tern-port
 tmp
+.nvmrc

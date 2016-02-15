@@ -11,15 +11,6 @@
 * http://www.lesscss.org
 */
 
-// Always use a light font
-atom-text-editor, atom-text-editor::shadow, :host {
-  font-weight: 300;
-
-  // Make it a little lighter on a retina display
-  @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
-    font-weight: 200;
-  }
-}
 
 .tree-view {
   li.list-nested-item.directory > .list-item {
@@ -32,30 +23,44 @@ atom-text-editor, atom-text-editor::shadow, :host {
   }
 }
 
+// General editor settings and syntax tweaks
 atom-text-editor, atom-text-editor::shadow, :host {
-  // font-weight: 300;
 
-  // Dumb stuff for playing around with Courier Prime. It does a bad job of placing
-  // the characters in the line-height
-  // .comment, .string, .markup.raw {
-  //   padding-top: 4px;
-  // }
-  // .cursor {
-  //   top: -2px;
-  // }
+  // Make text antialiased and use a lighter weight
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
 
-  // .lines {
-  //   margin-left: 0.25em;
+  // Add support for Moniod
+  // -webkit-font-feature-settings: "liga" on, "calt" on;
+
+  // Make it a little lighter on a retina display
+  // @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
+  //   font-weight: 200;
   // }
 
-  .gfm .markup.heading {
-    font-weight: bold;
+  // I like my comments italic, and some syntax themes don't agree
+  .comment {
+    font-style: italic;
   }
+}
+
+atom-text-editor, atom-text-editor::shadow, :host {
+
+  // Tweaks for Markdown files
+  .gfm .markup {
+    &.bold { font-weight: 500; }
+    &.heading {
+      font-weight: bold;
+      font-style: italic;
+    }
+  }
+
+  // Set up indent guide tweaks
+  @indent-offset: 4px; // This might need tweaking depending on font and size
+  @guide-width: 1px;
 
   // Shift indent guides to align vertically with center of column
   .indent-guide {
-    @indent-offset: 4px; // This might need tweaking depending on font and size
-    @guide-width: 2px;
     box-shadow: none;
     background: linear-gradient(90deg, // replace box-shadow with gradient
       transparent,
@@ -64,41 +69,99 @@ atom-text-editor, atom-text-editor::shadow, :host {
       @syntax-indent-guide-color @indent-offset + @guide-width,
       transparent @indent-offset + @guide-width)
   }
-  
+
+  .indent-guide-improved {
+    width: @indent-offset + @guide-width;
+    &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
+      background: linear-gradient(90deg, // replace box-shadow with gradient
+        transparent,
+        transparent @indent-offset,
+        @syntax-indent-guide-color @indent-offset,
+        @syntax-indent-guide-color @indent-offset + @guide-width,
+        transparent @indent-offset + @guide-width)
+    }
+  }
+
   .invisible-character { // hide most invisibles
     color: transparent;
   }
   .trailing-whitespace { // Just show trailing whitespace
-    color: fade(red, 50);
+    // Use `syntax-color-removed` since it's usually red
+    // Unfortunately, the invisible characters are behind the indent guide, so
+    // we have to use background rather than foreground (since I have moved the
+    // indent guides over to be centered in the character column)
+    // color: @syntax-color-removed;
+    background: fade(@syntax-color-removed, 25);
   }
-}
 
+  .gutter {
+    min-width: 0;
+    .line-number {
+      // FIXME Part of a flailing attempt at getting the gutter less huge
+      // padding-left: 0 !important;
+      // ^^ Turns out that's good when there's the git gutter icons, but bad
+      //    when there's not, and overall going with not gives a more
+      //    reasonable-sized gutter
+
+      // This is, once again, an attempt at a narrower gutter. This approach
+      // seems a little more solid, but moving the folding indicator in-line
+      // is a bit of a stretch
+      padding-right: 0.5em;
+      .icon-right { // Folding indicators
+        position: absolute;
+        left: 0.25em;
+        right: 0;
+        background: @syntax-gutter-background-color;
+        opacity: 1;
+      }
+
+      &.cursor-line .icon-right {
+        // background: @syntax-gutter-background-color-selected;
+        // FIXME Ugh, transparent backgrounds make everything complicated
+        background: #f1eaca;
+      }
+
+      // Make the git status indicator wider
+      &.git-line-added, &.git-line-modified {
+        border-left-width: 0.25em;
+        padding-left: 0.25em;
+        font-weight: bold;
+      }
+
+      &.git-line-added { color: @syntax-color-added }
+      &.git-line-modified { color: @syntax-color-modified }
+    }
+  }
+
+}
 // More visible coloring of added/changed lines
-atom-text-editor.is-focused,
-atom-text-editor.is-focused::shadow,
-:host(.is-focused) {
-  .gutter .line-number {
-    &.git-line-added {
-      background: fade(@syntax-color-added, 10);
-    }
-    &.git-line-modified {
-      background: fade(@syntax-color-modified, 10);
-    }
-  }
-}
+// atom-text-editor.is-focused,
+// atom-text-editor.is-focused::shadow,
+// :host(.is-focused) {
+//   .gutter .line-number {
+//     &.git-line-added {
+//       // background: fade(@syntax-color-added, 10);
+//       background: fade(@syntax-color-added, 50);
+//       color: @syntax-background-color;
+//     }
+//     &.git-line-modified {
+//       // background: fade(@syntax-color-modified, 10);
+//       background: @syntax-color-modified;
+//     }
+//   }
+// }
 
-// Trying to get rid of the annoying scroll bar thing
-// NOPE seems to disable scrolling entirely in the tree view if I do the
-// width-height thing, but has no effect without it. Argh.
-.tree-view-resizer, atom-text-editor /deep/ ::-webkit-scrollbar { 
-  // width: initial; 
-  // height: initial;
-  &-track  { background-color: initial; }
-  &-corner { background-color: initial; }
-  &-thumb  { background-color: initial; }
-}
 
 // THEME-SPECIFIC SETTINGS
+
+.theme-blessed-light-syntax {
+  atom-text-editor, atom-text-editor::shadow, :host {
+    .trailing-whitespace {
+      // The red "removed" color in this theme looks terrible with the rest of the colors
+      background: fade(@syntax-cursor-color, 25);
+    }
+  }
+}
 
 .theme-isotope-ui {
   .tab-bar {
@@ -170,6 +233,55 @@ atom-text-editor.is-focused::shadow,
   atom-text-editor, atom-text-editor::shadow, :host {
     .source.yaml > .string {
       background: inherit;
+    }
+    
+    .string.regexp {
+      .punctuation {
+        &.regexp, &.group, &.embedded {
+          background: none;
+        }
+      }
+    }
+  }
+}
+
+.theme-idiomatic-dark-syntax {
+  atom-text-editor, atom-text-editor::shadow, :host {
+    .gutter:not([gutter-name="line-number"]) {
+      border: none;
+    }
+  }
+}
+
+// Fix weird padding/margin trickery breaking text metrics
+.theme-galaxy-light-syntax {
+  atom-text-editor, atom-text-editor::shadow, :host {
+    .line.cursor-line {
+      // This was breaking all the things (namely cursor placement)
+      padding-left: 0 !important;
+      margin-left: 0 !important;
+    }
+
+    .gutter .line-number {
+      &.git-line-added, &.git-line-modified {
+        // This theme felt the need to go its own way with line number
+        // padding, so it messes up the git change display
+        padding-left: 8px;
+      }
+    }
+
+    .selection .region {
+      // The white-ish selection color was almost impossible to see
+      background-color: rgba(165, 103, 165, 0.2);
+    }
+  }
+}
+
+.theme-princess-syntax {
+  atom-text-editor, atom-text-editor::shadow, :host {
+    .string {
+      font-style: italic;
+      .punctuation, .source { font-style: normal; }
     }
   }
 }

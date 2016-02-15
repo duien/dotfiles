@@ -61,7 +61,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
-   dotspacemacs-additional-packages '(groovy-mode)
+   dotspacemacs-additional-packages '(groovy-mode hlinum)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -99,17 +99,22 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-light gruvbox)
+   ;; dotspacemacs-themes '(spacemacs-light gruvbox)
+   dotspacemacs-themes '(gruvbox spacemacs-light)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    ;; TODO Find some way to make this work across macs
-   dotspacemacs-default-font '("Input";; "Fantasque Sans Mono" ;; M+ 2m"
-                               :size 18
-                               :weight regular
+   dotspacemacs-default-font '(;; "Input";; "Fantasque Sans Mono" ;; M+ 2m"
+                               ;; "Source Code Pro"
+                               ;; "Monoid"
+                               ;; "PragmataPro Mono"
+                               "Operator Mono SSm"
+                               :size 16
+                               :weight light
                                :width normal
-                               :powerline-scale 1.0)
+                               :powerline-scale 1.3)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -206,11 +211,6 @@ values."
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init'.  You are free to put any
 user code."
-
-  ;; FIXME If this hook is removed, the recent files and projects list in the
-  ;; Spacemacs startup buffer go away. It is truly a mystery.
-  (add-hook 'text-mode-hook
-            (lambda () (visual-line-mode t)))
   )
 
 (defun dotspacemacs/user-config ()
@@ -218,6 +218,11 @@ user code."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  (set-fontset-font "fontset-default" nil 
+                    (font-spec :size 16 :name "Source Code Pro"))
+
+  (hlinum-activate)
+  (setq moe-theme-highlight-buffer-id nil)
   ;; Turn off the `swipe-left' and `swipe-right' gestures that used to
   ;; annoyingly switch between files when I tried to scroll
   ;;
@@ -278,11 +283,15 @@ layers configuration."
   ;; Show enabled minor modes in plain ASCII so it's easier to tell the correct key to toggle
   (setq dotspacemacs-mode-line-unicode-symbols nil)
 
+
   (setq neo-theme 'nerd)
-  (setq powerline-default-separator 'wave)
+  (setq powerline-default-separator 'arrow)
   (spacemacs/toggle-visual-line-navigation-on) ;; up/down within wrapped lines
   (spacemacs/toggle-highlight-current-line-globally-off)
-  (spacemacs/toggle-fill-column-indicator-on)
+  ;; (spacemacs/toggle-fill-column-indicator-on)
+  (spacemacs/toggle-vi-tilde-fringe-off)
+  (spacemacs/toggle-line-numbers-on)
+  (spacemacs/toggle-auto-completion-off)
 
   ;; Attempt to set up auto-indent in a sane way. This is surprisingly difficult.
   (setq indent-tabs-mode nil) ;; Always indent with spaces
@@ -293,6 +302,7 @@ layers configuration."
   (setq evil-shift-width 2)
 
   ;; Assorted config for org-mode
+  (setq org-fontify-whole-heading-line t)
   (setq org-fontify-done-headline t)
   (setq org-hide-leading-stars t)
   (setq org-bullets-bullet-list '("*"))
@@ -367,37 +377,42 @@ layers configuration."
   ;; something about how hard it is to understand emacs lisp, and also something
   ;; about how very /deeply/ people customize emacs
 
-  (setq spacemacs-mode-line-left
-        '(
-          ((workspace-number window-number)
-            :fallback state-tag
-            :separator "|"
-            :face state-face)
-          (buffer-modified buffer-id)
-          (major-mode
-            :face state-face)
-          ((flycheck-errors flycheck-warnings flycheck-infos)
-            :when active)
-          ))
-  (setq spacemacs-mode-line-right
-        '(
-          (line-column :when active :face state-face)
-          ((global-mode new-version) :when active)
-          ))
+  ;; (setq spacemacs-mode-line-left
+  ;;       '(
+  ;;         ((workspace-number window-number)
+  ;;           :fallback state-tag
+  ;;           :separator "|"
+  ;;           :face state-face)
+  ;;         (buffer-modified buffer-id)
+  ;;         (major-mode
+  ;;           :face state-face)
+  ;;         ((flycheck-errors flycheck-warnings flycheck-infos)
+  ;;           :when active)
+  ;;         ))
+  ;; (setq spacemacs-mode-line-right
+  ;;       '(
+  ;;         (line-column :when active :face state-face)
+  ;;         ((global-mode new-version) :when active)
+  ;;         ))
 
   ;; In any programming mode, highlight the isolated string TODO BUG XXX or FIXME (which mysteriously stopped working again?)
   ;; Ideally, we'd want this to happen only when the keyword appears at the beginning of a comment, but that's harder
-  (add-hook 'prog-mode-hook
-            (lambda ()
-              (defvar todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
-              (defvar-local todo-comment-graphic '(:inherit font-lock-comment-face :foreground "#715ab1" :weight bold :underline t))
-              (defvar-local todo-comment-term    '(:inherit font-lock-comment-face :foreground "#af5fd7" :weight bold :underline t))
+  ;; (add-hook 'prog-mode-hook
+  ;;           (lambda ()
+  ;;             (defvar todo-comment-regexp "\\<\\(FIXME\\|TODO\\|BUG\\|XXX+\\):?\\>")
+  ;;             (defvar-local todo-comment-graphic '(:inherit font-lock-comment-face :foreground "#715ab1" :weight bold :underline t))
+  ;;             (defvar-local todo-comment-term    '(:inherit font-lock-comment-face :foreground "#af5fd7" :weight bold :underline t))
 
-              (font-lock-add-keywords
-               nil
-               `((,todo-comment-regexp 1 ',(if (display-graphic-p) todo-comment-graphic todo-comment-term) t
-                                      )))
-              ))
+  ;;             (font-lock-add-keywords
+  ;;              nil
+  ;;              `((,todo-comment-regexp 1 ',(if (display-graphic-p) todo-comment-graphic todo-comment-term) t
+  ;;                                     )))
+  ;;             ))
+
+  ;; TODO Figure out why this doesn't actually seem to make the fill
+  ;; column show up reliably. Although it also has something to do
+  ;; with different modes setting the fill-column differently, I think
+  (add-hook 'prog-mode-hook 'fc-mode)
 
   ;; If an org headline also contains a TODO (or similar) keyword, then remove all the fancy color and size styling
   ;; and fall back to `org-default' which is the same as notes
@@ -450,7 +465,10 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(font-lock-comment-face ((t (:slant italic :foreground "#9f8fbd" :background "#f1eeed"))))
- '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab")))))
+ ;; '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ ;; '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(font-lock-comment-face ((t (:slant italic))))
+ ;; TODO Find a way to apply this customization only to `spacemacs-light' theme
+ ;; '(font-lock-comment-face ((t (:slant italic :foreground "#9f8fbd" :background "#f1eeed"))))
+ ;; '(org-ellipsis ((t (:background "azure2" :foreground "#1f71ab"))))
+ )

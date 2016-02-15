@@ -1,8 +1,8 @@
 # Additonal fish customizations, mostly alises and env
 
-
 # Aliases
 alias gst "git status"
+alias jk jekyll
 
 # Basic environment
 set CDPATH . $HOME $HOME/Code $CDPATH
@@ -15,9 +15,9 @@ if test -d "$HOME/.bin"
   set PATH $HOME/.bin $PATH
 end
 
-set -x EDITOR vim
-set -x VISUAL atom
-set -x GEMEDITOR atom
+set -x EDITOR nvim
+set -x VISUAL nvim
+set -x GEMEDITOR nvim
 
 # Setting up other random crap
 
@@ -44,3 +44,9 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 # Enable rbenv
 set -gx RBENV_ROOT /usr/local/var/rbenv
 . (rbenv init -|psub)
+
+
+set -x GOPATH /Users/ehyland/Code/go_crap
+set -x GOBIN /Users/ehyland/Code/go_crap/bin
+
+set -x PATH $PATH $GOBIN
