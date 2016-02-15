@@ -3,3 +3,4 @@
 .atom/packages
 bin
 .spacemacs.d
+.config/nvim
