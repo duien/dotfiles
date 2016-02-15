@@ -2,3 +2,4 @@
 .atom
 .atom/packages
 bin
+.spacemacs.d

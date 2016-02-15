@@ -1,22 +1,6 @@
 "*":
-  "exception-reporting":
-    userId: "71c26210-a1a7-6854-55d6-2e6d25f32095"
-  "release-notes":
-    viewedVersion: "0.95.0"
-  welcome:
-    showOnStartup: false
-  metrics:
-    userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
-  editor:
-    scrollPastEnd: true
-    invisibles: {}
-    showInvisibles: true
-    showIndentGuide: true
-    softWrapAtPreferredLineLength: true
-    lineHeight: 1.4
-    fontSize: 18
-    fontFamily: "'Fantasque Sans Mono'"
   core:
+    destroyEmptyPanes: false
     disabledPackages: [
       "atom-jshint"
       "linter-rubocop"
@@ -29,9 +13,11 @@
       "project-palette-finder"
       "autocomplete-plus"
       "omni-ruler"
+      "file-type-icons"
+      "vim-mode"
+      "vim-mode-plus"
+      "pigments"
     ]
-    projectHome: "/Users/eprice/Code"
-    destroyEmptyPanes: false
     ignoredNames: [
       ".git"
       ".hg"
@@ -41,40 +27,51 @@
       "Thumbs.db"
       ".projectile"
     ]
+    projectHome: "/Users/eprice/Code"
     themes: [
-      "nucleus-dark-ui"
-      "retro-gruvbox"
+      "one-dark-ui"
+      "itg-light-syntax"
     ]
-  "spell-check":
-    grammars: [
-      "source.gfm"
-      "text.git-commit"
-      "text.plain"
-    ]
-  "tree-view":
-    hideIgnoredNames: true
-  whitespace:
-    removeTrailingWhitespace: false
-  linter:
-    showHightlighting: false
-    showHighlighting: false
-    showErrorInline: false
-    statusBar: "Show error of the selected line"
+  editor:
+    fontFamily: "'Operator Mono SSm'"
+    fontSize: 16
+    invisibles: {}
+    scrollPastEnd: true
+    showInvisibles: true
+    softWrapAtPreferredLineLength: true
+  "exception-reporting":
+    userId: "71c26210-a1a7-6854-55d6-2e6d25f32095"
+  "file-icons":
+    coloured: false
+  "git-diff": {}
   "git-log":
     fontScale: 1
-  "file-icons": {}
+  gruvswitch:
+    mode: "light"
+  "isotope-ui":
+    customBackgroundColorPicker:
+      alpha: 1
+      blue: 25
+      green: 2
+      red: 36
+    fontFamily: "System Default"
+    fontWeight: "Regular"
+  linter:
+    gutterEnabled: false
+    gutterPosition: "Left"
+    showErrorInline: false
+    showErrorTabFile: false
+    showErrorTabProject: false
+    showHighlighting: false
+    showHightlighting: false
+    statusBar: "Show error of the selected line"
+    statusIconScope: "File"
+  "linter-eslint": {}
+  metrics:
+    userId: "6162d00349c199248ff6e716be3f500e5d2c0ac1"
   minimap:
     plugins:
       bookmarks: true
-  "isotope-ui":
-    fontFamily: "System Default"
-    customBackgroundColorPicker:
-      red: 36
-      green: 2
-      blue: 25
-      alpha: 1
-    fontWeight: "Regular"
-  pigments: {}
   "omni-ruler":
     columns: [
       73
@@ -82,6 +79,30 @@
       80
       100
     ]
+  "one-dark-ui": {}
+  pigments:
+    ignoredScopes: [
+      "\\.comment|\\.gfm"
+    ]
+    markerType: "dot"
+  react: {}
+  "release-notes":
+    viewedVersion: "0.95.0"
+  "spell-check":
+    grammars: [
+      "source.gfm"
+      "text.git-commit"
+      "text.plain"
+    ]
   tabs:
     usePreviewTabs: true
-  react: {}
+  tasks:
+    baseMarker: "_"
+    cancelledMarker: "×"
+    completeMarker: "*"
+  "tree-view":
+    hideIgnoredNames: true
+  welcome:
+    showOnStartup: false
+  whitespace:
+    removeTrailingWhitespace: false

@@ -5,11 +5,11 @@
   ui = auto
 [pull]
   default = matching
- [push]
+[push]
 	default = simple
 [core]
   excludesfile = ~/.gitignore
-  editor = vim
+  editor = nvim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
   hist = "log --oneline --decorate --graph"
@@ -17,6 +17,7 @@
   pr = "pull --rebase"
   wdiff = "diff --color-words"
   amend = commit --amend --no-edit
+  edit = commit --amend --edit
   cached = diff --cached
   stat = diff --stat
 	patch = add --patch
@@ -32,8 +33,7 @@
 [github]
   user = duien
 [branch]
-  autosetupmerge = always
-	autosetuprebase = always
+  autosetupmerge = true
 [mailmap]
   file = /Users/eprice/.gitmailmap
 [credential]

@@ -12,3 +12,5 @@
 #   editor = editorView.getEditor()
 #   if path.extname(editor.getPath()) is '.md'
 #     editor.setSoftWrap(true)
+
+# document.body.classList.add('earthsung-modify-ui')
