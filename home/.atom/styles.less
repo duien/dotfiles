@@ -28,7 +28,7 @@ atom-text-editor, atom-text-editor::shadow, :host {
 
   // Make text antialiased and use a lighter weight
   -webkit-font-smoothing: antialiased;
-  font-weight: 300;
+  font-weight: 400;
 
   // Add support for Moniod
   -webkit-font-feature-settings: "liga" on, "calt" on;
@@ -42,18 +42,21 @@ atom-text-editor, atom-text-editor::shadow, :host {
   .comment {
     font-style: italic;
   }
-}
 
-atom-text-editor, atom-text-editor::shadow, :host {
+  // Italic strings too!!!
+  .string {
+    font-style: italic;
+    .punctuation, .source { font-style: normal; }
+  }
 
   // Tweaks for Markdown files
-  .gfm .markup {
-    &.bold { font-weight: 500; }
-    &.heading {
-      font-weight: bold;
-      font-style: italic;
-    }
-  }
+  // .gfm .markup {
+  //   &.bold { font-weight: 500; }
+  //   &.heading {
+  //     font-weight: bold;
+  //     font-style: italic;
+  //   }
+  // }
 
   // Set up indent guide tweaks
   @indent-offset: 4px; // This might need tweaking depending on font and size
@@ -85,6 +88,7 @@ atom-text-editor, atom-text-editor::shadow, :host {
   .invisible-character { // hide most invisibles
     color: transparent;
   }
+  // .line:not(.cursor-line) .trailing-whitespace,
   .trailing-whitespace { // Just show trailing whitespace
     // Use `syntax-color-removed` since it's usually red
     // Unfortunately, the invisible characters are behind the indent guide, so
@@ -94,8 +98,13 @@ atom-text-editor, atom-text-editor::shadow, :host {
     background: fade(@syntax-color-removed, 25);
   }
 
+  .gutter-container {
+    margin-right: 0.5em !important;
+  }
+  
   .gutter {
     min-width: 0;
+    font-weight: 200;
     .line-number {
       // FIXME Part of a flailing attempt at getting the gutter less huge
       // padding-left: 0 !important;
@@ -118,7 +127,8 @@ atom-text-editor, atom-text-editor::shadow, :host {
       &.cursor-line .icon-right {
         // background: @syntax-gutter-background-color-selected;
         // FIXME Ugh, transparent backgrounds make everything complicated
-        background: #f1eaca;
+        // background: #f1eaca;
+        background: @syntax-gutter-background-color-selected;
       }
 
       // Make the git status indicator wider
@@ -150,6 +160,11 @@ atom-text-editor, atom-text-editor::shadow, :host {
 //     }
 //   }
 // }
+
+ft-outline-editor {
+  font-family: 'Operator Mono SSm';
+  
+}
 
 
 // THEME-SPECIFIC SETTINGS
@@ -234,11 +249,16 @@ atom-text-editor, atom-text-editor::shadow, :host {
     .source.yaml > .string {
       background: inherit;
     }
-    
-    .string.regexp {
-      .punctuation {
-        &.regexp, &.group, &.embedded {
-          background: none;
+
+    .string {
+      font-style: italic;
+      .punctuation, .source { font-style: normal; }
+
+      &.regexp {
+        .punctuation {
+          &.regexp, &.group, &.embedded {
+            background: none;
+          }
         }
       }
     }
@@ -273,15 +293,6 @@ atom-text-editor, atom-text-editor::shadow, :host {
     .selection .region {
       // The white-ish selection color was almost impossible to see
       background-color: rgba(165, 103, 165, 0.2);
-    }
-  }
-}
-
-.theme-princess-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .string {
-      font-style: italic;
-      .punctuation, .source { font-style: normal; }
     }
   }
 }

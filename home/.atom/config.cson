@@ -1,4 +1,20 @@
 "*":
+  Zen:
+    softWrap: true
+  "autocomplete-elixir":
+    elixirPath: "/usr/local/bin/elixir"
+    erlangHome: "/usr/local/bin/"
+    matchDoEnd: false
+  "autocomplete-plus":
+    autoActivationDelay: 500
+    enableAutoActivation: false
+    enableAutoConfirmSingleSuggestion: false
+    enableBuiltinProvider: false
+    fileBlacklist: [
+      ".txt"
+      ".md"
+    ]
+    maxVisibleSuggestions: 5
   core:
     destroyEmptyPanes: false
     disabledPackages: [
@@ -11,12 +27,13 @@
       "org"
       "language-jsx"
       "project-palette-finder"
-      "autocomplete-plus"
       "omni-ruler"
       "file-type-icons"
       "vim-mode"
       "vim-mode-plus"
       "pigments"
+      "iex"
+      "symbols-tree-view"
     ]
     ignoredNames: [
       ".git"
@@ -27,13 +44,13 @@
       "Thumbs.db"
       ".projectile"
     ]
-    projectHome: "/Users/eprice/Code"
+    projectHome: "/Users/ehyland/Code"
     themes: [
       "one-dark-ui"
-      "itg-light-syntax"
+      "brilliant-syntax"
     ]
   editor:
-    fontFamily: "'Monoid'"
+    fontFamily: "'Operator Mono SSm', 'Source Code Pro'"
     fontSize: 16
     invisibles: {}
     scrollPastEnd: true
@@ -41,13 +58,15 @@
     softWrapAtPreferredLineLength: true
   "exception-reporting":
     userId: "71c26210-a1a7-6854-55d6-2e6d25f32095"
-  "file-icons":
-    coloured: false
+  "file-icons": {}
   "git-diff": {}
   "git-log":
     fontScale: 1
   gruvswitch:
     mode: "light"
+  iex:
+    colors: {}
+    openPanesInSameSplit: true
   "isotope-ui":
     customBackgroundColorPicker:
       alpha: 1
@@ -85,6 +104,8 @@
       "\\.comment|\\.gfm"
     ]
     markerType: "dot"
+  "project-plus":
+    folderBlacklist: "~/Code/Snippets"
   react: {}
   "release-notes":
     viewedVersion: "0.95.0"
@@ -104,5 +125,6 @@
     hideIgnoredNames: true
   welcome:
     showOnStartup: false
+  "whimsy-ui": {}
   whitespace:
     removeTrailingWhitespace: false

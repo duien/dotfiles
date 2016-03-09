@@ -1,7 +1,9 @@
 .DS_Store
 .*.swp
 .*.swo
+.#*
 .powenv
 .tern-port
 tmp
 .nvmrc
+.byebug_history
