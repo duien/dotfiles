@@ -1,6 +1,10 @@
 "*":
   Zen:
     softWrap: true
+    tabs: "multiple"
+    width: 100
+  "atom-beautify":
+    _analyticsUserId: "769aca66-48e0-4c1d-adae-6fe94f3ee579"
   "autocomplete-elixir":
     elixirPath: "/usr/local/bin/elixir"
     erlangHome: "/usr/local/bin/"
@@ -31,9 +35,12 @@
       "file-type-icons"
       "vim-mode"
       "vim-mode-plus"
-      "pigments"
       "iex"
       "symbols-tree-view"
+      "pigments"
+      "language-javascript-jsx"
+      "language-liquid"
+      "language-gfm"
     ]
     ignoredNames: [
       ".git"
@@ -46,8 +53,8 @@
     ]
     projectHome: "/Users/ehyland/Code"
     themes: [
-      "one-dark-ui"
-      "brilliant-syntax"
+      "nucleus-dark-ui"
+      "eclectic-syntax"
     ]
   editor:
     fontFamily: "'Operator Mono SSm', 'Source Code Pro'"
