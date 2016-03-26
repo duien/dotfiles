@@ -1,424 +1,469 @@
-# name: bobthefish
+set powerline_right \uE0B0
+set powerline_right_soft \uE0B1
+set powerline_left \uE0B2
+set powerline_left_soft \uE0B3
+set powerline_branch \uE0A0
+
+#         red    green  yellow blue   purple cyan   orange
+# bright  f73028 b8bb26 fabd2f 83a598 d3869b 7db669 fe8019
+# neutral cc241d 98971a d79921 458588 b16286 578e57 d65d0e
+# faded   890009 66620d a56311 0e5365 7b2b5e 356a46 9d2807
 #
-# bobthefish is a Powerline-style, Git-aware fish theme optimized for awesome.
+# grayscale 1d2021 282828 32302f 3c3836 504945 665c54 7c6f64 928374 a89984 bdae93 d5c4a1 ebdbb2 f2e5bc fbf1c7 f9f5d7
+
+# Use $COLUMNS to determine window width
+
+set red    f73028 cc241d 890009
+set orange fe8019 d65d0e 9d2807
+set yellow fabd2f d79921 a56311
+set green  b8bb26 98971a 66620d
+set cyan   7db669 54a367 00875f
+set blue   87afaf 458588 005f87 # trying term color codes instead
+set purple d3869b b16286 7b2b5e
+set grayscale 1d2021 282828 32302f 3c3836 504945 665c54 7c6f64 928374 a89984 bdae93 d5c4a1 ebdbb2 f2e5bc fbf1c7 f9f5d7
+
+set bg_normal $grayscale[2]
+
+# If `git_root` is the root of a git repo, and the # of segments to show is 5:
 #
-# You will probably need a Powerline-patched font for this to work:
+# QUESTION: Should the branch count as a segment? Probably -- it does take
+#           up a segment worth of space
 #
-#     https://powerline.readthedocs.org/en/latest/fontpatching.html
+# ~/git_root
+# ~ < br > git_root
 #
-# I recommend picking one of these:
+# ~/foo/git_root/bar
+# ~ > foo < br > git_root > bar
 #
-#     https://github.com/Lokaltog/powerline-fonts
+# ~/foo/bar/git_root/baz
+# ... > bar < br > git_root > bar
 #
-# You can override some default options in your config.fish:
+# ~/foo/git_root/bar/baz
+# br > git_root > bar > baz
 #
-#     set -g theme_display_git no
-#     set -g theme_display_hg yes
-#     set -g theme_display_virtualenv no
-#     set -g theme_display_ruby no
-#     set -g theme_display_user yes
-#     set -g default_user your_normal_user
+# ~/foo/bar/git_root/bar/baz
+# br > git_root > bar > baz
+#
+# ~/foo/git_root/bar/baz/quux
+# br > git_root > bar > baz > quux
+#
+# ~/git_root/foo/bar/baz/quux
+# br > git_root ... bar > baz > quux
+#
+# And a special 2-or-3 segment example:
+#
+# ~/git_root/foo/bar/baz/quux
+# br > git_root ... quux
 
-set -g __bobthefish_current_bg NONE
+# Ok, summarize that into rules:
+#
+# - always show git root and branch (2 segments)
+# - in outside section, `...` counts as a segment
+# - in inside section, use `...` as special separator
+# - if `...` out be only segment in outside, skip it
+#   (eg, if configured length is 1 and path length > 1)
 
-# Powerline glyphs
-set __bobthefish_branch_glyph            \uE0A0
-set __bobthefish_ln_glyph                \uE0A1
-set __bobthefish_padlock_glyph           \uE0A2
-set __bobthefish_right_black_arrow_glyph \uE0B0
-set __bobthefish_right_arrow_glyph       \uE0B1
-set __bobthefish_left_black_arrow_glyph  \uE0B2
-set __bobthefish_left_arrow_glyph        \uE0B3
+function __shish_debug
+  [ "$SHISH_DEBUG" ] ; and echo "[$argv]"
+end
 
-# Additional glyphs
-set __bobthefish_detached_glyph          \u27A6
-set __bobthefish_nonzero_exit_glyph      '! '
-set __bobthefish_superuser_glyph         '$ '
-set __bobthefish_bg_job_glyph            '% '
-set __bobthefish_hg_glyph                \u263F
+set SHISH_DEBUG
+set __shish_bg_current
 
-# Python glyphs
-set __bobthefish_superscript_glyph       \u00B9 \u00B2 \u00B3
-set __bobthefish_virtualenv_glyph        \u25F0
-set __bobthefish_pypy_glyph              \u1D56
+function __shish_print_in -a color
+  # __shish_debug in $color
+  # __shish_debug p $argv[2..-1]
+  set_color normal
+  set_color $color
+  [ 'unstarted' != $__shish_bg_current ] ; and set_color -b $__shish_bg_current
+  echo -n $argv[2..-1]
+  set_color normal
+  [ 'unstarted' != $__shish_bg_current ] ; and set_color -b $__shish_bg_current
+end
 
-# Colors
-set __bobthefish_lt_green   addc10 # scm clean bg
-set __bobthefish_med_green  189303 # super user
-set __bobthefish_dk_green   0c4801 # scm clean fg
+function __shish_end
+  # TODO Something werid is happening, but eh
+  __shish_segment hard right normal # $bg_normal
+  # echo -n ' '
+end
 
-set __bobthefish_lt_red     C99     # non-writeable dir fg, something in scm status?
-set __bobthefish_med_red    ce000f  # non-0 exit, scm dirty bg
-set __bobthefish_dk_red     600     # non-writeable dir bg
-set __bobthefish_ruby_red   af0000  # ruby version bg
+function __shish_switch_bg -a color
+  set_color normal
+  set_color -b $color
+  set __shish_bg_current $color
+end
 
-set __bobthefish_slate_blue 255e87 # bg jobs, other user
-set __bobthefish_med_blue   005faf # python version
+function __shish_print_list_in -a color separator -d "Print pretty list <color> <separator> <list>"
+  set -l list $argv[3..-1]
+  set -l length (count $list)
 
-set __bobthefish_lt_orange  f6b117 # git stashed fg
-set __bobthefish_dk_orange  3a2a03 # git stashed bg
+  if set -q list[2]
+    for item in $list[1..-2]
+      __shish_print_in $color $item
+      __shish_print_in $color $separator
+    end
+  end
+  __shish_print_in $color $list[-1]
+end
 
-set __bobthefish_dk_grey    333    # directory bg
-set __bobthefish_med_grey   999    # directory fg
-set __bobthefish_lt_grey    ccc    # user bg, python, ruby fg
+function _shish_limit_to -a length -d "Limit list to n items (including `...`)"
+  set -l list $argv[2..-1]
+  if [ (count $list) -gt $length ]
+    set -e list[1..(math -1\*$length-1)]
+    set list[1] '⋯ '
+  end
+  for item in $list ; echo $item ; end
+end
 
-set __bobthefish_dk_brown   4d2600 # nothing?
-set __bobthefish_med_brown  803F00 # also nothign?
-set __bobthefish_lt_brown   BF5E00 # and also nothing
+function __shish_segment -a kind direction color -d "Generate segment <kind> <direction> <color>"
+  # Usage:
+  #   __shish_segment <kind> <direction> <color>
+  #
+  # Options:
+  #   <kind>        Type of separator: `hard` (filled arrow) or `soft` (open arrow)
+  #   <direction>   Direction of separator: pointing `left` or `right`
+  #   <color>       For hard: The color of the new segment to transition to
+  #                 For soft: The color of the separator itself
+  switch $kind
+    case soft
+      switch $direction ; case right ; __shish_print_in $color " $powerline_right_soft "
+        case left  ; __shish_print_in $color " $powerline_left_soft "
+      end
+    case hard
+      set -l unstarted
+      [ "unstarted" = $__shish_bg_current ] ; and set unstarted true
+      if [ -z "$unstarted" ]
+        switch $direction
+          case right
+            echo -n " "
+            set_color normal
+            set_color $__shish_bg_current -b $color
+            echo -n "$powerline_right "
+          case left
+            __shish_print_in $color " $powerline_left"
+        end
+      end
+
+      __shish_switch_bg $color
+      [ "$unstarted" -o "$kind $direction" = "hard left" ] ; and echo -n ' '
+  end
+end
+
+function _shish_pretty_pwd
+  echo (_shish_pretty_dir $PWD)
+end
+
+function _shish_pretty_dir -a directory -d "Current directory, with home turned into `~` if applicable"
+  echo $directory | sed -e "s|^$HOME|~|" -e 's|^/private||' -e 's|^/||'
+end
+
+function _shish_ruby
+  set -l actual_ruby_version (ruby -v | cut -f 2 -d ' ' | cut -f 1 -d 'p')
+  if which rbenv | grep 'rbenv' > /dev/null
+    # TODO For some stupid reason, `rbenv shell` works differently than
+    # all the other commands and puts output somewhere that still shows
+    # up even with STDOUT and STDERR redirected
+
+    rbenv local ^ /dev/null > /dev/null; and echo -n 'l'
+    rbenv global ^ /dev/null > /dev/null; and echo -n 'g'
 
 
-# # bob the solarized fish
-# set __bobthefish_lt_orange yellow
-# set __bobthefish_dk_orange black
+    # # Check for local ruby version
+    # set -l ruby_version (rbenv local ^ /dev/null)
+    # if [ -n "$ruby_version" ]
+    #   echo -n "⟡ $ruby_version"
+    #   return
+    # end
 
-# set __bobthefish_lt_red red
-# set __bobthefish_med_red red
-# set __bobthefish_dk_red 7E1614 # 8A1816 # 951A18
-# set __bobthefish_ruby_red red
+    # Check for global ruby version
+    # set -l ruby_version (rbenv global ^ /dev/null)
+    # if [ -n "$ruby_version" ]
+    #   echo -n "∗ $ruby_version"
+    #   return
+    # end
 
-# # set __bobthefish_dk_grey black
-# # set __bobthefish_med_grey 586E75
-# # set __bobthefish_lt_grey 93A1A1
-# set __bobthefish_dk_grey blue
-# set __bobthefish_med_grey 5fafd7 # 00afd7 # 005f87
-# set __bobthefish_lt_grey white
+    # Huh, that's weird
+    # set -l ruby_version (rbenv version ^ /dev/null)
+    # echo -n \? ($ruby_version | cut -f 1 -d ' ')
 
-## BOB THE SHELLFISH ##
-set __bobthefish_lt_green green
-set __bobthefish_med_green green
-set __bobthefish_dk_green black
+  else
+    echo -n (ruby -v | cut -f 2 -d ' ' | cut -f 1 -d 'p') # ruby version
+  end
+end
 
-set __bobthefish_lt_red white
-set __bobthefish_med_red red
-set __bobthefish_dk_red red
-set __bobthefish_ruby_red red
+# Prompt color setup
+set shish_bg_pwd $grayscale[4]
+set shish_fg_pwd $grayscale[7]
+set shish_sp_pwd $grayscale[5]
 
-set __bobthefish_lt_orange yellow
-set __bobthefish_dk_orange black
+set shish_git_clean     $cyan
+set shish_git_untracked $blue
+set shish_git_staged    $orange
+set shish_git_dirty     $red
 
-set __bobthefish_dk_grey blue
-set __bobthefish_med_grey white
-set __bobthefish_lt_grey white
+set shish_bg_branch $grayscale[1]
+set shish_fg_branch $purple[3]
+set shish_hl_branch $purple[1]
 
-# ===========================
-# Helper methods
-# ===========================
+set shish_bg_detached $grayscale[-1]
+set shish_fg_detached $purple[3]
 
-# function __bobthefish_in_git -d 'Check whether pwd is inside a git repo'
-#   command which git > /dev/null 2>&1; and command git rev-parse --is-inside-work-tree >/dev/null 2>&1
+# TODO Maybe set up all the syntax highlighting colors? o.O
+# The following variables are available to change the highlighting colors in fish:
+#
+# fish_color_normal, the default color
+# fish_color_command, the color for commands
+# fish_color_quote, the color for quoted blocks of text
+# fish_color_redirection, the color for IO redirections
+# fish_color_end, the color for process separators like ';' and '&'
+# fish_color_error, the color used to highlight potential errors
+# fish_color_param, the color for regular command parameters
+# fish_color_comment, the color used for code comments
+# fish_color_match, the color used to highlight matching parenthesis
+# fish_color_search_match, the color used to highlight history search matches
+# fish_color_operator, the color for parameter expansion operators like '*' and '~'
+# fish_color_escape, the color used to highlight character escapes like '\n' and '\x70'
+# fish_color_cwd, the color used for the current working directory in the default prompt
+#
+# Additionally, the following variables are available to change the highlighting in the completion pager:
+#
+# fish_pager_color_prefix, the color of the prefix string, i.e. the string that is to be completed
+# fish_pager_color_completion, the color of the completion itself
+# fish_pager_color_description, the color of the completion description
+# fish_pager_color_progress, the color of the progress bar at the bottom left corner
+# fish_pager_color_secondary, the background color of the every second completion
+
+# This would be the spot for a hook to run after a long-running command
+# although doing so before figuring out how to ignore interactive commands
+# would be annoying
+# function _test_postexec --on-event fish_postexec
+#   set -g __shish_last_command $argv
+#   echo "post[$argv] $status $_"
 # end
 
-# function __bobthefish_in_hg -d 'Check whether pwd is inside a hg repo'
-#   command which hg > /dev/null 2>&1; and command hg stat > /dev/null 2>&1
+# This is the best start I've been able to make on saving the previous
+# foreground job before current. This would let us check for a known
+# list of interactive things, but that's far from perfect
+# function __save_previous_command -v _
+#   [ "$_" != 'fish' ] ; and set -g __ $_
 # end
 
-function __bobthefish_git_branch -d 'Get the current git branch (or commitish)'
-  set -l ref (command git symbolic-ref HEAD ^/dev/null)
-  if [ $status -gt 0 ]
-    set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
-    set ref "$__bobthefish_detached_glyph $branch"
-  end
-  echo $ref | sed  "s#refs/heads/#$__bobthefish_branch_glyph #"
-end
+set shish_error_symbol "⚡︎" # "╰→"
+set shish_duration_symbol "Δ" # "⟳ "
 
-function __bobthefish_hg_branch -d 'Get the current hg branch'
-  set -l branch (command hg branch ^/dev/null)
-  set -l book " @ "(command hg book | grep \* | cut -d\  -f3)
-  echo "$__bobthefish_branch_glyph $branch$book"
-end
+function fish_prompt
+  set -l last_status $status
+  set -l segments (math $COLUMNS/20)
+  set __shish_bg_current 'unstarted'
 
-function __bobthefish_pretty_parent -d 'Print a parent directory, shortened to fit the prompt'
-  echo -n (dirname $argv[1]) | sed -e 's#/private##' -e "s#^$HOME#~#" -e 's#/\(\.\{0,1\}[^/]\)\([^/]*\)#/\1#g' -e 's#/$##'
-end
+  # Show return status of last command if non-zero
+  [ $last_status -ne 0 ] ; and __shish_print_in $orange[2] "$shish_error_symbol $last_status "
 
-function __bobthefish_git_project_dir -d 'Print the current git project base directory'
-  [ "$theme_display_git" = 'no' ]; and return
-  command git rev-parse --show-toplevel ^/dev/null
-end
-
-function __bobthefish_hg_project_dir -d 'Print the current hg project base directory'
-  [ "$theme_display_hg" = 'yes' ]; or return
-  set d (pwd)
-  while not [ $d = / ]
-    if [ -e $d/.hg ]
-      command hg root --cwd "$d" ^/dev/null
-      return
-    end
-    set d (dirname $d)
-  end
-end
-
-function __bobthefish_project_pwd -d 'Print the working directory relative to project root'
-  echo "$PWD" | sed -e "s#$argv[1]##g" -e 's#^/##'
-end
-
-
-# ===========================
-# Segment functions
-# ===========================
-
-function __bobthefish_start_segment -d 'Start a prompt segment'
-  set -l bg $argv[1]
-  set -e argv[1]
-  set -l fg $argv[1]
-  set -e argv[1]
-
-  set_color normal # clear out anything bold or underline...
-  set_color -b $bg
-  set_color $fg $argv
-  if [ "$__bobthefish_current_bg" = 'NONE' ]
-    # If there's no background, just start one
-    echo -n ' '
-  else
-    # If there's already a background...
-    if [ "$bg" = "$__bobthefish_current_bg" ]
-      # and it's the same color, draw a separator
-      echo -n "$__bobthefish_right_arrow_glyph "
+  # Show the duration of the last command
+  # NOTE There's some variation in the contents of the CMD_DURATION variable. In
+  # slightly older versions of fish, it's preformatted number of seconds, and in
+  # newer versions it's a raw millisecond value
+  # TODO Find a way to skip duration for interactive commands
+  if [ -n "$CMD_DURATION" ]
+    # For numeric duration
+    if [ "$CMD_DURATION" -eq "$CMD_DURATION" ]
+      # Print if over 5 seconds
+      [ "$CMD_DURATION" -gt 5000 ] ; and __shish_print_in $blue[2] "$shish_duration_symbol $CMD_DURATION ms"
     else
-      # otherwise, draw the end of the previous segment and the start of the next
-      set_color $__bobthefish_current_bg
-      echo -n "$__bobthefish_right_black_arrow_glyph "
-      set_color $fg $argv
+      __shish_print_in $blue[2] "$shish_duration_symbol $CMD_DURATION"
     end
   end
-  set __bobthefish_current_bg $bg
-end
-
-function __bobthefish_path_segment -d 'Display a shortened form of a directory'
-  if [ -w "$argv[1]" ]
-    __bobthefish_start_segment $__bobthefish_dk_grey $__bobthefish_med_grey
-  else
-    __bobthefish_start_segment $__bobthefish_dk_red $__bobthefish_lt_red
-  end
-
-  set -l directory
-  set -l parent
-
-  switch "$argv[1]"
-    case /
-      set directory '/'
-    case "$HOME"
-      set directory '~'
-    case '*'
-      set parent    (__bobthefish_pretty_parent "$argv[1]")
-      set parent    "$parent/"
-      set directory (basename "$argv[1]")
-  end
-
-  [ "$parent" ]; and echo -n -s "$parent"
-  set_color white --bold
-  echo -n "$directory "
-  set_color normal
-end
-
-function __bobthefish_finish_segments -d 'Close open prompt segments'
-  if [ -n $__bobthefish_current_bg -a $__bobthefish_current_bg != 'NONE' ]
-    set_color -b normal
-    set_color $__bobthefish_current_bg
-    echo -n "$__bobthefish_right_black_arrow_glyph "
-    set_color normal
-  end
-  set -g __bobthefish_current_bg NONE
-end
+  echo
 
 
-# ===========================
-# Theme components
-# ===========================
+  # Ruby version (hacky)
+  # __shish_segment hard right $red[3]
+  # __shish_print_in $red[1] (_shish_ruby)
 
-function __bobthefish_prompt_status -d 'Display symbols for a non zero exit status, root and background jobs'
-  set -l nonzero
-  set -l superuser
-  set -l bg_jobs
+  # Are we in a git repository?
+  set -l git_root (_shish_git root)
+  if [ "$git_root" ]
+    # Display prompt with git info
+    # components : outside / branch / root / inside
+    set -l remaining_length (math $segments-2) # segments after branch & root
+    set -l inside (echo "$PWD" | sed -e "s#$git_root##g" -e 's#^/##' | tr / \n)
+    [ -z "$inside" ] ; and set -e inside
+    set -l outside_length (math $remaining_length-(count $inside))
 
-  # Last exit was nonzero
-  # if [ $status -ne 0 ]
-  #   set nonzero $__bobthefish_nonzero_exit_glyph
-  # end
+    set -l outside (echo (_shish_pretty_dir $git_root) | tr / \n)
+    set -l root $outside[-1]
+    set -e outside[-1]
 
-  # if superuser (uid == 0)
-  set -l uid (id -u $USER)
-  if [ $uid -eq 0 ]
-    set superuser $__bobthefish_superuser_glyph
-  end
-
-  # Jobs display
-  if [ (jobs -l | wc -l) -gt 0 ]
-    set bg_jobs $__bobthefish_bg_job_glyph
-  end
-
-  set -l status_flags "$nonzero$superuser$bg_jobs"
-
-  if [ "$nonzero" -o "$superuser" -o "$bg_jobs" ]
-    __bobthefish_start_segment fff 000
-    if [ "$nonzero" ]
-      set_color $__bobthefish_med_red --bold
-      echo -n $__bobthefish_nonzero_exit_glyph
+    # If we would show only '...' outside, skip it entirely
+    if [ $outside_length -eq 1 -a (count $outside) -gt 1 ]
+      set outside_length 0
     end
 
-    if [ "$superuser" ]
-      set_color $__bobthefish_med_green --bold
-      echo -n $__bobthefish_superuser_glyph
-    end
-
-    if [ "$bg_jobs" ]
-      set_color $__bobthefish_slate_blue --bold
-      echo -n $__bobthefish_bg_job_glyph
-    end
-
-    set_color normal
-  end
-end
-
-function __bobthefish_prompt_user -d 'Display actual user if different from $default_user'
-  if [ "$theme_display_user" = 'yes' ]
-    if [ "$USER" != "$default_user" -o -n "$SSH_CLIENT" ]
-      __bobthefish_start_segment $__bobthefish_lt_grey $__bobthefish_slate_blue
-      echo -n -s (whoami) '@' (hostname | cut -d . -f 1) ' '
-    end
-  end
-end
-
-function __bobthefish_prompt_hg -d 'Display the actual hg state'
-  set -l dirty (command hg stat; or echo -n '*')
-
-  set -l flags "$dirty"
-  [ "$flags" ]; and set flags ""
-
-  set -l flag_bg $__bobthefish_lt_green
-  set -l flag_fg $__bobthefish_dk_green
-  if [ "$dirty" ]
-    set flag_bg $__bobthefish_med_red
-    set flag_fg white
-  end
-
-  __bobthefish_path_segment $argv[1]
-
-  __bobthefish_start_segment $flag_bg $flag_fg
-  echo -n -s $__bobthefish_hg_glyph ' '
-
-  __bobthefish_start_segment $flag_bg $flag_fg # --bold
-  echo -n -s (__bobthefish_hg_branch) $flags ' '
-  set_color normal
-
-  set -l project_pwd  (__bobthefish_project_pwd $argv[1])
-  if [ "$project_pwd" ]
-    if [ -w "$PWD" ]
-      __bobthefish_start_segment $__bobthefish_dk_grey $__bobthefish_med_grey
+    set -l inside_count (count $inside)
+    [ -z "$inside" ] ; and set inside_count 0
+    set -l inside_length
+    if [ $outside_length -gt 0 ]
+      set inside_length (math $remaining_length-$outside_length)
     else
-      __bobthefish_start_segment $__bobthefish_med_red $__bobthefish_lt_red
+      set inside_length $remaining_length
     end
 
-    echo -n -s $project_pwd ' '
-  end
-end
+    # Print outside segments if we ended up with any
+    if [ $outside_length -gt 0 ]
+      __shish_segment hard right $shish_bg_pwd
+      __shish_print_list_in $shish_fg_pwd (__shish_segment soft right $shish_sp_pwd) \
+          (_shish_limit_to $outside_length $outside)
+    end
 
-function __bobthefish_prompt_git -d 'Display the actual git state'
-  set -l dirty   (command git diff --no-ext-diff --quiet --exit-code; or echo -n '*')
-  set -l staged  (command git diff --cached --no-ext-diff --quiet --exit-code; or echo -n '~')
-  set -l stashed (command git rev-parse --verify --quiet refs/stash >/dev/null; and echo -n '$')
-  set -l ahead   (command git rev-list --left-right '@{upstream}...HEAD' ^/dev/null | awk '/>/ {a += 1} /</ {b += 1} {if (a > 0) nextfile} END {if (a > 0 && b > 0) print "±"; else if (a > 0) print "+"; else if (b > 0) print "-"}')
-
-  set -l new (command git ls-files --other --exclude-standard);
-  [ "$new" ]; and set new '…'
-
-  set -l flags   "$dirty$staged$stashed$ahead$new"
-  [ "$flags" ]; and set flags " $flags"
-
-  set -l flag_bg $__bobthefish_lt_green
-  set -l flag_fg $__bobthefish_dk_green
-  if [ "$dirty" -o "$staged" ]
-    set flag_bg $__bobthefish_med_red
-    set flag_fg white
-  else if [ "$stashed" ]
-    set flag_bg $__bobthefish_lt_orange
-    set flag_fg $__bobthefish_dk_orange
-  end
-
-  __bobthefish_path_segment $argv[1]
-
-  __bobthefish_start_segment $flag_bg $flag_fg # --bold
-  echo -n -s (__bobthefish_git_branch) $flags ' '
-  set_color normal
-
-  set -l project_pwd  (__bobthefish_project_pwd $argv[1])
-  if [ "$project_pwd" ]
-    if [ -w "$PWD" ]
-      # __bobthefish_start_segment $__bobthefish_dk_grey white
-      __bobthefish_start_segment $__bobthefish_dk_grey $__bobthefish_med_grey
-
+    # Print branch info
+    set -l branch (_shish_git branch)
+    if [ $branch ]
+      __shish_segment hard left $shish_bg_branch
+      if [ $branch = 'master' ]
+        __shish_print_in $shish_fg_branch $branch
+      else
+        set -l branch_bits (echo $branch | tr / \n)
+        if set -q branch_bits[2]
+          __shish_print_list_in $shish_fg_branch '/' $branch_bits[1..-2]
+          __shish_print_in $shish_fg_branch '/'
+        end
+        __shish_print_in $shish_hl_branch $branch_bits[-1]
+      end
     else
-      __bobthefish_start_segment $__bobthefish_med_red $__bobthefish_lt_red
+      __shish_segment hard left $shish_bg_detached
+      __shish_print_in $shish_fg_detached (_shish_git ref)
     end
 
-    echo -n -s $project_pwd ' '
-  end
-end
 
-function __bobthefish_prompt_dir -d 'Display a shortened form of the current directory'
-  __bobthefish_path_segment "$PWD"
-end
+    # Determine git status color
+    set -l shish_status_color $shish_git_clean
+    if      [ (_shish_git dirty) ]     ; set shish_status_color $shish_git_dirty
+    else if [ (_shish_git staged) ]    ; set shish_status_color $shish_git_staged
+    else if [ (_shish_git untracked) ] ; set shish_status_color $shish_git_untracked
+    end
 
-function __bobthefish_virtualenv_python_version -d 'Get current python version'
-  set -l python_version (readlink (which python))
-  switch "$python_version"
-    case 'python2*'
-      echo $__bobthefish_superscript_glyph[2]
-    case 'python3*'
-      echo $__bobthefish_superscript_glyph[3]
-    case 'pypy*'
-      echo $__bobthefish_pypy_glyph
-  end
-end
+    # Print git root
+    __shish_segment hard right $shish_status_color[3]
+    __shish_print_in $grayscale[-1] $root
 
-function __bobthefish_prompt_virtualfish -d "Display activated virtual environment (only for virtualfish, virtualenv's activate.fish changes prompt by itself)"
-  [ "$theme_display_virtualenv" = 'no' -o -z "$VIRTUAL_ENV" ]; and return
-  set -l version_glyph (__bobthefish_virtualenv_python_version)
-  if [ "$version_glyph" ]
-    __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey
-    echo -n -s $__bobthefish_virtualenv_glyph $version_glyph
-  end
-  __bobthefish_start_segment $__bobthefish_med_blue $__bobthefish_lt_grey # --bold
-  echo -n -s (basename "$VIRTUAL_ENV") ' '
-  set_color normal
-end
+    # Print segments inside repo, if any
+    if [ $inside_count -gt 0 ]
 
-function __bobthefish_prompt_rubies -d 'Display current Ruby (rvm/rbenv)'
-  [ "$theme_display_ruby" = 'no' ]; and return
-  set -l ruby_version
-  if type rvm-prompt >/dev/null
-    set ruby_version (rvm-prompt i v g)
-  else if type rbenv >/dev/null
-    set ruby_version (rbenv version-name)
-    # Don't show global ruby version...
-    [ "$ruby_version" = (rbenv global) ]; and return
-  end
-  [ -z "$ruby_version" ]; and return
+      # We have room for all the segments
+      if [ $inside_length -ge $inside_count ]
+        # __shish_segment soft right $shish_status_color[2]
+        # __shish_print_list_in $shish_status_color[1] (__shish_segment soft right $shish_status_color[2]) $inside
 
-  __bobthefish_start_segment $__bobthefish_ruby_red $__bobthefish_lt_grey # --bold
-  echo -n -s $ruby_version ' '
-  set_color normal
-end
+        __shish_segment hard right $shish_status_color[2]
+        __shish_print_list_in $grayscale[-3] (__shish_segment soft right $shish_status_color[3]) $inside
 
 
-# ===========================
-# Apply theme
-# ===========================
 
-function fish_prompt -d 'bobthefish, a fish theme optimized for awesome'
-  __bobthefish_prompt_status
-  __bobthefish_prompt_user
-  __bobthefish_prompt_rubies
-  __bobthefish_prompt_virtualfish
+      # Only show some segments
+      else
+        set inside_length (math $inside_length+1)
+        [ $inside_length -eq 1 ] ; and set inside_length 2
+        set -l visible_inside (_shish_limit_to $inside_length $inside)
 
-  set -l git_root (__bobthefish_git_project_dir)
-  set -l hg_root  (__bobthefish_hg_project_dir)
-  if [ (echo "$hg_root" | wc -c) -gt (echo "$git_root" | wc -c) ]
-    __bobthefish_prompt_hg $hg_root
-  else if [ "$git_root" ]
-    __bobthefish_prompt_git $git_root
+
+        __shish_segment hard right $shish_status_color[2]
+        __shish_print_in $shish_status_color[3] '⋯  '
+        __shish_print_list_in $grayscale[-3] (__shish_segment soft right $shish_status_color[3]) $visible_inside[2..-1]
+        
+        # __shish_print_in $shish_status_color[2] ' ⋯  '
+        # __shish_print_list_in $shish_status_color[1] (__shish_segment soft right $shish_status_color[2]) $visible_inside[2..-1]
+      end
+    end
+
   else
-    __bobthefish_prompt_dir
+    # Display prompt without git info
+    __shish_segment hard right $shish_bg_pwd
+    __shish_print_list_in $shish_fg_pwd (__shish_segment soft right $shish_sp_pwd) \
+      (_shish_limit_to $segments (_shish_pretty_pwd | tr / \n))
   end
-  __bobthefish_finish_segments
+  __shish_end
+end
+
+# TODO Return status of last command
+function messy_fish_prompt
+  set -l segments (math $COLUMNS/20)
+  echo "[seg|$segments]"
+
+  set -l git_root (command git rev-parse --show-toplevel ^/dev/null)
+  if [ "$git_root" ]
+    set -l path_bits (_shish_segments $git_root)
+    set -l dir_inside_git (echo "$PWD" | sed -e "s#$git_root##g" -e 's#^/##')
+    set -l path_bits_inside (_shish_segments $dir_inside_git)
+    set -l inside_length
+    if [ $dir_inside_git ]
+      set inside_length (count $path_bits_inside)
+      if [ $inside_length -gt (math $segments-1) ]
+        set inside_length (math $segments-1)
+      end
+    else
+      set inside_length 0
+    end
+    set -l outside_length (math $segments-1-$inside_length)
+
+    set -l dirty (_shish_git dirty)
+    set -l staged (_shish_git staged)
+    set -l untracked (_shish_git untracked)
+
+    set -l status_colors
+    if [ $dirty ] ; set status_colors $orange
+    else if [ $staged ] ; set status_colors $yellow
+    else if [ $untracked ] ; set status_colors $blue
+    # else if [ $stashed ] ; set status_colors $yellow
+    # else if [ $ahead ] ; set status_colors $green
+    else ; set status_colors $cyan
+    end
+
+    set -l ref (command git symbolic-ref HEAD ^/dev/null)
+    set -l fg_branch $purple[1]
+    set -l bg_branch $grayscale[1]
+    if [ $status -gt 0 ]
+      set -l branch (command git show-ref --head -s --abbrev | head -n1 ^/dev/null)
+      set ref $branch
+      set bg_branch $grayscale[-1]
+      set fg_branch $purple[3]
+    end
+    set ref (echo $ref | sed  "s#refs/heads/##")
+    if [ "master" = $ref ]
+      set fg_branch $purple[3]
+    end
+
+    # everything leading up to git root
+    if test $outside_length -gt 0
+      _shish_cprintf $grayscale[4] $grayscale[6] ' '
+      _shish_list $outside_length " $powerline_right_soft " $grayscale[4] $grayscale[7] $grayscale[5] $path_bits[1..-2]
+      _shish_transition $grayscale[4] $bg_branch $powerline_left
+    else
+      _shish_cprintf $bg_branch $status_colors[1] ' '
+    end
+
+    # git branch / status
+    set -l branch_segments (_shish_segments $ref)
+    if [ (count $branch_segments) -gt 1 ]
+      _shish_list (count $branch_segments) '/' $bg_branch $purple[3] $purple[3] $branch_segments[1..-2]
+      _shish_cprintf $bg_branch $purple[3] '/'
+    end
+    _shish_cprintf $bg_branch $fg_branch $branch_segments[-1]
+    _shish_transition $bg_branch $status_colors[3] $powerline_right true
+
+    # the git root
+    _shish_cbprintf $status_colors[3] $grayscale[-1] $path_bits[-1]
+
+    # and the dir inside git
+    if test $inside_length -gt 0
+      _shish_cprintf $status_colors[3] $status_colors[2] " $powerline_right_soft "
+      _shish_list $inside_length " $powerline_right_soft " $status_colors[3] $status_colors[1] $status_colors[2] $path_bits_inside
+    end
+    _shish_transition $status_colors[3] $bg_normal $powerline_right true
+  else
+    # not inside of git
+
+    _shish_cprintf $grayscale[4] $grayscale[7] ' '
+    _shish_pwd $segments " $powerline_right_soft " $grayscale[4] $grayscale[7] $grayscale[5] $grayscale[-1] (_shish_segments $PWD)
+    _shish_transition $grayscale[4] $bg_normal $powerline_right true
+  end
 end
