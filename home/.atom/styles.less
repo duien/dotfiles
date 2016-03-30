@@ -25,6 +25,27 @@ html, body, atom-workspace {
   }
 }
 
+.theme-atom-dark-ui .tab-bar {
+  padding-top: 5px;
+  height: auto;
+  &:after {
+    background: @syntax-background-color;
+    border: none;
+    // display: none;
+    height: 0 !important;
+  }
+  .tab { top: 0; }
+  .tab.active[data-type="TextEditor"] {
+    &,
+    &:after,
+    &:before {
+      background: @syntax-background-color;
+      color: @syntax-text-color;
+      box-shadow: none;
+    }
+  }
+}
+
 
 .tree-view {
   // Make directories bold in tree view

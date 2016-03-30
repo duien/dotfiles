@@ -1,8 +1,6 @@
 "*":
   Zen:
     softWrap: true
-    tabs: "multiple"
-    width: 100
   "atom-beautify":
     _analyticsUserId: "769aca66-48e0-4c1d-adae-6fe94f3ee579"
   "autocomplete-elixir":
@@ -37,7 +35,6 @@
       "vim-mode-plus"
       "iex"
       "symbols-tree-view"
-      "pigments"
       "language-javascript-jsx"
       "language-liquid"
       "language-gfm"
@@ -53,8 +50,8 @@
     ]
     projectHome: "/Users/ehyland/Code"
     themes: [
-      "nucleus-dark-ui"
-      "eclectic-syntax"
+      "atom-dark-ui"
+      "brilliant-syntax"
     ]
   editor:
     fontFamily: "'Operator Mono SSm', 'Source Code Pro'"
@@ -135,3 +132,7 @@
   "whimsy-ui": {}
   whitespace:
     removeTrailingWhitespace: false
+".md.text":
+  editor:
+    preferredLineLength: 80
+    softWrapHangingIndent: 2

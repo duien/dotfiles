@@ -55,7 +55,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(groovy-mode)
+   dotspacemacs-additional-packages '(groovy-mode ruby-guard)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(org-bullets window-numbering)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -114,9 +114,9 @@ values."
                          ;; gruvbox
                          ;; light-soap
                          ;; brin
-                         omtose-phellack
+                         ;; omtose-phellack
                          spacemacs-light
-                         darktooth
+                         ;; darktooth
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
