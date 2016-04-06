@@ -23,37 +23,39 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      colors
      deft
      elixir
      emacs-lisp
      emoji
+     eyebrowse
      git
      markdown
      org
      osx
-     ranger
+     ;; ranger
      react
      (ruby :variables
            ruby-enable-enh-ruby-mode nil)
+     shell-scripts
      themes-megapack
-     (theming :variables
-              theme-headings-inherit-from-default 'all
-              theme-headings-same-size 'all)
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     theming
+     (shell :variables
+            shell-default-height 30
+            shell-default-shell 'eshell
+            shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+     syntax-checking
      version-control
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(omtose-phellack-theme)
+   dotspacemacs-additional-packages '(groovy-mode ruby-guard)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(org-bullets)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -95,11 +97,11 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(projects recents)
+   dotspacemacs-startup-lists '(recents projects)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 5
@@ -109,12 +111,13 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         apropospriate-light
                          ;; gruvbox
                          ;; light-soap
                          ;; brin
-                         spacemacs-light
-                         darktooth
-                         omtose-phellack
+                         ;; omtose-phellack
+                         ;; spacemacs-light
+                         ;; darktooth
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -258,6 +261,11 @@ It is called immediately after `dotspacemacs/init'.  You are free to put almost
 any user code here.  The exception is org related code, which should be placed
 in `dotspacemacs/user-config'."
 
+  ;; This seems to require being in `init'
+  ;; But then it loses its value if I switch themes
+  ;; (setq spacemacs-theme-comment-bg nil)
+  ;; (setq spacemacs-theme-org-height nil)
+
   ;; Experiment with theme tweaking using `theming' layer
   ;; This seems to require being in `init' rather than config
   (setq theming-modifications
@@ -268,13 +276,16 @@ in `dotspacemacs/user-config'."
            (org-todo :weight bold  :inverse-video t)
            (org-done :weight bold  :slant italic :foreground "#868691")
            (org-headline-done      :slant italic :foreground "#73767d")
+           (markdown-header-face   :inherit font-lock-function-name-face :weight bold :slant italic)
+           (helm-selection         :background "#BB4EB8")
+           (helm-selection-line    :background "#BB4EB8")
            )
           (darktooth
            (font-lock-string-face  :slant italic)
            (font-lock-comment-face :slant italic))
           (spacemacs-light
            (font-lock-string-face  :slant italic)
-           (font-lock-comment-face :slant italic :foreground "#B8AEB6" :background "#FBF8EF")
+           (font-lock-comment-face :slant italic :foreground "#B8AEB6")
            (font-lock-doc-face     :slant italic)
            )
           (gruvbox
@@ -308,6 +319,15 @@ in `dotspacemacs/user-config'."
                   (2 'org-default t)
                   ))
                )))
+
+  (add-hook 'text-mode-hook 'spacemacs/toggle-truncate-lines-on)
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+
+  (add-hook 'prog-mode-hook 'spacemacs/toggle-truncate-lines-off)
+  (add-hook 'prog-mode-hook 'spacemacs/toggle-visual-line-navigation-off)
+
+  (add-hook 'ruby-mode-hook 'spacemacs/toggle-syntax-checking-off)
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -319,18 +339,17 @@ layers configuration. You are free to put any user code."
   (setq deft-directory "~/Dropbox/PlainText")
 
   (prefer-coding-system 'utf-8-unix)
-  (setq powerline-default-separator 'arrow)
+  (setq powerline-default-separator 'bar)
   (setq vc-follow-symlinks t)
+  ;; TODO The word-wrap, truncate-lines, fill-column mess is just *not* working
+  ;; (spacemacs/toggle-truncate-lines-on)
   ;; (spacemacs/toggle-visual-line-navigation-on)
-  (spacemacs/toggle-truncate-lines-on)
   (spacemacs/toggle-highlight-current-line-globally-off)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (spacemacs/toggle-fill-column-indicator-on)
 
-  ;; FIXME Not sure this visual-line-mode setup is quite right
-  ;; (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
-
   ;; Set up indentation (suprisingly complicated)
+  ;; IDEA Would this work well for a (large) contribution to spacemacs?
   (setq indent-tabs-mode nil)
   (setq standard-indent 2)
   (setq tab-width 2)
@@ -339,16 +358,16 @@ layers configuration. You are free to put any user code."
   (setq evil-shift-width 2)
 
 
+  ;; ------------------------ ;;
+  ;;         ORG MODE         ;;
+  ;; ------------------------ ;;
   (with-eval-after-load 'org
-    ;; ------------------------ ;;
-    ;;         ORG MODE         ;;
-    ;; ------------------------ ;;
 
     ;; Set up basic org-mode options
     (setq org-fontify-whole-heading-line t)
     (setq org-fontify-done-headline t)
     (setq org-hide-leading-stars t)
-    (setq org-startup-folder nil)
+    (setq org-startup-folded nil)
     (setq org-cycle-level-faces nil)
     (setq org-insert-heading-respect-content t)
 
@@ -360,6 +379,14 @@ layers configuration. You are free to put any user code."
                             (file-expand-wildcards (concat org-directory "*.org"))
                             (file-expand-wildcards (concat org-directory "**/*.org"))))
     (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+
+    ;; Set up org capture templates
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+             "** TODO %?\nCAPTURED: %u %a\n%i")
+            ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+             "%? (logged from [[%l][%f]])")
+            ))
 
     ;; Set up org keywords
     (setq org-todo-keywords
@@ -395,7 +422,95 @@ layers configuration. You are free to put any user code."
     ) ;; end org-mode section
 
 
+  ;; ------------------------ ;;
+  ;;         BAD IDEAS        ;;
+  ;; ------------------------ ;;
+
+  ;; don't get any ... big ideas ... never ... gonna happen
+
+  ;; working on a custom `spaceline' theme
+  ;; see: https://github.com/TheBB/spaceline
+
+  (spaceline-toggle-buffer-size-off)
+  (spaceline-toggle-minor-modes-off)
+  (spaceline-toggle-buffer-position-off)
+  (spaceline-toggle-line-column-off)
+  (spaceline-toggle-buffer-encoding-abbrev-off)
+
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(fci-rule-color "#d6d6d6")
+ '(fringe-mode 6 nil (fringe))
+ '(hl-paren-background-colors
+   (quote
+    ("#00FF99" "#CCFF99" "#FFCC99" "#FF9999" "#FF99CC" "#CC99FF" "#9999FF" "#99CCFF" "#99FFCC" "#7FFF00")))
+ '(hl-paren-colors (quote ("#326B6B")))
+ '(hl-sexp-background-color "#efebe9")
+ '(linum-format " %5i ")
+ '(rainbow-identifiers-cie-l*a*b*-lightness 30)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 35)
+ '(spacemacs-theme-comment-bg nil)
+ '(spacemacs-theme-org-height nil)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#c82829")
+     (40 . "#f5871f")
+     (60 . "#eab700")
+     (80 . "#718c00")
+     (100 . "#3e999f")
+     (120 . "#4271ae")
+     (140 . "#8959a8")
+     (160 . "#c82829")
+     (180 . "#f5871f")
+     (200 . "#eab700")
+     (220 . "#718c00")
+     (240 . "#3e999f")
+     (260 . "#4271ae")
+     (280 . "#8959a8")
+     (300 . "#c82829")
+     (320 . "#f5871f")
+     (340 . "#eab700")
+     (360 . "#718c00"))))
+ '(vc-annotate-very-old-color nil)
+ '(when
+      (or
+       (not
+        (boundp
+         (quote ansi-term-color-vector)))
+       (not
+        (facep
+         (aref ansi-term-color-vector 0)))))
+ '(xterm-color-names
+   ["#595963" "#A06BB0" "#80BAB4" "#ABCCBA" "#5D809E" "#676EA1" "#8797B5" "#BCC1C4"])
+ '(xterm-color-names-bright
+   ["#73767d" "#B88CD4" "#9CD6CD" "#BFDECD" "#7498B8" "#9198C9" "#A3B4D4" "#ADADAD"]))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(font-lock-comment-delimiter-face ((t (:foreground "#90A4AE" :slant italic))))
+ ;; '(font-lock-comment-face ((t (:foreground "#90A4AE" :slant italic))))
+ ;; '(font-lock-string-face ((t (:foreground "#66BB6A" :slant italic))))
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(font-lock-string-face ((t (:slant italic))))
+ '(font-lock-doc-face ((t (:slat italic))))
+ ;; '(helm-selection ((t (:background "#BB4EB8"))))
+ ;; '(helm-selection-line ((t (:background "#BB4EB8"))))
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :slant italic))))
+ '(org-done ((t (:weight bold :slant italic :foreground "#868691"))))
+ '(org-headline-done ((t (:slant italic :foreground "#73767d"))))
+ '(org-todo ((t (:weight bold :inverse-video t)))))

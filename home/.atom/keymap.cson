@@ -19,3 +19,6 @@
 
 'atom-workspace':
   'cmd-\'': 'toggle-quotes:toggle'
+
+# 'atom-text-editor:not([mini]):not(.autocomplete-active)':
+#   'tab': 'autocomplete-plus:activate'

@@ -12,284 +12,396 @@
 */
 
 
-.tree-view {
-  li.list-nested-item.directory > .list-item {
-    font-weight: 600;
+/* Make the UI into Operator */
+html, body, atom-workspace {
+  font-family: 'Operator Mono SSM';
+  font-weight: 300;
+}
+
+[data-zen="true"][data-zen-tabs="multiple"],
+[data-zen="true"][data-zen-tabs="single"] {
+  .theme-nucleus-dark-ui .tab-bar {
+    display: table !important;
   }
+}
+
+.theme-atom-dark-ui .tab-bar {
+  padding-top: 5px;
+  height: auto;
+  &:after {
+    background: @syntax-background-color;
+    border: none;
+    // display: none;
+    height: 0 !important;
+  }
+  .tab { top: 0; }
+  .tab.active[data-type="TextEditor"] {
+    &,
+    &:after,
+    &:before {
+      background: @syntax-background-color;
+      color: @syntax-text-color;
+      box-shadow: none;
+    }
+  }
+}
+
+
+.tree-view {
+  // Make directories bold in tree view
+  // li.list-nested-item.directory > .list-item > .name {
+  //   font-weight: 600;
+  // }
 
   // Don't color icons in the tree view (but do color them elsewhere)
   .icon:before {
     color: inherit !important;
   }
 }
-
-// General editor settings and syntax tweaks
+// 
+// // General editor settings and syntax tweaks
 atom-text-editor, atom-text-editor::shadow, :host {
 
   // Make text antialiased and use a lighter weight
   -webkit-font-smoothing: antialiased;
-  font-weight: 300;
+  .source.gfm,  .text.md {
+    .markup {
+      -webkit-font-smoothing: antialiased;
 
-  // Add support for Moniod
-  // -webkit-font-feature-settings: "liga" on, "calt" on;
+      &.quote {
+        font-style: italic;
+      }
+    }
 
-  // Make it a little lighter on a retina display
-  // @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
-  //   font-weight: 200;
-  // }
-
+    // There's no such thing in a bad ampersand
+    .invalid.bad-ampersand {
+      color: inherit;
+      background: inherit;
+      font-weight: inherit;
+    }
+  }
+  // font-weight: 400;
+// 
+//   // Add support for Moniod
+//   -webkit-font-feature-settings: "liga" on, "calt" on;
+// 
+//   // Make it a little lighter on a retina display
+//   // @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi) {
+//   //   font-weight: 200;
+//   // }
+// 
   // I like my comments italic, and some syntax themes don't agree
   .comment {
     font-style: italic;
   }
-}
 
-atom-text-editor, atom-text-editor::shadow, :host {
-
-  // Tweaks for Markdown files
-  .gfm .markup {
-    &.bold { font-weight: 500; }
-    &.heading {
-      font-weight: bold;
-      font-style: italic;
-    }
+  // Italic strings too!!!
+  .string {
+    font-style: italic;
+    &.punctuation, .source, &.unquoted { font-style: normal; }
+    .unquoted.yaml { font-style: italic; }
   }
 
-  // Set up indent guide tweaks
-  @indent-offset: 4px; // This might need tweaking depending on font and size
-  @guide-width: 1px;
-
-  // Shift indent guides to align vertically with center of column
-  .indent-guide {
-    box-shadow: none;
-    background: linear-gradient(90deg, // replace box-shadow with gradient
-      transparent,
-      transparent @indent-offset,
-      @syntax-indent-guide-color @indent-offset,
-      @syntax-indent-guide-color @indent-offset + @guide-width,
-      transparent @indent-offset + @guide-width)
-  }
+//   // Tweaks for Markdown files
+//   // .gfm .markup {
+//   //   &.bold { font-weight: 500; }
+//   //   &.heading {
+//   //     font-weight: bold;
+//   //     font-style: italic;
+//   //   }
+//   // }
+// 
+//   // Set up indent guide tweaks
+//   @indent-offset: 4px; // This might need tweaking depending on font and size
+//   @guide-width: 1px;
+// 
+//   // Shift indent guides to align vertically with center of column
+//   .indent-guide {
+//     box-shadow: none;
+//     background: linear-gradient(90deg, // replace box-shadow with gradient
+//       transparent,
+//       transparent @indent-offset,
+//       @syntax-indent-guide-color @indent-offset,
+//       @syntax-indent-guide-color @indent-offset + @guide-width,
+//       transparent @indent-offset + @guide-width)
+//   }
+// 
+//   .indent-guide-improved {
+//     width: @indent-offset + @guide-width;
+//     &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
+//       background: linear-gradient(90deg, // replace box-shadow with gradient
+//         transparent,
+//         transparent @indent-offset,
+//         @syntax-indent-guide-color @indent-offset,
+//         @syntax-indent-guide-color @indent-offset + @guide-width,
+//         transparent @indent-offset + @guide-width)
+//     }
+//   }
+// 
 
   .indent-guide-improved {
-    width: @indent-offset + @guide-width;
-    &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
-      background: linear-gradient(90deg, // replace box-shadow with gradient
-        transparent,
-        transparent @indent-offset,
-        @syntax-indent-guide-color @indent-offset,
-        @syntax-indent-guide-color @indent-offset + @guide-width,
-        transparent @indent-offset + @guide-width)
+    background-color: mix(@syntax-indent-guide-color, @syntax-background-color);
+    &.indent-guide-stack {
+      background-color: mix(@syntax-indent-guide-color, @syntax-background-color);
+      &.indent-guide-active {
+        background-color: @syntax-indent-guide-color;
+      }
     }
   }
 
-  .invisible-character { // hide most invisibles
-    color: transparent;
-  }
   .trailing-whitespace { // Just show trailing whitespace
     // Use `syntax-color-removed` since it's usually red
     // Unfortunately, the invisible characters are behind the indent guide, so
     // we have to use background rather than foreground (since I have moved the
     // indent guides over to be centered in the character column)
-    // color: @syntax-color-removed;
-    background: fade(@syntax-color-removed, 25);
+    color: @syntax-color-removed;
   }
+// 
+//   .gutter-container {
+//     margin-right: 0.5em !important;
+//   }
+//   
+//   .gutter {
+//     min-width: 0;
+//     font-weight: 200;
+//     .line-number {
+//       // FIXME Part of a flailing attempt at getting the gutter less huge
+//       // padding-left: 0 !important;
+//       // ^^ Turns out that's good when there's the git gutter icons, but bad
+//       //    when there's not, and overall going with not gives a more
+//       //    reasonable-sized gutter
+// 
+//       // This is, once again, an attempt at a narrower gutter. This approach
+//       // seems a little more solid, but moving the folding indicator in-line
+//       // is a bit of a stretch
+//       padding-right: 0.5em;
+//       .icon-right { // Folding indicators
+//         position: absolute;
+//         left: 0.25em;
+//         right: 0;
+//         background: @syntax-gutter-background-color;
+//         opacity: 1;
+//       }
+// 
+//       &.cursor-line .icon-right {
+//         // background: @syntax-gutter-background-color-selected;
+//         // FIXME Ugh, transparent backgrounds make everything complicated
+//         // background: #f1eaca;
+//         background: @syntax-gutter-background-color-selected;
+//       }
+// 
+//       // Make the git status indicator wider
+//       &.git-line-added, &.git-line-modified {
+//         border-left-width: 0.25em;
+//         padding-left: 0.25em;
+//         font-weight: bold;
+//       }
+// 
+//       &.git-line-added { color: @syntax-color-added }
+//       &.git-line-modified { color: @syntax-color-modified }
+//     }
+//   }
+// 
+// }
+// // More visible coloring of added/changed lines
+// // atom-text-editor.is-focused,
+// // atom-text-editor.is-focused::shadow,
+// // :host(.is-focused) {
+// //   .gutter .line-number {
+// //     &.git-line-added {
+// //       // background: fade(@syntax-color-added, 10);
+// //       background: fade(@syntax-color-added, 50);
+// //       color: @syntax-background-color;
+// //     }
+// //     &.git-line-modified {
+// //       // background: fade(@syntax-color-modified, 10);
+// //       background: @syntax-color-modified;
+// //     }
+// //   }
+// // }
+// 
 
-  .gutter {
-    min-width: 0;
-    .line-number {
-      // FIXME Part of a flailing attempt at getting the gutter less huge
-      // padding-left: 0 !important;
-      // ^^ Turns out that's good when there's the git gutter icons, but bad
-      //    when there's not, and overall going with not gives a more
-      //    reasonable-sized gutter
-
-      // This is, once again, an attempt at a narrower gutter. This approach
-      // seems a little more solid, but moving the folding indicator in-line
-      // is a bit of a stretch
-      padding-right: 0.5em;
-      .icon-right { // Folding indicators
-        position: absolute;
-        left: 0.25em;
-        right: 0;
-        background: @syntax-gutter-background-color;
-        opacity: 1;
-      }
-
-      &.cursor-line .icon-right {
-        // background: @syntax-gutter-background-color-selected;
-        // FIXME Ugh, transparent backgrounds make everything complicated
-        background: #f1eaca;
-      }
-
-      // Make the git status indicator wider
-      &.git-line-added, &.git-line-modified {
-        border-left-width: 0.25em;
-        padding-left: 0.25em;
-        font-weight: bold;
-      }
-
-      &.git-line-added { color: @syntax-color-added }
-      &.git-line-modified { color: @syntax-color-modified }
+  // Tweaks to line numbers in the gutter
+  .gutter .line-number {
+    &.cursor-line {
+      font-weight: bold;
+    }
+    &.git-line-added {
+      color: mix(@syntax-color-added, @syntax-gutter-text-color); }
+    &.git-line-modified {
+      color: mix(@syntax-color-modified, @syntax-gutter-text-color);
     }
   }
-
 }
-// More visible coloring of added/changed lines
-// atom-text-editor.is-focused,
-// atom-text-editor.is-focused::shadow,
-// :host(.is-focused) {
-//   .gutter .line-number {
-//     &.git-line-added {
-//       // background: fade(@syntax-color-added, 10);
-//       background: fade(@syntax-color-added, 50);
-//       color: @syntax-background-color;
+
+// ft-outline-editor {
+//   font-family: 'Operator Mono SSm';
+//   
+// }
+// 
+// 
+// // THEME-SPECIFIC SETTINGS
+// 
+// .theme-blessed-light-syntax {
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     .trailing-whitespace {
+//       // The red "removed" color in this theme looks terrible with the rest of the colors
+//       background: fade(@syntax-cursor-color, 25);
 //     }
-//     &.git-line-modified {
-//       // background: fade(@syntax-color-modified, 10);
-//       background: @syntax-color-modified;
+//   }
+// }
+// 
+// .theme-isotope-ui {
+//   .tab-bar {
+//     // Tabs were escaping their visual bounds by 1px on each side of the tab bar,
+//     // and it was driving me nuts
+//     margin: 0 1px;
+//   }
+// 
+//   // Experimental: try adding some white-space at the top of the editor pane
+//   // to give better separation from tabs
+//   .item-views > atom-text-editor {
+//     border-top: 5px solid @syntax-background-color;
+//   }
+// }
+// 
+// .theme-solarized-light-syntax {
+//   @yellow:  #b58900;
+//   @orange:  #cb4b16;
+//   @red:     #dc322f;
+//   @magenta: #d33682;
+//   @purple:  #6c71c4;
+//   @blue:    #268bd2;
+//   @cyan:    #2aa198;
+//   @green:   #859900;
+// 
+//   // Cycle through solarized colors for the indent guide in solarized syntax
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     .indent-guide {
+//       &:nth-child(1)    { box-shadow: none !important; }
+//       &:nth-child(8n-6) { box-shadow: inset 1px 0 fade(@yellow,  15); }
+//       &:nth-child(8n-5) { box-shadow: inset 1px 0 fade(@blue,    15); }
+//       &:nth-child(8n-4) { box-shadow: inset 1px 0 fade(@red,     15); }
+//       &:nth-child(8n-3) { box-shadow: inset 1px 0 fade(@green,   15); }
+//       &:nth-child(8n-2) { box-shadow: inset 1px 0 fade(@purple,  15); }
+//       &:nth-child(8n-1) { box-shadow: inset 1px 0 fade(@orange,  15); }
+//       &:nth-child(8n)   { box-shadow: inset 1px 0 fade(@cyan,    15); }
+//       &:nth-child(8n+1) { box-shadow: inset 1px 0 fade(@magenta, 15); }
+//     }
+//     .trailing-whitespace {
+//       color: fade(@red, 50);
+//     }
+//   }
+// }
+// 
+// .theme-kuali-light-syntax {
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     // TODO Make todo comments stand out
+//     // FIXME It's hard to see fixme comments
+//     // And the continaution isnt' fancy
+//     .comment .type {
+//       text-decoration: underline;
+//       
+//       &:before {
+//         content: '';
+//         position: absolute;
+//         left: 0;
+//         right: 0;
+//         top: 0;
+//         bottom: 0;
+//         background: fade(#f39c12, 10%);
+//         // height: @font-size * 5/3;
+//       }
+//     }
+//   }
+// }
+// 
+// // TODO Things to get pulled into princess syntax
+// .theme-princess-syntax {
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     .source.yaml > .string {
+//       background: inherit;
+//     }
+// 
+//     .string {
+//       font-style: italic;
+//       .punctuation, .source { font-style: normal; }
+// 
+//       &.regexp {
+//         .punctuation {
+//           &.regexp, &.group, &.embedded {
+//             background: none;
+//           }
+//         }
+//       }
 //     }
 //   }
 // }
 
-
-// THEME-SPECIFIC SETTINGS
-
-.theme-blessed-light-syntax {
+.theme-eclectic-syntax {
   atom-text-editor, atom-text-editor::shadow, :host {
-    .trailing-whitespace {
-      // The red "removed" color in this theme looks terrible with the rest of the colors
-      background: fade(@syntax-cursor-color, 25);
-    }
-  }
-}
+    // @invisible-color: darken(@syntax-background-color, 3%);
+    @subtle-guide-color: mix(@syntax-background-color, @syntax-gutter-text-color, 75%);
+    @invisible-color: @subtle-guide-color;
 
-.theme-isotope-ui {
-  .tab-bar {
-    // Tabs were escaping their visual bounds by 1px on each side of the tab bar,
-    // and it was driving me nuts
-    margin: 0 1px;
-  }
+    .gutter { border: none; }
+    .wrap-guide { background-color: @invisible-color; }
+    .invisible-character:not(.trailing-whitespace) { color: @invisible-color; }
 
-  // Experimental: try adding some white-space at the top of the editor pane
-  // to give better separation from tabs
-  .item-views > atom-text-editor {
-    border-top: 5px solid @syntax-background-color;
-  }
-}
-
-.theme-solarized-light-syntax {
-  @yellow:  #b58900;
-  @orange:  #cb4b16;
-  @red:     #dc322f;
-  @magenta: #d33682;
-  @purple:  #6c71c4;
-  @blue:    #268bd2;
-  @cyan:    #2aa198;
-  @green:   #859900;
-
-  // Cycle through solarized colors for the indent guide in solarized syntax
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .indent-guide {
-      &:nth-child(1)    { box-shadow: none !important; }
-      &:nth-child(8n-6) { box-shadow: inset 1px 0 fade(@yellow,  15); }
-      &:nth-child(8n-5) { box-shadow: inset 1px 0 fade(@blue,    15); }
-      &:nth-child(8n-4) { box-shadow: inset 1px 0 fade(@red,     15); }
-      &:nth-child(8n-3) { box-shadow: inset 1px 0 fade(@green,   15); }
-      &:nth-child(8n-2) { box-shadow: inset 1px 0 fade(@purple,  15); }
-      &:nth-child(8n-1) { box-shadow: inset 1px 0 fade(@orange,  15); }
-      &:nth-child(8n)   { box-shadow: inset 1px 0 fade(@cyan,    15); }
-      &:nth-child(8n+1) { box-shadow: inset 1px 0 fade(@magenta, 15); }
-    }
-    .trailing-whitespace {
-      color: fade(@red, 50);
-    }
-  }
-}
-
-.theme-kuali-light-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    // TODO Make todo comments stand out
-    // FIXME It's hard to see fixme comments
-    // And the continaution isnt' fancy
-    .comment .type {
-      text-decoration: underline;
-      
-      &:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background: fade(#f39c12, 10%);
-        // height: @font-size * 5/3;
-      }
-    }
-  }
-}
-
-// TODO Things to get pulled into princess syntax
-.theme-princess-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .source.yaml > .string {
-      background: inherit;
-    }
-    
-    .string.regexp {
-      .punctuation {
-        &.regexp, &.group, &.embedded {
-          background: none;
+    .indent-guide-improved {
+      background-color: @subtle-guide-color;
+      &.indent-guide-stack {
+        background-color: @subtle-guide-color;
+        &.indent-guide-active {
+          background-color: @syntax-gutter-text-color;
         }
       }
     }
-  }
-}
 
-.theme-idiomatic-dark-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .gutter:not([gutter-name="line-number"]) {
-      border: none;
+    .constant {
+      // &.symbol { color: #469c91; }
+      &.numeric { font-weight: 600; }
     }
   }
 }
 
-// Fix weird padding/margin trickery breaking text metrics
-.theme-galaxy-light-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .line.cursor-line {
-      // This was breaking all the things (namely cursor placement)
-      padding-left: 0 !important;
-      margin-left: 0 !important;
-    }
-
-    .gutter .line-number {
-      &.git-line-added, &.git-line-modified {
-        // This theme felt the need to go its own way with line number
-        // padding, so it messes up the git change display
-        padding-left: 8px;
-      }
-    }
-
-    .selection .region {
-      // The white-ish selection color was almost impossible to see
-      background-color: rgba(165, 103, 165, 0.2);
-    }
-  }
-}
-
-.theme-princess-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
-    .string {
-      font-style: italic;
-      .punctuation, .source { font-style: normal; }
-    }
-  }
-}
-
-// Temp styles for screenshots
-// atom-text-editor, atom-text-editor::shadow, :host {
-//   background: white;
-//   .gutter {
-//     background: white;
+// 
+// .theme-idiomatic-dark-syntax {
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     .gutter:not([gutter-name="line-number"]) {
+//       border: none;
+//     }
 //   }
 // }
+// 
+// // Fix weird padding/margin trickery breaking text metrics
+// .theme-galaxy-light-syntax {
+//   atom-text-editor, atom-text-editor::shadow, :host {
+//     .line.cursor-line {
+//       // This was breaking all the things (namely cursor placement)
+//       padding-left: 0 !important;
+//       margin-left: 0 !important;
+//     }
+// 
+//     .gutter .line-number {
+//       &.git-line-added, &.git-line-modified {
+//         // This theme felt the need to go its own way with line number
+//         // padding, so it messes up the git change display
+//         padding-left: 8px;
+//       }
+//     }
+// 
+//     .selection .region {
+//       // The white-ish selection color was almost impossible to see
+//       background-color: rgba(165, 103, 165, 0.2);
+//     }
+//   }
+// }
+// 
+// // Temp styles for screenshots
+// // atom-text-editor, atom-text-editor::shadow, :host {
+// //   background: white;
+// //   .gutter {
+// //     background: white;
+// //   }
+// // }
