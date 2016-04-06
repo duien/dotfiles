@@ -57,7 +57,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(groovy-mode ruby-guard)
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(org-bullets window-numbering)
+   dotspacemacs-excluded-packages '(org-bullets)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -111,11 +111,12 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         apropospriate-light
                          ;; gruvbox
                          ;; light-soap
                          ;; brin
                          ;; omtose-phellack
-                         spacemacs-light
+                         ;; spacemacs-light
                          ;; darktooth
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
@@ -325,6 +326,8 @@ in `dotspacemacs/user-config'."
   (add-hook 'prog-mode-hook 'spacemacs/toggle-truncate-lines-off)
   (add-hook 'prog-mode-hook 'spacemacs/toggle-visual-line-navigation-off)
 
+  (add-hook 'ruby-mode-hook 'spacemacs/toggle-syntax-checking-off)
+
   )
 
 (defun dotspacemacs/user-config ()
@@ -336,7 +339,7 @@ layers configuration. You are free to put any user code."
   (setq deft-directory "~/Dropbox/PlainText")
 
   (prefer-coding-system 'utf-8-unix)
-  (setq powerline-default-separator 'slant)
+  (setq powerline-default-separator 'bar)
   (setq vc-follow-symlinks t)
   ;; TODO The word-wrap, truncate-lines, fill-column mess is just *not* working
   ;; (spacemacs/toggle-truncate-lines-on)
@@ -444,6 +447,70 @@ layers configuration. You are free to put any user code."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(fci-rule-color "#d6d6d6")
+ '(fringe-mode 6 nil (fringe))
+ '(hl-paren-background-colors
+   (quote
+    ("#00FF99" "#CCFF99" "#FFCC99" "#FF9999" "#FF99CC" "#CC99FF" "#9999FF" "#99CCFF" "#99FFCC" "#7FFF00")))
+ '(hl-paren-colors (quote ("#326B6B")))
+ '(hl-sexp-background-color "#efebe9")
+ '(linum-format " %5i ")
+ '(rainbow-identifiers-cie-l*a*b*-lightness 30)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 35)
  '(spacemacs-theme-comment-bg nil)
  '(spacemacs-theme-org-height nil)
-)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#c82829")
+     (40 . "#f5871f")
+     (60 . "#eab700")
+     (80 . "#718c00")
+     (100 . "#3e999f")
+     (120 . "#4271ae")
+     (140 . "#8959a8")
+     (160 . "#c82829")
+     (180 . "#f5871f")
+     (200 . "#eab700")
+     (220 . "#718c00")
+     (240 . "#3e999f")
+     (260 . "#4271ae")
+     (280 . "#8959a8")
+     (300 . "#c82829")
+     (320 . "#f5871f")
+     (340 . "#eab700")
+     (360 . "#718c00"))))
+ '(vc-annotate-very-old-color nil)
+ '(when
+      (or
+       (not
+        (boundp
+         (quote ansi-term-color-vector)))
+       (not
+        (facep
+         (aref ansi-term-color-vector 0)))))
+ '(xterm-color-names
+   ["#595963" "#A06BB0" "#80BAB4" "#ABCCBA" "#5D809E" "#676EA1" "#8797B5" "#BCC1C4"])
+ '(xterm-color-names-bright
+   ["#73767d" "#B88CD4" "#9CD6CD" "#BFDECD" "#7498B8" "#9198C9" "#A3B4D4" "#ADADAD"]))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(font-lock-comment-delimiter-face ((t (:foreground "#90A4AE" :slant italic))))
+ ;; '(font-lock-comment-face ((t (:foreground "#90A4AE" :slant italic))))
+ ;; '(font-lock-string-face ((t (:foreground "#66BB6A" :slant italic))))
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(font-lock-string-face ((t (:slant italic))))
+ '(font-lock-doc-face ((t (:slat italic))))
+ ;; '(helm-selection ((t (:background "#BB4EB8"))))
+ ;; '(helm-selection-line ((t (:background "#BB4EB8"))))
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :slant italic))))
+ '(org-done ((t (:weight bold :slant italic :foreground "#868691"))))
+ '(org-headline-done ((t (:slant italic :foreground "#73767d"))))
+ '(org-todo ((t (:weight bold :inverse-video t)))))
