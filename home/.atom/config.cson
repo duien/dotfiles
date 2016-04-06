@@ -3,6 +3,8 @@
     softWrap: true
   "atom-beautify":
     _analyticsUserId: "769aca66-48e0-4c1d-adae-6fe94f3ee579"
+    general:
+      _analyticsUserId: "dc644f52-2c31-4a2e-901d-27d727024f9d"
   "autocomplete-elixir":
     elixirPath: "/usr/local/bin/elixir"
     erlangHome: "/usr/local/bin/"
@@ -50,8 +52,8 @@
     ]
     projectHome: "/Users/ehyland/Code"
     themes: [
-      "atom-dark-ui"
-      "brilliant-syntax"
+      "nucleus-dark-ui"
+      "eclectic-syntax"
     ]
   editor:
     fontFamily: "'Operator Mono SSm', 'Source Code Pro'"

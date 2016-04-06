@@ -64,9 +64,21 @@ atom-text-editor, atom-text-editor::shadow, :host {
 
   // Make text antialiased and use a lighter weight
   -webkit-font-smoothing: antialiased;
-  .source.gfm .markup,
-  .text.md .markup {
-    -webkit-font-smoothing: antialiased;
+  .source.gfm,  .text.md {
+    .markup {
+      -webkit-font-smoothing: antialiased;
+
+      &.quote {
+        font-style: italic;
+      }
+    }
+
+    // There's no such thing in a bad ampersand
+    .invalid.bad-ampersand {
+      color: inherit;
+      background: inherit;
+      font-weight: inherit;
+    }
   }
   // font-weight: 400;
 // 
@@ -89,7 +101,7 @@ atom-text-editor, atom-text-editor::shadow, :host {
     &.punctuation, .source, &.unquoted { font-style: normal; }
     .unquoted.yaml { font-style: italic; }
   }
-// 
+
 //   // Tweaks for Markdown files
 //   // .gfm .markup {
 //   //   &.bold { font-weight: 500; }
