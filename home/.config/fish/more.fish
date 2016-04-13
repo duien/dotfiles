@@ -6,7 +6,7 @@ alias jk jekyll
 
 # Basic environment
 set CDPATH . $HOME $HOME/Code $CDPATH
-set PATH /usr/local/bin $PATH
+set PATH /usr/local/bin /usr/local/sbin $PATH
 if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
@@ -25,10 +25,10 @@ set -x GEMEDITOR nvim
 # to open all files at once
 ulimit -n 4096
 
-if type boot2docker >/dev/null 2>&1
-  set -x DOCKER_HOST tcp://192.168.59.103:2375
-  # eval (boot2docker shellinit | tr \n \;)
-end
+# if type boot2docker >/dev/null 2>&1
+#   set -x DOCKER_HOST tcp://192.168.59.103:2375
+#   # eval (boot2docker shellinit | tr \n \;)
+# end
 
 if test -s  ~/.config/fish/nvm-wrapper/nvm.fish
   source ~/.config/fish/nvm-wrapper/nvm.fish
@@ -46,7 +46,7 @@ set -gx RBENV_ROOT /usr/local/var/rbenv
 . (rbenv init -|psub)
 
 
-set -x GOPATH /Users/ehyland/Code/go_crap
-set -x GOBIN /Users/ehyland/Code/go_crap/bin
+set -x GOPATH /Users/ehyland/Code/Go
+set -x GOBIN /Users/ehyland/Code/Go/bin
 
 set -x PATH $PATH $GOBIN
