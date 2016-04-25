@@ -38,6 +38,7 @@
       "language-javascript-jsx"
       "language-liquid"
       "language-gfm"
+      "language-elixir"
     ]
     ignoredNames: [
       ".git"
@@ -50,8 +51,8 @@
     ]
     projectHome: "/Users/ehyland/Code"
     themes: [
-      "atom-dark-ui"
-      "brilliant-syntax"
+      "one-dark-ui"
+      "eclectic-syntax"
     ]
   editor:
     fontFamily: "'Operator Mono SSm', 'Source Code Pro'"
