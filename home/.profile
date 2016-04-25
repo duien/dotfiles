@@ -70,3 +70,8 @@ alias pgstop='pg_ctl -D /usr/local/var/postgres stop -s -m fast'
 
 export NVM_DIR="/Users/ehyland/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export RBENV_ROOT=/usr/local/var/rbenv
+eval "$(rbenv init -)"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"

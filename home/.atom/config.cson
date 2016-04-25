@@ -40,6 +40,7 @@
       "language-javascript-jsx"
       "language-liquid"
       "language-gfm"
+      "language-elixir"
     ]
     ignoredNames: [
       ".git"
@@ -52,7 +53,11 @@
     ]
     projectHome: "/Users/ehyland/Code"
     themes: [
+<<<<<<< HEAD
       "nucleus-dark-ui"
+=======
+      "one-dark-ui"
+>>>>>>> b4b840b19eb99cd69861652e6624c0c5743dcb58
       "eclectic-syntax"
     ]
   editor:
