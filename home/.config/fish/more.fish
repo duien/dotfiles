@@ -1,8 +1,12 @@
 # Additonal fish customizations, mostly alises and env
 
 # Aliases
-alias gst "git status"
-alias jk jekyll
+alias gst    "git status"
+alias jk     "jekyll"
+alias rehash "rbenv rehash"
+alias ll     "ls -lA"
+alias la     "ls -A"
+alias more-fish "source ~/.config/fish/more.fish"
 
 # Basic environment
 set CDPATH . $HOME $HOME/Code $CDPATH
@@ -18,6 +22,9 @@ end
 set -x EDITOR nvim
 set -x VISUAL nvim
 set -x GEMEDITOR nvim
+
+# Source color theme setup
+source ~/.config/fish/color-theme.fish
 
 # Setting up other random crap
 
