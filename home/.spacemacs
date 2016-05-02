@@ -38,7 +38,7 @@ values."
      ;; theming
      ;; git
      markdown
-     ;; org
+     org
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -51,7 +51,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(org-bullets)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -264,7 +264,19 @@ you should place your code here."
   ;; tweaking powerline
   (setq powerline-default-separator nil)
 
+  (setq org-todo-keyword-faces
+        '(
+          ;; ("TODO" . (:inherit org-todo :foreground "#......"))
+          ("WAIT"     . (:inherit org-todo :foreground "#b3b9be"))
+          ("LATER"    . (:inherit org-todo :foreground "#b1951d"))
+          ;; ("DONE"     . (:inherit org-done :foreground ""))
+          ("CANCEL"   . (:inherit org-done :foreground "#b3b9be"))
 
+          ("QUESTION" . (:inherit org-todo :foreground "#3a81c3"))
+          ("ANSWER"   . (:inherit org-done :foreground "#3a81c3"))
+
+          ("IDEA"     . (:inherit org-todo :foreground "#a31db1"))
+          ))
 
   )
 
@@ -275,6 +287,13 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-cycle-level-faces nil)
+ '(org-fontify-done-headline t)
+ '(org-todo-keywords
+   (quote
+    ((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
+     (sequence "QUESTION(q)" "ANSWER(a)")
+     (sequence "IDEA(i)"))))
  '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -283,4 +302,15 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(font-lock-comment-face ((t (:slant italic))))
  '(font-lock-doc-face ((t (:slant italic))))
- '(font-lock-string-face ((t (:slant italic)))))
+ '(font-lock-string-face ((t (:slant italic))))
+ '(org-done ((t (:inherit org-todo :inverse-video nil :weight light))))
+ '(org-headline-done ((t (:foreground "#b3b9be" :strike-through t :slant italic))))
+ '(org-level-1 ((t (:foreground "#3a81c3" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-2 ((t (:foreground "#2d9574" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-3 ((t (:foreground "#67b11d" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-4 ((t (:foreground "#b1951d" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-5 ((t (:foreground "#3a81c3" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-6 ((t (:foreground "#2d9574" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-7 ((t (:foreground "#67b11d" :height 1.0 :weight medium :inherit nil))))
+ '(org-level-8 ((t (:foreground "#b1951d" :height 1.0 :weight medium :inherit nil))))
+ '(org-todo ((t (:inherit bold :foreground "#67b11d" :inverse-video t)))))
