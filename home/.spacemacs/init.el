@@ -23,7 +23,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      emacs-lisp
      osx
@@ -264,6 +264,8 @@ you should place your code here."
   ;; tweaking powerline
   (setq powerline-default-separator nil)
 
+  (setq vc-follow-symlinks t)
+
   (setq org-todo-keyword-faces
         '(
           ("WAIT"     . (:inherit org-todo :foreground "#b3b9be"))
@@ -278,6 +280,21 @@ you should place your code here."
           ("~~~"      . (:inherit org-todo :foreground "#efeae9"))
           ))
   (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+
+  ;; Tell org where to find files
+  (setq org-directory "~/Org/")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-default-log-file   (concat org-directory "/logbook.org"))
+  (setq org-agenda-files (append
+                          (file-expand-wildcards (concat org-directory "*.org"))
+                          (file-expand-wildcards (concat org-directory "**/*.org"))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+
+  ;;; scroll one line at a time (less "jumpy" than defaults)
+  ;;; https://github.com/syl20bnr/spacemacs/issues/1781#issuecomment-114885799
+  (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; two lines at a time
+  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
   )
 
