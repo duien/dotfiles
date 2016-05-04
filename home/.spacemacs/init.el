@@ -23,7 +23,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; auto-completion
+     auto-completion
      ;; better-defaults
      emacs-lisp
      osx
@@ -264,19 +264,37 @@ you should place your code here."
   ;; tweaking powerline
   (setq powerline-default-separator nil)
 
+  (setq vc-follow-symlinks t)
+
   (setq org-todo-keyword-faces
         '(
-          ;; ("TODO" . (:inherit org-todo :foreground "#......"))
           ("WAIT"     . (:inherit org-todo :foreground "#b3b9be"))
           ("LATER"    . (:inherit org-todo :foreground "#b1951d"))
-          ;; ("DONE"     . (:inherit org-done :foreground ""))
           ("CANCEL"   . (:inherit org-done :foreground "#b3b9be"))
 
           ("QUESTION" . (:inherit org-todo :foreground "#3a81c3"))
           ("ANSWER"   . (:inherit org-done :foreground "#3a81c3"))
 
           ("IDEA"     . (:inherit org-todo :foreground "#a31db1"))
+          ("YAK"      . (:inherit org-todo :foreground "#8c799f"))
+          ("~~~"      . (:inherit org-todo :foreground "#efeae9"))
           ))
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+
+  ;; Tell org where to find files
+  (setq org-directory "~/Org/")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-default-log-file   (concat org-directory "/logbook.org"))
+  (setq org-agenda-files (append
+                          (file-expand-wildcards (concat org-directory "*.org"))
+                          (file-expand-wildcards (concat org-directory "**/*.org"))))
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+
+  ;;; scroll one line at a time (less "jumpy" than defaults)
+  ;;; https://github.com/syl20bnr/spacemacs/issues/1781#issuecomment-114885799
+  (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))) ;; two lines at a time
+  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 
   )
 
@@ -290,10 +308,11 @@ you should place your code here."
  '(org-cycle-level-faces nil)
  '(org-fontify-done-headline t)
  '(org-todo-keywords
-   (quote
-    ((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
-     (sequence "QUESTION(q)" "ANSWER(a)")
-     (sequence "IDEA(i)"))))
+   (quote (
+           (type "~~~(r!)" "IDEA(i)" "YAK(y)" "|")
+           (sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")
+           (sequence "QUESTION(q)" "ANSWER(a@)")
+     )))
  '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

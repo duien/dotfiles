@@ -1,0 +1,2 @@
+* Todos
+** TODO I don't use avy. Can I make ~SPC SPC~ open up a capture buffer for org???

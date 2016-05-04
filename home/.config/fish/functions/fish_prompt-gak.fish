@@ -150,13 +150,24 @@ function fish_prompt
 
   # Set and print text of prompt statusline
   set prompt_str (fish_prompt_line)
+  set cols (tput cols)
+  set prompt_width (echo $prompt_str | ansifilter | wc -c)
+  set remaining (math $cols - $prompt_width)
+
+  if test $remaining -lt 0
+    # if the prompt is too long
+    set prompt_str "$c1 nope"
+    # set prompt_str (section git $git_branch)
+    set prompt_width (echo $prompt_str | ansifilter | wc -c)
+    set remaining (math $cols - $prompt_width)
+    # set remaining (math $cols - 5)
+    # set remaining 5
+  end
+
   printf $prompt_str
 
   # Fill rest of line with background color
   printf (set_color --background $color_base)
-  set cols (tput cols)
-  set prompt_width (echo $prompt_str | ansifilter | wc -c)
-  set remaining (math $cols - $prompt_width)
   printf (yes " " | head -n $remaining | tr -d "\n")
 
   # Next line
@@ -171,6 +182,7 @@ function fish_prompt
   end
 
   # And the prompt character
-  printf "$c4> "
+  set_color $color_base
+  printf "> "
 end
 
