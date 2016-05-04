@@ -266,17 +266,18 @@ you should place your code here."
 
   (setq org-todo-keyword-faces
         '(
-          ;; ("TODO" . (:inherit org-todo :foreground "#......"))
           ("WAIT"     . (:inherit org-todo :foreground "#b3b9be"))
           ("LATER"    . (:inherit org-todo :foreground "#b1951d"))
-          ;; ("DONE"     . (:inherit org-done :foreground ""))
           ("CANCEL"   . (:inherit org-done :foreground "#b3b9be"))
 
           ("QUESTION" . (:inherit org-todo :foreground "#3a81c3"))
           ("ANSWER"   . (:inherit org-done :foreground "#3a81c3"))
 
           ("IDEA"     . (:inherit org-todo :foreground "#a31db1"))
+          ("YAK"      . (:inherit org-todo :foreground "#8c799f"))
+          ("~~~"      . (:inherit org-todo :foreground "#efeae9"))
           ))
+  (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
 
   )
 
@@ -290,10 +291,11 @@ you should place your code here."
  '(org-cycle-level-faces nil)
  '(org-fontify-done-headline t)
  '(org-todo-keywords
-   (quote
-    ((sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d)" "CANCEL(c)")
-     (sequence "QUESTION(q)" "ANSWER(a)")
-     (sequence "IDEA(i)"))))
+   (quote (
+           (type "~~~(r!)" "IDEA(i)" "YAK(y)" "|")
+           (sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")
+           (sequence "QUESTION(q)" "ANSWER(a@)")
+     )))
  '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
