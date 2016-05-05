@@ -91,7 +91,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
@@ -307,18 +307,20 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(org-cycle-level-faces nil)
  '(org-fontify-done-headline t)
+ '(org-insert-heading-respect-content t)
  '(org-todo-keywords
-   (quote (
-           (type "~~~(r!)" "IDEA(i)" "YAK(y)" "|")
-           (sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")
-           (sequence "QUESTION(q)" "ANSWER(a@)")
-     )))
+   (quote
+    ((type "~~~(r!)" "IDEA(i)" "YAK(y)" "|")
+     (sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")
+     (sequence "QUESTION(q)" "ANSWER(a@)"))))
  '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
  '(font-lock-comment-face ((t (:slant italic))))
  '(font-lock-doc-face ((t (:slant italic))))
  '(font-lock-string-face ((t (:slant italic))))
