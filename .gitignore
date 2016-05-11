@@ -6,5 +6,6 @@ home/.config/fish/fishd.*
 home/.atom/storage
 home/.atom/.node-gyp
 home/.atom/compile-cache
+home/.atom/config.cson
 home/.thefuck/*.pyc
 

@@ -270,7 +270,7 @@ you should place your code here."
         '(
           ("WAIT"     . (:inherit org-todo :foreground "#b3b9be"))
           ("LATER"    . (:inherit org-todo :foreground "#b1951d"))
-          ("CANCEL"   . (:inherit org-done :foreground "#b3b9be"))
+          ("CANCEL"   . (:inherit org-done :foreground "#b3b9be" :background "#efeae9"))
 
           ("QUESTION" . (:inherit org-todo :foreground "#3a81c3"))
           ("ANSWER"   . (:inherit org-done :foreground "#3a81c3"))
@@ -289,6 +289,14 @@ you should place your code here."
                           (file-expand-wildcards (concat org-directory "*.org"))
                           (file-expand-wildcards (concat org-directory "**/*.org"))))
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 9))))
+
+  ;; Set up org capture templates
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+           "** TODO %?\nCAPTURED: %u %a\n%i")
+          ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+           "%? (logged from [[%l][%f]])")
+          ))
 
   ;;; scroll one line at a time (less "jumpy" than defaults)
   ;;; https://github.com/syl20bnr/spacemacs/issues/1781#issuecomment-114885799
@@ -324,6 +332,8 @@ you should place your code here."
  '(font-lock-comment-face ((t (:slant italic))))
  '(font-lock-doc-face ((t (:slant italic))))
  '(font-lock-string-face ((t (:slant italic))))
+ '(org-checkbox-statistics-done ((t (:inherit org-done :foreground "#b3b9be"))))
+ '(org-checkbox-statistics-todo ((t (:inherit org-todo :foreground "#e0211d"))))
  '(org-done ((t (:inherit org-todo :inverse-video nil :weight light))))
  '(org-headline-done ((t (:foreground "#b3b9be" :strike-through t :slant italic))))
  '(org-level-1 ((t (:foreground "#3a81c3" :height 1.0 :weight medium :inherit nil))))
