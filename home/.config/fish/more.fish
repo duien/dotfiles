@@ -53,7 +53,7 @@ set -gx RBENV_ROOT /usr/local/var/rbenv
 . (rbenv init -|psub)
 
 
-set -x GOPATH /Users/ehyland/Code/go_crap
-set -x GOBIN /Users/ehyland/Code/go_crap/bin
+# set -x GOPATH /Users/ehyland/Code/go_crap
+# set -x GOBIN /Users/ehyland/Code/go_crap/bin
 
-set -x PATH $PATH $GOBIN
+# set -x PATH $PATH $GOBIN

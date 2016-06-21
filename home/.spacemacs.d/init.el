@@ -280,6 +280,10 @@ you should place your code here."
           ("~~~"      . (:inherit org-todo :foreground "#efeae9"))
           ))
   (add-hook 'text-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+  (add-hook 'org-mode-hook  (lambda () (org-indent-mode -1)))
+
+  (rainbow-delimiters-mode)
+  ;; (spacemacs/toggle-)
 
   ;; Tell org where to find files
   (setq org-directory "~/Org/")
@@ -315,6 +319,8 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(org-cycle-level-faces nil)
  '(org-fontify-done-headline t)
+ '(org-fontify-whole-heading-line nil)
+ '(org-hide-leading-stars t)
  '(org-insert-heading-respect-content t)
  '(org-todo-keywords
    (quote

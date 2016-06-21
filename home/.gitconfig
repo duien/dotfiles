@@ -9,7 +9,7 @@
 	default = simple
 [core]
   excludesfile = ~/.gitignore
-  editor = nvim
+	editor = subl
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
   hist = "log --oneline --decorate --graph"
@@ -30,6 +30,7 @@
 [diff]
 	tool = Kaleidoscope
   algorithm = patience
+	compactionHeuristic = true
 [github]
   user = duien
 [branch]

@@ -25,27 +25,48 @@ html, body, atom-workspace {
   }
 }
 
-.theme-atom-dark-ui .tab-bar {
-  padding-top: 5px;
-  height: auto;
-  &:after {
-    background: @syntax-background-color;
-    border: none;
-    // display: none;
-    height: 0 !important;
-  }
-  .tab { top: 0; }
-  .tab.active[data-type="TextEditor"] {
-    &,
-    &:after,
-    &:before {
+.theme-atom-dark-ui {
+  .tab-bar {
+    padding-top: 5px;
+    height: auto;
+    &:after {
       background: @syntax-background-color;
-      color: @syntax-text-color;
-      box-shadow: none;
+      border: none;
+      // display: none;
+      height: 0 !important;
+    }
+    .tab { top: 0; }
+    .tab.active[data-type="TextEditor"] {
+      &,
+      &:after,
+      &:before {
+        background: @syntax-background-color;
+        color: @syntax-text-color;
+        box-shadow: none;
+      }
+    }
+
+    .tab.active[data-type="SettingsView"] {
+      &, &:after, &:before { background: #292c2f; }
+
+      &        { box-shadow: inset -1px 1px 0 #222222,  4px -4px 4px rgba(0, 0, 0, 0.1); }
+      &:before { box-shadow: inset  1px 1px 0 #222222, -4px -4px 4px rgba(0, 0, 0, 0.1); }
+      &:after  { box-shadow: inset -1px 1px 0 #222222,  4px -4px 4px rgba(0, 0, 0, 0.1); }
+    }
+  }
+
+  // Make the status bar at the bottom match the syntax theme rather than UI
+  &.theme-brilliant-syntax {
+    atom-panel.bottom {
+      background: #f7eef9;
+      border-top-color: #e1bee7;
+      color: #b39ddb;
+      status-bar a {
+        color: #b39ddb;
+      }
     }
   }
 }
-
 
 .tree-view {
   // Make directories bold in tree view
