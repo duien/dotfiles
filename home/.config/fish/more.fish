@@ -57,3 +57,5 @@ set -x GOPATH /Users/ehyland/Code/Go
 set -x GOBIN /Users/ehyland/Code/Go/bin
 
 set -x PATH $PATH $GOBIN
+
+set -x CENTURION_HOME /Users/ehyland/Code/centurion-configs
