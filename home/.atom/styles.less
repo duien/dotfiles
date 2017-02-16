@@ -12,6 +12,7 @@
 */
 
 @editor-font: 'Operator Mono SSm';
+// @editor-font: 'Space Mono';
 // @editor-font: 'Fira Code';
 @use-italic: italic;
 
@@ -114,7 +115,7 @@ atom-text-editor, atom-text-editor::shadow, :host {
   }
 
   // Tweak indent guide positioning (for built-in guides)
-  @indent-offset: 4px; // This might need tweaking depending on font and size
+  @indent-offset: 5px; // This might need tweaking depending on font and size
   @guide-width: 1px;
 
   // Shift indent guides to align vertically with center of column
@@ -168,25 +169,21 @@ atom-text-editor, atom-text-editor::shadow, :host {
 
 // THEME-SPECIFIC SETTINGS
 
-atom-text-editor, atom-text-editor::shadow, :host {
+atom-text-editor {
   .theme-atom-dark-fusion-syntax & {
     .variable.other.less::first-letter {
       // color: fade(#4dbac7, 5%);
       color: red;
     }
   }
-}
 
-.theme-gruvbox-plus-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
+  .theme-gruvbox-plus-syntax & {
     .punctuation.definition.string {
       color: #b8bb26;
     }
   }
-}
 
-.theme-eclectic-syntax {
-  atom-text-editor, atom-text-editor::shadow, :host {
+  .theme-eclectic-syntax & {
     // @invisible-color: darken(@syntax-background-color, 3%);
     @subtle-guide-color: mix(@syntax-background-color, @syntax-gutter-text-color, 75%);
     @invisible-color: @subtle-guide-color;
@@ -210,10 +207,20 @@ atom-text-editor, atom-text-editor::shadow, :host {
       &.numeric { font-weight: 600; }
     }
   }
+
+  .theme-brilliant-syntax {
+    .minimap .cursor-line {
+      background: @syntax-selection-color;
+    }
+  }
 }
 
-.theme-brilliant-syntax {
-  .minimap .cursor-line {
-    background: @syntax-selection-color;
+
+.theme-atom-material-ui {
+  .scroll-view {
+    padding-left: 0;
+  }
+  .tab-bar .tab.active {
+    background-color: #673AB7;
   }
 }
