@@ -217,6 +217,12 @@ atom-text-editor {
 
 
 .theme-atom-material-ui {
+  atom-panel.modal.overlay.from-top {
+    top: 25%;
+    border-radius: 0.125rem;
+    border: 2px solid #E040FB; // use accent color for tab panel border
+  }
+
   .scroll-view {
     padding-left: 0;
   }
@@ -224,3 +230,9 @@ atom-text-editor {
     background-color: #673AB7;
   }
 }
+
+// IDEA Add a panel to the bottom of the tree view showing git status
+// You could color the whole background based on status and show the branch and
+// change counts as text. It would line up with the editor status-bar and seems
+// like a more logical place than the bottom of the editor.
+// What do you do when the sidebar is collapsed?
