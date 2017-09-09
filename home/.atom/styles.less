@@ -280,9 +280,15 @@ atom-text-editor {
     }
   }
 
-  .theme-brilliant-syntax {
+  .theme-brilliant-syntax & {
     .minimap .cursor-line {
       background: @syntax-selection-color;
+    }
+    
+    // The `|>` operator in elixir and probably more accidental things
+    .syntax--keyword.syntax--operator.syntax--other {
+      color: #ff3ec0;
+      // font-weight: bold;
     }
   }
   
