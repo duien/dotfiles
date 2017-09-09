@@ -9,7 +9,7 @@
 	default = simple
 [core]
   excludesfile = ~/.gitignore
-	editor = subl
+	editor = vim
 [alias]
   vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
   hist = "log --oneline --decorate --graph"
@@ -21,6 +21,7 @@
   cached = diff --cached
   stat = diff --stat
 	patch = add --patch
+	cm = commit -m
 [format]
   pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ar)
 [difftool "Kaleidoscope"]

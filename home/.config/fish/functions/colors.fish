@@ -1,7 +1,19 @@
 function colors -d "What do my terminal colors look like?"
   set -l colors normal black red green yellow blue purple cyan white
 
-  echo "=== THE COLORS ==="
+  for color in $colors
+    set_color --background $color
+    set_color --bold
+    echo -n " $color"
+    set_color --bold $color
+    echo -n " on self "
+    set_color normal
+    echo " "
+  end
+end
+
+function colors_grid -d "More complete view of the colors"
+  set -l colors normal black red green yellow blue purple cyan white
 
   for background in $colors
     set_color --background $background

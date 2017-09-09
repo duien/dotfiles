@@ -117,11 +117,11 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Operator Mono Ssm"
-                               :size 16
+   dotspacemacs-default-font '("Input"
+                               :size 14
                                :weight light
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -209,7 +209,7 @@ values."
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
@@ -262,7 +262,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; tweaking powerline
-  (setq powerline-default-separator nil)
+  (setq powerline-default-separator 'utf-8)
 
   (setq vc-follow-symlinks t)
 
@@ -327,6 +327,9 @@ you should place your code here."
     ((type "~~~(r!)" "IDEA(i)" "YAK(y)" "|")
      (sequence "TODO(t)" "WAIT(w)" "LATER(l)" "|" "DONE(d!)" "CANCEL(c@)")
      (sequence "QUESTION(q)" "ANSWER(a@)"))))
+ '(package-selected-packages
+   (quote
+    (reveal-in-osx-finder rainbow-mode rainbow-identifiers pbcopy osx-trash osx-dictionary org-projectile org-present org-pomodoro alert log4e gntp org-download magit-gh-pulls launchctl insert-shebang htmlize helm-company helm-c-yasnippet gnuplot github-search github-clone magit magit-popup github-browse-file git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter gist gh marshal logito pcache ht flycheck-pos-tip pos-tip fish-mode evil-commentary diff-hl company-statistics company-shell color-identifiers-mode auto-yasnippet ac-ispell auto-complete ws-butler window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline restart-emacs request rainbow-delimiters quelpa popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file ob-elixir neotree move-text mmm-mode markdown-toc macrostep lorem-ipsum livid-mode linum-relative link-hint json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio gh-md flycheck-mix flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump define-word column-enforce-mode coffee-mode clean-aindent-mode auto-highlight-symbol auto-compile alchemist aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line)))
  '(spacemacs-theme-comment-bg nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -338,8 +341,8 @@ you should place your code here."
  '(font-lock-comment-face ((t (:slant italic))))
  '(font-lock-doc-face ((t (:slant italic))))
  '(font-lock-string-face ((t (:slant italic))))
- '(org-checkbox-statistics-done ((t (:inherit org-done :foreground "#b3b9be"))))
- '(org-checkbox-statistics-todo ((t (:inherit org-todo :foreground "#e0211d"))))
+ '(org-checkbox-statistics-done ((t (:inherit org-done :foreground "#b3b9be"))) t)
+ '(org-checkbox-statistics-todo ((t (:inherit org-todo :foreground "#e0211d"))) t)
  '(org-done ((t (:inherit org-todo :inverse-video nil :weight light))))
  '(org-headline-done ((t (:foreground "#b3b9be" :strike-through t :slant italic))))
  '(org-level-1 ((t (:foreground "#3a81c3" :height 1.0 :weight medium :inherit nil))))

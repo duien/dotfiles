@@ -11,19 +11,25 @@
 * http://www.lesscss.org
 */
 
-@editor-font: 'Operator Mono SSm';
+// @editor-font: 'Operator Mono SSm';
+// @editor-font: 'Consolamono';
+// @editor-font: 'Input';
+// @editor-font: 'Monoid';
 // @editor-font: 'Space Mono';
 // @editor-font: 'Fira Code';
-@use-italic: italic;
+
+// @use-italic: italic;
+@use-italic: normal;
 
 
 /* Font settings - Editor and UI */
 html, body, atom-workspace,
 atom-text-editor {
   // font-family: 'Operator Mono SSM', 'Source Code Pro';
+  // font-family: 'Courier Prime Code';
   // font-family: 'Monoid'
-  font-family: @editor-font;
-  // font-weight: 200;
+  // font-family: @editor-font;
+  font-weight: 200;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -62,26 +68,34 @@ atom-text-editor {
   }
 }
 
+// Monoid Mess
+* {
+  // text-rendering: optimizeLegibility;
+  // -webkit-font-smoothing: antialiased;
+  // -webkit-font-feature-settings: "liga" on, "calt" on;
+}
+
 // General editor settings and syntax tweaks
 atom-text-editor {
 
-  .source.gfm,  .text.md {
-    .markup {
+  .syntax--source.syntax--gfm,  .syntax--text.syntax--md {
+    .syntax--markup {
       -webkit-font-smoothing: antialiased;
 
-      &.quote {
+      &.syntax--quote {
         font-style: @use-italic;
         // font-style: normal;
       }
 
-      &.heading {
+      &.syntax--heading {
         font-style: @use-italic;
+        font-weight: bold;
         // font-style: normal;
       }
     }
 
     // There's no such thing in a bad ampersand
-    .invalid.bad-ampersand {
+    .syntax--invalid.syntax--bad-ampersand {
       color: inherit;
       background: inherit;
       font-weight: inherit;
@@ -89,17 +103,19 @@ atom-text-editor {
   }
 
   // I like my comments italic, and some syntax themes don't agree
-  .comment {
+  .syntax--comment,
+  .syntax--punctuation.syntax--definition.syntax--comment
+   {
     font-style: @use-italic;
     // font-style: normal;
   }
 
   // Italic strings too!!!
-  .string {
+  .syntax--string {
     font-style: @use-italic;
     // font-style: normal;
-    &.punctuation, .source, &.unquoted { font-style: normal; }
-    .unquoted.yaml { font-style: @use-italic; }
+    &.syntax--punctuation, .syntax--source, &.syntax--unquoted { font-style: normal; }
+    .syntax--unquoted.syntax--yaml { font-style: @use-italic; }
   }
 
 
@@ -120,38 +136,42 @@ atom-text-editor {
 
   // Shift indent guides to align vertically with center of column
   .indent-guide {
-    box-shadow: none;
-    background: linear-gradient(90deg, // replace box-shadow with gradient
-      transparent,
-      transparent @indent-offset,
-      @syntax-indent-guide-color @indent-offset,
-      @syntax-indent-guide-color @indent-offset + @guide-width,
-      transparent @indent-offset + @guide-width)
+    // box-shadow: none;
+  //   background: linear-gradient(90deg, // replace box-shadow with gradient
+  //     transparent,
+  //     transparent @indent-offset,
+  //     @syntax-indent-guide-color @indent-offset,
+  //     @syntax-indent-guide-color @indent-offset + @guide-width,
+  //     transparent @indent-offset + @guide-width)
   }
-
-  .indent-guide-improved {
-    width: @indent-offset + @guide-width;
-    &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
-      background: linear-gradient(90deg, // replace box-shadow with gradient
-        transparent,
-        transparent @indent-offset,
-        @syntax-indent-guide-color @indent-offset,
-        @syntax-indent-guide-color @indent-offset + @guide-width,
-        transparent @indent-offset + @guide-width)
-    }
-  }
+  //
+  // .indent-guide-improved {
+  //   // width: @indent-offset + @guide-width;
+  //   &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
+  //     background: linear-gradient(90deg, // replace box-shadow with gradient
+  //       transparent,
+  //       transparent @indent-offset,
+  //       @syntax-indent-guide-color @indent-offset,
+  //       @syntax-indent-guide-color @indent-offset + @guide-width,
+  //       transparent @indent-offset + @guide-width)
+  //   }
+  // }
 
   // Tweak pigments display
   pigment-markers::shadow pigment-color-marker .region.background {
     border-radius: 3px;
   }
 
+  // Try to make invisible characters generally less visually obtrusive
+  .invisible-character {
+    color: mix(@syntax-text-color, @syntax-background-color, 7%);
+  }
   .trailing-whitespace { // Just show trailing whitespace
     // Use `syntax-color-removed` since it's usually red
     // Unfortunately, the invisible characters are behind the indent guide, so
     // we have to use background rather than foreground (since I have moved the
     // indent guides over to be centered in the character column)
-    color: @syntax-color-removed;
+    color: @syntax-color-removed;   
   }
 
   // Tweaks to line numbers in the gutter
@@ -178,8 +198,60 @@ atom-text-editor {
   }
 
   .theme-gruvbox-plus-syntax & {
-    .punctuation.definition.string {
-      color: #b8bb26;
+
+    @bg1: #ebdbb2;
+    @bg2: #d5c4a1;
+    @bg3: #bdae93;
+    @bg4: #a89984;
+    @gray: #928374;
+    @fg1: #3c3836;
+    @fg2: #504945;
+    @fg3: #665c54;
+    @fg4: #7c6f64;
+    @red: #9d0006;
+    @green: #79740e;
+    @yellow: #b57614;
+    @blue: #076678;
+    @purple: #8f3f71;
+    @aqua: #427b58;
+    @orange: #af3a03;
+    @neutral-red: #cc241d;
+    @neutral-green: #98971a;
+    @neutral-yellow: #d79921;
+    @neutral-blue: #458588;
+    @neutral-purple: #b16286;
+    @neutral-aqua: #689d6a;
+    @neutral-orange: #d65d0e;
+
+    .syntax--punctuation.syntax--definition.syntax--string {
+      color: @neutral-green;
+    }
+    .syntax--regexp {
+      color: @aqua;
+      &.syntax--punctuation {
+        color: @neutral-aqua;
+      }
+    }
+
+    // attempt to hack in `.markup` and `.language-md` support
+    .syntax--markup, .syntax--md {
+      .syntax--punctuation { color: @bg3; }
+
+      .syntax--code { color: @orange; }
+      .syntax--code > .syntax--punctuation { color: @neutral-orange; }
+      .syntax--fenced > .syntax--language { color: @orange; }
+
+      &.syntax--list { color: @syntax-text-color; }
+
+      .syntax--link {
+        .syntax--string > .syntax--punctuation { color: @neutral-green; }
+        > .syntax--punctuation { color: @neutral-blue; }
+        &.syntax--destination, &.syntax--hyperlink { color: @blue; }
+      }
+    }
+    
+    .syntax--symbol > .syntax--punctuation.syntax--definition {
+      color: @neutral-purple;
     }
   }
 
@@ -213,8 +285,23 @@ atom-text-editor {
       background: @syntax-selection-color;
     }
   }
+  
+  .theme-dark-side-of-the-moon-syntax & {
+    .syntax--source .syntax--comment {
+      .syntax--storage.syntax--type {
+        margin-left: -0.4em;
+        margin-right: -0.4em;
+      }
+    }
+  }
 }
 
+// XXX This still doesn't make it match, but it makes it closer
+.theme-dark-side-of-the-moon-syntax {
+  .gutter .line-number{
+    background-color: @syntax-background-color;
+  }
+}
 
 .theme-atom-material-ui {
   atom-panel.modal.overlay.from-top {
