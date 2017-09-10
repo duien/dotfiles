@@ -104,7 +104,10 @@ atom-text-editor {
 
   // I like my comments italic, and some syntax themes don't agree
   .syntax--comment,
-  .syntax--punctuation.syntax--definition.syntax--comment
+  .syntax--punctuation.syntax--definition.syntax--comment,
+  .syntax--comment.syntax--block,
+  .syntax--comment.syntax--line,
+  .syntax--comment.syntax--documentation
    {
     font-style: @use-italic;
     // font-style: normal;
@@ -176,13 +179,29 @@ atom-text-editor {
 
   // Tweaks to line numbers in the gutter
   .gutter .line-number {
+    opacity: 1;
     &.cursor-line {
       font-weight: bold;
     }
-    &.git-line-added {
-      color: mix(@syntax-color-added, @syntax-gutter-text-color); }
-    &.git-line-modified {
-      color: mix(@syntax-color-modified, @syntax-gutter-text-color);
+    &.git-line-added::after {
+      // color: mix(@syntax-color-added, @syntax-gutter-text-color); }
+      background: fade(@syntax-color-added, 10%);
+      content: " ";
+      position: absolute;
+      left: 0;
+      right: 1em;
+      top: 0;
+      bottom: 0;
+    }
+    &.git-line-modified::after {
+      // color: mix(@syntax-color-modified, @syntax-gutter-text-color);
+      background: fade(@syntax-color-modified, 10%);
+      content: " ";
+      position: absolute;
+      left: 0;
+      right: 1em;
+      top: 0;
+      bottom: 0;
     }
   }
 }
