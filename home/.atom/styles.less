@@ -18,18 +18,20 @@
 // @editor-font: 'Space Mono';
 // @editor-font: 'Fira Code';
 
-// @use-italic: italic;
-@use-italic: normal;
+@use-italic: italic;
+// @use-italic: normal;
 
 
 /* Font settings - Editor and UI */
 html, body, atom-workspace,
+.github-Panel,
 atom-text-editor {
   // font-family: 'Operator Mono SSM', 'Source Code Pro';
   // font-family: 'Courier Prime Code';
   // font-family: 'Monoid'
   // font-family: @editor-font;
-  font-weight: 200;
+  // font-weight: 200;
+  // font-family: "PragmataPro";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -68,12 +70,6 @@ atom-text-editor {
   }
 }
 
-// Monoid Mess
-* {
-  // text-rendering: optimizeLegibility;
-  // -webkit-font-smoothing: antialiased;
-  // -webkit-font-feature-settings: "liga" on, "calt" on;
-}
 
 // General editor settings and syntax tweaks
 atom-text-editor {
@@ -174,7 +170,7 @@ atom-text-editor {
     // Unfortunately, the invisible characters are behind the indent guide, so
     // we have to use background rather than foreground (since I have moved the
     // indent guides over to be centered in the character column)
-    color: @syntax-color-removed;   
+    color: @syntax-color-removed;
   }
 
   // Tweaks to line numbers in the gutter
@@ -268,7 +264,7 @@ atom-text-editor {
         &.syntax--destination, &.syntax--hyperlink { color: @blue; }
       }
     }
-    
+
     .syntax--symbol > .syntax--punctuation.syntax--definition {
       color: @neutral-purple;
     }
@@ -303,14 +299,14 @@ atom-text-editor {
     .minimap .cursor-line {
       background: @syntax-selection-color;
     }
-    
+
     // The `|>` operator in elixir and probably more accidental things
     .syntax--keyword.syntax--operator.syntax--other {
       color: #ff3ec0;
       // font-weight: bold;
     }
   }
-  
+
   .theme-dark-side-of-the-moon-syntax & {
     .syntax--source .syntax--comment {
       .syntax--storage.syntax--type {
