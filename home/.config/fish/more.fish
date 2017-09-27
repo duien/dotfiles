@@ -38,4 +38,5 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 
 # Enable rbenv
 set -gx RBENV_ROOT /usr/local/var/rbenv
-. (rbenv init -|psub)
+status --is-interactive; and source (rbenv init -|psub)
+set -g fish_user_paths "/usr/local/opt/postgresql@9.4/bin" $fish_user_paths
