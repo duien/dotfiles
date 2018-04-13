@@ -1,6 +1,8 @@
 @import "ui-variables";
 @import "syntax-variables";
 
+@import 'styles/vim-status';
+
 /*
 * Your Stylesheet
 *
@@ -34,6 +36,8 @@ atom-text-editor {
   // font-family: "PragmataPro";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  font-feature-settings: "liga" off; // turn off ligatures for Attribute Mono
+                                     // since they're not monospace-friendly
 }
 
 // Customize tab colors for atom dark
@@ -73,6 +77,16 @@ atom-text-editor {
 
 // General editor settings and syntax tweaks
 atom-text-editor {
+
+  // Pigments (colors) styling
+  .pigments-native-background {
+    // TODO I really like having this additional styling most of the time, but
+    // it messes up weirdly in less, when the color is a variable. The `@` gets
+    // highlighted separately from the name and ends up looking weird.
+    // border-radius: 2px;
+    // margin: 0 -2px;
+    // padding: 0 2px;
+  }
 
   .syntax--source.syntax--gfm,  .syntax--text.syntax--md {
     .syntax--markup {
@@ -117,44 +131,63 @@ atom-text-editor {
     .syntax--unquoted.syntax--yaml { font-style: @use-italic; }
   }
 
+  // Tweak indent guide positioning (for built-in guides)
+  @indent-offset: 4px; // This might need tweaking depending on font and size
+  @guide-width: 1px;
+  @active-guide-color: @syntax-indent-guide-color;
+  @inactive-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color, 25%);
+  @stack-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color);
 
   // Tweak colors for indent-guide-improved
   .indent-guide-improved {
-    background-color: mix(@syntax-indent-guide-color, @syntax-background-color);
+    background-color: @inactive-guide-color;
     &.indent-guide-stack {
-      background-color: mix(@syntax-indent-guide-color, @syntax-background-color);
+      background-color: @stack-guide-color;
       &.indent-guide-active {
-        background-color: @syntax-indent-guide-color;
+        background-color: @active-guide-color;
       }
     }
   }
 
-  // Tweak indent guide positioning (for built-in guides)
-  @indent-offset: 5px; // This might need tweaking depending on font and size
-  @guide-width: 1px;
-
   // Shift indent guides to align vertically with center of column
-  .indent-guide {
-    // box-shadow: none;
+  // .indent-guide {
+  //   box-shadow: none;
   //   background: linear-gradient(90deg, // replace box-shadow with gradient
   //     transparent,
   //     transparent @indent-offset,
   //     @syntax-indent-guide-color @indent-offset,
   //     @syntax-indent-guide-color @indent-offset + @guide-width,
   //     transparent @indent-offset + @guide-width)
-  }
-  //
-  // .indent-guide-improved {
-  //   // width: @indent-offset + @guide-width;
-  //   &, &.indent-guide-stack, &.indent-guide-stack.indent-guide-active {
-  //     background: linear-gradient(90deg, // replace box-shadow with gradient
-  //       transparent,
-  //       transparent @indent-offset,
-  //       @syntax-indent-guide-color @indent-offset,
-  //       @syntax-indent-guide-color @indent-offset + @guide-width,
-  //       transparent @indent-offset + @guide-width)
-  //   }
   // }
+  .indent-guide-improved {
+    width: @indent-offset + @guide-width;
+    & {
+      background: linear-gradient(90deg, // replace box-shadow with gradient
+        transparent,
+        transparent @indent-offset,
+        @inactive-guide-color @indent-offset,
+        @inactive-guide-color @indent-offset + @guide-width,
+        transparent @indent-offset + @guide-width);
+
+      &.indent-guide-stack {
+        background: linear-gradient(90deg, // replace box-shadow with gradient
+          transparent,
+          transparent @indent-offset,
+          @stack-guide-color @indent-offset,
+          @stack-guide-color @indent-offset + @guide-width,
+          transparent @indent-offset + @guide-width);
+
+        &.indent-guide-active {
+          background: linear-gradient(90deg, // replace box-shadow with gradient
+            transparent,
+            transparent @indent-offset,
+            @active-guide-color @indent-offset,
+            @active-guide-color @indent-offset + @guide-width,
+            transparent @indent-offset + @guide-width);
+        }
+      }
+    }
+  }
 
   // Tweak pigments display
   pigment-markers::shadow pigment-color-marker .region.background {
@@ -271,6 +304,22 @@ atom-text-editor {
   }
 
   .theme-eclectic-syntax & {
+    @gray: #36393e;
+    @chalk: #d9dec3;
+    @nightshade: #4b4a53;
+    @cyan: #81c7be;
+    @teal: darken(@cyan, 20%);
+    @celery: #a8b577;
+    @leaf: darken(spin(@celery, 16), 10%);
+    @gold: #e6c37e;
+    @creamsicle: darken(desaturate(@gold, 10%), 15%);
+    @lavender: #9c8db1;
+    @deep-purple: darken(@lavender, 15%);
+    @rose: #c77fa4;
+    @fuscia: darken(@rose, 10%);
+    @ice: #b1d1b1;
+
+
     // @invisible-color: darken(@syntax-background-color, 3%);
     @subtle-guide-color: mix(@syntax-background-color, @syntax-gutter-text-color, 75%);
     @invisible-color: @subtle-guide-color;
@@ -289,10 +338,20 @@ atom-text-editor {
       }
     }
 
-    .constant {
-      // &.symbol { color: #469c91; }
-      &.numeric { font-weight: 600; }
+    .syntax--constant {
+
+      // Make it easier to differentiate symbols and strings
+      &.syntax--symbol.syntax--other {
+        color: @cyan;
+
+        > .syntax--punctuation.syntax--definition {
+          color: @teal;
+        }
+      }
+      &.syntax--numeric { font-weight: 600; }
     }
+
+
   }
 
   .theme-brilliant-syntax & {
@@ -315,12 +374,120 @@ atom-text-editor {
       }
     }
   }
+
+  .theme-far-side-of-the-moon-syntax & {
+    // TODO Make todo comments stay in place
+    // FIXME And also the others
+    .syntax--source .syntax--comment .syntax--type {
+      padding-left: 0.3em;
+      padding-right: 0.3em;
+      margin-left: -0.3em;
+      margin-right: -0.3em;
+    }
+
+    // Highlight IDs and elements in HAML differently than classes
+    .syntax--tag { // element
+      &.syntax--meta, &.syntax--meta .syntax--punctuation { color: #a40699; }
+      &.syntax--entity.syntax--id {  color: #e8a72b; }
+    }
+
+    // Trying to make indent guides more reasonable
+    @indent-offset: 4px; // This might need tweaking depending on font and size
+    @guide-width: 1px;
+    @active-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color, 25%);
+    @inactive-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color, 5%);
+    @stack-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color, 15%);
+    .indent-guide-improved {
+      width: @indent-offset + @guide-width;
+      & {
+        background: linear-gradient(90deg, // replace box-shadow with gradient
+          transparent,
+          transparent @indent-offset,
+          @inactive-guide-color @indent-offset,
+          @inactive-guide-color @indent-offset + @guide-width,
+          transparent @indent-offset + @guide-width);
+
+        &.indent-guide-stack {
+          background: linear-gradient(90deg, // replace box-shadow with gradient
+            transparent,
+            transparent @indent-offset,
+            @stack-guide-color @indent-offset,
+            @stack-guide-color @indent-offset + @guide-width,
+            transparent @indent-offset + @guide-width);
+
+          &.indent-guide-active {
+            background: linear-gradient(90deg, // replace box-shadow with gradient
+              transparent,
+              transparent @indent-offset,
+              @active-guide-color @indent-offset,
+              @active-guide-color @indent-offset + @guide-width,
+              transparent @indent-offset + @guide-width);
+          }
+        }
+      }
+    }
+
+  }
+
+  .theme-isohedron-syntax & {
+    .syntax--completed {
+      // text-decoration: line-through;
+      font-style: italic;
+      > .syntax--punctuation:first-child {
+        font-style: normal;
+      }
+    }
+    // Don't highlight URLs detected in strings
+    .syntax--quoted .syntax--hyperlink {
+      background-color: transparent;
+    }
+  }
+
+  .theme-soft-era-syntax & {
+
+    // Darken up main text and comments a bit
+    color: #948484;
+    .syntax--comment {
+      color: #c8b3b3;
+      opacity: 1;
+    }
+
+    // Get rid of weird cursor gradient thing
+    .cursor:after {
+      content: none;
+    }
+
+    // Make symbols look like strings (which is better than the weird mixed
+    // thing that was happening, but still not ideal)
+    .syntax--constant.syntax--symbol {
+      background: rgba(233, 228, 225, 0.65);
+      color: #414141;
+      // color: #82b4e3;
+    }
+  }
 }
 
 // XXX This still doesn't make it match, but it makes it closer
 .theme-dark-side-of-the-moon-syntax {
   .gutter .line-number{
     background-color: @syntax-background-color;
+  }
+}
+
+.theme-far-side-of-the-moon-syntax {
+  .gutter {
+    background-color: @syntax-background-color;
+    & .line-number{
+      // background-color: @syntax-background-color;
+      color: mix(#a1a1a1, @syntax-background-color);
+      &.cursor-line {
+        color: #a1a1a1;
+      }
+    }
+  }
+
+  .scroll-view {
+    padding-left: 0;
   }
 }
 

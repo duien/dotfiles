@@ -10,7 +10,7 @@ alias more-fish "source ~/.config/fish/more.fish"
 
 # Basic environment
 set CDPATH . $HOME $HOME/Code $CDPATH
-set PATH /usr/local/bin /usr/local/sbin $PATH
+set PATH /usr/local/bin $PATH
 if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
@@ -40,3 +40,7 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 set -gx RBENV_ROOT /usr/local/var/rbenv
 status --is-interactive; and source (rbenv init -|psub)
 set -g fish_user_paths "/usr/local/opt/postgresql@9.4/bin" $fish_user_paths
+
+# Enable nvm
+export NVM_DIR="$HOME/.nvm"
+bass source /usr/local/opt/nvm/nvm.sh --no-use ';' nvm use > /dev/null

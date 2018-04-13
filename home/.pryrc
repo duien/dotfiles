@@ -100,56 +100,58 @@ end
 require_maybe_outside_bundler 'pbcopy'
 require_maybe_outside_bundler 'pry-doc'
 
-if `git rev-parse --is-inside-work-tree 2>&1`.strip == "true"
-  Pry.config.prompt_name = `basename \`git rev-parse --show-toplevel\``.strip
-elsif Pry.config.prompt_name == 'pry'
-  Pry.config.prompt_name = nil
-end
-
-def rails_sym
-  defined?(Rails) ? '# ' : ''
-end
-
-use_powerline = true
-powerline_symbols = {
-  right_arrow: "\uE0B0",
-  right_separator: "\uE0B1",
-  left_arrow: "\uE0B2",
-  left_separator: "\uE0B3"
-}
-
-prompt_name_color = 88 # 124
-prompt = proc { |target_self, nest_level, pry|
-  tree = pry.binding_stack.map { |b| Pry.view_clip(b.eval("self")) }
-  current = tree.pop
-  tree.push('')
-  tree = ["⋯ "] + tree.last(3) if tree.length > 4
-
-  [
-    on_white(black(" #{pry.input_array.size} ")),
-    Pry.config.prompt_name ? [
-      # white(on_num(prompt_name_color, powerline_symbols[:right_arrow])),
-      on_num(prompt_name_color, " "),
-      on_num(prompt_name_color, white("#{rails_sym}#{Pry.config.prompt_name} ")),
-      # num(prompt_name_color, on_red(powerline_symbols[:right_arrow])),
-    ] : [
-      # white(on_red(powerline_symbols[:right_arrow]))
-    ],
-    on_red(" "),
-    # on_red(num(88, tree.join(" #{powerline_symbols[:right_separator]} "))),
-    on_red(num(88, tree.join('>'))),
-    on_red(white("#{Pry.view_clip(target_self)} ")),
-    # red(powerline_symbols[:right_arrow]),
-    " "
-  ].flatten.join
-}
-
-Pry.prompt = [
-  prompt,
-  proc { |target_self, nest_level, pry|
-    prompt_str = uncolor(prompt.call(target_self, nest_level, pry))[0...-2]
-    # prompt_str.gsub!(powerline_symbols[:right_arrow], powerline_symbols[:right_separator])
-    # "#{dim(prompt_str)}#{red(powerline_symbols[:right_separator])} "
-    "#{dim(prompt_str)} "
-  }
-]
+#
+#
+# if `git rev-parse --is-inside-work-tree 2>&1`.strip == "true"
+#   Pry.config.prompt_name = `basename \`git rev-parse --show-toplevel\``.strip
+# elsif Pry.config.prompt_name == 'pry'
+#   Pry.config.prompt_name = nil
+# end
+#
+# def rails_sym
+#   defined?(Rails) ? '# ' : ''
+# end
+#
+# use_powerline = true
+# powerline_symbols = {
+#   right_arrow: "\uE0B0",
+#   right_separator: "\uE0B1",
+#   left_arrow: "\uE0B2",
+#   left_separator: "\uE0B3"
+# }
+#
+# prompt_name_color = 88 # 124
+# prompt = proc { |target_self, nest_level, pry|
+#   tree = pry.binding_stack.map { |b| Pry.view_clip(b.eval("self")) }
+#   current = tree.pop
+#   tree.push('')
+#   tree = ["⋯ "] + tree.last(3) if tree.length > 4
+#
+#   [
+#     on_white(black(" #{pry.input_array.size} ")),
+#     Pry.config.prompt_name ? [
+#       white(on_num(prompt_name_color, powerline_symbols[:right_arrow])),
+#       on_num(prompt_name_color, " "),
+#       on_num(prompt_name_color, white("#{rails_sym}#{Pry.config.prompt_name} ")),
+#       num(prompt_name_color, on_red(powerline_symbols[:right_arrow])),
+#     ] : [
+#       white(on_red(powerline_symbols[:right_arrow]))
+#     ],
+#     on_red(" "),
+#     on_red(num(88, tree.join(" #{powerline_symbols[:right_separator]} "))),
+#     on_red(num(88, tree.join('>'))),
+#     on_red(white("#{Pry.view_clip(target_self)} ")),
+#     red(powerline_symbols[:right_arrow]),
+#     " "
+#   ].flatten.join
+# }
+#
+# Pry.prompt = [
+#   prompt,
+#   proc { |target_self, nest_level, pry|
+#     prompt_str = uncolor(prompt.call(target_self, nest_level, pry))[0...-2]
+#     prompt_str.gsub!(powerline_symbols[:right_arrow], powerline_symbols[:right_separator])
+#     "#{dim(prompt_str)}#{red(powerline_symbols[:right_separator])} "
+#     # "#{dim(prompt_str)} "
+#   }
+# ]
