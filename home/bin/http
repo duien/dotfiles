@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'rack/utils'
+input = ARGV[0]
+
+status = {
+  code: nil,
+  symbol: nil,
+  name: nil
+}
+
+if input =~ /^\d{3}$/ and input = input.to_i and Rack::Utils::HTTP_STATUS_CODES.key?(input)
+  puts "#{input} #{Rack::Utils::HTTP_STATUS_CODES[input]} (:#{Rack::Utils::SYMBOL_TO_STATUS_CODE.invert[input]})"
+else
+  puts "Not a valid HTTP status code: #{input}"
+end
