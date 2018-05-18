@@ -39,8 +39,13 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 # Enable rbenv
 set -gx RBENV_ROOT /usr/local/var/rbenv
 status --is-interactive; and source (rbenv init -|psub)
-set -g fish_user_paths "/usr/local/opt/postgresql@9.4/bin" $fish_user_paths
+
+if test -d "/usr/local/opt/postgresql@9.4/bin"
+  set -g fish_user_paths "/usr/local/opt/postgresql@9.4/bin" $fish_user_paths
+end
 
 # Enable nvm
-export NVM_DIR="$HOME/.nvm"
-bass source /usr/local/opt/nvm/nvm.sh --no-use ';' nvm use > /dev/null
+if test -x "(which nvm)"
+  export NVM_DIR="$HOME/.nvm"
+  bass source /usr/local/opt/nvm/nvm.sh --no-use ';' nvm use > /dev/null
+end
