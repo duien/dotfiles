@@ -1,8 +1,6 @@
 @import "ui-variables";
 @import "syntax-variables";
 
-@import 'styles/vim-status';
-
 /*
 * Your Stylesheet
 *
@@ -36,7 +34,7 @@ atom-text-editor {
   // font-family: "PragmataPro";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "liga" off; // turn off ligatures for Attribute Mono
+  font-feature-settings: "liga" on; // turn off ligatures for Attribute Mono
                                      // since they're not monospace-friendly
 }
 
@@ -195,9 +193,9 @@ atom-text-editor {
   }
 
   // Try to make invisible characters generally less visually obtrusive
-  .invisible-character {
-    color: mix(@syntax-text-color, @syntax-background-color, 7%);
-  }
+  // .invisible-character {
+  //   color: mix(@syntax-text-color, @syntax-background-color, 7%);
+  // }
   .trailing-whitespace { // Just show trailing whitespace
     // Use `syntax-color-removed` since it's usually red
     // Unfortunately, the invisible characters are behind the indent guide, so
@@ -472,7 +470,7 @@ atom-text-editor {
       padding: 0 2px;
     }
   }
-  
+
   .theme-ocean-light-syntax & {
     .scroll-view {
       padding-left: 0;
