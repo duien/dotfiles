@@ -34,8 +34,12 @@ atom-text-editor {
   // font-family: "PragmataPro";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "liga" on; // turn off ligatures for Attribute Mono
+  font-feature-settings: "liga" off;
+  // font-feature-settings: "liga" on; // turn off ligatures for Attribute Mono
                                      // since they're not monospace-friendly
+  .cursor-line {
+    font-feature-settings: "liga" off;
+  }
 }
 
 // Customize tab colors for atom dark
@@ -84,6 +88,17 @@ atom-text-editor {
     // border-radius: 2px;
     // margin: 0 -2px;
     // padding: 0 2px;
+  }
+
+  // Always make block comments
+  // OPTIMIZE This may very well be bad with some themes
+  .syntax--comment .syntax--storage.syntax--type {
+    background: @syntax-gutter-text-color;
+    color: @syntax-background-color;
+    border-radius: 2px;
+    margin: 0 -2px;
+    padding: 0 2px;
+    font-style: normal;
   }
 
   .syntax--source.syntax--gfm,  .syntax--text.syntax--md {
@@ -428,6 +443,12 @@ atom-text-editor {
   }
 
   .theme-isohedron-syntax & {
+    .syntax--italic {
+      font-style: italic;
+      > .syntax--punctuation {
+        font-style: normal;
+      }
+    }
     .syntax--completed {
       // text-decoration: line-through;
       font-style: italic;
@@ -479,6 +500,130 @@ atom-text-editor {
       color: #e5e8ed;
     }
   }
+
+  // Prot16 Themes
+
+  .theme-cyprium-dark-syntax &,
+  .theme-cyprium-syntax & {
+    @red: #b86a5c; // Red
+    @ora: #b37521; // Orange
+    @yel: #a38e10; // Yellow
+    @gre: #669252; // Green
+    @cya: #4c9b94; // Cyan
+    @blu: #5c8c9e; // Blue
+    @vio: #8B85ac; // Violet
+    @mag: #bc7374; // Magenta
+
+    .syntax--symbol,
+    .syntax-symbol > .syntax--punctuation {
+      color: @vio;
+    }
+
+    .syntax--comment .syntax--storage.syntax--type {
+      &.syntax--bug,
+      &.syntax--hack
+        { background: @red; }
+      &.syntax--warning,
+      &.syntax--fixme
+        { background: @ora; }
+      &.syntax--review,
+      &.syntax--note
+        { background: @yel; }
+      &.syntax--combak,
+      &.syntax--todo
+        { background: @gre; }
+      &.syntax--optimize
+        { background: @cya; }
+      &.syntax--question,
+      &.syntax--debug
+        { background: @blu; }
+      &.syntax--idea
+        { background: @vio; }
+      &.syntax--changed
+        { background: @mag; }
+    }
+  }
+
+  .theme-fortuna-dark-syntax &,
+  .theme-fortuna-syntax & {
+    @red: #da5447; // red variant
+    @ora: #dc7926; // orange variant
+    @yel: #db9d0b; // yellow variant
+    @gre: #78ad28; // green variant
+    @cya: #16adac; // cyan variant
+    @blu: #3894cd; // blue variant
+    @vio: #aa8bee; // violet variant
+    @mag: #dc6788; // magenta variant
+
+    .syntax--symbol,
+    .syntax-symbol > .syntax--punctuation {
+      color: @vio;
+    }
+
+    .syntax--comment .syntax--storage.syntax--type {
+      &.syntax--bug,
+      &.syntax--hack
+        { background: @red; }
+      &.syntax--warning,
+      &.syntax--fixme
+        { background: @ora; }
+      &.syntax--review,
+      &.syntax--note
+        { background: @yel; }
+      &.syntax--combak,
+      &.syntax--todo
+        { background: @gre; }
+      &.syntax--optimize
+        { background: @cya; }
+      &.syntax--question,
+      &.syntax--debug
+        { background: @blu; }
+      &.syntax--idea
+        { background: @vio; }
+      &.syntax--changed
+        { background: @mag; }
+    }
+  }
+
+  .theme-ficus-syntax & {
+    @gre: #84a33c;
+    @ora: #bd7e20;
+    @red: #c84954;
+    @vio: #a46acd;
+    @yel: #a9a60a;
+    @blu: #6d75cd;
+    @mag: #cb5e9a;
+    @cya: #3caaa9;
+
+    .syntax--symbol,
+    .syntax-symbol > .syntax--punctuation {
+      color: @blu;
+    }
+
+    .syntax--comment .syntax--storage.syntax--type {
+      &.syntax--bug,
+      &.syntax--hack
+        { background: @red; }
+      &.syntax--warning,
+      &.syntax--fixme
+        { background: @ora; }
+      &.syntax--review,
+      &.syntax--note
+        { background: @yel; }
+      &.syntax--combak,
+      &.syntax--todo
+        { background: @gre; }
+      &.syntax--optimize
+        { background: @cya; }
+      &.syntax--question,
+      &.syntax--debug
+        { background: @blu; }
+      &.syntax--idea
+        { background: @vio; }
+      &.syntax--changed
+        { background: @mag; }
+    }
+  }
 }
 
 // XXX This still doesn't make it match, but it makes it closer
@@ -488,6 +633,11 @@ atom-text-editor {
   }
 }
 
+.theme-east-end-syntax {
+  .gutter {
+    background-color: @syntax-background-color;
+  }
+}
 .theme-far-side-of-the-moon-syntax {
   .gutter {
     background-color: @syntax-background-color;
@@ -520,8 +670,45 @@ atom-text-editor {
   }
 }
 
+.theme-pristine-ui {
+
+  // Tree view added
+  .list-group li:not(.list-nested-item).status-added,
+  .list-tree li:not(.list-nested-item).status-added,
+  .list-group li.list-nested-item.status-added > .list-item,
+  .list-tree li.list-nested-item.status-added > .list-item {
+    color: @syntax-color-added;
+  }
+
+  // Tree view modified
+  .list-group li:not(.list-nested-item).selected.status-modified,
+  .list-tree li:not(.list-nested-item).selected.status-modified,
+  .list-group li.list-nested-item.selected.status-modified > .list-item,
+  .list-tree li.list-nested-item.selected.status-modified > .list-item {
+    color: @syntax-color-modified;
+  }
+}
+
 // IDEA Add a panel to the bottom of the tree view showing git status
 // You could color the whole background based on status and show the branch and
 // change counts as text. It would line up with the editor status-bar and seems
 // like a more logical place than the bottom of the editor.
 // What do you do when the sidebar is collapsed?
+
+// Comment keywords I actually use
+// TODO FIXME HACK IDEA XXX NOTE QUESTION
+
+// All the comment keywords supported by the package
+// TODO FIXME CHANGED XXX IDEA HACK NOTE REVIEW NB BUG QUESTION
+// COMBAK TEMP DEBUG OPTIMIZE WARNING
+
+// A color-based arrangement
+// BUG HACK       red
+// WARNING FIXME  orange
+// NOTE REVIEW    yellow
+// TODO COMBAK    green
+// OPTIMIZE       cyan
+// QUESTION DEBUG blue
+// IDEA           violet
+// CHANGED        magenta
+// XXX TEMP NB    default
