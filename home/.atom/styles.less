@@ -501,6 +501,27 @@ atom-text-editor {
     }
   }
 
+  .theme-parchment-syntax & {
+    .syntax--constant.syntax--symbol {
+      color: #3b6481;
+      > .syntax--punctuation.syntax--definition {
+        color: #3b6481;
+      }
+    }
+    .syntax--variable.syntax--instance {
+      color: #61366f;
+      > .syntax--punctuation.syntax--definition {
+        color: #61366f;
+      }
+    }
+    // TODO Make these look OK
+    .syntax--comment .syntax--storage.syntax--type {
+      background: #c68e77;
+      // color: #863663;
+      color: lighten(#e0d3c2, 5%);
+    }
+  }
+
   // Prot16 Themes
 
   .theme-cyprium-dark-syntax &,
@@ -623,6 +644,17 @@ atom-text-editor {
       &.syntax--changed
         { background: @mag; }
     }
+  }
+}
+
+.theme-parchment-syntax {
+  // Color tab backgrounds, since syntax variables are a mess
+  .tab-bar .tab.active[data-type$="Editor"],
+  .tab-bar .tab.active[data-type$="AboutView"],
+  .tab-bar .tab.active[data-type$="TimecopView"],
+  .tab-bar .tab.active[data-type$="StyleguideView"],
+  .tab-bar .tab.active[data-type="MarkdownPreviewView"] {
+    background-color: #e0d3c2;
   }
 }
 
