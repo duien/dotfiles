@@ -11,12 +11,24 @@
 * http://www.lesscss.org
 */
 
-// @editor-font: 'Operator Mono SSm';
-// @editor-font: 'Consolamono';
-// @editor-font: 'Input';
-// @editor-font: 'Monoid';
-// @editor-font: 'Space Mono';
-// @editor-font: 'Fira Code';
+ // ---------------[     UTILITY FUNCTIONS          ]------------------ //
+
+// Always make block comments
+// OPTIMIZE This may very well be bad with some themes
+// FIXME This overwrites colors for themes that already have good rules
+.block-comments() {
+ .syntax--comment .syntax--storage.syntax--type {
+   background: @syntax-gutter-text-color;
+   color: @syntax-background-color;
+   border-radius: 2px;
+   margin: 0 -2px;
+   padding: 0 2px;
+   font-style: normal;
+ }
+}
+
+
+// SETTINGS
 
 @use-italic: italic;
 // @use-italic: normal;
@@ -26,12 +38,6 @@
 html, body, atom-workspace,
 .github-Panel,
 atom-text-editor {
-  // font-family: 'Operator Mono SSM', 'Source Code Pro';
-  // font-family: 'Courier Prime Code';
-  // font-family: 'Monoid'
-  // font-family: @editor-font;
-  // font-weight: 200;
-  // font-family: "PragmataPro";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "liga" off;
@@ -39,28 +45,6 @@ atom-text-editor {
                                      // since they're not monospace-friendly
   .cursor-line {
     font-feature-settings: "liga" off;
-  }
-}
-
-// Customize tab colors for atom dark
-.theme-atom-dark-ui .tab-bar {
-  padding-top: 5px;
-  height: auto;
-  &:after {
-    background: @syntax-background-color;
-    border: none;
-    // display: none;
-    height: 0 !important;
-  }
-  .tab { top: 0; }
-  .tab.active[data-type="TextEditor"] {
-    &,
-    &:after,
-    &:before {
-      background: @syntax-background-color;
-      color: @syntax-text-color;
-      box-shadow: none;
-    }
   }
 }
 
@@ -85,20 +69,26 @@ atom-text-editor {
     // TODO I really like having this additional styling most of the time, but
     // it messes up weirdly in less, when the color is a variable. The `@` gets
     // highlighted separately from the name and ends up looking weird.
-    // border-radius: 2px;
-    // margin: 0 -2px;
-    // padding: 0 2px;
-  }
-
-  // Always make block comments
-  // OPTIMIZE This may very well be bad with some themes
-  .syntax--comment .syntax--storage.syntax--type {
-    background: @syntax-gutter-text-color;
-    color: @syntax-background-color;
     border-radius: 2px;
     margin: 0 -2px;
     padding: 0 2px;
-    font-style: normal;
+  }
+
+  .syntax--variable > .pigments-native-background {
+    margin-left: 0;
+    padding-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .syntax--variable.syntax--punctuation.syntax--definition > .pigments-native-background {
+    margin-right: 0;
+    margin-left: -2px;
+    padding-right: 0;
+    padding-left: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 0;
   }
 
   .syntax--source.syntax--gfm,  .syntax--text.syntax--md {
@@ -202,11 +192,6 @@ atom-text-editor {
     }
   }
 
-  // Tweak pigments display
-  pigment-markers::shadow pigment-color-marker .region.background {
-    border-radius: 3px;
-  }
-
   // Try to make invisible characters generally less visually obtrusive
   // .invisible-character {
   //   color: mix(@syntax-text-color, @syntax-background-color, 7%);
@@ -248,7 +233,7 @@ atom-text-editor {
   }
 }
 
-// THEME-SPECIFIC SETTINGS
+// --------[          SYNTAX THEME HIGHLIGHTING TWEAKS        ]------------//
 
 atom-text-editor {
   .theme-atom-dark-fusion-syntax & {
@@ -442,6 +427,7 @@ atom-text-editor {
 
   }
 
+  // FIXME It's ridiculous to have overwrites for your own theme
   .theme-isohedron-syntax & {
     .syntax--italic {
       font-style: italic;
@@ -515,6 +501,7 @@ atom-text-editor {
       }
     }
     // TODO Make these look OK
+    .block-comments();
     .syntax--comment .syntax--storage.syntax--type {
       background: #c68e77;
       // color: #863663;
@@ -540,6 +527,7 @@ atom-text-editor {
       color: @vio;
     }
 
+    .block-comments();
     .syntax--comment .syntax--storage.syntax--type {
       &.syntax--bug,
       &.syntax--hack
@@ -581,6 +569,7 @@ atom-text-editor {
       color: @vio;
     }
 
+    .block-comments();
     .syntax--comment .syntax--storage.syntax--type {
       &.syntax--bug,
       &.syntax--hack
@@ -607,6 +596,7 @@ atom-text-editor {
   }
 
   .theme-ficus-syntax & {
+
     @gre: #84a33c;
     @ora: #bd7e20;
     @red: #c84954;
@@ -621,6 +611,7 @@ atom-text-editor {
       color: @blu;
     }
 
+    .block-comments();
     .syntax--comment .syntax--storage.syntax--type {
       &.syntax--bug,
       &.syntax--hack
@@ -646,6 +637,8 @@ atom-text-editor {
     }
   }
 }
+
+//-----------[          SYNTAX THEME INTERFACE TWEAKS          ]-------------//
 
 .theme-parchment-syntax {
   // Color tab backgrounds, since syntax variables are a mess
@@ -684,6 +677,30 @@ atom-text-editor {
 
   .scroll-view {
     padding-left: 0;
+  }
+}
+
+//---------[        UI THEME TWEAKS        ]------------//
+
+// Customize tab colors for atom dark
+.theme-atom-dark-ui .tab-bar {
+  padding-top: 5px;
+  height: auto;
+  &:after {
+    background: @syntax-background-color;
+    border: none;
+    // display: none;
+    height: 0 !important;
+  }
+  .tab { top: 0; }
+  .tab.active[data-type="TextEditor"] {
+    &,
+    &:after,
+    &:before {
+      background: @syntax-background-color;
+      color: @syntax-text-color;
+      box-shadow: none;
+    }
   }
 }
 
