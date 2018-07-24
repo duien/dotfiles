@@ -8,6 +8,7 @@ export ZSH="/Users/duien/.oh-my-zsh"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="refined"
+# Keep theme blank to use pure, which is set up later
 ZSH_THEME=""
 
 # Set list of themes to load
@@ -75,6 +76,9 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# Install pure theme with
+#   > npm install --global pure-prompt
+# and then by happy
 autoload -U promptinit; promptinit
 PURE_GIT_DOWN_ARROW='↓'
 PURE_GIT_UP_ARROW='↑'
