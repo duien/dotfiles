@@ -69,27 +69,30 @@ atom-text-editor {
     // TODO I really like having this additional styling most of the time, but
     // it messes up weirdly in less, when the color is a variable. The `@` gets
     // highlighted separately from the name and ends up looking weird.
-    border-radius: 2px;
-    margin: 0 -2px;
-    padding: 0 2px;
+    // border-radius: 2px;
+    // margin: 0 -2px;
+    // padding: 0 2px;
   }
 
-  .syntax--variable > .pigments-native-background {
-    margin-left: 0;
-    padding-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  .syntax--variable.syntax--punctuation.syntax--definition > .pigments-native-background {
-    margin-right: 0;
-    margin-left: -2px;
-    padding-right: 0;
-    padding-left: 2px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 0;
-  }
+  // This stuff below is sufficient to fix variables such as "@red" but not to fix
+  // more complex expressions like "lighten(#e0d3c2, 5%)" which gets broken into many
+  // tokens, at least in regular use
+  // .syntax--variable > .pigments-native-background {
+  //   margin-left: 0;
+  //   padding-left: 0;
+  //   border-top-left-radius: 0;
+  //   border-bottom-left-radius: 0;
+  // }
+  // .syntax--variable.syntax--punctuation.syntax--definition > .pigments-native-background {
+  //   margin-right: 0;
+  //   margin-left: -2px;
+  //   padding-right: 0;
+  //   padding-left: 2px;
+  //   border-top-left-radius: 2px;
+  //   border-top-right-radius: 0;
+  //   border-bottom-left-radius: 2px;
+  //   border-bottom-right-radius: 0;
+  // }
 
   .syntax--source.syntax--gfm,  .syntax--text.syntax--md {
     .syntax--markup {
