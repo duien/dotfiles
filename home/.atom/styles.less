@@ -514,20 +514,11 @@ atom-text-editor {
 
   // Prot16 Themes
 
-  .theme-cyprium-dark-syntax &,
-  .theme-cyprium-syntax & {
-    @red: #b86a5c; // Red
-    @ora: #b37521; // Orange
-    @yel: #a38e10; // Yellow
-    @gre: #669252; // Green
-    @cya: #4c9b94; // Cyan
-    @blu: #5c8c9e; // Blue
-    @vio: #8B85ac; // Violet
-    @mag: #bc7374; // Magenta
-
+  .prot-16(@symbol-color) {
+    // Assumes it's being included in a context that has the 8 colors defined
     .syntax--symbol,
     .syntax-symbol > .syntax--punctuation {
-      color: @vio;
+      color: @symbol-color;
     }
 
     .block-comments();
@@ -554,52 +545,38 @@ atom-text-editor {
       &.syntax--changed
         { background: @mag; }
     }
+  }
+
+  .theme-cyprium-dark-syntax &,
+  .theme-cyprium-syntax & {
+    @red: #b86a5c;
+    @ora: #b37521;
+    @yel: #a38e10;
+    @gre: #669252;
+    @cya: #4c9b94;
+    @blu: #5c8c9e;
+    @vio: #8B85ac;
+    @mag: #bc7374;
+
+    .prot-16(@vio);
   }
 
   .theme-fortuna-dark-syntax &,
   .theme-fortuna-syntax & {
-    @red: #da5447; // red variant
-    @ora: #dc7926; // orange variant
-    @yel: #db9d0b; // yellow variant
-    @gre: #78ad28; // green variant
-    @cya: #16adac; // cyan variant
-    @blu: #3894cd; // blue variant
-    @vio: #aa8bee; // violet variant
-    @mag: #dc6788; // magenta variant
+    @red: #da5447;
+    @ora: #dc7926;
+    @yel: #db9d0b;
+    @gre: #78ad28;
+    @cya: #16adac;
+    @blu: #3894cd;
+    @vio: #aa8bee;
+    @mag: #dc6788;
 
-    .syntax--symbol,
-    .syntax-symbol > .syntax--punctuation {
-      color: @vio;
-    }
-
-    .block-comments();
-    .syntax--comment .syntax--storage.syntax--type {
-      &.syntax--bug,
-      &.syntax--hack
-        { background: @red; }
-      &.syntax--warning,
-      &.syntax--fixme
-        { background: @ora; }
-      &.syntax--review,
-      &.syntax--note
-        { background: @yel; }
-      &.syntax--combak,
-      &.syntax--todo
-        { background: @gre; }
-      &.syntax--optimize
-        { background: @cya; }
-      &.syntax--question,
-      &.syntax--debug
-        { background: @blu; }
-      &.syntax--idea
-        { background: @vio; }
-      &.syntax--changed
-        { background: @mag; }
-    }
+    .prot-16(@vio);
   }
 
+  .theme-ficus-dark-syntax &,
   .theme-ficus-syntax & {
-
     @gre: #84a33c;
     @ora: #bd7e20;
     @red: #c84954;
@@ -609,34 +586,25 @@ atom-text-editor {
     @mag: #cb5e9a;
     @cya: #3caaa9;
 
-    .syntax--symbol,
-    .syntax-symbol > .syntax--punctuation {
-      color: @blu;
+    .prot-16(@blu);
+
+    .syntax--md.syntax--heading {
+      color: @gre;
+      .syntax--punctuation {
+        font-weight: normal;
+        // font-style: normal;
+      }
     }
 
-    .block-comments();
-    .syntax--comment .syntax--storage.syntax--type {
-      &.syntax--bug,
-      &.syntax--hack
-        { background: @red; }
-      &.syntax--warning,
-      &.syntax--fixme
-        { background: @ora; }
-      &.syntax--review,
-      &.syntax--note
-        { background: @yel; }
-      &.syntax--combak,
-      &.syntax--todo
-        { background: @gre; }
-      &.syntax--optimize
-        { background: @cya; }
-      &.syntax--question,
-      &.syntax--debug
-        { background: @blu; }
-      &.syntax--idea
-        { background: @vio; }
-      &.syntax--changed
-        { background: @mag; }
+    .syntax--md.syntax--code {
+      color: @vio;
+    }
+    .syntax--md.syntax--strike {
+      color: #778ca7;
+      font-style: italic;
+      & > .syntax--punctuation {
+        font-style: normal;
+      }
     }
   }
 }
