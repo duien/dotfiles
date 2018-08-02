@@ -24,6 +24,7 @@
    margin: 0 -2px;
    padding: 0 2px;
    font-style: normal;
+   font-weight: bold;
  }
 }
 
@@ -40,11 +41,46 @@ html, body, atom-workspace,
 atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "liga" off;
-  // font-feature-settings: "liga" on; // turn off ligatures for Attribute Mono
-                                     // since they're not monospace-friendly
+  // Trying to set up font features for Iosevka
+  font-feature-settings:
+    "liga" on, // ligatures
+    "calt" on, // contextual alternates
+    "cv02" on, // single-storey "a"
+    "cv04" on, // curved "i"
+    "cv08" on, // curved "l"
+    "cv12" on, // single-storey "g"
+    "cv14" on, // dotted 0
+    "cv17" on, // move ~ to middle of line
+    "cv19" on, // move * to middle of line
+    "cv21" on, // move _ below line
+    "cv26" on, // shorter middle on the m
+    "cv30" on, // move the ^ to middle of line
+    "cv38" on, // simplified $
+    "cv44" on, // upright # in non-italic
+    ;
   .cursor-line {
-    font-feature-settings: "liga" off;
+    font-feature-settings:
+      "liga" on, // ligatures
+      "calt" off, // contextual alternates off on current line
+      "cv02" on, // single-storey "a"
+      "cv04" on, // curved "i"
+      "cv08" on, // curved "l"
+      "cv12" on, // single-storey "g"
+      "cv14" on, // dotted 0
+      "cv17" on, // move ~ to middle of line
+      "cv19" on, // move * to middle of line
+      "cv21" on, // move _ below line
+      "cv26" on, // shorter middle on the m
+      "cv30" on, // move the ^ to middle of line
+      "cv38" on, // simplified $
+      "cv44" on, // upright # in non-italic
+      ;
+  }
+}
+
+atom-text-editor {
+  .syntax--md .syntax--bold > .syntax--punctuation {
+    font-feature-settings: "cv19" off; // use superscript * for markdown bold
   }
 }
 
