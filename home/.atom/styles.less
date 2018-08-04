@@ -215,8 +215,10 @@ atom-text-editor {
   // Tweaks to line numbers in the gutter
   .gutter .line-number {
     opacity: 1;
+    font-weight: 300;
     &.cursor-line {
-      font-weight: bold;
+      // font-weight: bold;
+      font-weight: 400;
     }
     &.git-line-added::after {
       // color: mix(@syntax-color-added, @syntax-gutter-text-color); }
@@ -601,9 +603,11 @@ atom-text-editor {
       }
     }
 
-    .syntax--md.syntax--code {
+    .syntax--md.syntax--code.syntax--raw {
       color: @vio;
+      // color: @blu;
     }
+
     .syntax--md.syntax--strike {
       color: #778ca7;
       font-style: italic;
@@ -611,6 +615,21 @@ atom-text-editor {
         font-style: normal;
       }
     }
+
+    // tweak colors for links and tables because I'm picky
+    .syntax--md.syntax--link {
+      > .syntax--string {
+        color: @cya;
+      }
+      > .syntax--destination {
+        color: @blu;
+      }
+    }
+
+    .syntax--md.syntax--table {
+      color: @syntax-text-color;
+    }
+
   }
 }
 
@@ -737,3 +756,22 @@ atom-text-editor {
 // IDEA           violet
 // CHANGED        magenta
 // XXX TEMP NB    default
+
+
+////////// WORK IN PROGRESS ///////////
+
+
+.preview-pane .results-view {
+  // setting the font size doesn't work because tree-view line heights are
+  // set directly on their elements
+  //
+  // font-size: var(--editor-font-size);
+  // line-height: var(--editor-line-height);
+  .preview, .line-number {
+    // is not getting editor font properly
+    // font-family: "Iosevka Custom";
+    font-family: var(--editor-font-family);
+    // font-size: var(--editor-font-size);
+    // line-height: var(--editor-line-height);
+  }
+}
