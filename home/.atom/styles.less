@@ -27,6 +27,17 @@
    font-weight: bold;
  }
 }
+.matchingBackground() {
+  &:after {
+    background: currentColor;
+    opacity: 0.1;
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: calc(~"var(--editor-font-size) * var(--editor-line-height)");
+  }
+}
 
 
 // SETTINGS
@@ -42,14 +53,14 @@ atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   .cursor-line {
-    font-feature-settings: "calt" off;
+    // font-feature-settings: "calt" off;
   }
 }
 
 atom-text-editor {
   .syntax--md .syntax--bold > .syntax--punctuation,
   .syntax--md .syntax--italic > .syntax--punctuation {
-    font-feature-settings: "cv18" on; // use superscript * for markdown bold
+    font-feature-settings: "cv18" on; // use superscript * for markdown bold/italic
   }
 }
 
@@ -241,6 +252,33 @@ atom-text-editor {
       bottom: 0;
     }
   }
+
+  &.editor { // necessary to get sufficient selector specificity to not need !important
+    // Tweaking tasks theming
+    .syntax--tasks {
+      .syntax--marker {
+        color: @syntax-text-color;
+      }
+
+      &.syntax--header {
+        font-weight: bold;
+        color: #a46acd;
+        .matchingBackground()
+      }
+      &.syntax--done .syntax--marker {
+        color: @syntax-color-added;
+      }
+      &.syntax--cancelled .syntax--marker {
+        color: @syntax-color-removed;
+      }
+      &.syntax--text.syntax--done,
+      &.syntax--text.syntax--cancelled {
+        color: fade(#778ca7, 50%);
+        font-style: italic;
+      }
+    }
+  }
+
 }
 
 // --------[          SYNTAX THEME HIGHLIGHTING TWEAKS        ]------------//
@@ -596,11 +634,20 @@ atom-text-editor {
     .prot-16(@blu);
 
     .syntax--md.syntax--heading {
-      color: @gre;
       .syntax--punctuation {
         font-weight: normal;
-        // font-style: normal;
       }
+      > .syntax--md {
+        .matchingBackground();
+        .syntax--punctuation {
+          color: currentColor;
+          opacity: 0.5;
+        }
+      }
+      .syntax--heading-1 { color: @mag; }
+      .syntax--heading-2 { color: @vio; }
+      .syntax--heading-3 { color: @blu; }
+      .syntax--heading-4 { color: @cya; }
     }
 
     .syntax--md.syntax--code.syntax--raw {
