@@ -1,1 +1,1 @@
-fish_prompt-shish.fish
+fish_prompt-pure.fish
