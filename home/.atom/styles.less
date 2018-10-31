@@ -17,14 +17,16 @@
 // OPTIMIZE This may very well be bad with some themes
 // FIXME This overwrites colors for themes that already have good rules
 .block-comments() {
- .syntax--comment .syntax--storage.syntax--type {
-   background: @syntax-gutter-text-color;
-   color: @syntax-background-color;
-   border-radius: 2px;
-   margin: 0 -2px;
-   padding: 0 2px;
-   font-style: normal;
-   font-weight: bold;
+ .syntax--comment, .syntax--md {
+   .syntax--storage.syntax--type {
+     background: @syntax-gutter-text-color;
+     color: @syntax-background-color;
+     border-radius: 2px;
+     margin: 0 -2px;
+     padding: 0 2px;
+     font-style: normal;
+     font-weight: bold;
+   }
  }
 }
 .matchingBackground() {
@@ -42,8 +44,8 @@
 
 // SETTINGS
 
-@use-italic: italic;
-// @use-italic: normal;
+// @use-italic: italic;
+@use-italic: normal;
 
 
 /* Font settings - Editor and UI */
@@ -52,15 +54,20 @@ html, body, atom-workspace,
 atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  // font-weight: 400;
+  // font-feature-settings: "liga" on, "calt" on, "ss03" on, "ss13" on; // monoid
+
+  // some things
+  // asterisk * 1 4 6 9 mm 0
   .cursor-line {
-    // font-feature-settings: "calt" off;
+    // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
   }
 }
 
 atom-text-editor {
   .syntax--md .syntax--bold > .syntax--punctuation,
   .syntax--md .syntax--italic > .syntax--punctuation {
-    font-feature-settings: "cv18" on; // use superscript * for markdown bold/italic
+    // font-feature-settings: "cv18" on; // use superscript * for markdown bold/italic with iosevka
   }
 }
 
@@ -567,7 +574,8 @@ atom-text-editor {
     }
 
     .block-comments();
-    .syntax--comment .syntax--storage.syntax--type {
+    .syntax--comment, .syntax--md {
+      .syntax--storage.syntax--type {
       &.syntax--bug,
       &.syntax--hack
         { background: @red; }
@@ -589,6 +597,7 @@ atom-text-editor {
         { background: @vio; }
       &.syntax--changed
         { background: @mag; }
+      }
     }
   }
 
@@ -633,6 +642,11 @@ atom-text-editor {
 
     .prot-16(@blu);
 
+    .syntax--link.syntax--underline {
+      text-decoration: underline;
+      color: @blu;
+    }
+
     .syntax--md.syntax--heading {
       .syntax--punctuation {
         font-weight: normal;
@@ -662,6 +676,23 @@ atom-text-editor {
         font-style: normal;
       }
     }
+
+    .syntax--md.syntax--reference {
+      color: @blu;
+      text-decoration: underline;
+
+      > .syntax--punctuation {
+        color: fade(@blu, 50%);
+      }
+      .syntax--user, .syntax--repository, .syntax--issue {
+        color: @blu;
+      }
+    }
+
+    // .syntax--md .syntax--markup.syntax--link {
+    //   color: @cya;
+    //   text-decoration: underline;
+    // }
 
     // tweak colors for links and tables because I'm picky
     .syntax--md.syntax--link {
