@@ -10,7 +10,7 @@ alias more-fish "source ~/.config/fish/more.fish"
 
 # Basic environment
 set CDPATH . $HOME $HOME/Code $CDPATH
-set PATH /usr/local/bin $PATH
+set PATH /usr/local/bin /usr/local/sbin $PATH
 if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
 end
