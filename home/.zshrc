@@ -1,15 +1,26 @@
+
+fpath=( "$HOME/.zfunctions" $fpath )
+
+echo $fpath
+echo 'UGH'
+
+autoload -U promptinit; promptinit
+prompt spaceship
+
+
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/duien/.oh-my-zsh"
+# export ZSH="/Users/duien/.oh-my-zsh"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 # ZSH_THEME="refined"
 # Keep theme blank to use pure, which is set up later
-ZSH_THEME=""
+# ZSH_THEME=""
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -63,26 +74,26 @@ ZSH_THEME=""
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  bundler
-  osx
-  rake
-  rbenv
-  ruby
-)
+# plugins=(
+#   git
+#   bundler
+#   osx
+#   rake
+#   rbenv
+#   ruby
+# )
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 # Install pure theme with
 #   > npm install --global pure-prompt
-# and then by happy
-autoload -U promptinit; promptinit
-PURE_GIT_DOWN_ARROW='↓'
-PURE_GIT_UP_ARROW='↑'
-prompt pure
+# and then be happy
+# autoload -U promptinit; promptinit
+# PURE_GIT_DOWN_ARROW='↓'
+# PURE_GIT_UP_ARROW='↑'
+# prompt pure
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
