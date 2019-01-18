@@ -44,8 +44,8 @@
 
 // SETTINGS
 
-// @use-italic: italic;
-@use-italic: normal;
+@use-italic: italic;
+// @use-italic: normal;
 
 
 /* Font settings - Editor and UI */
@@ -54,14 +54,15 @@ html, body, atom-workspace,
 atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  // font-weight: 400;
-  // font-feature-settings: "liga" on, "calt" on, "ss03" on, "ss13" on; // monoid
-
-  // some things
-  // asterisk * 1 4 6 9 mm 0
+  font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
   .cursor-line {
     // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
   }
+}
+
+atom-text-editor {
+  // For Eureka, the too-wide font
+  // letter-spacing: calc(~"var(--editor-font-size) * -0.1");
 }
 
 atom-text-editor {
