@@ -1,12 +1,16 @@
 
-fpath=( "$HOME/.zfunctions" $fpath )
+# fpath=( "$HOME/.zfunctions" $fpath )
+#
+# echo $fpath
+# echo 'UGH'
+#
+# autoload -U promptinit; promptinit
+# prompt spaceship
+setopt PROMPT_SUBST
 
-echo $fpath
-echo 'UGH'
+WHATEVER="bar"
 
-autoload -U promptinit; promptinit
-prompt spaceship
-
+PROMPT='foo [${WHATEVER}] [$(pwd)]'
 
 
 # If you come from bash you might have to change your $PATH.

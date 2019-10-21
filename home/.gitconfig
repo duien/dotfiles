@@ -29,7 +29,6 @@
 [difftool]
 	prompt = false
 [diff]
-	tool = Kaleidoscope
   algorithm = patience
 	compactionHeuristic = true
 [github]

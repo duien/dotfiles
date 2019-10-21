@@ -9,7 +9,7 @@ alias la     "ls -A"
 alias more-fish "source ~/.config/fish/more.fish"
 
 # Basic environment
-set CDPATH . $HOME $HOME/Code $CDPATH
+set CDPATH . $HOME $HOME/Code $HOME/.homesick/repos $CDPATH
 set PATH /usr/local/bin /usr/local/sbin $PATH
 if test -d "$HOME/bin"
   set PATH $HOME/bin $PATH
@@ -29,7 +29,7 @@ source ~/.config/fish/color-theme.fish
 # Setting up other random crap
 
 # Set up ruby gems to use Homebrew's readline
-set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline)
+set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) -W0
 
 # If `.private.sh` exsits, load it
 # This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
@@ -49,3 +49,4 @@ if test -x "(which nvm)"
   export NVM_DIR="$HOME/.nvm"
   bass source /usr/local/opt/nvm/nvm.sh --no-use ';' nvm use > /dev/null
 end
+set -g fish_user_paths "/usr/local/opt/openssl/bin" $fish_user_paths

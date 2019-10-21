@@ -54,7 +54,7 @@ html, body, atom-workspace,
 atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
+  // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
   .cursor-line {
     // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
   }
@@ -259,6 +259,8 @@ atom-text-editor {
       top: 0;
       bottom: 0;
     }
+
+    // .gutter .decoration.github-editorCommentGutterIcon {}
   }
 
   &.editor { // necessary to get sufficient selector specificity to not need !important
@@ -284,6 +286,11 @@ atom-text-editor {
         color: fade(#778ca7, 50%);
         font-style: italic;
       }
+    }
+
+    .line.github-editorCommentHighlight {
+      background: none;
+      // background: @syntax-selection-gutter;
     }
   }
 
@@ -568,9 +575,12 @@ atom-text-editor {
   // Prot16 Themes
 
   .prot-16(@symbol-color) {
+    // @symbol-color: @tertiary1;
+    // passing all the colors in visual order would be handy for some things
+
     // Assumes it's being included in a context that has the 8 colors defined
     .syntax--symbol,
-    .syntax-symbol > .syntax--punctuation {
+    .syntax--symbol > .syntax--punctuation {
       color: @symbol-color;
     }
 
@@ -600,6 +610,85 @@ atom-text-editor {
         { background: @mag; }
       }
     }
+
+    // Syntax tweaks
+    .syntax--source.syntax--ruby .syntax--meta {
+      &.syntax--brace {
+        // color: @syntax-comment-color;
+        // this should be comment color but prot16 themes
+        // apparently don't define that variable?
+        color: @syntax-gutter-text-color;
+      }
+    }
+
+    // Markdown tweaks
+
+    .syntax--md.syntax--heading {
+       // Full-color headings
+      .syntax--punctuation {
+        font-weight: normal;
+      }
+      > .syntax--md {
+        .matchingBackground();
+        .syntax--punctuation {
+          color: currentColor;
+          opacity: 0.5;
+        }
+      }
+      .syntax--heading-1 { color: @mag; }
+      .syntax--heading-2 { color: @vio; }
+      .syntax--heading-3 { color: @blu; }
+      .syntax--heading-4 { color: @cya; }
+    }
+
+    .syntax--md.syntax--code.syntax--raw {
+      color: @vio;
+      // color: @blu;
+    }
+
+    .syntax--md.syntax--strike {
+      color: @syntax-gutter-text-color;
+      font-style: italic;
+      & > .syntax--punctuation {
+        font-style: normal;
+      }
+    }
+
+    .syntax--text {
+      .syntax--link.syntax--underline {
+        // URLs and links
+        text-decoration: underline;
+        color: @blu;
+      }
+    }
+
+    // references such as `github/github#1 ` in markdown
+    .syntax--md.syntax--reference {
+      color: @blu;
+      text-decoration: underline;
+
+      > .syntax--punctuation {
+        // color: fade(@blu, 50%);
+        color: @blu;
+      }
+      .syntax--user, .syntax--repository, .syntax--issue {
+        color: @blu;
+      }
+    }
+
+    .syntax--md.syntax--link {
+      > .syntax--string {
+        // color: @cya;
+      }
+      // > .syntax--destination {
+      //   color: @blu;
+      // }
+    }
+
+    .syntax--md.syntax--table {
+      color: @syntax-text-color;
+    }
+
   }
 
   .theme-cyprium-dark-syntax &,
@@ -630,85 +719,106 @@ atom-text-editor {
     .prot-16(@vio);
   }
 
+  .theme-bionis-dark-syntax &,
+  .theme-bionis-syntax & {
+    @red: #C25A5B;
+    @ora: #CB6832;
+    @yel: #BA8A00;
+    @gre: #4DA35C;
+    @cya: #439B9B;
+    @blu: #5A7ACD;
+    @vio: #AA6BC5;
+    @mag: #C25783;
+
+    .prot-16(@ora);
+  }
+
+  .theme-playa-dark-syntax &,
+  .theme-playa-syntax & {
+    @red: #ca6e6a;
+    @ora: #cb8d6a;
+    @yel: #ccb45d;
+    @gre: #7db97a;
+    @cya: #4dc4b7;
+    @blu: #65afcd;
+    @vio: #aa85cb;
+    @mag: #cb7e9a;
+
+    .prot-16(@red); // tertiary1
+
+    // headings in visual order?
+    .syntax--md.syntax--heading {
+      .syntax--heading-1 { color: @blu; }
+      .syntax--heading-2 { color: @gre; }
+      .syntax--heading-3 { color: @cya; }
+      .syntax--heading-4 { color: @ora; }
+    }
+
+  }
+
+  .theme-flowerbed-syntax & {
+    @red: #d86a87;
+    @ora: #d89a47;
+    @yel: #cd9a8a;
+    @gre: #5cbc7d;
+    @cya: #1caba1;
+    @blu: #4aa7d2;
+    @vio: #7988ca;
+    @mag: #bc74af;
+    .prot-16(@blu)
+  }
+  // orionis seabed termina
+
+  .theme-sonho-syntax & {
+    @red: #cd4679;
+    @ora: #d9766d;
+    @yel: #d9a652;
+    @gre: #11bf8c;
+    @cya: #38A8b9;
+    @blu: #479cb5;
+    @vio: #a77ccf;
+    @mag: #dd619f;
+    .prot-16(@blu);
+  }
+
+  .theme-magus-syntax & {
+    @red: #bd5956;
+    @ora: #bb7321;
+    @yel: #c1a222;
+    @gre: #8b972a;
+    @cya: #65ab85;
+    @blu: #5c8caa;
+    @vio: #7a7da7;
+    @mag: #b881a8;
+    .prot-16(@vio);
+  }
+
   .theme-ficus-dark-syntax &,
   .theme-ficus-syntax & {
-    @gre: #84a33c;
-    @ora: #bd7e20;
-    @red: #c84954;
-    @vio: #a46acd;
-    @yel: #a9a60a;
-    @blu: #6d75cd;
-    @mag: #cb5e9a;
-    @cya: #3caaa9;
+    @gre: #84a33c; // primary 3
+    @ora: #bd7e20; // tertiary 3
+    @red: #c84954; // tertiary 2
+    @vio: #a46acd; // primary 2
+    @yel: #a9a60a; // secondary 1
+    @blu: #6d75cd; // tertiary 1 ---
+    @mag: #cb5e9a; // primary 1
+    @cya: #3caaa9; // secondary 2
 
     .prot-16(@blu);
+  }
 
-    .syntax--link.syntax--underline {
-      text-decoration: underline;
-      color: @blu;
-    }
+  .theme-archaic-syntax &,
+  .theme-archaic-dark-syntax & {
+    @red: #ab5637;
+    @ora: #c76d26;
+    @yel: #a97906;
+    @gre: #688a38;
+    @cya: #368876;
+    @blu: #4884ad;
+    @vio: #8a6bb5;
+    @mag: #a25763;
 
-    .syntax--md.syntax--heading {
-      .syntax--punctuation {
-        font-weight: normal;
-      }
-      > .syntax--md {
-        .matchingBackground();
-        .syntax--punctuation {
-          color: currentColor;
-          opacity: 0.5;
-        }
-      }
-      .syntax--heading-1 { color: @mag; }
-      .syntax--heading-2 { color: @vio; }
-      .syntax--heading-3 { color: @blu; }
-      .syntax--heading-4 { color: @cya; }
-    }
-
-    .syntax--md.syntax--code.syntax--raw {
-      color: @vio;
-      // color: @blu;
-    }
-
-    .syntax--md.syntax--strike {
-      color: #778ca7;
-      font-style: italic;
-      & > .syntax--punctuation {
-        font-style: normal;
-      }
-    }
-
-    .syntax--md.syntax--reference {
-      color: @blu;
-      text-decoration: underline;
-
-      > .syntax--punctuation {
-        color: fade(@blu, 50%);
-      }
-      .syntax--user, .syntax--repository, .syntax--issue {
-        color: @blu;
-      }
-    }
-
-    // .syntax--md .syntax--markup.syntax--link {
-    //   color: @cya;
-    //   text-decoration: underline;
-    // }
-
-    // tweak colors for links and tables because I'm picky
-    .syntax--md.syntax--link {
-      > .syntax--string {
-        color: @cya;
-      }
-      > .syntax--destination {
-        color: @blu;
-      }
-    }
-
-    .syntax--md.syntax--table {
-      color: @syntax-text-color;
-    }
-
+    .prot-16(@blu);
   }
 }
 
