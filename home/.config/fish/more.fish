@@ -44,9 +44,12 @@ if test -d "/usr/local/opt/postgresql@9.6/bin"
   set -g fish_user_paths "/usr/local/opt/postgresql@9.6/bin" $fish_user_paths
 end
 
+if test -d "/usr/local/opt/openssl@1.1/bin"
+  set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
+end
+
 # Enable nvm
 if test -x "(which nvm)"
   export NVM_DIR="$HOME/.nvm"
   bass source /usr/local/opt/nvm/nvm.sh --no-use ';' nvm use > /dev/null
 end
-set -g fish_user_paths "/usr/local/opt/openssl/bin" $fish_user_paths
