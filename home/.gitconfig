@@ -23,7 +23,7 @@
 	patch = add --patch
 	cm = commit -m
 [format]
-  pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ar)
+  pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
 [difftool "Kaleidoscope"]
 	cmd = "ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\""
 [difftool]
