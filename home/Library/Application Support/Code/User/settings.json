@@ -1,0 +1,139 @@
+{
+    // "editor.fontFamily": "Sudo",
+    "editor.fontFamily": "Victor Mono",
+    // "editor.fontFamily": "Operator Mono SSm",
+    // "editor.fontFamily": "IBM Plex Mono",
+    // "editor.fontFamily": "Iosevka",
+    // "editor.fontFamily": "PragmataPro Mono Liga",
+    "editor.fontSize": 14,
+    "editor.fontWeight": "300",
+    "editor.fontLigatures": true,
+    "editor.minimap.enabled": false,
+    // "editor.lineHeight": 18,
+    "workbench.editor.highlightModifiedTabs": false,
+    "editor.colorDecorators": false,
+    "workbench.colorCustomizations": {
+        "[Pop N' Lock Theme by Luxcium ✨]": {
+            "terminal.background": "#1D1028",
+            "terminal.foreground": "#B1A68F",
+
+            "terminal.ansiBlack": "#2C203C",
+            "terminal.ansiBlue": "#528FC6",
+            "terminal.ansiCyan": "#3C9C85",
+            "terminal.ansiGreen": "#65A926",
+            "terminal.ansiMagenta": "#B056AD",
+            "terminal.ansiRed": "#C42251",
+            "terminal.ansiWhite": "#C4BDB5",
+            "terminal.ansiYellow": "#E2B651",
+
+            "terminal.ansiBrightBlack": "#5D5D6F",
+            "terminal.ansiBrightBlue": "#87CEFA",
+            "terminal.ansiBrightCyan": "#8EB7AE",
+            "terminal.ansiBrightGreen": "#A2BC4D",
+            "terminal.ansiBrightMagenta": "#DA70D6",
+            "terminal.ansiBrightRed": "#C4586A",
+            "terminal.ansiBrightWhite": "#EAE7E4",
+            "terminal.ansiBrightYellow": "#F3CD03"
+        }
+    },
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "comment, comment.line.double-slash",
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            },
+        ],
+        "[Spacemacs - light]": {
+            "comments": "#969896"
+            // "comments": "#c5c8c6"
+        },
+
+        "[Pop N' Lock Theme by Luxcium ✨]": {
+            "textMateRules": [
+                // Make JS comments look like others
+                {
+                    "scope": "comment.line.double-slash, source.css comment.block",
+                    "settings": {
+                        "foreground": "#666677"
+                    }
+                },
+                {
+                    "scope": "comment.line.double-slash punctuation.definition.comment, comment.block punctuation.definition.comment.begin, comment.block punctuation.definition.comment.end",
+                    "settings": {
+                        "fontStyle": "italic",
+                        "foreground": "#506899"
+                    }
+                },
+
+                // Style symbols
+                {
+                    "scope": "constant.language.symbol",
+                    "settings": {
+                        "foreground": "#55BBEE"
+                    }
+                },
+                {
+                    "scope": "constant.language.symbol punctuation.definition.constant",
+                    "settings": {
+                        "foreground": "#55BBEE88",
+                        "fontStyle": "bold"
+                    }
+                },
+
+                // stabby lambda -- the only selector option also gets `puts` and others :(
+                // {
+                //     "scope": "support.function.kernel",
+                //     "settings": {
+                //         "foreground": "#FFCC55CC",
+                //         "fontStyle": "bold"
+                //     }
+                // }
+
+                // Style true/false/nil
+                {
+                    "scope": "constant.language.boolean",
+                    "settings": {
+                        "fontStyle": "bold italic"
+                    }
+                },
+                {
+                    "scope": "constant.language.nil",
+                    "settings": {
+                        "foreground": "#EE6677CC",
+                        "fontStyle": "bold italic"
+                    }
+                }
+            ]
+        }
+    },
+    "atomKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.formatOnPaste": true,
+    "window.zoomLevel": 0,
+    "editor.rulers": [
+
+        {
+            "column": 80,
+            "color": "#4AE3"
+        },
+        {
+            "column": 120,
+            "color": "#FA04"
+        },
+        {
+            "column": 121,
+            "color": "#FA08"
+        },
+    ],
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontWeight": "300",
+    "workbench.colorTheme": "Pop N' Lock Theme by Luxcium ✨",
+    // "better-comments.multilineComments": true,
+    // "gitlens.codeLens.enabled": false,
+    // "gitlens.currentLine.enabled": false
+    "ruby.useBundler": true, //run non-lint commands with bundle exec
+    "ruby.useLanguageServer": true, // use the internal language server (see below)
+    "editor.acceptSuggestionOnEnter": "off"
+}
