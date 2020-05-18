@@ -55,9 +55,10 @@ atom-text-editor {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
+  // font-feature-settings: "ss09" on;
   .cursor-line {
     // font-feature-settings: "liga" off, "calt" off, "ss03" on, "ss13" on; // monoid
-    // font-feature-settings: "liga" off, "calt" off; // jetbrains 
+    // font-feature-settings: "liga" off, "calt" off; // jetbrains
   }
 }
 
@@ -163,7 +164,7 @@ atom-text-editor {
   }
 
   // Tweak indent guide positioning (for built-in guides)
-  @indent-offset: 4px; // This might need tweaking depending on font and size
+  @indent-offset: 3px; // This might need tweaking depending on font and size
   @guide-width: 1px;
   @active-guide-color: @syntax-indent-guide-color;
   @inactive-guide-color: mix(@syntax-indent-guide-color, @syntax-background-color, 25%);
@@ -180,7 +181,7 @@ atom-text-editor {
     }
   }
 
-  // Shift indent guides to align vertically with center of column
+  // // Shift indent guides to align vertically with center of column
   // .indent-guide {
   //   box-shadow: none;
   //   background: linear-gradient(90deg, // replace box-shadow with gradient
@@ -224,6 +225,7 @@ atom-text-editor {
   // .invisible-character {
   //   color: mix(@syntax-text-color, @syntax-background-color, 7%);
   // }
+  .invisible-character.leading-whitespace { color: transparent; }
   .trailing-whitespace { // Just show trailing whitespace
     // Use `syntax-color-removed` since it's usually red
     // Unfortunately, the invisible characters are behind the indent guide, so
