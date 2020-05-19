@@ -129,11 +129,52 @@
     ],
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontWeight": "300",
-    "workbench.colorTheme": "Pop N' Lock Theme by Luxcium ✨",
     // "better-comments.multilineComments": true,
     // "gitlens.codeLens.enabled": false,
     // "gitlens.currentLine.enabled": false
     "ruby.useBundler": true, //run non-lint commands with bundle exec
     "ruby.useLanguageServer": true, // use the internal language server (see below)
-    "editor.acceptSuggestionOnEnter": "off"
+    "editor.acceptSuggestionOnEnter": "off",
+    "workbench.colorTheme": "Pop N' Lock Theme by Luxcium ✨",
+    "workbench.iconTheme": "material-icon-theme",
+
+    "todohighlight.isEnable": true,
+    "todohighlight.defaultStyle": {
+        "color": "#2C203C",
+        "backgroundColor": "#5D5D6F",
+        "fontStyle": "normal",
+        "fontWeight": "bold"
+    },
+    // these are set up for Pop Lux
+    "todohighlight.keywords": [
+        {
+            "text": "TODO",
+            "backgroundColor": "#65A926"
+        },
+        {
+            "text": "HACK",
+            "backgroundColor": "#C4586A"
+        },
+        {
+            "text": "FIXME",
+            "backgroundColor": "#D2811A"
+        },
+        {
+            "text": "NOTE",
+            "backgroundColor": "#E2B651"
+        },
+        {
+            "text": "OPTIMIZE",
+            "backgroundColor": "#3C9C85"
+        },
+        {
+            "text": "QUESTION",
+            "backgroundColor": "#528FC6"
+        },
+        {
+            "text": "IDEA",
+            "backgroundColor": "#B056AD"
+        },
+        "XXX"
+    ]
 }
