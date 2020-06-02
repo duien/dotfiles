@@ -20,8 +20,8 @@ if test -d "$HOME/.bin"
 end
 
 set -x EDITOR vim
-set -x VISUAL atom
-set -x GEMEDITOR atom
+set -x VISUAL code
+set -x GEMEDITOR code
 
 # Source color theme setup
 source ~/.config/fish/color-theme.fish
