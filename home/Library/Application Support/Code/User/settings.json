@@ -176,5 +176,26 @@
             "backgroundColor": "#B056AD"
         },
         "XXX"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "git.autofetch": true,
+    "githubPullRequests.queries": [
+
+        {
+            "label": "Waiting For My Review",
+            "query": "is:open review-requested:${user}"
+        },
+        {
+            "label": "Needs Review",
+            "query": "is:open review:required -author:${user}"
+        },
+        {
+            "label": "Created By Me",
+            "query": "is:open author:${user}"
+        },
+        {
+            "label": "Approved",
+            "query": "is:open review:approved"
+        }
     ]
 }
