@@ -2,3 +2,4 @@
 --type-add=css=.sass,.scss
 --ignore-dir=tmp
 --ignore-dir=log
+--ignore-dir=public/packs-test
