@@ -2,52 +2,45 @@
 	email = hello@duien.com
 	name = Emily Hyland
 [color]
-  ui = auto
+    ui = auto
 [pull]
-  default = matching
+    default = matching
 [push]
 	default = simple
 [core]
-  excludesfile = ~/.gitignore
+    excludesfile = ~/.gitignore
 	editor = vim
 [alias]
-  vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
-  hist = "log --oneline --decorate --graph"
+    vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
+    hist = "log --oneline --decorate --graph"
 	co = checkout
-  pr = "pull --rebase"
-  wdiff = "diff --color-words"
-  amend = commit --amend --no-edit
-  edit = commit --amend --edit
-  cached = diff --cached
-  stat = diff --stat
+    pr = "pull --rebase"
+    wdiff = "diff --color-words"
+    amend = commit --amend --no-edit
+    edit = commit --amend --edit
+    cached = diff --cached
+    stat = diff --stat
 	patch = add --patch
 	cm = commit -m
 [format]
-  pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
-[difftool "Kaleidoscope"]
-	cmd = "ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\""
+    pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
 [difftool]
 	prompt = false
 [diff]
-  algorithm = patience
+    algorithm = patience
 	compactionHeuristic = true
 [github]
-  user = duien
+    user = duien
 [branch]
-  autosetupmerge = true
+    autosetupmerge = true
 [mailmap]
-  file = /Users/eprice/.gitmailmap
+    file = /Users/eprice/.gitmailmap
 [credential]
 	helper = osxkeychain
 [hub]
 	protocol = https
-[mergetool "Kaleidoscope"]
-	cmd = "ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot"
-	trustExitCode = true
 [mergetool]
 	prompt = false
-[merge]
-	tool = Kaleidoscope
 [filter "media"]
 	clean = git media clean %f
 	smudge = git media smudge %f
@@ -58,5 +51,13 @@
 	required = true
 [clean]
 	requireForce = false
-[url "git@source.datanerd.us:"]
-	insteadOf = https://source.datanerd.us/
+
+# use vscode for diff/merge
+[merge]
+    tool = vscode
+[diff]
+	tool = vscode
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
