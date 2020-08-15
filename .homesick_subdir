@@ -4,5 +4,4 @@
 bin
 .spacemacs.d
 .config/nvim
-Library/Fonts
 Library/Application Support/Code/User
