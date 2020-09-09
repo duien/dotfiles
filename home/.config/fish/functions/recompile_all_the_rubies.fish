@@ -31,5 +31,6 @@ function recompile_all_the_rubies -d "Uninstall all the rbenv rubies and recompi
     set_color normal
     rbenv uninstall $ruby
     rbenv install $ruby
+    gem pristine --all
   end
 end

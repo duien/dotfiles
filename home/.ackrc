@@ -3,3 +3,4 @@
 --ignore-dir=tmp
 --ignore-dir=log
 --ignore-dir=public/packs-test
+--ignore-dir=coverage
