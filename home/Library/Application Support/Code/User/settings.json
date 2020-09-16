@@ -9,7 +9,7 @@
     // "editor.fontFamily": "Iosevka",
     // "editor.fontFamily": "PragmataPro Mono Liga",
     "editor.fontSize": 14,
-    "editor.fontWeight": "400",
+    "editor.fontWeight": "300",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
     // "editor.lineHeight": 18,
@@ -17,8 +17,8 @@
     "[markdown]": {
         "editor.wordWrap": "wordWrapColumn"
     },
-    "workbench.editor.highlightModifiedTabs": false,
     "editor.colorDecorators": false,
+    "files.defaultLanguage": "markdown",
     "workbench.colorCustomizations": {
         "[Pop N' Lock Theme by Luxcium ✨]": {
             "terminal.background": "#1D1028",
@@ -269,5 +269,30 @@
         "xml",
         "svg",
         "markdown"
-    ]
+    ],
+    "gitlens.codeLens.enabled": false,
+    "gitlens.views.repositories.location": "scm",
+    "gitlens.views.fileHistory.location": "explorer",
+    "gitlens.views.lineHistory.location": "explorer",
+    "gitlens.views.compare.location": "gitlens",
+    "gitlens.views.search.location": "gitlens",
+    "gitlens.menus": {
+        "editorGroup": false,
+        "editorTab": false,
+        "explorer": false,
+        "scmGroup": {
+            "compare": true,
+            "openClose": true,
+            "stash": true,
+            "stashInline": true
+        },
+        "scmItem": {
+            "clipboard": true,
+            "compare": true,
+            "history": true,
+            "remote": true,
+            "stash": true
+        }
+    },
+    "editor.renderWhitespace": "trailing",
 }
