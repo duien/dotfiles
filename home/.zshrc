@@ -10,7 +10,7 @@ setopt PROMPT_SUBST
 
 WHATEVER="bar"
 
-PROMPT='foo [${WHATEVER}] [$(pwd)]'
+PROMPT='%F{black}%K{12}$(pwd)%k%f '
 
 
 # If you come from bash you might have to change your $PATH.
@@ -136,11 +136,12 @@ cdpath=(. $HOME $HOME/Code)
 export PATH="/usr/local/bin:$PATH"
 
 export EDITOR=vim
-export VISUAL=atom
-export GEMEDITOR=atom
+export VISUAL=code
+export GEMEDITOR=code
 
-# Clone atom packages for dev to a better spot
-export ATOM_REPOS_HOME=$HOME/Code/Forks
+if [[ -d "/usr/local/opt/openssl@1.1/bin" ]] ; then
+  export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+fi
 
 if [[ -d "$HOME/bin" ]] ; then
   export PATH="$HOME/bin:$PATH"
@@ -150,8 +151,16 @@ if [[ -d "$HOME/.bin" ]] ; then
   export PATH="$HOME/.bin" "$PATH"
 fi
 
-export RUBY_CONFIGURE_OPTS="--with-readline-dir=$(brew --prefix readline)"
+source ~/.private.sh
+
+export RUBY_CONFIGURE_OPTS="--with-readline-dir=$(brew --prefix readline) --with-openssl-dir=$(brew --prefix openssl@1.1)"
+export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include -I/usr/local/opt/readline/include"
+export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib -L/usr/local/opt/readline/lib"
+
+
 
 # Set up rbenv
 export RBENV_ROOT="/usr/local/var/rbenv"
 eval "$(rbenv init -)"
+
+eval "$("/Users/ehyland/Code/dox-compose/bin/dox-init")"
