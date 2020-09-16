@@ -87,7 +87,7 @@ function _git_stash_current
 
   if test $stash_count -gt 0
     for i in (seq 0 (echo "$stash_count - 1" | bc))
-      if test (git rev-parse stash@\{$i\}2>/dev/null) = (git rev-parse @)
+      if test (git rev-parse stash@\{$i\}^) = (git rev-parse @)
         set stash_current "$stash_current§"
       end
     end
