@@ -5,6 +5,7 @@
     ui = auto
 [pull]
     default = matching
+	ff = only
 [push]
 	default = simple
 [core]

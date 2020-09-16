@@ -19,6 +19,10 @@ if test -d "$HOME/.bin"
   set PATH $HOME/.bin $PATH
 end
 
+if test -d "$HOME/Code/dox-compose/bin"
+  set PATH "$HOME/Code/dox-compose/bin" $PATH
+end
+
 set -x EDITOR vim
 set -x VISUAL code
 set -x GEMEDITOR code

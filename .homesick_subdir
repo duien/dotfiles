@@ -1,4 +1,5 @@
 .config
+.config/fish/functions
 .atom
 .atom/packages
 bin
