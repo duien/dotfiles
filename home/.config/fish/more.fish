@@ -52,3 +52,7 @@ end
 if test -d "/usr/local/opt/openssl@1.1/bin"
   set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
 end
+
+if test -d "$HOME/.nvm"
+  nvm use 14.13.0
+end
