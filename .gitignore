@@ -8,4 +8,4 @@ home/.atom/.node-gyp
 home/.atom/compile-cache
 home/.atom/config.cson
 home/.thefuck/*.pyc
-
+home/.config/karabiner/automatic_backups/
