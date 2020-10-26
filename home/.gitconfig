@@ -11,6 +11,7 @@
 [core]
     excludesfile = ~/.gitignore
 	editor = vim
+	attributesfile = /Users/ehyland/.gitattributes
 [alias]
     vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
     hist = "log --oneline --decorate --graph"
@@ -62,3 +63,5 @@
     cmd = code --wait $MERGED
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
+[diff "rspec"]
+	xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
