@@ -6,15 +6,14 @@
     // "editor.fontFamily": "Ellograph CF",
     // "editor.fontFamily": "Cartograph CF",
     // "editor.fontFamily": "Rec Mono Casual",
-    "editor.fontFamily": "Rec Mono Custom",
+    // "editor.fontFamily": "Rec Mono Custom",
     // "editor.fontFamily": "Monospaceland VF",
     // "editor.fontFamily": "Attribute Mono",
     // "editor.fontFamily": "CamingoCode",
     // "editor.fontFamily": "Operator Mono SSm",
-    // "editor.fontFamily": "IBM Plex Mono",
+    "editor.fontFamily": "IBM Plex Mono",
     // "editor.fontFamily": "Iosevka",
     // "editor.fontFamily": "PragmataPro Mono Liga",
-    "editor.fontSize": 15,
     // "editor.fontWeight": "300",
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
@@ -45,29 +44,29 @@
             "terminal.ansiBrightWhite": "#EAE7E4",
             "terminal.ansiBrightYellow": "#F3CD03"
         },
-        "activityBarBadge.background": "#616161",
-        "activityBar.activeBorder": "#616161",
-        "list.activeSelectionForeground": "#616161",
-        "list.inactiveSelectionForeground": "#616161",
-        "list.highlightForeground": "#616161",
-        "scrollbarSlider.activeBackground": "#61616150",
-        "editorSuggestWidget.highlightForeground": "#616161",
-        "textLink.foreground": "#616161",
-        "progressBar.background": "#616161",
-        "pickerGroup.foreground": "#616161",
-        "tab.activeBorder": "#616161",
-        "notificationLink.foreground": "#616161",
-        "editorWidget.resizeBorder": "#616161",
-        "editorWidget.border": "#616161",
-        "settings.modifiedItemIndicator": "#616161",
-        "settings.headerForeground": "#616161",
-        "panelTitle.activeBorder": "#616161",
-        "breadcrumb.activeSelectionForeground": "#616161",
-        "menu.selectionForeground": "#616161",
-        "menubar.selectionForeground": "#616161",
-        "editor.findMatchBorder": "#616161",
-        "selection.background": "#61616140",
-        "statusBarItem.remoteBackground": "#616161"
+        // "activityBarBadge.background": "#616161",
+        // "activityBar.activeBorder": "#616161",
+        // "list.activeSelectionForeground": "#616161",
+        // "list.inactiveSelectionForeground": "#616161",
+        // "list.highlightForeground": "#616161",
+        // "scrollbarSlider.activeBackground": "#61616150",
+        // "editorSuggestWidget.highlightForeground": "#616161",
+        // "textLink.foreground": "#616161",
+        // "progressBar.background": "#616161",
+        // "pickerGroup.foreground": "#616161",
+        // "tab.activeBorder": "#616161",
+        // "notificationLink.foreground": "#616161",
+        // "editorWidget.resizeBorder": "#616161",
+        // "editorWidget.border": "#616161",
+        // "settings.modifiedItemIndicator": "#616161",
+        // "settings.headerForeground": "#616161",
+        // "panelTitle.activeBorder": "#616161",
+        // "breadcrumb.activeSelectionForeground": "#616161",
+        // "menu.selectionForeground": "#616161",
+        // "menubar.selectionForeground": "#616161",
+        // "editor.findMatchBorder": "#616161",
+        // "selection.background": "#61616140",
+        // "statusBarItem.remoteBackground": "#616161"
     },
     "editor.tokenColorCustomizations": {
         "textMateRules": [
@@ -77,22 +76,36 @@
                     "fontStyle": "italic"
                 }
             },
-            {   // WIP not sure specificity is correct here
-                "scope": "string.quoted",
+            { // WIP not sure specificity is correct here
+                "scope": "string.quoted, string.template",
                 "settings": {
                     "fontStyle": "italic"
                 }
             },
             {
-                "scope": "punctuation.definition.string.begin, punctuation.definition.string.end",
+                "scope": "punctuation.definition.string, punctuation.definition.string.template, punctuation.definition.template-expression",
                 "settings": {
                     "fontStyle": ""
                 }
             }
         ],
+        "[Chinolor Light]": {
+            "textMateRules": [
+                
+            ]
+        },
         "[Spacemacs - light]": {
-            "comments": "#969896"
-            // "comments": "#c5c8c6"
+            // "comments": "#969896", // too dark
+            // "comments": "#c5c8c6", // too light
+            "comments": "#adb0ae", // just right
+            "textMateRules": [
+                { // was making all JSON hash keys italic
+                    "scope": "support.type",
+                    "settings": {
+                        "fontStyle": ""
+                    }
+                }
+            ]
         },
 
         "[Pop N' Lock Theme by Luxcium ✨]": {
@@ -316,4 +329,5 @@
     "gruvboxMaterial.lightContrast": "hard",
     "gruvboxMaterial.lightWorkbench": "high-contrast",
     "gruvboxMaterial.darkWorkbench": "high-contrast",
+    "editor.fontSize": 16,
 }
