@@ -1,6 +1,10 @@
 function _pwd_with_tilde
-  echo $PWD | sed 's|^'$HOME'\(.*\)$|~\1|'
+  echo $PWD | sed 's|^'$HOME'\(.*\)$|~\1|' 
 end
+
+# pwd
+# if in git dir, surround repo with bold
+
 
 function _in_git_directory
   git rev-parse --git-dir > /dev/null 2>&1
@@ -11,7 +15,7 @@ function _git_branch_name_or_revision
   set -l revision (git rev-parse HEAD 2> /dev/null | cut -b 1-7)
 
   if test (count $branch) -gt 0
-    echo $branch
+    echo "¬ $branch"
   else
     echo $revision
   end
@@ -54,7 +58,7 @@ function _git_status
   set -l asterisk
 
   if _git_dirty
-    set asterisk "$asterisk◊"
+    set asterisk "$asterisk◇"
   end
 
   echo $asterisk
@@ -86,9 +90,10 @@ function _git_stash_current
   set -l stash_current
 
   if test $stash_count -gt 0
+    set stash_current "△"
     for i in (seq 0 (echo "$stash_count - 1" | bc))
       if test (git rev-parse stash@\{$i\}^) = (git rev-parse @)
-        set stash_current "$stash_current§"
+        set stash_current "▲"
       end
     end
   end
@@ -127,25 +132,29 @@ end
 function fish_prompt
   set -l last_status $status
 
-  _print_in_color "\n"(_pwd_with_tilde) blue
+  _print_in_color "\n"(_pwd_with_tilde) blue --bold
 
   if _in_git_directory
     # "\e[3m#{str}\e[0m"
     # _print_in_color " \e[3m"(_git_branch_name_or_revision)"\e[0m" magenta # 242
     _print_in_color (_git_branch_name_or_revision) magenta --italics
-    _print_in_color (_git_status) yellow # FCBC47
     _print_in_color (_git_upstream_status) cyan
+    _print_in_color (_git_status) yellow # FCBC47
     _print_in_color (_git_stash_current) red
-    _print_in_color (_git_stash_count) black
+    # _print_in_color (_git_stash_count) black
+    printf "\n"
+  else
+    printf " "
   end
 
   # printf "\n"
-  if test $last_status -ne 0
-    _print_in_color "\n"(_status_prompt $last_status) red
-    _print_in_color "> " (_prompt_color_for_status $last_status)
-  else
-    _print_in_color "\n> " (_prompt_color_for_status $last_status)
-  end
+  # if test $last_status -ne 0
+    # _print_in_color (_status_prompt $last_status) red
+    printf (set_color (_prompt_color_for_status $last_status))"> "(set_color normal)
+  # else
+    # _print_in_color "▷ " (_prompt_color_for_status $last_status)
+    # printf (set_color (_prompt_color_for_status $last_status))"$prompt_char "(set_color normal)
+  # end
 
   # _print_in_color (_status_prompt $last_status) (_prompt_color_for_status $last_status)
 end

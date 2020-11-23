@@ -54,5 +54,6 @@ if test -d "/usr/local/opt/openssl@1.1/bin"
 end
 
 if test -d "$HOME/.nvm"
-  nvm use 14.13.0
+  # nvm use 14.13.0
+  nvm use node
 end
