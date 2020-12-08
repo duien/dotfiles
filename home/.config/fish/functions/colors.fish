@@ -1,11 +1,11 @@
 function colors -d "What do my terminal colors look like?"
-  set -l colors normal black red green yellow blue purple cyan white
+  set -l colors black red green yellow blue purple cyan white
 
   for color in $colors
     set_color --background $color
     set_color --bold
     echo -n " $color"
-    set_color --bold $color
+    set_color --bold br$color
     echo -n " on self "
     set_color normal
     echo " "

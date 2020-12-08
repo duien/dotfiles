@@ -129,6 +129,15 @@ function _prompt_color_for_status
   end
 end
 
+function _print_colored_stash
+  set -l _stash (_git_stash_current)
+  if test $_stash = "▲"
+    _print_in_color $_stash red # c1651a
+  else
+    _print_in_color $_stash brblack
+  end
+end
+
 function fish_prompt
   set -l last_status $status
 
@@ -140,7 +149,7 @@ function fish_prompt
     _print_in_color (_git_branch_name_or_revision) magenta --italics
     _print_in_color (_git_upstream_status) cyan
     _print_in_color (_git_status) yellow # FCBC47
-    _print_in_color (_git_stash_current) red
+    _print_colored_stash
     # _print_in_color (_git_stash_count) black
     printf "\n"
   else
