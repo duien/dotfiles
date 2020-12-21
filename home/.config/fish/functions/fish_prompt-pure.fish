@@ -34,8 +34,13 @@ function _git_ahead_of_upstream
 end
 
 function _git_dirty
-  set -l is_git_dirty (command git status --porcelain --ignore-submodules 2>/dev/null)
+  set -l is_git_dirty (command git diff --name-only --ignore-submodules 2>/dev/null)
   test -n "$is_git_dirty"
+end
+
+function _git_staged_changes
+  set -l has_staged_changes (command git diff --name-only --cached 2>/dev/null)
+  test -n "$has_staged_changes"
 end
 
 function _git_upstream_status
@@ -64,6 +69,14 @@ function _git_status
   echo $asterisk
 end
 
+function _git_staged
+  set -l indicator
+  if _git_staged_changes
+    set indicator "◆"
+  end
+
+  echo $indicator
+end
 # function _git_stash_status
 #   set -l stash
 #
@@ -93,7 +106,14 @@ function _git_stash_current
     set stash_current "△"
     for i in (seq 0 (echo "$stash_count - 1" | bc))
       if test (git rev-parse stash@\{$i\}^) = (git rev-parse @)
-        set stash_current "▲"
+        set stash_current (_print_in_color "▲" red)
+        break
+      else
+        set -l branch_commits (git log master.. --pretty=%H)
+        if contains (git rev-parse stash@\{$i\}^) $branch_commits
+          set stash_current (_print_in_color "△" red)
+          break
+        end
       end
     end
   end
@@ -148,6 +168,7 @@ function fish_prompt
     # _print_in_color " \e[3m"(_git_branch_name_or_revision)"\e[0m" magenta # 242
     _print_in_color (_git_branch_name_or_revision) magenta --italics
     _print_in_color (_git_upstream_status) cyan
+    _print_in_color (_git_staged) green
     _print_in_color (_git_status) yellow # FCBC47
     _print_colored_stash
     # _print_in_color (_git_stash_count) black
