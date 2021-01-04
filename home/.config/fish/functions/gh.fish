@@ -1,9 +1,9 @@
 function gh --description 'gh pr status'
 	if test -z "$argv"
     command gh pr status
-  else if test "draft" = $argv
+  else if test "draft" = "$argv"
     # IDEA get pivotal story from branch name
-    command gh pr --draft
+    command gh pr create --draft --head master # --fill
   else
     command gh $argv
   end

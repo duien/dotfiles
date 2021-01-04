@@ -6,7 +6,8 @@
     // "editor.fontFamily": "Ellograph CF",
     // "editor.fontFamily": "Cartograph CF",
     // "editor.fontFamily": "Rec Mono Casual",
-    "editor.fontFamily": "Rec Mono Custom",
+    // "editor.fontFamily": "Rec Mono Custom",
+    "editor.fontFamily": "Nuvo Mono Offc Pro",
     // "editor.fontFamily": "Monospaceland VF",
     // "editor.fontFamily": "Attribute Mono",
     // "editor.fontFamily": "CamingoCode",
@@ -47,7 +48,7 @@
         "[Chinolor Light]": {
             "terminal.ansiBrightBlue": "#1781b5",
             "terminal.ansiBrightRed": "#bd3c45"
-        }
+        },
     },
     "editor.tokenColorCustomizations": {
         "textMateRules": [
@@ -187,9 +188,9 @@
     // "gitlens.codeLens.enabled": false,
     // "gitlens.currentLine.enabled": false
     "ruby.useBundler": true, //run non-lint commands with bundle exec
-    "ruby.useLanguageServer": true, // use the internal language server (see below)
+    "ruby.useLanguageServer": false, // use the internal language server (see below)
     "editor.acceptSuggestionOnEnter": "off",
-    "workbench.colorTheme": "Chinolor Light",
+    "workbench.colorTheme": "Chinolor",
     "workbench.iconTheme": "material-icon-theme",
 
     "todohighlight.isEnable": true,
@@ -199,9 +200,13 @@
         // "color": "#2C203C",
         // "backgroundColor": "#5D5D6F",
 
-        // chinolor
-        "color": "#f8f4ed",
-        "backgroundColor": "#8a988e",
+        // chinolor dark
+        "color": "#2b312c",
+        "backgroundColor": "#617172",
+
+        // chinolor light
+        // "color": "#f8f4ed",
+        // "backgroundColor": "#8a988e",
         "fontStyle": "normal",
         "fontWeight": "bold"
     },
@@ -224,8 +229,11 @@
         {
             "text": "NOTE",
             // "backgroundColor": "#E2B651" // poplux
-            "backgroundColor": "#f8e8c1", // chinolor
-            "color": "#f8b37f"
+            // "backgroundColor": "#f8e8c1", // chinolor
+            // "color": "#f8b37f",
+
+            // chinolor
+            "backgroundColor": "#f9d367"
         },
         {
             "text": "OPTIMIZE",
@@ -313,5 +321,31 @@
     "gruvboxMaterial.darkWorkbench": "high-contrast",
     "editor.fontSize": 16,
 
-    "rubyTestExplorer.rspecCommand": "dox-do bundle exec rspec"
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+          "before": ["<space>"],
+          "commands": ["vspacecode.space"]
+        }
+      ],
+      "vim.visualModeKeyBindingsNonRecursive": [
+        {
+          "before": ["<space>"],
+          "commands": ["vspacecode.space"]
+        }
+    ],
+    "vim.statusBarColorControl": false,
+    "vim.statusBarColors.normal": [
+        "#8FBCBB",
+        "#434C5E"
+    ],
+    "vim.statusBarColors.insert": "#BF616A",
+    "vim.statusBarColors.visual": "#B48EAD",
+    "vim.statusBarColors.visualline": "#B48EAD",
+    "vim.statusBarColors.visualblock": "#A3BE8C",
+    "vim.statusBarColors.replace": "#D08770",
+    "vim.statusBarColors.commandlineinprogress": "#007ACC",
+    "vim.statusBarColors.searchinprogressmode": "#007ACC",
+    "vim.statusBarColors.easymotionmode": "#007ACC",
+    "vim.statusBarColors.easymotioninputmode": "#007ACC",
+    "vim.statusBarColors.surroundinputmode": "#007ACC"
  }
