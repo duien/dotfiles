@@ -3,11 +3,15 @@
     // "editor.fontFamily": "Victor Mono",
     // "editor.fontFamily": "Belinsky Text",
     // "editor.fontFamily": "Gintronic",
+    "editor.fontFamily": "Cascadia Code PL",
     // "editor.fontFamily": "Ellograph CF",
     // "editor.fontFamily": "Cartograph CF",
     // "editor.fontFamily": "Rec Mono Casual",
     // "editor.fontFamily": "Rec Mono Custom",
-    "editor.fontFamily": "Nuvo Mono Offc Pro",
+    // "editor.fontFamily": "Nuvo Mono Offc Pro",
+    // "editor.fontFamily": "Louisa",
+    // "editor.fontFamily": "Antikor Mono",
+    // "editor.fontFamily": "Dank Mono",
     // "editor.fontFamily": "Monospaceland VF",
     // "editor.fontFamily": "Attribute Mono",
     // "editor.fontFamily": "CamingoCode",
@@ -15,7 +19,7 @@
     // "editor.fontFamily": "IBM Plex Mono",
     // "editor.fontFamily": "Iosevka",
     // "editor.fontFamily": "PragmataPro Mono Liga",
-    // "editor.fontWeight": "300",
+    "editor.fontWeight": 300,
     "editor.fontLigatures": true,
     "editor.minimap.enabled": false,
     "[markdown]": {
@@ -55,13 +59,13 @@
             {
                 "scope": "comment, comment.line.double-slash",
                 "settings": {
-                    "fontStyle": "italic"
+                    // "fontStyle": "italic"
                 }
             },
             { // WIP not sure specificity is correct here
                 "scope": "string.quoted, string.template",
                 "settings": {
-                    "fontStyle": "italic"
+                    // "fontStyle": "italic"
                 }
             },
             {
@@ -319,7 +323,7 @@
     "gruvboxMaterial.lightContrast": "hard",
     "gruvboxMaterial.lightWorkbench": "high-contrast",
     "gruvboxMaterial.darkWorkbench": "high-contrast",
-    "editor.fontSize": 16,
+    "editor.fontSize": 14,
 
     "vim.normalModeKeyBindingsNonRecursive": [
         {
