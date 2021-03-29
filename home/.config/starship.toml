@@ -1,0 +1,73 @@
+# Don't print a new line at the start of the prompt
+# add_newline = false
+format = """
+$time\
+$directory\
+$git_branch\
+$git_commit\
+$git_status\
+$line_break\
+$git_state$cmd_duration$status\
+$character"""
+
+
+# Replace the "❯" symbol in the prompt with "➜"
+# [character]                            # The name of the module we are configuring is "character"
+# success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+
+# Disable the package module, hiding it from the prompt completely
+# [package]
+# disabled = true
+[time]
+disabled = false
+format = "[\\[$time\\]]($style) "
+style = "bright-black"
+time_format = "%R"
+
+[directory]
+style = "bold blue"
+# fish_style_pwd_dir_length = 2
+truncation_symbol = "…/"
+
+[cmd_duration]
+format = "[$duration]($style) "
+
+[character]
+success_symbol = "[▷](bold green)"
+# error_symbol = "[✗](bold red) "
+error_symbol = "[▶](bold red)"
+
+[status]
+format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
+disabled = true
+symbol = ""
+style = "red"
+
+[nodejs]
+disabled = true
+
+[git_branch]
+# symbol = "🌱 "
+# always_show_remote = true
+symbol = "¬ "
+style = "italic purple"
+format = "[$symbol$branch]($style) "
+only_attached = true
+
+[git_commit]
+style = "bold bright-purple"
+tag_disabled = false
+tag_symbol = " "
+format = "([TAG:$tag](green))[$hash]($style) "
+
+[git_status]
+format = "($ahead_behind )$conflicted$renamed$modified$staged$deleted$untracked$stashed "
+ahead = "[↑](cyan)"
+behind = "[↓](bright-cyan)"
+diverged = "[↑↓](bold bright-cyan)"
+untracked = "[·](blue)"
+stashed = " [△ $count](bright-black)"
+modified = "[◇](yellow)"
+staged = "[◆](green)"
+renamed = "[≈](blue)"
+deleted = "[∙](red)"
