@@ -1,27 +1,25 @@
 # Additonal fish customizations, mostly alises and env
 
 # Aliases
-alias gst    "git status"
-alias jk     "jekyll"
-alias rehash "rbenv rehash"
-alias ll     "ls -lA"
-alias la     "ls -A"
+alias gst        "git status"
+alias jk         "jekyll"
+alias rehash     "rbenv rehash"
+alias ll         "ls -lA"
+alias la         "ls -A"
 alias more-fish "source ~/.config/fish/more.fish"
 
 # Basic environment
-set CDPATH . $HOME $HOME/Code $HOME/.homesick/repos $CDPATH
-set PATH /usr/local/bin /usr/local/sbin $PATH
-if test -d "$HOME/bin"
-  set PATH $HOME/bin $PATH
-end
+prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/.homesick/repos
+prepend_if_exists PATH /usr/local/bin /usr/local/sbin
 
-if test -d "$HOME/.bin"
-  set PATH $HOME/.bin $PATH
-end
+prepend_if_exists PATH "$HOME/bin"
+prepend_if_exists PATH "$HOME/.bin"
+prepend_if_exists PATH "$HOME/Code/dox-compose/bin"
 
-if test -d "$HOME/Code/dox-compose/bin"
-  set PATH "$HOME/Code/dox-compose/bin" $PATH
-end
+# Set up homebrew packages that need to be prepended to path
+prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/local/opt/openssl@1.1/bin"
+# This was in universal variables, which are not a great idea for my setup
+# SETUVAR fish_user_paths:/usr/local/opt/openssl/bin\x1e/usr/local/opt/postgresql\x409\x2e4/bin\x1e/Users/duien/\x2eyarn/bin
 
 set -x EDITOR vim
 set -x VISUAL code
@@ -45,15 +43,7 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 set -gx RBENV_ROOT /usr/local/var/rbenv
 status --is-interactive; and source (rbenv init -|psub)
 
-if test -d "/usr/local/opt/postgresql@9.6/bin"
-  set -g fish_user_paths "/usr/local/opt/postgresql@9.6/bin" $fish_user_paths
-end
-
-if test -d "/usr/local/opt/openssl@1.1/bin"
-  set -g fish_user_paths "/usr/local/opt/openssl@1.1/bin" $fish_user_paths
-end
-
+# Set up NVM
 if test -d "$HOME/.nvm"
-  # nvm use 14.13.0
   nvm use node
 end
