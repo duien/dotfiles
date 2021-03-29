@@ -3,7 +3,7 @@
     // "editor.fontFamily": "Victor Mono",
     // "editor.fontFamily": "Belinsky Text",
     // "editor.fontFamily": "Gintronic",
-    "editor.fontFamily": "Cascadia Code PL",
+    // "editor.fontFamily": "Cascadia Code PL",
     // "editor.fontFamily": "Ellograph CF",
     // "editor.fontFamily": "Cartograph CF",
     // "editor.fontFamily": "Rec Mono Custom",
@@ -18,6 +18,7 @@
     // "editor.fontFamily": "IBM Plex Mono",
     // "editor.fontFamily": "Iosevka",
     // "editor.fontFamily": "PragmataPro Mono Liga",
+    "editor.fontFamily": "Galix Mono",
     "editor.fontWeight": 300,
     "editor.fontLigatures": true,
     "editor.minimap.enabled": true,
@@ -58,13 +59,13 @@
             {
                 "scope": "comment, comment.line.double-slash",
                 "settings": {
-                    // "fontStyle": "italic"
+                    "fontStyle": "italic"
                 }
             },
             { // WIP not sure specificity is correct here
                 "scope": "string.quoted, string.template",
                 "settings": {
-                    // "fontStyle": "italic"
+                    "fontStyle": "italic"
                 }
             },
             {
@@ -322,7 +323,7 @@
     "gruvboxMaterial.lightContrast": "hard",
     "gruvboxMaterial.lightWorkbench": "high-contrast",
     "gruvboxMaterial.darkWorkbench": "high-contrast",
-    "editor.fontSize": 14,
+    "editor.fontSize": 16,
 
     "vim.normalModeKeyBindingsNonRecursive": [
         {
