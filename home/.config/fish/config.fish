@@ -20,3 +20,5 @@ end
 
 # Load my aliases and environment
 source ~/.config/fish/more.fish
+
+source ("/usr/local/bin/starship" init fish --print-full-init | psub)
