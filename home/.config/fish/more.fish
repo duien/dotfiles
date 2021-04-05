@@ -19,7 +19,7 @@ prepend_if_exists PATH "$HOME/Code/dox-compose/bin"
 # Set up homebrew packages that need to be prepended to path
 prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/local/opt/openssl@1.1/bin"
 # This was in universal variables, which are not a great idea for my setup
-# SETUVAR fish_user_paths:/usr/local/opt/openssl/bin\x1e/usr/local/opt/postgresql\x409\x2e4/bin\x1e/Users/duien/\x2eyarn/bin
+prepend_if_exists fish_user_paths "/usr/local/opt/openssl/bin" "/usr/local/opt/postgresql@9.4/bin" "/Users/duien/.yarn/bin"
 
 set -x EDITOR vim
 set -x VISUAL code
