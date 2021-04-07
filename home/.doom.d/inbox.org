@@ -1,0 +1,3 @@
+* Inbox
+** TODO Capturing a task
+CAPTURED: [2021-04-07 Wed] [[file:~/.doom.d/config.el::"%? (logged from \[\[%l\]\[%f\]\])")))]]

@@ -15,6 +15,7 @@ prepend_if_exists PATH /usr/local/bin /usr/local/sbin
 prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
 prepend_if_exists PATH "$HOME/Code/dox-compose/bin"
+prepend_if_exists PATH "$HOME/.emacs.d/bin"
 
 # Set up homebrew packages that need to be prepended to path
 prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/local/opt/openssl@1.1/bin"
