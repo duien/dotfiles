@@ -3,29 +3,13 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
 (setq user-full-name "Emily Hyland"
       user-mail-address "emily@duien.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-;; (setq doom-font (font-spec :family "Rec Mono Custom" :size 16)
-;;       doom-variable-pitch-font (font-spec :family "Recursive Sans Linear Static" :size 16))
-;; (setq doom-font (font-spec :family "Overpass Mono" :size 16)
-;;       doom-variable-pitch-font (font-spec :family "Overpass" :size 16))
-      (setq doom-font (font-spec :family "MonoLisa" :size 16 :weight 'semi-light))
+;; NOTE Using a font with ligatures enabled (if it has a ~**~ or ~***~ ligature) will
+;; cause the leading org bullets to disappear. Using ~org +pretty~ to get superstar-mode
+;; seems to be an alternate fix
+(setq doom-font (font-spec :family "MonoLisa" :size 14 :weight 'semi-light))
 
 (setq doom-localleader-key ",")
 (setq doom-localleader-alt-key "M-,")
@@ -39,10 +23,11 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Org/"
       org-log-into-drawer t
-      )
-
+      org-superstar-cycle-headline-bullets nil
+      org-superstar-headline-bullets-list '("•")
+)
 (add-hook 'org-mode-hook 'visual-line-mode)
-;; (add-hook 'org-mode-hook (lambda() (electric-indent-mode -1)))
+(add-hook 'org-mode-hook (lambda() (electric-indent-mode -1)))
 
 (after! org
   (setq org-default-notes-file (concat org-directory "inbox.org")
