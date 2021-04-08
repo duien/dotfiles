@@ -21,7 +21,7 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Org/"
+(setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
       org-log-done t
       org-log-into-drawer t
       org-log-state-notes-into-drawer nil
