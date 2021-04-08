@@ -22,12 +22,18 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Org/"
+      org-log-state-notes-into-drawer nil
+      org-log-done t
       org-log-into-drawer t
+
+      org-ellipsis "▼"
       org-superstar-cycle-headline-bullets nil
-      org-superstar-headline-bullets-list '("•")
-)
-(add-hook 'org-mode-hook 'visual-line-mode)
-(add-hook 'org-mode-hook (lambda() (electric-indent-mode -1)))
+      org-superstar-headline-bullets-list '("•"))
+
+(add-hook! org-mode (electric-indent-local-mode -1))
+(add-hook! org-mode :append
+           #'visual-line-mode
+           #'variable-pitch-mode)
 
 (after! org
   (setq org-default-notes-file (concat org-directory "inbox.org")
@@ -64,18 +70,17 @@
           ("DEPLOYED" . modus-themes-subtle-neutral)
           ))
   )
-;; (after! org-capture
-;;   (setq org-capture-templates
-;;         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
-;;            "** TODO %?\nCAPTURED: %u %a\n%i")
-;;           ("l" "Log to daybook" plain (file+datetree org-default-log-file)
-;;            "%? (logged from [[%l][%f]])")))
-;;   )
+(after! org-capture
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+           "** TODO %?\nCAPTURED: %u %a\n%i")
+          ("l" "Log to daybook" plain (file+datetree org-default-log-file)
+           "%? (logged from [[%l][%f]])")))
+  )
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
-
 
 (setq all-the-icons-scale-factor 1.0)
 
@@ -121,7 +126,7 @@
   (setq modus-themes-bold-constructs t
         modus-themes-slanted-constructs t
         modus-themes-syntax 'alt-synatx
-        modus-themes-no-mixed-fonts t
+        ;; modus-themes-no-mixed-fonts t
         modus-themes-prompts 'intense-accented
         modus-themes-mode-line 'borderless-moody
         modus-themes-completions 'opinionated

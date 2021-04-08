@@ -11,6 +11,9 @@
 (package! solaire-mode :disable t)
 (package! fish-mode)
 
+(package! doct
+  :recipe (:host github :repo "progfolio/doct"))
+
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
 
