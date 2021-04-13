@@ -24,7 +24,6 @@
 (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
       org-log-done t
       org-log-into-drawer t
-      org-log-state-notes-into-drawer nil
       org-cycle-separator-lines -1
       org-fontify-done-headline t
       org-ellipsis " ▼")
@@ -78,7 +77,7 @@
       org-superstar-headline-bullets-list '("◌" "•"))
 
 (after! org-superstar
-  (setq org-superstar-leading-bullet " " ; totally hide leading bullets, but let them take up space
+  (setq org-superstar-leading-bullet "·" ; totally hide leading bullets, but let them take up space
         org-superstar-prettify-item-bullets nil)
   (setq org-superstar-todo-bullet-alist '(("TODO" . ?⭘) ;11096) ;
                                           ("FLAG" . ?◍)
@@ -185,3 +184,6 @@
 ;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 ;;   (require 'spaceline-config)
 ;;   (spaceline-spacemacs-theme))
+
+(custom-set-faces!
+  '(org-superstar-leading :inherit org-hide))
