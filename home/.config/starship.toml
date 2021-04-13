@@ -58,7 +58,7 @@ only_attached = true
 style = "bold bright-purple"
 tag_disabled = false
 tag_symbol = " "
-format = "([TAG:$tag](green))[$hash]($style) "
+format = "([$tag](green)) [$hash]($style) "
 
 [git_status]
 format = "($ahead_behind )$conflicted$renamed$modified$staged$deleted$untracked$stashed "

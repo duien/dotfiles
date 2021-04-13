@@ -140,7 +140,8 @@
   (projectile-add-known-project "~/Code/doximity")
   (projectile-add-known-project "~/.homesick/repos/dotfiles")
   (projectile-add-known-project "~/.doom.d")
-  (projectile-add-known-project "~/Org")
+  ;; (projectile-add-known-project "~/Org")
+  (projectile-add-known-project org-directory)
   )
 
 ;; (after! org

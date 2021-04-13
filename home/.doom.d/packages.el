@@ -8,6 +8,7 @@
 ;; (package! moody)
 ;; (package! spaceline)
 (package! modus-themes)
+(package! spacemacs-theme)
 (package! solaire-mode :disable t)
 (package! fish-mode)
 
