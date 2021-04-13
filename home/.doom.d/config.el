@@ -19,6 +19,8 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'modus-operandi)
 
+(setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
@@ -184,6 +186,10 @@
 ;;   (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
 ;;   (require 'spaceline-config)
 ;;   (spaceline-spacemacs-theme))
+
+(use-package orderless
+  :ensure t
+  :custom (completion-styles '(orderless)))
 
 (custom-set-faces!
   '(org-superstar-leading :inherit org-hide))

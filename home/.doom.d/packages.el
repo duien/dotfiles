@@ -10,7 +10,7 @@
 (package! modus-themes)
 (package! spacemacs-theme)
 (package! solaire-mode :disable t)
-(package! fish-mode)
+(package! orderless)
 
 (package! doct
   :recipe (:host github :repo "progfolio/doct"))
