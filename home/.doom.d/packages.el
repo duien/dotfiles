@@ -9,11 +9,12 @@
 ;; (package! spaceline)
 (package! modus-themes)
 (package! spacemacs-theme)
-(package! solaire-mode :disable t)
+;; (package! solaire-mode :disable t)
 (package! orderless)
+(package! ripgrep)
 
-(package! doct
-  :recipe (:host github :repo "progfolio/doct"))
+;; (package! doct
+;;   :recipe (:host github :repo "progfolio/doct"))
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
