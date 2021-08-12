@@ -11,6 +11,7 @@ alias more-fish "source ~/.config/fish/more.fish"
 # Basic environment
 prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/.homesick/repos
 prepend_if_exists PATH /usr/local/bin /usr/local/sbin
+prepend_if_exists PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 
 prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
