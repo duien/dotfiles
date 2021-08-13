@@ -9,13 +9,19 @@
 ;; NOTE Using a font with ligatures enabled (if it has a ~**~ or ~***~ ligature) will
 ;; cause the leading org bullets to disappear. Using ~org +pretty~ to get superstar-mode
 ;; seems to be an alternate fix
-(setq doom-font (font-spec :family "MonoLisa" :size 14 :weight 'semi-light) )
+;; (setq doom-font (font-spec :family "MonoLisa" :size 14 :weight 'semi-light) )
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 15 :weight 'semi-light) )
+;; (setq doom-font (font-spec :family "Cascadia Code PL" :size 15 :weight 'semi-light) )
+;; (setq doom-font (font-spec :family "Cascadia Mono PL" :size 15 :weight 'semi-light) )
+
+;; (setq line-spacing 0.2) ;; for Cascadia, add a little space between lines
+;; (setq line-spacing nil)
 
 (setq doom-localleader-key ",")
 (setq doom-localleader-alt-key "M-,")
 
 (setq doom-themes-treemacs-enable-variable-pitch nil)
-;; (setq doom-themes-treemacs-theme "doom-colors")
+(setq doom-themes-treemacs-theme "doom-colors")
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -26,6 +32,7 @@
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-string-face  :slant italic)
+  '(line-number :weight light)
   )
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -54,6 +61,7 @@
 (setq emojify-emoji-set "twemoji-v2")
 (setq which-key-idle-delay 0.5)
 
+(map! :leader :desc "Toggle file browser" :n "\\" #'+treemacs/toggle)
 
 (use-package! projectile
   :config
@@ -70,23 +78,23 @@
 
 ;; (use-package! modus-themes
 ;;   :init
-;;   (setq modus-themes-bold-constructs t
-;;         modus-themes-slanted-constructs t
-;;         modus-themes-syntax 'alt-synatx
-;;         modus-themes-no-mixed-fonts t
-;;         modus-themes-prompts 'intense-accented
-;;         modus-themes-mode-line 'borderless-moody
-;;         modus-themes-completions 'opinionated
-;;         modus-themes-fringes 'intense
-;;         modus-themes-lang-checkers 'colored-backgrounds
-;;         ;; modus-themes-hl-line 'accented-background
-;;         modus-themes-hl-line 'underline-only-neutral
-;;         modus-themes-paren-match 'intense-bold
-;;         modus-themes-region 'bg-only
-;;         ;; modus-themes-scale-headings t
-;;         modus-themes-headings
-;;         '((1 . rainbow-highlight)
-;;           (t . no-color-no-bold)))
+  (setq modus-themes-bold-constructs t
+        modus-themes-slanted-constructs t
+        modus-themes-syntax 'alt-synatx
+        modus-themes-no-mixed-fonts t
+        modus-themes-prompts 'intense-accented
+        modus-themes-mode-line 'borderless-moody
+        modus-themes-completions 'opinionated
+        modus-themes-fringes 'intense
+        modus-themes-lang-checkers 'colored-backgrounds
+        ;; modus-themes-hl-line 'accented-background
+        modus-themes-hl-line 'underline-only-neutral
+        modus-themes-paren-match 'intense-bold
+        modus-themes-region 'bg-only
+        ;; modus-themes-scale-headings t
+        modus-themes-headings
+        '((1 . rainbow-highlight)
+          (t . no-color-no-bold)))
 ;;   )
 
 (setq mouse-wheel-tilt-scroll t) ;; horizontal scrolling
