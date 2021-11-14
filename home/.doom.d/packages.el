@@ -10,8 +10,6 @@
 (package! modus-themes)
 (package! spacemacs-theme)
 ;; (package! solaire-mode :disable t)
-(package! orderless)
-(package! ripgrep)
 
 ;; (package! doct
 ;;   :recipe (:host github :repo "progfolio/doct"))

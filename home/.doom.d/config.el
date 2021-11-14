@@ -123,10 +123,10 @@
 (setq orderless-matching-styles '(orderless-regexp)
       orderless-style-dispatchers '(without-if-bang))
 
-(setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
-(use-package orderless
-  :ensure t
-  :custom (completion-styles '(orderless)))
+;; (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
+;; (use-package orderless
+;;   :ensure t
+;;   :custom (completion-styles '(orderless)))
 
 (add-hook! markdown-mode :append
            #'visual-line-mode)
@@ -165,12 +165,6 @@
                                         ("OK" . ?·)
                                         ("YES" . ?·)
                                         ("NO" . ?·)
-                                        ("STORY" . ?⏽)
-                                        ("PR" . ?⏽)
-                                        ("REVIEWED" . ?⏽)
-                                        ("PASSED" . ?⏽)
-                                        ;; ("WORK" . ?⭘)
-                                        ("DEPLOYED" . ?·)
                                         ))
 (setq org-superstar-leading-bullet "·" ; totally hide leading bullets, but let them take up space
          org-superstar-prettify-item-bullets nil)
