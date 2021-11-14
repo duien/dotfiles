@@ -10,6 +10,8 @@ $line_break\
 $git_state$cmd_duration$status\
 $character"""
 
+command_timeout = 750 # milliseconds
+
 
 # Replace the "❯" symbol in the prompt with "➜"
 # [character]                            # The name of the module we are configuring is "character"
@@ -57,7 +59,8 @@ only_attached = true
 [git_commit]
 style = "bold bright-purple"
 tag_disabled = false
-tag_symbol = " "
+# tag_symbol = " "
+tag_symbol = ""
 format = "([$tag](green)) [$hash]($style) "
 
 [git_status]
