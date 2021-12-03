@@ -29,21 +29,32 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-one-light)
 (setq doom-theme 'doom-flatwhite)
+;; (setq doom-theme 'doom-solarized-light)
 ;; (setq doom-theme 'modus-operandi)
 ;; (setq doom-theme 'spacemacs-light)
 
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-string-face  :slant italic)
+  ;; `(outline-1 :foreground ,(doom-color 'red))
   '(line-number :weight light)
   '(markdown-language-keyword-face :inherit markdown-pre-face :slant italic)
   )
 
+;; Stuff just for doom-solarized
+;; (custom-set-faces!
+;;   `(font-lock-constant-face :weight semi-light :foreground ,(doom-color 'cyan)) ;; solarized was making symbols bold -- only needed for solarized
+;;   `(font-lock-variable-name-face :foreground ,(doom-color 'violet)) ;; only needed for solarized
+;;   '(font-lock-type-face :slant normal)
+;;   `(font-lock-function-name-face :foreground ,(doom-color 'blue))
+;;   )
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
-
-(setq all-the-icons-scale-factor 1.0)
+(setq display-line-numbers-type t
+      all-the-icons-scale-factor 1.0
+      scroll-margin 5
+      )
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -68,6 +79,8 @@
 (setq which-key-idle-delay 0.5)
 
 (map! :leader :desc "Toggle file browser" :n "\\" #'+treemacs/toggle)
+(after! treemacs
+  (treemacs-follow-mode t))
 
 (use-package! projectile
   :config
@@ -97,7 +110,7 @@
       '((1 . rainbow-highlight)
         (t . no-color-no-bold)))
 
-(setq doom-gruvbox-light-brighter-comments t
+(setq doom-gruvbox-light-brighter-comments nil
       doom-gruvbox-light-variant "hard"
       doom-gruvbox-light-brighter-modeline t)
 (setq doom-flatwhite-brighter-modeline t)
@@ -127,6 +140,17 @@
 ;; (use-package orderless
 ;;   :ensure t
 ;;   :custom (completion-styles '(orderless)))
+
+;; Change where the new window goes when splitting
+(setq evil-vsplit-window-right t
+      evil-split-window-below t
+      )
+;; prompt for file for new split (same as SPC SPC)
+(defadvice! prompt-for-buffer (&rest _)
+  :after '(evil-window-split evil-window-vsplit)
+  (projectile-find-file))
+;; (defadvice! prompt-for-buffer (&rest _)
+;;   :after 'window-split (switch-to-buffer))
 
 (add-hook! markdown-mode :append
            #'visual-line-mode)
