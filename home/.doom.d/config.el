@@ -120,6 +120,35 @@
 
 (setq mouse-wheel-tilt-scroll t) ;; horizontal scrolling
 
+;; (setq frame-title-format
+;;       '(""
+;;         (:eval
+;;          (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+;;              (replace-regexp-in-string
+;;               ".*/[0-9]*-?" "☰ "
+;;               (subst-char-in-string ?_ ?  buffer-file-name))
+;;            "%b"))
+;;         (:eval
+;;          (let ((project-name (projectile-project-name)))
+;;            (unless (string= "-" project-name)
+;;              (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+;; (setq frame-title-format '("%b" " · " (:eval (doom-project-name))))
+
+;; in the terminal:
+;;   defaults write org.gnu.Emacs TransparentTitleBar LIGHT
+;; (push '(ns-transparent-titlebar . t) default-frame-alist)
+;; (push '(ns-appearance . t) default-frame-alist)
+;; (add-to-list 'default-frame-alist '(ns-appearance . light)) ;; {light, dark}
+;; (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
+(vertico-posframe-mode 1)
+(setq vertico-posframe-parameters
+      '(
+        (vertico-posframe-width . (* (window-font-width) 20))
+        (left-fringe . (window-font-width))
+        (right-fringe . (window-font-width))
+        (background-color . "#f1ece4") ;; taken from solaire-default-face :background
+        ))
 ;; ORDERLESS
 
 (defun flex-if-twiddle (pattern _index _total)

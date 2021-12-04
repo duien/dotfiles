@@ -9,6 +9,7 @@
 ;; (package! spaceline)
 (package! modus-themes)
 (package! spacemacs-theme)
+(package! vertico-posframe)
 ;; (package! solaire-mode :disable t)
 
 ;; (package! doct
