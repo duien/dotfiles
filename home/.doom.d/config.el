@@ -141,14 +141,38 @@
 ;; (add-to-list 'default-frame-alist '(ns-appearance . light)) ;; {light, dark}
 ;; (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 
-(vertico-posframe-mode 1)
-(setq vertico-posframe-parameters
-      '(
-        (vertico-posframe-width . (* (window-font-width) 20))
-        (left-fringe . (window-font-width))
-        (right-fringe . (window-font-width))
-        (background-color . "#f1ece4") ;; taken from solaire-default-face :background
-        ))
+;; (setq which-key-posframe-poshandler 'posframe-poshandler-frame-top-center)
+;; (setq vertico-posframe-parameters
+;;       '(
+;;         (vertico-posframe-width . (* (window-font-width) 20))
+;;         (left-fringe . (window-font-width))
+;;         (right-fringe . (window-font-width))
+;;         (background-color . "#f1ece4")
+;;         ;; (background-color . (face-attribute 'solaire-default-face :background)) ;; taken from solaire-default-face :background
+;;         ))
+
+;; ;; (face-attribute 'solaire-default-face :background) ;; this returns a value, but if I try to use it in the parameters, vertico doesn't show up
+;; ;; dig around in doom-real-buffer-p to see how to make vertico "unreal"
+;; ;; vertico goes in the minibuffer, vs which-key which I think creates a buffer
+;; ;; in the normal course of things, though, vertico does use the darker background :thinking-face:
+;; (vertico-posframe-mode 1)
+;; (which-key-posframe-mode 1)
+
+(mini-frame-mode 1)
+(setq mini-frame-show-parameters
+      '((top . 10)
+        (width . 0.7)
+        (left . 0.5))
+      )
+(setq mini-frame-show-parameters
+      '((left . 0.5)
+       (top . 0.3)
+       (width . 80)
+       (height . 10))
+      mini-frame-resize nil
+      )
+;; overall, this is going better than posframe...
+;; however, it somehow stops vertico from displaying suggestions until you start typing
 ;; ORDERLESS
 
 (defun flex-if-twiddle (pattern _index _total)
