@@ -10,6 +10,7 @@
 (package! modus-themes)
 (package! spacemacs-theme)
 (package! mini-frame)
+(package! rotate)
 ;; (package! vertico-posframe)
 ;; (package! which-key-posframe)
 ;; (package! solaire-mode :disable t)

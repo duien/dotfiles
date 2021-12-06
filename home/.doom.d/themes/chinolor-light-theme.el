@@ -40,69 +40,77 @@ Can be an integer to determine the exact padding."
   :group 'chinolor-light-theme
   :type '(choice integer boolean))
 
-
-;;
-;;; Theme definition
-
 (def-doom-theme chinolor-light
   "A light theme inspired by Solarized light"
 
   ;; name        default   256       16
-  ((bg         '("#FDF6E3" "#FDF6E3" "white"        ))
-   (fg         '("#556b72" "#556b72" "black"        ))
+  ((bg         '("#f8f4ed" "#FDF6E3" "white"        ))
+   (fg         '("#2b312c" "#556b72" "black"        ))
 
    ;; These are off-color variants of bg/fg, used primarily for `solaire-mode',
    ;; but can also be useful as a basis for subtle highlights (e.g. for hl-line
    ;; or region), especially when paired with the `doom-darken', `doom-lighten',
    ;; and `doom-blend' helper functions.
-   (bg-alt     '("#EEE8D5" "#EEE8D5" "white"        ))
-   (fg-alt     '("#7B8787" "#7B8787" "brightwhite"  ))
+   (bg-alt     '("#e7e3db" "#EEE8D5" "white"        ))
+   (fg-alt     '("#2b312c" "#7B8787" "brightwhite"  ))
 
    ;; These should represent a spectrum from bg to fg, where base0 is a starker
    ;; bg and base8 is a starker fg. For example, if bg is light grey and fg is
    ;; dark grey, base0 should be white and base8 should be black.
-   (base0      '("#FFFBF0" "#FFFBF0" "white"        ))
-   (base1      '("#FCF8ED" "#FCF8ED" "brightblack"  ))
-   (base2      '("#FCF7E8" "#FCF7E8" "brightblack"  ))
-   (base3      '("#F2E6CE" "#F2E6CE" "brightblack"  ))
-   (base4      '("#E1DBCD" "#E1DBCD" "brightblack"  ))
-   (base5      '("#D6D6D6" "#D6D6D6" "brightblack"  ))
-   (base6      '("#96A7A9" "#96A7A9" "brightblack"  ))
-   (base7      '("#788484" "#788484" "brightblack"  ))
-   (base8      '("#626C6C" "#626C6C" "black"        ))
+   (base0      '("#FFFFFF" "#FFFBF0" "white"        ))
+   (base1      '("#F8F4ED" "#FCF8ED" "brightblack"  )) ;; <-- bg
+   (base2      '("#e7e3db" "#FCF7E8" "brightblack"  )) ;; #d6d4cd
+   (base3      '("#A4ACA7" "#F2E6CE" "brightblack"  )) ;; #B4B3AD
+   (base4      '("#8A988E" "#E1DBCD" "brightblack"  )) ;; #92938D
+   (base5      '("#6F726C" "#D6D6D6" "brightblack"  ))
+   (base6      '("#4D524C" "#96A7A9" "brightblack"  ))
+   (base7      '("#2B312C" "#788484" "brightblack"  )) ;; <-- fg
+   (base8      '("#09100c" "#626C6C" "black"        ))
+
+   ;; colors that were in chinolor already
+        ;; (base0      '("#F8F4ED" "#FFFBF0" "white"        )) ;; <-- bg
+        ;; (base1      '("#F3EFE8" "#FCF8ED" "brightblack"  ))
+        ;; (base2      '("#EEE8E0" "#FCF7E8" "brightblack"  ))
+        ;; (base3      '("#E7E3DB" "#F2E6CE" "brightblack"  )) ;; <-- bg-alt
+        ;; (base4      '("#E4DFD7" "#E1DBCD" "brightblack"  ))
+        ;; (base5      '("#A4ACA7" "#D6D6D6" "brightblack"  ))
+        ;; (base6      '("#8A988E" "#96A7A9" "brightblack"  ))
+        ;; (base7      '("#474B4C" "#788484" "brightblack"  ))
+        ;; (base8      '("#2B312C" "#626C6C" "black"        ))
 
    (grey       base4)
-   (red        '("#dc322f" "#dc322f" "red"          ))
-   (orange     '("#cb4b16" "#cb4b16" "brightred"    ))
-   (green      '("#859900" "#859900" "green"        ))
-   (teal       '("#35a69c" "#35a69c" "brightgreen"  ))
-   (yellow     '("#b58900" "#b58900" "yellow"       ))
-   (blue       '("#268bd2" "#268bd2" "brightblue"   ))
-   (dark-blue  '("#3F88AD" "#3F88AD" "blue"         ))
-   (magenta    '("#d33682" "#d33682" "magenta"      ))
-   (violet     '("#6c71c4" "#6c71c4" "brightmagenta"))
-   (cyan       '("#2aa198" "#2aa198" "brightcyan"   ))
-   (dark-cyan  '("#204052" "#204052" "cyan"         ))
+   (red        '("#ee3f4d" "#dc322f" "red"          ))
+   (orange     '("#fc7930" "#cb4b16" "brightred"    ))
+   (green      '("#41ae3c" "#859900" "green"        ))
+   (teal       '("#35a69c" "#35a69c" "brightgreen"  )) ;; TODO
+   (yellow     '("#b78d12" "#b58900" "yellow"       ))
+   (blue       '("#1781b5" "#268bd2" "brightblue"   ))
+   (dark-blue  '("#0066BF" "#3F88AD" "blue"         )) ;; TODO
+   (magenta    '("#cc5595" "#d33682" "magenta"      ))
+   (violet     '("#983680" "#6c71c4" "brightmagenta"))
+   (cyan       '("#12aa9c" "#2aa198" "brightcyan"   ))
+   (dark-cyan  '("#204052" "#204052" "cyan"         )) ;; TODO
+
+   ;; custom colors
+   (c-selection '("#C7D2D4" "#C7D2D4" "brightblack"))
 
    ;; face categories -- required for all themes
    (highlight      blue)
-   (vertical-bar   base4)
-   (selection      dark-blue)
+   (vertical-bar   base2)
+   (selection      base4)
    (builtin        magenta)
-   (comments       (if chinolor-light-brighter-comments
-                       (doom-lighten teal 0.25)
-                     base6))
+   (comments       base3)
    (doc-comments   teal)
-   (constants      violet)
-   (functions      magenta)
-   (keywords       green)
+   (constants      blue)
+   (functions      orange)
+   (keywords       violet)
    (methods        cyan)
    (operators      blue)
    (type           yellow)
-   (strings        cyan)
+   (strings        green)
    (variables      blue)
    (numbers        violet)
-   (region         `(,(doom-darken (car bg-alt) 0.1) ,@(doom-darken (cdr base0) 0.1)))
+   (region         c-selection)
    (error          red)
    (warning        yellow)
    (success        green)
