@@ -25,7 +25,11 @@
 ;; (setq +ligatures-in-modes nil)
 ;; (setq +ligatures-extras-in-modes nil)
 
+(modus-themes-load-themes)
 
+(use-package! org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
 
 (setq doom-localleader-key ",")
 (setq doom-localleader-alt-key "M-,")
@@ -126,19 +130,27 @@
 ;; (modus-themes-load-operandi)
 ;; (load-theme 'modus-operandi t)
 (defun my-modus-themes-custom-faces ()
+  (modus-themes-load-themes)
   ;; doom specifies a bitmap for the fringe indicator, which ends up coloring
   ;; the whole thing with the foreground (this makes modus unreadable)
-  (set-face-attribute 'git-gutter:added nil
-                      :background (modus-themes-color 'green-graph-0-bg)
-                      :foreground (modus-themes-color 'green-graph-0-bg))
-  (set-face-attribute 'git-gutter:modified nil
-                      :background (modus-themes-color 'blue-graph-0-bg)
-                      :foreground (modus-themes-color 'blue-graph-0-bg))
+
+  ;; this stops the error, but it the face is apparently not defined in time
+  (if (facep 'git-gutter-fr:added)
+        (set-face-attribute 'git-gutter-fr:added nil
+                            :background (modus-themes-color 'green-graph-0-bg)
+                            :foreground (modus-themes-color 'green-graph-0-bg))
+        )
+  (if (facep 'git-gutter-fr:modified)
+        (set-face-attribute 'git-gutter-fr:modified nil
+                            :background (modus-themes-color 'blue-graph-0-bg)
+                            :foreground (modus-themes-color 'blue-graph-0-bg))
+        )
   )
 ;; TODO Figure out why this isn't getting called
 ;; maybe it _is_ getting called, but the faces aren't defined yet?
 ;; there was maybe an error, but it disappeared too fast
 (add-hook 'modus-themes-after-load-theme-hook #'my-modus-themes-custom-faces)
+;; (my-modus-themes-custom-faces)
 
 (defun my-load-theme (appearance)
   "Load theme, taking current system APPEARANCE into consideration."

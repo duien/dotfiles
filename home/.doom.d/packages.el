@@ -11,6 +11,7 @@
 (package! spacemacs-theme)
 (package! mini-frame)
 (package! rotate)
+(package! org-auto-tangle)
 ;; (package! vertico-posframe)
 ;; (package! which-key-posframe)
 ;; (package! solaire-mode :disable t)
