@@ -46,6 +46,6 @@ set -gx RBENV_ROOT /usr/local/var/rbenv
 status --is-interactive; and source (rbenv init -|psub)
 
 # Set up NVM
-if test -d "$HOME/.nvm"
-  nvm use node
-end
+# if test -d "$HOME/.nvm"
+#   nvm use node
+# end
