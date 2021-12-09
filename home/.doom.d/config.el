@@ -13,9 +13,13 @@
 ;; (setq doom-font (font-spec :family "Galix Mono" :size 16 :weight 'semi-light) )
 ;; (setq doom-font (font-spec :family "Rec Mono Custom" :size 15) )
 ;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 16 :weight 'normal) )
-;; (setq doom-font (font-spec :family "Cascadia Code PL" :size 15 :weight 'semi-light) )
 ;; (setq doom-font (font-spec :family "Gintronic" :size 15 :weight 'semilight))
+;; (setq doom-font (font-spec :family "Belinsky Text" :size 14 :weight 'semilight) )
 (setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'semilight) )
+;; (setq doom-font (font-spec :family "Codelia Demo" :size 15))
+;; (setq doom-font (font-spec :family "Comic Code Demo" :size 15) )
+;; (setq doom-font (font-spec :family "PragmataPro Mono" :size 16))
+
 (setq ns-use-thin-smoothing t)
 
 (setq line-spacing 0.1) ;; for Cascadia, add a little space between lines
@@ -117,12 +121,12 @@
       modus-themes-fringes 'intense
       modus-themes-mode-line '(borderless)
       modus-themes-syntax '(green-strings)
-      ;; modus-themes-syntax '(alt-syntax green-strings)
       modus-themes-prompts '(gray background intense)
       modus-themes-region '(bg-only accented)
       modus-themes-org-blocks 'gray-background
       modus-themes-headings
       '((1 . (rainbow background))
+        (2 . (rainbow background))
         (t . (monochrome regular)))
       )
 ;; (load-theme 'modus-operandi)
@@ -145,6 +149,7 @@
                             :background (modus-themes-color 'blue-graph-0-bg)
                             :foreground (modus-themes-color 'blue-graph-0-bg))
         )
+  (set-face-attribute 'bold nil :weight 'semibold)
   )
 ;; TODO Figure out why this isn't getting called
 ;; maybe it _is_ getting called, but the faces aren't defined yet?
@@ -154,7 +159,7 @@
 
 (defun my-load-theme (appearance)
   "Load theme, taking current system APPEARANCE into consideration."
-  (mapc #'disable-theme custom-enabled-themes)
+  (mapc #'disable-theme custom-enabled-themes) ;; disable currently enabled themes
   (pcase appearance
     ('light (modus-themes-load-operandi) )
     ('dark (modus-themes-load-vivendi) )))
