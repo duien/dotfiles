@@ -153,6 +153,30 @@
         )
   )
 
+(after! org
+  (setq org-todo-keyword-faces
+        '(("TODO" . '(modus-themes-refine-green))
+          ("FLAG" . '(modus-themes-intense-green))
+          ("DONE" . '(modus-themes-nuanced-green))
+          ("WAIT" . '(modus-themes-refine-yellow))
+          ("BLOK" . '(modus-themes-intense-yellow))
+          ("HOLD" . '(modus-themes-intense-neutral))
+          ("KILL" . '(modus-themes-nuanced-red))
+          ("QUESTION" . '(modus-themes-refine-blue))
+          ("ANSWER" . '(modus-themes-special-cold))
+          ("OK" . '(modus-themes-nuanced-blue))
+          ("YES" . '(modus-themes-nuanced-green))
+          ("NO" . '(modus-themes-nuanced-red))
+          ("IDEA" . '(modus-themes-intense-magenta))
+          ("YAK" . '(modus-themes-refine-magenta))
+          )
+        ))
+
+(custom-set-faces!
+  '(org-headline-todo :inherit default :foreground nil)
+  '(org-headline-done :inherit font-lock-comment-face :weight semilight)
+  )
+
 (add-hook! org-mode (electric-indent-local-mode -1))
 (add-hook! org-mode :append
            #'visual-line-mode)

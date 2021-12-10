@@ -298,9 +298,62 @@ First, set up our todo keywords and the custom bullets for each of them
   )
 #+end_src
 
+Now, let's attempt to colorize those using modus faces and inheritance.
+
+The example from the Modus documentation is
+#+begin_src emacs-lisp :tangle no
+(setq org-todo-keyword-faces
+      '(("MEET" . '(bold org-todo))
+        ("STUDY" . '(warning org-todo))
+        ("WRITE" . '(shadow org-todo))))
+#+end_src
+
+Our own version of that will be a little more involved, probably. Let's give it a shot.
+
+#+begin_src emacs-lisp
+(after! org
+  (setq org-todo-keyword-faces
+        '(("TODO" . '(modus-themes-refine-green))
+          ("FLAG" . '(modus-themes-intense-green))
+          ("DONE" . '(modus-themes-nuanced-green))
+          ("WAIT" . '(modus-themes-refine-yellow))
+          ("BLOK" . '(modus-themes-intense-yellow))
+          ("HOLD" . '(modus-themes-intense-neutral))
+          ("KILL" . '(modus-themes-nuanced-red))
+          ("QUESTION" . '(modus-themes-refine-blue))
+          ("ANSWER" . '(modus-themes-special-cold))
+          ("OK" . '(modus-themes-nuanced-blue))
+          ("YES" . '(modus-themes-nuanced-green))
+          ("NO" . '(modus-themes-nuanced-red))
+          ("IDEA" . '(modus-themes-intense-magenta))
+          ("YAK" . '(modus-themes-refine-magenta))
+          )
+        ))
+#+end_src
+
+#+begin_src emacs-lisp
+(custom-set-faces!
+  '(org-headline-todo :inherit default :foreground nil)
+  '(org-headline-done :inherit font-lock-comment-face :weight semilight)
+  )
+#+end_src
+
 **** TODO Set up coloring for different todo keywords
 Ideally, these should use ~modus-color~ to get colors and adapt to light or dark variants
 Also, set something better for ~org-headline-todo~ face (inherit from default?) and probably ~org-headline-done~ as well
+***** FLAG This is flagged
+***** DONE This is done
+***** WAIT This is waiting
+***** BLOK This is blocked
+***** HOLD This is on hold
+***** KILL This is no longer relevant
+***** QUESTION This is a question
+***** ANSWER This is the answer
+***** OK This is dismissed
+***** YES The answer was yes
+***** NO The answer was no
+***** IDEA This is something to try
+***** YAK This is a rabbit-hole
 **** TODO Set up capture templates
 - Quickly add a note to the logbook linking back to source
 - Create a todo in various different places
