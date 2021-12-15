@@ -12,6 +12,10 @@
 (package! mini-frame)
 (package! rotate)
 (package! org-auto-tangle)
+
+(package! ligature
+  :recipe (:host github :repo "mickeynp/ligature.el"))
+
 ;; (package! vertico-posframe)
 ;; (package! which-key-posframe)
 ;; (package! solaire-mode :disable t)
