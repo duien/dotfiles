@@ -25,6 +25,10 @@
 (setq doom-flatwhite-brighter-modeline t)
 (setq doom-nord-light-brighter-modeline t)
 
+(setq spacemacs-theme-comment-bg nil
+      spacemacs-theme-comment-italic t
+      spacemacs-theme-org-height nil)
+
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-string-face  :slant italic)
@@ -109,6 +113,8 @@
 
 (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode) ;; don't turn on hl-line by default
 (remove-hook 'after-change-major-mode-hook #'+ligatures-init-buffer-h) ;; this disables too many ligatures - find a way to disable just prettyify-symbols-mode that doesn't break everything else
+
+(setq so-long-threshold 1000)
 
 (map! :leader :desc "Toggle file browser" :n "\\" #'+treemacs/toggle)
 

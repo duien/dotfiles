@@ -9,9 +9,13 @@
 ;; (package! spaceline)
 (package! modus-themes)
 (package! spacemacs-theme)
+(package! humanoid-themes)
+(package! twilight-bright-theme)
+
 (package! mini-frame)
 (package! rotate)
 (package! org-auto-tangle)
+(package! annotate)
 
 (package! ligature
   :recipe (:host github :repo "mickeynp/ligature.el"))

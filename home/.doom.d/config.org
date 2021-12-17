@@ -74,9 +74,18 @@ Set up some properties for doom themes. I'm not currently using these, but it's 
       doom-gruvbox-light-brighter-modeline t)
 (setq doom-flatwhite-brighter-modeline t)
 (setq doom-nord-light-brighter-modeline t)
+
+(setq spacemacs-theme-comment-bg nil
+      spacemacs-theme-comment-italic t
+      spacemacs-theme-org-height nil)
+
 #+end_src
 
-*** TODO Get coding ligatures working without =prettify-symbols-mode= adding extra crap :noexport:
+*** DONE Get coding ligatures working without =prettify-symbols-mode= adding extra crap :noexport:
+CLOSED: [2021-12-17 Fri 15:10]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2021-12-17 Fri 15:10]
+:END:
 *** TODO Find a way to automatically exclude tasks from TOC :noexport:
 
 *** Tweak some basic faces
@@ -225,8 +234,21 @@ Remove hooks that I don't want
 (remove-hook 'after-change-major-mode-hook #'+ligatures-init-buffer-h) ;; this disables too many ligatures - find a way to disable just prettyify-symbols-mode that doesn't break everything else
 #+end_src
 
+Make =so-long-mode= less aggressive
+
+#+begin_src emacs-lisp
+(setq so-long-threshold 1000)
+#+end_src
+
 
 * Packages
+I should probably create some custom layers for some of this configuration, but haven't really dug into what needs to happen for that.
+
+** To explore and configure :noexport:
+*** TODO Create a custom layer w/ SPC-ified keybindings for =annotate=
+*** TODO Explore =code-review= package
+*** TODO Explore workflow with bookmarks
+
 ** Treemacs
 
 I like to toggle the file browser frequently, so bind that to =SPC \= for quick access
@@ -371,7 +393,7 @@ Our own version of that will be a little more involved, probably. Let's give it 
   )
 #+end_src
 
-**** TODO Set up coloring for different todo keywords
+**** DONE Set up coloring for different todo keywords
 Ideally, these should use ~modus-color~ to get colors and adapt to light or dark variants
 Also, set something better for ~org-headline-todo~ face (inherit from default?) and probably ~org-headline-done~ as well
 ***** FLAG This is flagged
@@ -392,6 +414,7 @@ Also, set something better for ~org-headline-todo~ face (inherit from default?) 
 - Create a todo in various different places
 **** TODO After automatically changing to =modus-vivendi= there's something weird going on with how TODO comments are highlighted
 In =config.el= the colors of the ~TODO~ didn't change, leaving it at a dark maroon. And it doesn't seem to correspond with the ~hl-todo~ face, which is bold bright orange. In strings inside the org buffer, it's highlighted with the ~warning~ face instead. But after a little while (and some various editing) the org todos now look like other buffers.
+**** TODO Set up archiving all ~DONE~ tasks
 
 *** Set up hooks for org behavior
 
