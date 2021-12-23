@@ -7,6 +7,7 @@
       user-mail-address "emily@duien.com")
 
 (setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'semilight))
+(setq doom-theme 'doom-isohedron)
 
 (setq ns-use-thin-smoothing t ;; not sure if this actually does anything useful?
       line-spacing 0.1
@@ -86,13 +87,6 @@
   ;; This happens through the light/dark hook
   )
 
-(defun eh/load-modus-variant (appearance)
-  (pcase appearance
-    ('light (modus-themes-load-operandi))
-    ('dark  (modus-themes-load-vivendi)))
-)
-(setq ns-system-appearance-change-functions #'eh/load-modus-variant)
-
 (setq mouse-wheel-tilt-scroll t)
 
 (setq evil-vsplit-window-right t
@@ -123,12 +117,13 @@
 
 (use-package! projectile
   :config
-  (projectile-discover-projects-in-directory "~/Code/" 3)
-  ;; Hoping to cover these by telling it to recurse 3 levels in Code
-  ;; (projectile-discover-projects-in-directory "~/Code/gems/")
-  ;; (projectile-discover-projects-in-directory "~/Code/Forks/")
-  ;; (projectile-discover-projects-in-directory "~/Code/Other/")
-  (projectile-discover-projects-in-directory "~/.homesick/repos/")
+  (setq projectile-project-search-path
+        '(("~/Code/" . 3)
+         ("~/.homesick/repos" . 0)
+         ))
+  
+  ;; (projectile-discover-projects-in-directory "~/Code/" 3)
+  ;; (projectile-discover-projects-in-directory "~/.homesick/repos/")
   )
 
 (defun flex-if-twiddle (pattern _index _total)
@@ -185,27 +180,44 @@
 
 (after! org
   (setq org-todo-keyword-faces
-        '(("TODO" . '(modus-themes-refine-green))
-          ("FLAG" . '(modus-themes-intense-green))
-          ("DONE" . '(modus-themes-nuanced-green))
-          ("WAIT" . '(modus-themes-refine-yellow))
-          ("BLOK" . '(modus-themes-intense-yellow))
-          ("HOLD" . '(modus-themes-intense-neutral))
-          ("KILL" . '(modus-themes-nuanced-red))
-          ("QUESTION" . '(modus-themes-refine-blue))
-          ("ANSWER" . '(modus-themes-special-cold))
-          ("OK" . '(modus-themes-nuanced-blue))
-          ("YES" . '(modus-themes-nuanced-green))
-          ("NO" . '(modus-themes-nuanced-red))
-          ("IDEA" . '(modus-themes-intense-magenta))
-          ("YAK" . '(modus-themes-refine-magenta))
-          )
-        ))
+        ;; Colors for isohedron/flatwhite
+        `(
+          ("TODO"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
+          ("FLAG"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
+          ("BLOK"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
+          ("QUESTION" :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
 
-(custom-set-faces!
-  '(org-headline-todo :inherit default :foreground nil)
-  '(org-headline-done :inherit font-lock-comment-face :weight semilight)
-  )
+          ("IDEA"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
+          ("YAK"      :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
+
+          ("WAIT" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("HOLD" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+
+          ("ANSWER" :foreground ,(doom-color 'fw-blue))
+          ("YES" :foreground ,(doom-color 'fw-green))
+          ("NO" :foreground ,(doom-color 'fw-red))
+          ("OK" :foreground ,(doom-color 'fg-alt))
+
+          ("DONE" :foreground ,(doom-color 'fg-alt))
+          ("KILL" :foreground ,(doom-color 'fg-alt))
+          )
+        ;; A modus version
+        ;; '(("TODO" . '(modus-themes-refine-green))
+        ;;   ("FLAG" . '(modus-themes-intense-green))
+        ;;   ("DONE" . '(modus-themes-nuanced-green))
+        ;;   ("WAIT" . '(modus-themes-refine-yellow))
+        ;;   ("BLOK" . '(modus-themes-intense-yellow))
+        ;;   ("HOLD" . '(modus-themes-intense-neutral))
+        ;;   ("KILL" . '(modus-themes-nuanced-red))
+        ;;   ("QUESTION" . '(modus-themes-refine-blue))
+        ;;   ("ANSWER" . '(modus-themes-special-cold))
+        ;;   ("OK" . '(modus-themes-nuanced-blue))
+        ;;   ("YES" . '(modus-themes-nuanced-green))
+        ;;   ("NO" . '(modus-themes-nuanced-red))
+        ;;   ("IDEA" . '(modus-themes-intense-magenta))
+        ;;   ("YAK" . '(modus-themes-refine-magenta))
+        ;;   )
+        ))
 
 (add-hook! org-mode (electric-indent-local-mode -1))
 (add-hook! org-mode :append

@@ -10,6 +10,7 @@
   - [[#typography-and-appearance][Typography and appearance]]
     - [[#tweak-some-basic-faces][Tweak some basic faces]]
     - [[#ligatures][Ligatures]]
+    - [[#isohedron-theme][Isohedron Theme]]
     - [[#modus][Modus]]
   - [[#customize-some-behavior][Customize some behavior]]
   - [[#customize-file-type-mappings-and-type-specific-behaviors][Customize file-type mappings and type-specific behaviors]]
@@ -49,6 +50,7 @@ Configure our main font through doom. To update the font without reloading, eval
 
 #+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'semilight))
+(setq doom-theme 'doom-isohedron)
 #+end_src
 
 Next, set up basic text display properties
@@ -135,6 +137,9 @@ Try to disable the weird character replacements from =prettify-symbols-mode= wit
 )
 #+end_src
 
+*** Isohedron Theme
+**** TODO A better color for an org block being edited in its own buffer
+
 *** Modus
 
 This is a theme with a lot of needs. But it's really well thought-out, and most of the complication is just in getting it set up.
@@ -169,7 +174,7 @@ In order to automatically switch between =modus-operandi= and =modus-vivendi= ba
 
 First, define the function for it to call, then add it to the hook
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun eh/load-modus-variant (appearance)
   (pcase appearance
     ('light (modus-themes-load-operandi))
@@ -271,12 +276,13 @@ Discover projects in my common locations
 #+begin_src emacs-lisp
 (use-package! projectile
   :config
-  (projectile-discover-projects-in-directory "~/Code/" 3)
-  ;; Hoping to cover these by telling it to recurse 3 levels in Code
-  ;; (projectile-discover-projects-in-directory "~/Code/gems/")
-  ;; (projectile-discover-projects-in-directory "~/Code/Forks/")
-  ;; (projectile-discover-projects-in-directory "~/Code/Other/")
-  (projectile-discover-projects-in-directory "~/.homesick/repos/")
+  (setq projectile-project-search-path
+        '(("~/Code/" . 3)
+         ("~/.homesick/repos" . 0)
+         ))
+  
+  ;; (projectile-discover-projects-in-directory "~/Code/" 3)
+  ;; (projectile-discover-projects-in-directory "~/.homesick/repos/")
   )
 #+end_src
 
@@ -368,34 +374,60 @@ Our own version of that will be a little more involved, probably. Let's give it 
 #+begin_src emacs-lisp
 (after! org
   (setq org-todo-keyword-faces
-        '(("TODO" . '(modus-themes-refine-green))
-          ("FLAG" . '(modus-themes-intense-green))
-          ("DONE" . '(modus-themes-nuanced-green))
-          ("WAIT" . '(modus-themes-refine-yellow))
-          ("BLOK" . '(modus-themes-intense-yellow))
-          ("HOLD" . '(modus-themes-intense-neutral))
-          ("KILL" . '(modus-themes-nuanced-red))
-          ("QUESTION" . '(modus-themes-refine-blue))
-          ("ANSWER" . '(modus-themes-special-cold))
-          ("OK" . '(modus-themes-nuanced-blue))
-          ("YES" . '(modus-themes-nuanced-green))
-          ("NO" . '(modus-themes-nuanced-red))
-          ("IDEA" . '(modus-themes-intense-magenta))
-          ("YAK" . '(modus-themes-refine-magenta))
+        ;; Colors for isohedron/flatwhite
+        `(
+          ("TODO"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
+          ("FLAG"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
+          ("BLOK"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
+          ("QUESTION" :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
+
+          ("IDEA"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
+          ("YAK"      :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
+
+          ("WAIT" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("HOLD" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+
+          ("ANSWER" :foreground ,(doom-color 'fw-blue))
+          ("YES" :foreground ,(doom-color 'fw-green))
+          ("NO" :foreground ,(doom-color 'fw-red))
+          ("OK" :foreground ,(doom-color 'fg-alt))
+
+          ("DONE" :foreground ,(doom-color 'fg-alt))
+          ("KILL" :foreground ,(doom-color 'fg-alt))
           )
+        ;; A modus version
+        ;; '(("TODO" . '(modus-themes-refine-green))
+        ;;   ("FLAG" . '(modus-themes-intense-green))
+        ;;   ("DONE" . '(modus-themes-nuanced-green))
+        ;;   ("WAIT" . '(modus-themes-refine-yellow))
+        ;;   ("BLOK" . '(modus-themes-intense-yellow))
+        ;;   ("HOLD" . '(modus-themes-intense-neutral))
+        ;;   ("KILL" . '(modus-themes-nuanced-red))
+        ;;   ("QUESTION" . '(modus-themes-refine-blue))
+        ;;   ("ANSWER" . '(modus-themes-special-cold))
+        ;;   ("OK" . '(modus-themes-nuanced-blue))
+        ;;   ("YES" . '(modus-themes-nuanced-green))
+        ;;   ("NO" . '(modus-themes-nuanced-red))
+        ;;   ("IDEA" . '(modus-themes-intense-magenta))
+        ;;   ("YAK" . '(modus-themes-refine-magenta))
+        ;;   )
         ))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
+;; remove this while we're working on font things, eh?
 (custom-set-faces!
   '(org-headline-todo :inherit default :foreground nil)
-  '(org-headline-done :inherit font-lock-comment-face :weight semilight)
+  '(org-headline-done :inherit font-lock-comment-face
+                      :foreground unspecified
+                      :weight semilight)
   )
 #+end_src
 
 **** DONE Set up coloring for different todo keywords
 Ideally, these should use ~modus-color~ to get colors and adapt to light or dark variants
 Also, set something better for ~org-headline-todo~ face (inherit from default?) and probably ~org-headline-done~ as well
+***** TODO This is a task
 ***** FLAG This is flagged
 ***** DONE This is done
 ***** WAIT This is waiting
