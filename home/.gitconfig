@@ -67,3 +67,5 @@
 	xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 [advice]
 	detachedHead = false
+[init]
+	defaultBranch = master

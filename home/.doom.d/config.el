@@ -18,7 +18,7 @@
 )
 
 (setq doom-themes-treemacs-enable-variable-pitch nil
-      doom-themes-treemacs-theme "doom-atom" ;; not actually sure about the styling difference here
+      ;; doom-themes-treemacs-theme "doom-atom" ;; not actually sure about the styling difference here
 )
 (setq doom-gruvbox-light-brighter-comments nil
       doom-gruvbox-light-variant "hard"
@@ -119,7 +119,7 @@
   :config
   (setq projectile-project-search-path
         '(("~/Code/" . 3)
-         ("~/.homesick/repos" . 0)
+         ("~/.homesick/repos" . 1)
          ))
   
   ;; (projectile-discover-projects-in-directory "~/Code/" 3)
