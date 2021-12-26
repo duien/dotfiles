@@ -9,5 +9,5 @@ home/.atom/compile-cache
 home/.atom/config.cson
 home/.thefuck/*.pyc
 home/.config/karabiner/automatic_backups/
-home/.emacs.scratch.d/straight/
-home/.emacs.scratch.d/recentf
+home/.scratch-config/straight/
+home/.scratch-config/recentf
