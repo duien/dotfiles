@@ -18,6 +18,7 @@ prepend_if_exists PATH "$HOME/.bin"
 prepend_if_exists PATH "$HOME/Code/dox-compose/bin"
 prepend_if_exists PATH "$HOME/.emacs.d/bin"
 
+set -x DOOMDIR "$HOME/.doom-config"
 # Set up homebrew packages that need to be prepended to path
 prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/local/opt/openssl@1.1/bin"
 # This was in universal variables, which are not a great idea for my setup
