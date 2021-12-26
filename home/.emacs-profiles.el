@@ -1,0 +1,7 @@
+(("scratch" . ((user-emacs-directory . "~/.scratch-config")
+               (server-name . "scratch")))
+ ("doom" . ((user-emacs-directory . "~/.doom")
+	       (env . (("DOOMDIR" . "~/.doom-config")))
+               (server-name . "doom")
+               (straight-p)
+)))
