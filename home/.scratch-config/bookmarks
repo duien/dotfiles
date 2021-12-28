@@ -1,8 +1,18 @@
-;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("main init"
+(("modus vivendi colors"
+ (filename . "~/.homesick/repos/dotfiles/home/.scratch-config/straight/repos/modus-themes/modus-themes.el")
+ (front-context-string . "(defconst modus-")
+ (rear-context-string . " Modus Vivendi\n\n")
+ (position . 20198))
+("modus operandi colors"
+ (filename . "~/.homesick/repos/dotfiles/home/.scratch-config/straight/repos/modus-themes/modus-themes.el")
+ (front-context-string . "(defconst modus-")
+ (rear-context-string . "Modus Operandi\n\n")
+ (position . 10266))
+("main init"
  (filename . "~/.emacs.scratch.d/init.el")
  (front-context-string . "ETUP\n\n(setq evil")
  (rear-context-string . "BEGIN THE MAIN S")

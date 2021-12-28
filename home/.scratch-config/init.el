@@ -304,6 +304,10 @@
   :after evil
   :init
   (evil-collection-init))
+(use-package evil-surround
+  :after evil
+  :init
+  (global-evil-surround-mode 1))
 
 (use-package magit
   :general
@@ -312,7 +316,14 @@
     "gg" 'magit-status
 
     )
+  )
 (use-package diff-hl
+  :config
+
+  :hook
+  (diff-hl-mode . diff-hl-flydiff-mode)
+  (magit-pre-refresh  . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh)
   :init (global-diff-hl-mode)
   )
 
@@ -340,19 +351,21 @@
   (setq org-todo-keyword-faces
         `(("TODO" . modus-themes-refine-green)
           ("FLAG" . modus-themes-intense-green)
-          ("DONE" . modus-themes-nuanced-green)
+          ("DONE" . (:inherit '(modus-themes-nuanced-green org-done) :foreground ,(modus-themes-color 'green-faint)))
           ("HOLD" . modus-themes-refine-yellow)
           ("BLOK" . modus-themes-intense-red)
-          ("WAIT" . modus-themes-intense-neutral)
-          ("KILL" . modus-themes-nuanced-red)
+          ("WAIT" . (:inherit '(modus-themes-intense-neutral org-done)))
+          ("KILL" . (:inherit '(modus-themes-nuanced-red org-done) :foreground ,(modus-themes-color 'red-faint)))
           ("QSTN" . modus-themes-refine-blue)
-          ("ANSR" . modus-themes-subtle-blue)
-          ("  OK" . (:foreground ,(modus-themes-color 'blue) :background ,(modus-themes-color 'blue-nuanced-bg)))
-          (" YES" . (:foreground ,(modus-themes-color 'green) :background ,(modus-themes-color 'green-nuanced-bg)))
-          ("  NO" . (:foreground ,(modus-themes-color 'red) :background ,(modus-themes-color 'red-nuanced-bg)))
+          ("ANSR" . (:inherit '(modus-themes-nuanced-blue org-done) :foreground ,(modus-themes-color 'blue-faint)))
+          ("  OK" . (:inherit '(org-done) :foreground ,(modus-themes-color 'blue) :background ,(modus-themes-color 'blue-nuanced-bg)))
+          (" YES" . (:inherit '(org-done) :foreground ,(modus-themes-color 'green) :background ,(modus-themes-color 'green-nuanced-bg)))
+          ("  NO" . (:inherit '(org-done) :foreground ,(modus-themes-color 'red) :background ,(modus-themes-color 'red-nuanced-bg)))
           ("IDEA" . modus-themes-intense-magenta)
           ;; ("YAK"  . '(modus-themes-refine-magenta)
           ))
+  (set-face-attribute 'org-done nil
+                      :weight (face-attribute 'default :weight))
   (set-face-attribute 'org-headline-todo nil
                       :foreground 'unspecified
                       :inherit 'default)
@@ -371,11 +384,11 @@
   (setq org-superstar-cycle-headline-bullets nil
         org-superstar-special-todo-items t
         ;; org-superstar-leading-bullet "·"
-        org-superstar-headline-bullets-list '("◌" "•"))
+        org-superstar-headline-bullets-list '("◎" "•")) ;;◌
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?⭘)
-          ("FLAG"     . ?◍)
-          ("DONE"     . ?·)
+        '(("TODO"     . ?▢) ;;⭘
+          ("FLAG"     . ?▶) ;;◍
+          ("DONE"     . ?✓)
           ("WAIT"     . ?◷) ;;⏾
           ("BLOK"     . ?▲)
           ("HOLD"     . ?≈)
