@@ -215,6 +215,7 @@
   :init
   (vertico-mode)
   )
+
 (use-package orderless
   :config
   (defun flex-if-twiddle (pattern _index _total)
@@ -272,8 +273,9 @@
   (solaire-global-mode 1))
 
 (use-package minions
-  :demand
-  :config (minions-mode 1))
+  :config
+  (setq minions-mode-line-lighter "≡")
+  :init (minions-mode 1))
 
 (use-package evil
   :config
@@ -303,7 +305,16 @@
   :init
   (evil-collection-init))
 
-(use-package magit)
+(use-package magit
+  :general
+  (eh/global-leader
+    "g" '(:ignore t :which-key "git")
+    "gg" 'magit-status
+
+    )
+(use-package diff-hl
+  :init (global-diff-hl-mode)
+  )
 
 (use-package fish-mode)
 (use-package rainbow-mode)
@@ -313,7 +324,7 @@
   (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
         org-log-done t
         org-log-into-drawer t
-        org-cycle-separator-lines -1
+        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
         org-hide-leading-stars t
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
@@ -342,16 +353,17 @@
           ("IDEA" . modus-themes-intense-magenta)
           ;; ("YAK"  . '(modus-themes-refine-magenta)
           ))
-
+  (set-face-attribute 'org-headline-todo nil
+                      :foreground 'unspecified
+                      :inherit 'default)
+  (set-face-attribute 'org-headline-done nil
+                      :inherit '(font-lock-comment-face default))
 
   :hook (org-mode . (lambda()
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
                       ))
-  ;; (org-mode . (org-indent-mode 1))
-  ;; (org-mode . (electric-indent-local-mode -1))
-  ;; (org-mode . (visual-line-mode 1))
   )
 
 (use-package org-superstar 
@@ -364,18 +376,20 @@
         '(("TODO"     . ?⭘)
           ("FLAG"     . ?◍)
           ("DONE"     . ?·)
-          ("WAIT"     . ?⏾)
+          ("WAIT"     . ?◷) ;;⏾
           ("BLOK"     . ?▲)
           ("HOLD"     . ?≈)
           ("KILL"     . ?×)
           ("QSTN"     . ?◇) 
-          ("ANSR"     . ?◆)
+          ("ANSR"     . ?⬥)
           ("  OK"     . ?·)
           (" YES"     . ?·)
           ("  NO"     . ?·)
+          ("IDEA"     . ?◦)
           )
         org-superstar-prettify-item-bullets nil
         )
+  (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight))
   :hook (org-mode . org-superstar-mode)
   )
 

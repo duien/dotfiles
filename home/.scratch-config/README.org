@@ -1,34 +1,27 @@
 #+TITLE: A Beautiful Field full of Yaks
+#+startup: content
 #+property: header-args:emacs-lisp :tangle init.el
 #+auto_tangle: t
 
-* Table of Contents                                    :toc_3:noexport:
-- [[#needs-to-be-configured][Needs to be configured]]
-- [[#early-initialization][Early initialization]]
-- [[#basic-setup][Basic setup]]
-  - [[#add-a-preamble][Add a preamble]]
-  - [[#bootstrap-straight-and-use-package][Bootstrap straight and use-package]]
-  - [[#adjust-things-for-mac][Adjust things for mac]]
-- [[#set-up-packages][Set up packages]]
-  - [[#keybindings-with-general][Keybindings with general]]
-  - [[#completion-and-menus][Completion and menus]]
-  - [[#some-basic-ui-stuff][Some basic UI stuff]]
-  - [[#evil][Evil]]
-  - [[#version-control][Version control]]
-    - [[#forge-and-code-review][Forge and code-review]]
-  - [[#misc-smaller-modes][Misc smaller modes]]
-  - [[#org][Org]]
-    - [[#some-org-add-ons][Some org add-ons]]
-  - [[#themes-and-stuff][Themes and stuff]]
+* Needs to be configured [2/2]                                     :noexport:
+** DONE Set org to leave blank line after headline
+CLOSED: [2021-12-28 Tue 11:11]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2021-12-28 Tue 11:11]
+:END:
+** DONE Make sure magit is working
+CLOSED: [2021-12-28 Tue 11:11]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2021-12-28 Tue 11:11]
+:END:
+** Questions to investigate
+***  YES Is there are way to get rid of the dark background for collapsed headlines that contain source blocks?
+CLOSED: [2021-12-28 Tue 11:22]
 
-* Needs to be configured
-- Set org to leave blank line after headline
-- Make sure magit is working
-- Keys for entering and exiting dedicated editing of org source blocks
-- Projectile
-
+Fixed by changing the setting for ~org-cycle-separator-lines~
 * Early initialization
 :PROPERTIES:
+:visibility: folded
 :header-args: :emacs-lisp :tangle early-init.el
 :END:
 
@@ -223,7 +216,6 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 #+end_src
 
 * Set up packages
-
 ** Keybindings with general
 
 #+begin_src emacs-lisp
@@ -265,9 +257,8 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   )
 #+end_src
 
-
 ** Completion and menus
-
+*** Use vertico for interactive completion
 #+begin_src emacs-lisp
 (use-package vertico
   :general
@@ -276,6 +267,9 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   :init
   (vertico-mode)
   )
+#+end_src
+*** Use orderless matching style
+#+begin_src emacs-lisp
 (use-package orderless
   :config
   (defun flex-if-twiddle (pattern _index _total)
@@ -294,18 +288,27 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
 
+*** Use consult for completing read
+#+begin_src emacs-lisp
 ;; `consult' replaces `completing-read' with a nice interface
 ;; that we can extend as we want
 (use-package consult
   :general
 
   )
+#+end_src
 
+*** Show marginalia when completing
+#+begin_src emacs-lisp
 (use-package marginalia
   :init
   (marginalia-mode))
+#+end_src
 
+*** Use whichkey to show menu of keybindings when you pause
+#+begin_src emacs-lisp
 (use-package which-key
   :config
   ;; this is the default
@@ -314,8 +317,8 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (which-key-mode))
 #+end_src
 
+*** TODO Try out =embark=
 ** Some basic UI stuff
-
 #+begin_src emacs-lisp
 ;; when using visual-line-mode, wrap to the `fill-column'
 ;; (use-package window-margin
@@ -337,10 +340,12 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (solaire-global-mode 1))
 
 (use-package minions
-  :demand
-  :config (minions-mode 1))
+  :config
+  (setq minions-mode-line-lighter "≡")
+  :init (minions-mode 1))
 #+end_src
 
+** TODO Project management with projectile
 ** Evil
 
 #+begin_src emacs-lisp
@@ -376,11 +381,26 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 ** Version control
 
 #+begin_src emacs-lisp
-(use-package magit)
+(use-package magit
+  :general
+  (eh/global-leader
+    "g" '(:ignore t :which-key "git")
+    "gg" 'magit-status
+
+    )
+(use-package diff-hl
+  :init (global-diff-hl-mode)
+  )
 #+end_src
 
+*** TODO Set up =g= submenu keybindings
 *** TODO Forge and code-review
 
+** Programming languages
+*** TODO Ruby
+*** TODO Elixir
+*** TODO Javascript
+*** TODO Web-mode
 ** Misc smaller modes
 
 #+begin_src emacs-lisp
@@ -388,7 +408,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 (use-package rainbow-mode)
 #+end_src
 
-** Org
+* Org
 
 #+begin_src emacs-lisp
 (use-package org
@@ -396,7 +416,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
         org-log-done t
         org-log-into-drawer t
-        org-cycle-separator-lines -1
+        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
         org-hide-leading-stars t
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
@@ -425,20 +445,25 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
           ("IDEA" . modus-themes-intense-magenta)
           ;; ("YAK"  . '(modus-themes-refine-magenta)
           ))
-
+  (set-face-attribute 'org-headline-todo nil
+                      :foreground 'unspecified
+                      :inherit 'default)
+  (set-face-attribute 'org-headline-done nil
+                      :inherit '(font-lock-comment-face default))
 
   :hook (org-mode . (lambda()
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
                       ))
-  ;; (org-mode . (org-indent-mode 1))
-  ;; (org-mode . (electric-indent-local-mode -1))
-  ;; (org-mode . (visual-line-mode 1))
   )
 #+end_src
+** TODO Keys for entering and exiting dedicated editing of org source blocks
+Can use =C-c '= which isn't terrible, but isn't evil-ish
+** TODO Key for change todo state
+Emacs-style is =C-c C-t=
 
-*** Some org add-ons
+** Some org add-ons
 
 #+begin_src emacs-lisp
 (use-package org-superstar 
@@ -451,18 +476,20 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
         '(("TODO"     . ?⭘)
           ("FLAG"     . ?◍)
           ("DONE"     . ?·)
-          ("WAIT"     . ?⏾)
+          ("WAIT"     . ?◷) ;;⏾
           ("BLOK"     . ?▲)
           ("HOLD"     . ?≈)
           ("KILL"     . ?×)
           ("QSTN"     . ?◇) 
-          ("ANSR"     . ?◆)
+          ("ANSR"     . ?⬥)
           ("  OK"     . ?·)
           (" YES"     . ?·)
           ("  NO"     . ?·)
+          ("IDEA"     . ?◦)
           )
         org-superstar-prettify-item-bullets nil
         )
+  (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight))
   :hook (org-mode . org-superstar-mode)
   )
 
@@ -474,22 +501,25 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   :hook (org-mode . toc-org-mode))
 #+end_src
 
-*** Testing out todo faces :noexport:
-**** TODO A task
-**** FLAG Is important
-**** DONE Is complete
-**** WAIT is taking a nap
-**** HOLD is paused
-**** BLOK can't be worked on
-**** KILL Is no longer relevant
-**** IDEA Is something that might be cool
-**** QSTN Is only partly configured
-**** ANSR Is also broken
-****  YES
-****   NO
-****   OK
+** Testing out todo faces                                         :noexport:
+:PROPERTIES:
+:visibility: folded
+:END:
+*** TODO A task
+*** FLAG Is important
+*** DONE Is complete
+*** WAIT is taking a nap
+*** HOLD is paused
+*** BLOK can't be worked on
+*** KILL Is no longer relevant
+*** IDEA Is something that might be cool
+*** QSTN Is only partly configured
+*** ANSR Is also broken
+***  YES Affirmative
+***   NO Not so much
+***   OK This is fine
 
-** Themes and stuff
+* Themes and stuff
 
 #+begin_src emacs-lisp
 ;; VISUALS AT THE END FOR SOME REASON
