@@ -241,6 +241,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 
     "f" '(:ignore t :which-key "file")
     "fs" 'save-buffer
+    "ff" 'project-find-file
 
     "w" '(:ignore t :which-key "window")
     "wd" 'delete-window 
@@ -254,8 +255,17 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
     "qq" 'save-buffers-kill-terminal
     "qf" 'server-edit
 
-    "h" (general-simulate-key "C-h")
-    )
+    ;; "h" (general-simulate-key "C-h")
+    "h" '(:ignore t :which-key "help")
+    "hv" 'describe-variable
+    "hk" 'describe-key
+    "hf" 'describe-function
+    "hF" 'describe-face
+    "ha" 'apropros-command
+    "hd" 'apropros-documentation
+    "hm" 'describe-mode
+    "hp" 'describe-package
+   ) 
   )
 #+end_src
 
@@ -348,7 +358,18 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   :init (minions-mode 1))
 #+end_src
 
+*** TODO Get visual evil state into mode-line
+
 ** TODO Project management with projectile
+#+begin_src emacs-lisp :tangle no
+(project-current)
+(project-find-file)
+(project-find-regexp)
+#+end_src
+
+What if we tried to just do this with =project.el=?
+
+
 ** Evil
 
 #+begin_src emacs-lisp
@@ -530,7 +551,7 @@ Emacs-style is =C-c C-t=
 *** TODO A task
 *** FLAG Is important
 *** DONE Is complete
-*** WAIT is taking a nap
+*** WAIT isn't ready to start on
 *** HOLD is paused
 *** BLOK can't be worked on
 *** KILL Is no longer relevant
@@ -540,6 +561,10 @@ Emacs-style is =C-c C-t=
 ***  YES Affirmative
 ***   NO Not so much
 ***   OK This is fine
+** More complex configuration
+*** TODO Set up super-agenda
+*** TODO Set up capture templates
+*** TODO Maybe org-journal?
 
 * Themes and stuff
 

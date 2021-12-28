@@ -191,6 +191,7 @@
 
     "f" '(:ignore t :which-key "file")
     "fs" 'save-buffer
+    "ff" 'project-find-file
 
     "w" '(:ignore t :which-key "window")
     "wd" 'delete-window 
@@ -204,8 +205,17 @@
     "qq" 'save-buffers-kill-terminal
     "qf" 'server-edit
 
-    "h" (general-simulate-key "C-h")
-    )
+    ;; "h" (general-simulate-key "C-h")
+    "h" '(:ignore t :which-key "help")
+    "hv" 'describe-variable
+    "hk" 'describe-key
+    "hf" 'describe-function
+    "hF" 'describe-face
+    "ha" 'apropros-command
+    "hd" 'apropros-documentation
+    "hm" 'describe-mode
+    "hp" 'describe-package
+   )
   )
 
 (use-package vertico
