@@ -4,4 +4,7 @@
 	       (env . (("DOOMDIR" . "~/.doom-config")))
                (server-name . "doom")
                (straight-p)
-)))
+               ))
+ ("castlemacs" . ((user-emacs-directory . "~/.castlemacs")
+                  (server-name . "castlemacs")))
+ )

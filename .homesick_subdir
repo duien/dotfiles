@@ -6,3 +6,4 @@
 bin
 .spacemacs.d
 .config/nvim
+.castlemacs
