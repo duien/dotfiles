@@ -15,6 +15,8 @@
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
+(push '(height . 50) default-frame-alist)
+(push '(width . 100) default-frame-alist)
 
 ;; Resizing the Emacs frame can be a terribly expensive part of changing the
 ;; font. By inhibiting this, we easily halve startup times with fonts that are
@@ -54,14 +56,6 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'use-package)
 
-;;; USING USE-PACKAGE
-
-;; :init Code to run when `use-package' form evals.
-;; :config Runs if and when package loads.
-
-
-;;; SANE DEFAULTS
-
 (use-package emacs
   :init
   (setq inhibit-startup-screen t
@@ -70,6 +64,9 @@
 
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
+
+  (set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
+  (set-face-attribute 'bold nil :weight 'semibold)
 
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -89,6 +86,7 @@
 
   ;; write over selected text on input... like all modern editors do
   (delete-selection-mode t)
+  (electric-pair-mode t)
 
   ;; enable recent files mode.
   (recentf-mode t)
@@ -171,6 +169,23 @@
     )
   )
 
+(defvar after-enable-theme-hook nil
+   "Normal hook run after enabling a theme.")
+
+(defun run-after-enable-theme-hook (&rest _args)
+   "Run `after-enable-theme-hook'."
+   (run-hooks 'after-enable-theme-hook))
+
+(advice-add 'enable-theme :after #'run-after-enable-theme-hook)
+;; (defun eh/set-face-basics ()
+;;   (set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
+;;   (set-face-attribute 'bold nil :weight 'semibold)
+;;   )
+;; (eh/set-face-basics) ;; do it right now too
+;; (use-package emacs
+;;   :hook
+;;   (after-enable-theme . eh/set-face-basics))
+
 (use-package general
   :demand t
   :config
@@ -205,6 +220,10 @@
     "qq" 'save-buffers-kill-terminal
     "qf" 'server-edit
 
+    "t" '(:ignore t :which-key "toggle")
+    "tl" 'display-line-numbers-mode
+    "tr" 'rainbow-mode
+
     ;; "h" (general-simulate-key "C-h")
     "h" '(:ignore t :which-key "help")
     "hv" 'describe-variable
@@ -215,7 +234,8 @@
     "hd" 'apropros-documentation
     "hm" 'describe-mode
     "hp" 'describe-package
-   )
+    "ht" 'consult-theme
+   ) 
   )
 
 (use-package vertico
@@ -287,6 +307,21 @@
   (setq minions-mode-line-lighter "≡")
   :init (minions-mode 1))
 
+(use-package popper
+  :ensure t ; or :straight t
+  :bind (("C-`"   . popper-toggle-latest)
+         ("M-`"   . popper-cycle)
+         ("C-M-`" . popper-toggle-type))
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1))                ; For echo area hints
+
 (use-package evil
   :config
   ;; Put cursor in new window after split
@@ -331,7 +366,7 @@
   :config
 
   :hook
-  (diff-hl-mode . diff-hl-flydiff-mode)
+  ;; (diff-hl-mode . diff-hl-flydiff-mode) ;; causing indent flicker in org
   (magit-pre-refresh  . diff-hl-magit-pre-refresh)
   (magit-post-refresh . diff-hl-magit-post-refresh)
   :init (global-diff-hl-mode)
@@ -345,6 +380,7 @@
   (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
         org-log-done t
         org-log-into-drawer t
+        org-insert-heading-respect-content t
         org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
         org-hide-leading-stars t
         org-fontify-whole-heading-line t
@@ -354,39 +390,100 @@
   (setq org-todo-keywords
         '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
           (sequence "QSTN(q)" "|" "  OK(o)" " YES(y)" "  NO(n)" "ANSR(a@)")
-          (type "IDEA(I)" "|")
+          (type "IDEA(I)" " YAK(Y)" "|")
           )
         )
-  ;; not sure if this will work here or not
+  ;; define faces to use for all org todo keywords
+
+  ;; completed states
+  (defface eh/org-keyword-done '((t :inherit org-done)) "Face used for the DONE keyword in Org")
+  (defface eh/org-keyword-kill '((t :inherit org-done)) "Face used for the KILL keyword in Org")
+  (defface eh/org-keyword-answer '((t :inherit org-done)) "Face used for the ANSR keyword in Org")
+  (defface eh/org-keyword-ok '((t :inherit eh/org-keyword-answer)) "Face used for the OK keyword in Org")
+  (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done)) "Face used for the YES keyword in Org")
+  (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill)) "Face used for the NO keyword in Org")
+
+  ;; incomplete states
+
+  (defface eh/org-keyword-wait '((t :inherit org-done)) "Face used for the WAIT keyword in Org")
+  (defface eh/org-keyword-flag '((t :inherit org-todo)) "Face used for the FLAG keyword in Org")
+  (defface eh/org-keyword-todo '((t :inherit org-todo)) "Face used for the TODO keyword in Org")
+  (defface eh/org-keyword-block '((t :inherit org-todo)) "Face used for the BLOK keyword in Org")
+  (defface eh/org-keyword-hold '((t :inherit org-todo)) "Face used for the HOLD keyword in Org")
+  (defface eh/org-keyword-question '((t :inherit org-todo)) "Face used for the QSTN keyword in Org")
+  (defface eh/org-keyword-idea '((t :inherit org-todo)) "Face used for the IDEA keyword in Org")
+  (defface eh/org-keyword-yak '((t :inherit org-todo)) "Face used for the YAK keyword in Org")
+
   (setq org-todo-keyword-faces
-        `(("TODO" . modus-themes-refine-green)
-          ("FLAG" . modus-themes-intense-green)
-          ("DONE" . (:inherit '(modus-themes-nuanced-green org-done) :foreground ,(modus-themes-color 'green-faint)))
-          ("HOLD" . modus-themes-refine-yellow)
-          ("BLOK" . modus-themes-intense-red)
-          ("WAIT" . (:inherit '(modus-themes-intense-neutral org-done)))
-          ("KILL" . (:inherit '(modus-themes-nuanced-red org-done) :foreground ,(modus-themes-color 'red-faint)))
-          ("QSTN" . modus-themes-refine-blue)
-          ("ANSR" . (:inherit '(modus-themes-nuanced-blue org-done) :foreground ,(modus-themes-color 'blue-faint)))
-          ("  OK" . (:inherit '(org-done) :foreground ,(modus-themes-color 'blue) :background ,(modus-themes-color 'blue-nuanced-bg)))
-          (" YES" . (:inherit '(org-done) :foreground ,(modus-themes-color 'green) :background ,(modus-themes-color 'green-nuanced-bg)))
-          ("  NO" . (:inherit '(org-done) :foreground ,(modus-themes-color 'red) :background ,(modus-themes-color 'red-nuanced-bg)))
-          ("IDEA" . modus-themes-intense-magenta)
-          ;; ("YAK"  . '(modus-themes-refine-magenta)
+        `(("TODO" . eh/org-keyword-todo)
+          ("FLAG" . eh/org-keyword-flag)
+          ("DONE" . eh/org-keyword-done)
+          ("HOLD" . eh/org-keyword-hold)
+          ("BLOK" . eh/org-keyword-block)
+          ("WAIT" . eh/org-keyword-wait)
+          ("KILL" . eh/org-keyword-kill)
+          ("QSTN" . eh/org-keyword-question)
+          ("ANSR" . eh/org-keyword-answer)
+          ("  OK" . eh/org-keyword-ok)
+          (" YES" . eh/org-keyword-yes)
+          ("  NO" . eh/org-keyword-no)
+          ("IDEA" . eh/org-keyword-idea)
+          (" YAK" . eh/org-keyword-yak)
           ))
-  (set-face-attribute 'org-done nil
-                      :weight (face-attribute 'default :weight))
-  (set-face-attribute 'org-headline-todo nil
-                      :foreground 'unspecified
-                      :inherit 'default)
-  (set-face-attribute 'org-headline-done nil
-                      :inherit '(font-lock-comment-face default))
+
+  (defun eh/org-update-theme ()
+    (set-face-attribute 'org-done nil
+                        :weight (face-attribute 'default :weight))
+    (set-face-attribute 'org-headline-todo nil
+                        :foreground 'unspecified
+                        :inherit 'default)
+    (set-face-attribute 'org-headline-done nil
+                        :inherit '(font-lock-comment-face default))
+    )
+  (defun eh/org-update-modus-theme ()
+    (set-face-attribute 'eh/org-keyword-todo nil
+                        :inherit '(modus-themes-refine-green org-todo))
+    (set-face-attribute 'eh/org-keyword-flag nil
+                        :inherit '(modus-themes-intense-green org-todo))
+    (set-face-attribute 'eh/org-keyword-hold nil
+                        :inherit '(modus-themes-refine-yellow org-todo))
+    (set-face-attribute 'eh/org-keyword-block nil
+                        :inherit '(modus-themes-intense-red org-todo))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :inherit '(modus-themes-intense-neutral org-done))
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :inherit '(modus-themes-refine-blue org-todo))
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :inherit '(modus-themes-refine-cyan org-todo))
+    (set-face-attribute 'eh/org-keyword-yak nil
+                        :inherit '(modus-themes-refine-magenta org-todo))
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :inherit '(modus-themes-nuanced-green org-done)
+                        :foreground (modus-themes-color 'green-faint))
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :inherit '(modus-themes-nuanced-red org-done)
+                        :foreground (modus-themes-color 'red-faint))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :inherit '(modus-themes-nuanced-blue org-done)
+                        :foreground (modus-themes-color 'blue-faint))
+    (set-face-attribute 'eh/org-keyword-ok nil
+                        :inherit 'eh/org-keyword-answer
+                        :foreground (modus-themes-color 'blue))
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :inherit 'eh/org-keyword-done
+                        :foreground (modus-themes-color 'green))
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :inherit 'eh/org-keyword-kill
+                        :foreground (modus-themes-color 'red))
+    )
 
   :hook (org-mode . (lambda()
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
                       ))
+  (after-enable-theme . eh/org-update-theme)
+  (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 
 (use-package org-superstar 
@@ -409,6 +506,7 @@
           (" YES"     . ?·)
           ("  NO"     . ?·)
           ("IDEA"     . ?◦)
+          (" YAK"     . ?◦)
           )
         org-superstar-prettify-item-bullets nil
         )
@@ -427,13 +525,12 @@
 
 ;; Set themes
 (use-package modus-themes
-  :ensure
   :init
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
         modus-themes-intense-markup t
-        modus-themes-fringes nil
+        modus-themes-fringes nil ;; background of fringe area
         modus-themes-mode-line '(moody accented)
         modus-themes-syntax '(green-strings)
         modus-themes-org-blocks 'gray-background
@@ -452,6 +549,3 @@
   :hook (modus-themes-after-load-theme . eh/modus-customize)
   :config
   (modus-themes-load-operandi))
-
-(set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
-(set-face-attribute 'bold nil :weight 'semibold)
