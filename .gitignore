@@ -10,4 +10,6 @@ home/.atom/config.cson
 home/.thefuck/*.pyc
 home/.config/karabiner/automatic_backups/
 home/.scratch-config/straight/
+home/.scratch-config/transient/
+home/.scratch-config/projectile-bookmarks.eld
 home/.scratch-config/recentf
