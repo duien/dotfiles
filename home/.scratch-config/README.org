@@ -14,6 +14,8 @@ CLOSED: [2021-12-28 Tue 11:11]
 :LOGBOOK:
 - State "DONE"       from "TODO"       [2021-12-28 Tue 11:11]
 :END:
+** TODO Pop up scratch buffer
+Learning opportunity: grabbing special buffers, popper-mode
 ** Questions to investigate
 ***  YES Is there are way to get rid of the dark background for collapsed headlines that contain source blocks?
 CLOSED: [2021-12-28 Tue 11:22]
@@ -127,7 +129,6 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 
   ;; write over selected text on input... like all modern editors do
   (delete-selection-mode t)
-  (electric-pair-mode t)
 
   ;; enable recent files mode.
   (recentf-mode t)
@@ -384,6 +385,13 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
   :init (minions-mode 1))
 #+end_src
 
+*** WAIT Smartparens has got to be better than electric pairs
+
+#+begin_src emacs-lisp :tangle no
+(use-package smartparens
+
+)
+#+end_src
 *** Try out popper
 Basic setup from their README
 #+begin_src emacs-lisp
@@ -405,14 +413,30 @@ Basic setup from their README
 
 *** TODO Get visual evil state into mode-line
 
-** HOLD Project management with projectile
-#+begin_src emacs-lisp :tangle no
-(project-current)
-(project-find-file)
-(project-find-regexp)
+** Project management with projectile
+#+begin_src emacs-lisp 
+(use-package projectile
+  :config
+  (setq projectile-project-search-path
+        '(("~/Code" . 3)
+        ("~/.homesick/repos" . 1)))
+  :init
+  (projectile-mode +1)
+  :general
+  (eh/global-leader
+    "p" '(:keymap projectile-command-map :package projectile :which-key "project")
+  )
+)
 #+end_src
+I believe this also needs =persp-mode= do really do what I want (which is the isolated buffers, etc.)
 
-What if we tried to just do this with =project.el=?
+*** TODO Pare down the keymapping to just things I use
+*** ANSR What if we tried to just do this with =project.el=?
+CLOSED: [2021-12-29 Wed 12:16]
+:LOGBOOK:
+- State "ANSR"       from "QSTN"       [2021-12-29 Wed 12:16] \\
+  It works fine for basic things like ~find-in-project~ but I don't see how to easily get fancier functionality like auto-discovered projects in a menu
+:END:
 
 ** Evil
 
@@ -483,6 +507,14 @@ CLOSED: [2021-12-28 Tue 12:04]
 *** TODO Ruby
 Probably want [[https://github.com/zenspider/enhanced-ruby-mode][Enhanced Ruby Mode]] and [[https://github.com/pezra/rspec-mode][Rspec Mode]]
 *** TODO Elixir
+
+Let's set up basic elixir language support as well as alchemist for fancy documentation stuff.
+
+#+begin_src emacs-lisp
+(use-package elixir-mode)
+(use-package alchemist)
+#+end_src
+
 *** TODO Javascript
 *** TODO Web-mode
 ** Misc smaller modes
@@ -607,7 +639,12 @@ Probably want [[https://github.com/zenspider/enhanced-ruby-mode][Enhanced Ruby M
   )
 #+end_src
 
-** TODO Consult headline
+** KILL Consult headline
+CLOSED: [2021-12-29 Wed 11:59]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2021-12-29 Wed 11:59] \\
+  Should be handled by =consult-imenu= binding
+:END:
 ** TODO Keys for entering and exiting dedicated editing of org source blocks
 Can use =C-c '= which isn't terrible, but isn't evil-ish
 ** TODO Key for change todo state

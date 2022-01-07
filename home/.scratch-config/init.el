@@ -86,7 +86,6 @@
 
   ;; write over selected text on input... like all modern editors do
   (delete-selection-mode t)
-  (electric-pair-mode t)
 
   ;; enable recent files mode.
   (recentf-mode t)
@@ -322,6 +321,19 @@
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
 
+(use-package projectile
+  :config
+  (setq projectile-project-search-path
+        '(("~/Code" . 3)
+        ("~/.homesick/repos" . 1)))
+  :init
+  (projectile-mode +1)
+  :general
+  (eh/global-leader
+    "p" '(:keymap projectile-command-map :package projectile :which-key "project")
+  )
+)
+
 (use-package evil
   :config
   ;; Put cursor in new window after split
@@ -371,6 +383,9 @@
   (magit-post-refresh . diff-hl-magit-post-refresh)
   :init (global-diff-hl-mode)
   )
+
+(use-package elixir-mode)
+(use-package alchemist)
 
 (use-package fish-mode)
 (use-package rainbow-mode)
