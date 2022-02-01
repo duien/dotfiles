@@ -57,6 +57,7 @@
 # use vscode for diff/merge
 [merge]
     tool = vscode
+	conflictstyle = zdiff3
 [diff]
 	tool = vscode
 [mergetool "vscode"]
