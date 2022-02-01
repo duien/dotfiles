@@ -3,7 +3,7 @@
 #+property: header-args:emacs-lisp :tangle init.el
 #+auto_tangle: t
 
-* Needs to be configured [2/2]                                     :noexport:
+* Needs to be configured [2/4]                                     :noexport:
 ** DONE Set org to leave blank line after headline
 CLOSED: [2021-12-28 Tue 11:11]
 :LOGBOOK:
@@ -16,6 +16,7 @@ CLOSED: [2021-12-28 Tue 11:11]
 :END:
 ** TODO Pop up scratch buffer
 Learning opportunity: grabbing special buffers, popper-mode
+** TODO Create a function to wrap =set-face-attribute= that will have it reset with the theme change hook
 ** Questions to investigate
 ***  YES Is there are way to get rid of the dark background for collapsed headlines that contain source blocks?
 CLOSED: [2021-12-28 Tue 11:22]
@@ -108,8 +109,16 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
 
-  (set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
-  (set-face-attribute 'bold nil :weight 'semibold)
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 150 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 150 :weight 'normal)
+  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 150 :weight 'normal)
+
+  ;; (set-face-attribute 'bold nil :weight 'semibold)
+
+  ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'variable-pitch' nil :font "IBM Plex Sans" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'bold nil :weight 'semibold)
 
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -366,6 +375,9 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
 ;;   (text-mode . 'turn-on-window-margin-mode)
 ;;   ;; (org-mode . 'turn-on-window-margin-mode)
 ;;   )
+(use-package all-the-icons
+  :demand
+  :if (display-graphic-p))
 
 (use-package moody
   :demand
@@ -392,6 +404,7 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
 
 )
 #+end_src
+
 *** Try out popper
 Basic setup from their README
 #+begin_src emacs-lisp
@@ -438,8 +451,18 @@ CLOSED: [2021-12-29 Wed 12:16]
   It works fine for basic things like ~find-in-project~ but I don't see how to easily get fancier functionality like auto-discovered projects in a menu
 :END:
 
-** Evil
+** Workspaces with persp-mode
+#+begin_src emacs-lisp :tangle no
+(use-package persp-mode
+  :config
+  :hook
+  (window-setup . (lambda () (persp-mode 1)))
+  )
+#+end_src
 
+*** TODO Figure out how the hell to configure this
+
+** Evil
 #+begin_src emacs-lisp
 (use-package evil
   :config
@@ -534,7 +557,9 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
         org-log-into-drawer t
         org-insert-heading-respect-content t
         org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
-        org-hide-leading-stars t
+        org-indent-mode-turns-on-hiding-stars nil
+        org-hide-leading-stars nil
+        org-ellipsis " …"
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
         org-fontify-done-headline t)
@@ -584,13 +609,20 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
           ))
 
   (defun eh/org-update-theme ()
+    (set-face-attribute 'org-todo nil
+                        :inherit 'fixed-pitch
+                        :weight (face-attribute 'bold :weight))
     (set-face-attribute 'org-done nil
+                        :inherit 'fixed-pitch
                         :weight (face-attribute 'default :weight))
     (set-face-attribute 'org-headline-todo nil
                         :foreground 'unspecified
+                        :weight 'normal
                         :inherit 'default)
     (set-face-attribute 'org-headline-done nil
                         :inherit '(font-lock-comment-face default))
+    (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
     )
   (defun eh/org-update-modus-theme ()
     (set-face-attribute 'eh/org-keyword-todo nil
@@ -633,6 +665,7 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
+                      (variable-pitch-mode 1)
                       ))
   (after-enable-theme . eh/org-update-theme)
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
@@ -645,6 +678,8 @@ CLOSED: [2021-12-29 Wed 11:59]
 - State "KILL"       from "TODO"       [2021-12-29 Wed 11:59] \\
   Should be handled by =consult-imenu= binding
 :END:
+**  YAK Why does =consult-headline= not actually find all the headlines?
+For instance, the "Org" headline doesn't show up when you search for "org"
 ** TODO Keys for entering and exiting dedicated editing of org source blocks
 Can use =C-c '= which isn't terrible, but isn't evil-ish
 ** TODO Key for change todo state
@@ -669,28 +704,35 @@ Added a ~after-enable-theme~ hook where they can be set
   :config
   (setq org-superstar-cycle-headline-bullets nil
         org-superstar-special-todo-items t
-        ;; org-superstar-leading-bullet "·"
-        org-superstar-headline-bullets-list '("◎" "•")) ;;◌
+        org-superstar-leading-fallback "·"
+        org-superstar-leading-bullet "·"
+        org-superstar-remove-leading-stars nil
+        org-superstar-headline-bullets-list '("#" "•")) ;;◌◎
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?▢) ;;⭘
-          ("FLAG"     . ?▶) ;;◍
+        '(("TODO"     . ?›) ;;⭘▢
+          ("FLAG"     . ?») ;;◍▶
           ("DONE"     . ?✓)
-          ("WAIT"     . ?◷) ;;⏾
-          ("BLOK"     . ?▲)
+          ("WAIT"     . ?~) ;;⏾◷
+          ("BLOK"     . ?◊) ;;▲
           ("HOLD"     . ?≈)
-          ("KILL"     . ?×)
-          ("QSTN"     . ?◇) 
-          ("ANSR"     . ?⬥)
+          ("KILL"     . ?×) ;;❌×
+          ("QSTN"     . ??) ;;◊◇
+          ("ANSR"     . ?•) ;;⬥
           ("  OK"     . ?·)
           (" YES"     . ?·)
           ("  NO"     . ?·)
-          ("IDEA"     . ?◦)
-          (" YAK"     . ?◦)
+          ("IDEA"     . ?•)
+          (" YAK"     . ?∞) ;;∞◦
+          ;; →←·•*#›»
           )
         org-superstar-prettify-item-bullets nil
         )
-  (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight))
-  :hook (org-mode . org-superstar-mode)
+  (defun eh/org-superstar-update-theme ()
+    (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
+    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'mode-line :background)))
+  :hook 
+  (org-mode . org-superstar-mode)
+  (org-mode . eh/org-superstar-update-theme)
   )
 
 (use-package org-auto-tangle
@@ -705,6 +747,7 @@ Added a ~after-enable-theme~ hook where they can be set
 :PROPERTIES:
 :visibility: folded
 :END:
+This is a longer bit ... wait ... 
 *** TODO A task
 *** FLAG Is important
 *** DONE Is complete
@@ -732,7 +775,9 @@ Added a ~after-enable-theme~ hook where they can be set
 ;; Set themes
 (use-package modus-themes
   :init
-  (setq modus-themes-italic-constructs t
+  (setq modus-themes-mixed-fonts t
+        modus-themes-variable-pitch-ui t
+        modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
         modus-themes-intense-markup t
@@ -748,7 +793,7 @@ Added a ~after-enable-theme~ hook where they can be set
         )
   (defun eh/modus-customize ()
     ;; deal with git gutter faces? or maybe that's no longer an issue?
-    ) 
+    )
 
   ;; load the theme files
   (modus-themes-load-themes)

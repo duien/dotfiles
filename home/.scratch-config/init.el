@@ -65,8 +65,16 @@
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
 
-  (set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
-  (set-face-attribute 'bold nil :weight 'semibold)
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 150 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 150 :weight 'normal)
+  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 150 :weight 'normal)
+
+  ;; (set-face-attribute 'bold nil :weight 'semibold)
+
+  ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'variable-pitch' nil :font "IBM Plex Sans" :weight 'semilight :height 150)
+  ;; (set-face-attribute 'bold nil :weight 'semibold)
 
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -288,6 +296,9 @@
 ;;   (text-mode . 'turn-on-window-margin-mode)
 ;;   ;; (org-mode . 'turn-on-window-margin-mode)
 ;;   )
+(use-package all-the-icons
+  :demand
+  :if (display-graphic-p))
 
 (use-package moody
   :demand
@@ -397,7 +408,9 @@
         org-log-into-drawer t
         org-insert-heading-respect-content t
         org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
-        org-hide-leading-stars t
+        org-indent-mode-turns-on-hiding-stars nil
+        org-hide-leading-stars nil
+        org-ellipsis " …"
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
         org-fontify-done-headline t)
@@ -447,13 +460,20 @@
           ))
 
   (defun eh/org-update-theme ()
+    (set-face-attribute 'org-todo nil
+                        :inherit 'fixed-pitch
+                        :weight (face-attribute 'bold :weight))
     (set-face-attribute 'org-done nil
+                        :inherit 'fixed-pitch
                         :weight (face-attribute 'default :weight))
     (set-face-attribute 'org-headline-todo nil
                         :foreground 'unspecified
+                        :weight 'normal
                         :inherit 'default)
     (set-face-attribute 'org-headline-done nil
                         :inherit '(font-lock-comment-face default))
+    (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
     )
   (defun eh/org-update-modus-theme ()
     (set-face-attribute 'eh/org-keyword-todo nil
@@ -496,6 +516,7 @@
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
+                      (variable-pitch-mode 1)
                       ))
   (after-enable-theme . eh/org-update-theme)
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
@@ -505,28 +526,35 @@
   :config
   (setq org-superstar-cycle-headline-bullets nil
         org-superstar-special-todo-items t
-        ;; org-superstar-leading-bullet "·"
-        org-superstar-headline-bullets-list '("◎" "•")) ;;◌
+        org-superstar-leading-fallback "·"
+        org-superstar-leading-bullet "·"
+        org-superstar-remove-leading-stars nil
+        org-superstar-headline-bullets-list '("#" "•")) ;;◌◎
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?▢) ;;⭘
-          ("FLAG"     . ?▶) ;;◍
+        '(("TODO"     . ?›) ;;⭘▢
+          ("FLAG"     . ?») ;;◍▶
           ("DONE"     . ?✓)
-          ("WAIT"     . ?◷) ;;⏾
-          ("BLOK"     . ?▲)
+          ("WAIT"     . ?~) ;;⏾◷
+          ("BLOK"     . ?◊) ;;▲
           ("HOLD"     . ?≈)
-          ("KILL"     . ?×)
-          ("QSTN"     . ?◇) 
-          ("ANSR"     . ?⬥)
+          ("KILL"     . ?×) ;;❌×
+          ("QSTN"     . ??) ;;◊◇
+          ("ANSR"     . ?•) ;;⬥
           ("  OK"     . ?·)
           (" YES"     . ?·)
           ("  NO"     . ?·)
-          ("IDEA"     . ?◦)
-          (" YAK"     . ?◦)
+          ("IDEA"     . ?•)
+          (" YAK"     . ?∞) ;;∞◦
+          ;; →←·•*#›»
           )
         org-superstar-prettify-item-bullets nil
         )
-  (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight))
-  :hook (org-mode . org-superstar-mode)
+  (defun eh/org-superstar-update-theme ()
+    (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
+    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'mode-line :background)))
+  :hook 
+  (org-mode . org-superstar-mode)
+  (org-mode . eh/org-superstar-update-theme)
   )
 
 (use-package org-auto-tangle
@@ -541,7 +569,9 @@
 ;; Set themes
 (use-package modus-themes
   :init
-  (setq modus-themes-italic-constructs t
+  (setq modus-themes-mixed-fonts t
+        modus-themes-variable-pitch-ui t
+        modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
         modus-themes-intense-markup t
@@ -557,7 +587,7 @@
         )
   (defun eh/modus-customize ()
     ;; deal with git gutter faces? or maybe that's no longer an issue?
-    ) 
+    )
 
   ;; load the theme files
   (modus-themes-load-themes)
