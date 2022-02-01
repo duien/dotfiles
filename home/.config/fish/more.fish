@@ -16,7 +16,7 @@ prepend_if_exists PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bi
 prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
 prepend_if_exists PATH "$HOME/Code/dox-compose/bin"
-prepend_if_exists PATH "$HOME/.emacs.d/bin"
+prepend_if_exists PATH "$HOME/.doom/bin"
 
 set -x DOOMDIR "$HOME/.doom-config"
 # Set up homebrew packages that need to be prepended to path
