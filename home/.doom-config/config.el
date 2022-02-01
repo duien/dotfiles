@@ -6,8 +6,10 @@
 (setq user-full-name "Emily Hyland"
       user-mail-address "emily@duien.com")
 
-(setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'semilight))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 15 :weight 'normal))
 (setq doom-theme 'doom-isohedron)
+
+(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 15 :weight 'normal))
 
 (setq ns-use-thin-smoothing t ;; not sure if this actually does anything useful?
       line-spacing 0.1
@@ -18,7 +20,7 @@
 )
 
 (setq doom-themes-treemacs-enable-variable-pitch nil
-      ;; doom-themes-treemacs-theme "doom-atom" ;; not actually sure about the styling difference here
+      doom-themes-treemacs-theme "doom-atom" ;; not actually sure about the styling difference here
 )
 (setq doom-gruvbox-light-brighter-comments nil
       doom-gruvbox-light-variant "hard"
@@ -33,12 +35,21 @@
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-string-face  :slant italic)
+  ;; '(markdown-pre-face :inherit fixed-pitch-face)
   '(markdown-language-keyword-face :inherit markdown-pre-face :slant italic)
   '(line-number :weight semilight)
   '(line-number-current-line :weight semibold)
   )
 
 (setq prettify-symbols-alist '())
+
+(use-package! mixed-pitch
+  :init
+;;   ;; (add-to-list 'mixed-pitch-fixed-pitch-faces
+;;                ;; 'markdown-pre 'org-superstar-header-bullet)
+  :hook
+  (org-mode . mixed-pitch-mode)
+  )
 
 (use-package! ligature
  :config
@@ -150,29 +161,31 @@
       org-ellipsis " ▼")
 (setq org-superstar-cycle-headline-bullets nil
       org-superstar-special-todo-items t
-      org-superstar-headline-bullets-list '("◌" "•"))
+      org-superstar-headline-bullets-list '("#" "•"))
 
 (after! org
   (setq org-todo-keywords
         '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
-          (sequence "QUESTION(q)" "|" "OK(o)" "YES(y)" "NO(n)" "ANSWER(a@)")
-          (type "IDEA(I)" "YAK(Y)" "|")
+          (sequence "QSTN(q)" "|" "  OK(o)" " YES(y)" "  NO(n)" "ANSR(a@)")
+          (type "IDEA(I)" " YAK(Y)" "|")
           )
         ))
 (after! org-superstar
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?⭘)
-          ("FLAG"     . ?◍)
-          ("DONE"     . ?·)
-          ("WAIT"     . ?⏾)
-          ("BLOK"     . ?▲)
-          ("HOLD"     . ?≈)
-          ("KILL"     . ?×)
-          ("QUESTION" . ?◇) ;; QSTN
-          ("ANSWER"   . ?◆) ;; ANSR
-          ("OK"       . ?·)
-          ("YES"      . ?·)
-          ("NO"       . ?·)
+        '(("TODO" . ?›)
+          ("FLAG" . ?»)
+          ("DONE" . ?✓)
+          ("WAIT" . ?~)
+          ("BLOK" . ?◊)
+          ("HOLD" . ?≈)
+          ("KILL" . ?×)
+          ("QSTN" . ??) ;; QSTN
+          ("ANSR" . ?•) ;; ANSR
+          ("  OK" . ?·)
+          (" YES" . ?·)
+          ("  NO" . ?·)
+          ("IDEA" . ?•)
+          (" YAK" . ?∞)
           )
         org-superstar-prettify-item-bullets nil
         )
@@ -182,24 +195,24 @@
   (setq org-todo-keyword-faces
         ;; Colors for isohedron/flatwhite
         `(
-          ("TODO"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
-          ("FLAG"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
-          ("BLOK"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
-          ("QUESTION" :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
+          ("TODO" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
+          ("FLAG" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
+          ("BLOK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
+          ("QSTN" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
 
-          ("IDEA"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
-          ("YAK"      :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
+          ("IDEA" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
+          (" YAK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
 
-          ("WAIT" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
-          ("HOLD" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("WAIT" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("HOLD" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
 
-          ("ANSWER" :foreground ,(doom-color 'fw-blue))
-          ("YES" :foreground ,(doom-color 'fw-green))
-          ("NO" :foreground ,(doom-color 'fw-red))
-          ("OK" :foreground ,(doom-color 'fg-alt))
+          ("ANSR" :inherit 'org-done :foreground ,(doom-color 'fw-blue))
+          (" YES" :inherit 'org-done :foreground ,(doom-color 'fw-green))
+          ("  NO" :inherit 'org-done :foreground ,(doom-color 'fw-red))
+          ("  OK" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
 
-          ("DONE" :foreground ,(doom-color 'fg-alt))
-          ("KILL" :foreground ,(doom-color 'fg-alt))
+          ("DONE" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
+          ("KILL" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
           )
         ;; A modus version
         ;; '(("TODO" . '(modus-themes-refine-green))
@@ -218,6 +231,9 @@
         ;;   ("YAK" . '(modus-themes-refine-magenta))
         ;;   )
         ))
+(custom-set-faces!
+  ;; '(org-superstar-header-bullet :inherit fixed-pitch-face :weight normal)
+  )
 
 (add-hook! org-mode (electric-indent-local-mode -1))
 (add-hook! org-mode :append

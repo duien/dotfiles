@@ -1,6 +1,4 @@
 #+TITLE: Doom Emacs Configuration
-# Automatically tangle this file on save, defaulting to ~emacs-lisp~ in ~config.el~
-# (Temporarily tangle to ~config-tangled~ instead to avoid destroying real config)
 #+property: header-args:emacs-lisp :tangle config.el :comments no
 #+auto_tangle: t
 
@@ -49,8 +47,10 @@ It's good to know who you are
 Configure our main font through doom. To update the font without reloading, evaluate this block then run ~doom/reload-font~ with =SPC h r f=
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "Cascadia Code" :size 15 :weight 'semilight))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 15 :weight 'normal))
 (setq doom-theme 'doom-isohedron)
+
+(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 15 :weight 'normal))
 #+end_src
 
 Next, set up basic text display properties
@@ -98,6 +98,7 @@ I don't like doing this through customize, as it tends to make things sneakily s
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-string-face  :slant italic)
+  ;; '(markdown-pre-face :inherit fixed-pitch-face)
   '(markdown-language-keyword-face :inherit markdown-pre-face :slant italic)
   '(line-number :weight semilight)
   '(line-number-current-line :weight semibold)
@@ -108,6 +109,19 @@ Try to disable the weird character replacements from =prettify-symbols-mode= wit
 
 #+begin_src emacs-lisp
 (setq prettify-symbols-alist '())
+#+end_src
+
+Similarly, do some tweaking of =mixed-pitch-mode= to fix things up. We use that one instead of =variable-pitch-mode= because ... that's the one that doom's themes seem to work with.
+
+
+#+begin_src emacs-lisp
+(use-package! mixed-pitch
+  :init
+;;   ;; (add-to-list 'mixed-pitch-fixed-pitch-faces
+;;                ;; 'markdown-pre 'org-superstar-header-bullet)
+  :hook
+  (org-mode . mixed-pitch-mode)
+  )
 #+end_src
 
 *** Ligatures
@@ -139,6 +153,7 @@ Try to disable the weird character replacements from =prettify-symbols-mode= wit
 
 *** Isohedron Theme
 **** TODO A better color for an org block being edited in its own buffer
+**** TODO Figure out whether mixed/variable pitch mode issues are the theme's fault
 
 *** Modus
 
@@ -286,6 +301,8 @@ Discover projects in my common locations
   )
 #+end_src
 
+*** TODO Figure out what's going on with project caching -- opening the project list has become very slow :noexport:
+
 ** Orderless
 
 Allow searching for fuzzy strings or excluding strings with orderless completion. I don't use these much in my day-to-day workflow, but let's keep them around as a pattern for how this configuration works.
@@ -324,7 +341,7 @@ Org-mode is a bit of a beast to configure even in ideal circumstances. With doom
       org-ellipsis " ▼")
 (setq org-superstar-cycle-headline-bullets nil
       org-superstar-special-todo-items t
-      org-superstar-headline-bullets-list '("◌" "•"))
+      org-superstar-headline-bullets-list '("#" "•"))
 #+end_src
 
 *** Override doom config after load
@@ -335,24 +352,26 @@ First, set up our todo keywords and the custom bullets for each of them
 (after! org
   (setq org-todo-keywords
         '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
-          (sequence "QUESTION(q)" "|" "OK(o)" "YES(y)" "NO(n)" "ANSWER(a@)")
-          (type "IDEA(I)" "YAK(Y)" "|")
+          (sequence "QSTN(q)" "|" "  OK(o)" " YES(y)" "  NO(n)" "ANSR(a@)")
+          (type "IDEA(I)" " YAK(Y)" "|")
           )
         ))
 (after! org-superstar
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?⭘)
-          ("FLAG"     . ?◍)
-          ("DONE"     . ?·)
-          ("WAIT"     . ?⏾)
-          ("BLOK"     . ?▲)
-          ("HOLD"     . ?≈)
-          ("KILL"     . ?×)
-          ("QUESTION" . ?◇) ;; QSTN
-          ("ANSWER"   . ?◆) ;; ANSR
-          ("OK"       . ?·)
-          ("YES"      . ?·)
-          ("NO"       . ?·)
+        '(("TODO" . ?›)
+          ("FLAG" . ?»)
+          ("DONE" . ?✓)
+          ("WAIT" . ?~)
+          ("BLOK" . ?◊)
+          ("HOLD" . ?≈)
+          ("KILL" . ?×)
+          ("QSTN" . ??) ;; QSTN
+          ("ANSR" . ?•) ;; ANSR
+          ("  OK" . ?·)
+          (" YES" . ?·)
+          ("  NO" . ?·)
+          ("IDEA" . ?•)
+          (" YAK" . ?∞)
           )
         org-superstar-prettify-item-bullets nil
         )
@@ -376,24 +395,24 @@ Our own version of that will be a little more involved, probably. Let's give it 
   (setq org-todo-keyword-faces
         ;; Colors for isohedron/flatwhite
         `(
-          ("TODO"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
-          ("FLAG"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
-          ("BLOK"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
-          ("QUESTION" :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
+          ("TODO" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-green))
+          ("FLAG" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-orange))
+          ("BLOK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-red))
+          ("QSTN" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-blue))
 
-          ("IDEA"     :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
-          ("YAK"      :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
+          ("IDEA" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
+          (" YAK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
 
-          ("WAIT" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
-          ("HOLD" :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("WAIT" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("HOLD" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
 
-          ("ANSWER" :foreground ,(doom-color 'fw-blue))
-          ("YES" :foreground ,(doom-color 'fw-green))
-          ("NO" :foreground ,(doom-color 'fw-red))
-          ("OK" :foreground ,(doom-color 'fg-alt))
+          ("ANSR" :inherit 'org-done :foreground ,(doom-color 'fw-blue))
+          (" YES" :inherit 'org-done :foreground ,(doom-color 'fw-green))
+          ("  NO" :inherit 'org-done :foreground ,(doom-color 'fw-red))
+          ("  OK" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
 
-          ("DONE" :foreground ,(doom-color 'fg-alt))
-          ("KILL" :foreground ,(doom-color 'fg-alt))
+          ("DONE" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
+          ("KILL" :inherit 'org-done :foreground ,(doom-color 'fg-alt))
           )
         ;; A modus version
         ;; '(("TODO" . '(modus-themes-refine-green))
@@ -412,6 +431,9 @@ Our own version of that will be a little more involved, probably. Let's give it 
         ;;   ("YAK" . '(modus-themes-refine-magenta))
         ;;   )
         ))
+(custom-set-faces!
+  ;; '(org-superstar-header-bullet :inherit fixed-pitch-face :weight normal)
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -441,6 +463,13 @@ Also, set something better for ~org-headline-todo~ face (inherit from default?) 
 ***** NO The answer was no
 ***** IDEA This is something to try
 ***** YAK This is a rabbit-hole
+*****  YAK This is a rabbit hole
+***** QSTN This is an updated question
+***** ANSR This is the answer
+*****   OK This is dismissed
+*****  YES The answer was yes
+*****   NO The answer was no
+
 **** TODO Set up capture templates
 - Quickly add a note to the logbook linking back to source
 - Create a todo in various different places

@@ -517,6 +517,8 @@ determine the exact padding."
    ((org-block &override)
     :background fw-base6)
    ;; decide on altered font for org-code and org-verbatim
+   ((org-hide &override)
+    :inherit 'default)
    ((org-code &override)
     :background fw-orange-blend
     :foreground fw-orange-text)
@@ -524,14 +526,15 @@ determine the exact padding."
     :background fw-teal-blend
     :foreground fw-teal-text)
    ((org-headline-todo &override) :inherit 'default)
-   ((org-headline-done &override) :inherit 'font-lock-comment-face :foreground nil :weight 'semilight)
+   ((org-headline-done &override) :inherit 'default :foreground base3 :weight 'semilight :slant 'italic)
    ;; TODO These don't seem to work
-   ;; ((org-todo &override) :inherit 'default :weight 'semibold :box t)
-   ;; ((org-done &override) :inherit 'default :weight 'semilight)
+   ;; ((org-todo &override) :inherit 'default :weight 'bold)
+   ;; ((org-done &override) :inherit 'default)
+   (org-todo :inherit 'default :weight 'bold)
+   (org-done :inherit 'default)
    ((org-quote &override)
     :background fw-orange-blend
     :foreground fw-orange-text)
-   (org-superstar-header-bullet :weight 'semilight)
    ;;;; outline
    ((outline-1 &override) :foreground fw-purple-text :background fw-purple-blend)
    (outline-2 :weight 'semibold)
