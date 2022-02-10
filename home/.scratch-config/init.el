@@ -337,6 +337,7 @@
   (setq projectile-project-search-path
         '(("~/Code" . 3)
         ("~/.homesick/repos" . 1)))
+  (projectile-add-known-project "~/Org/")
   :init
   (projectile-mode +1)
   :general
