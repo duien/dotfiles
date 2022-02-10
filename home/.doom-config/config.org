@@ -47,10 +47,10 @@ It's good to know who you are
 Configure our main font through doom. To update the font without reloading, evaluate this block then run ~doom/reload-font~ with =SPC h r f=
 
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "IBM Plex Mono" :size 15 :weight 'normal))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 16 :weight 'normal))
 (setq doom-theme 'doom-isohedron)
 
-(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 15 :weight 'normal))
+(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 16 :weight 'normal))
 #+end_src
 
 Next, set up basic text display properties
@@ -58,7 +58,7 @@ Next, set up basic text display properties
 #+begin_src emacs-lisp
 (setq ns-use-thin-smoothing t ;; not sure if this actually does anything useful?
       line-spacing 0.1
-      display-line-numbers-type t ;; show absolute line numbers
+      ;; display-line-numbers-type t ;; show absolute line numbers
       scroll-margin 5 ;; keep a few lines at the edge of the screen
       all-the-icons-scale-factor 1.0 ;; default of 1.2 is slightly too large
       emojify-emoji-set "twemoji-v2"
@@ -361,9 +361,9 @@ First, set up our todo keywords and the custom bullets for each of them
         '(("TODO" . ?›)
           ("FLAG" . ?»)
           ("DONE" . ?✓)
-          ("WAIT" . ?~)
+          ("WAIT" . ?≈)
           ("BLOK" . ?◊)
-          ("HOLD" . ?≈)
+          ("HOLD" . ?~)
           ("KILL" . ?×)
           ("QSTN" . ??) ;; QSTN
           ("ANSR" . ?•) ;; ANSR
@@ -403,8 +403,8 @@ Our own version of that will be a little more involved, probably. Let's give it 
           ("IDEA" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
           (" YAK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
 
-          ("WAIT" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
-          ("HOLD" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
+          ("HOLD" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("WAIT" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
 
           ("ANSR" :inherit 'org-done :foreground ,(doom-color 'fw-blue))
           (" YES" :inherit 'org-done :foreground ,(doom-color 'fw-green))

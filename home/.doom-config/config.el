@@ -6,14 +6,14 @@
 (setq user-full-name "Emily Hyland"
       user-mail-address "emily@duien.com")
 
-(setq doom-font (font-spec :family "IBM Plex Mono" :size 15 :weight 'normal))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 16 :weight 'normal))
 (setq doom-theme 'doom-isohedron)
 
-(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 15 :weight 'normal))
+(setq doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 16 :weight 'normal))
 
 (setq ns-use-thin-smoothing t ;; not sure if this actually does anything useful?
       line-spacing 0.1
-      display-line-numbers-type t ;; show absolute line numbers
+      ;; display-line-numbers-type t ;; show absolute line numbers
       scroll-margin 5 ;; keep a few lines at the edge of the screen
       all-the-icons-scale-factor 1.0 ;; default of 1.2 is slightly too large
       emojify-emoji-set "twemoji-v2"
@@ -175,9 +175,9 @@
         '(("TODO" . ?›)
           ("FLAG" . ?»)
           ("DONE" . ?✓)
-          ("WAIT" . ?~)
+          ("WAIT" . ?≈)
           ("BLOK" . ?◊)
-          ("HOLD" . ?≈)
+          ("HOLD" . ?~)
           ("KILL" . ?×)
           ("QSTN" . ??) ;; QSTN
           ("ANSR" . ?•) ;; ANSR
@@ -203,8 +203,8 @@
           ("IDEA" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-teal))
           (" YAK" :inherit 'org-todo :foreground ,(doom-color 'bg) :background ,(doom-color 'fw-purple))
 
-          ("WAIT" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
-          ("HOLD" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
+          ("HOLD" :inherit 'org-done :foreground ,(doom-color 'fg-alt) :background ,(doom-color 'fw-base5))
+          ("WAIT" :inherit 'org-todo :foreground ,(doom-color 'fw-yellow-text) :background ,(doom-color 'fw-yellow))
 
           ("ANSR" :inherit 'org-done :foreground ,(doom-color 'fw-blue))
           (" YES" :inherit 'org-done :foreground ,(doom-color 'fw-green))

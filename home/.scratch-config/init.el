@@ -65,9 +65,9 @@
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
 
-  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 150 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 150 :weight 'normal)
-  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 150 :weight 'normal)
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
 
   ;; (set-face-attribute 'bold nil :weight 'semibold)
 
@@ -400,6 +400,8 @@
 
 (use-package fish-mode)
 (use-package rainbow-mode)
+(use-package vterm)
+(use-package markdown-mode)
 
 (use-package org
   :config
@@ -480,11 +482,11 @@
                         :inherit '(modus-themes-refine-green org-todo))
     (set-face-attribute 'eh/org-keyword-flag nil
                         :inherit '(modus-themes-intense-green org-todo))
-    (set-face-attribute 'eh/org-keyword-hold nil
-                        :inherit '(modus-themes-refine-yellow org-todo))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :inherit '(modus-themes-refine-yellow org-done))
     (set-face-attribute 'eh/org-keyword-block nil
                         :inherit '(modus-themes-intense-red org-todo))
-    (set-face-attribute 'eh/org-keyword-wait nil
+    (set-face-attribute 'eh/org-keyword-hold nil
                         :inherit '(modus-themes-intense-neutral org-done))
     (set-face-attribute 'eh/org-keyword-question nil
                         :inherit '(modus-themes-refine-blue org-todo))
@@ -534,9 +536,9 @@
         '(("TODO"     . ?›) ;;⭘▢
           ("FLAG"     . ?») ;;◍▶
           ("DONE"     . ?✓)
-          ("WAIT"     . ?~) ;;⏾◷
+          ("WAIT"     . ?≈) ;;⏾◷
           ("BLOK"     . ?◊) ;;▲
-          ("HOLD"     . ?≈)
+          ("HOLD"     . ?~)
           ("KILL"     . ?×) ;;❌×
           ("QSTN"     . ??) ;;◊◇
           ("ANSR"     . ?•) ;;⬥

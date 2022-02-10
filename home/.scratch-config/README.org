@@ -109,9 +109,9 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
 
-  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 150 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 150 :weight 'normal)
-  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 150 :weight 'normal)
+  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
 
   ;; (set-face-attribute 'bold nil :weight 'semibold)
 
@@ -397,7 +397,7 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
   :init (minions-mode 1))
 #+end_src
 
-*** WAIT Smartparens has got to be better than electric pairs
+*** HOLD Smartparens has got to be better than electric pairs
 
 #+begin_src emacs-lisp :tangle no
 (use-package smartparens
@@ -524,7 +524,7 @@ CLOSED: [2021-12-28 Tue 12:04]
 :LOGBOOK:
 - State "DONE"       from "TODO"       [2021-12-28 Tue 12:04]
 :END:
-*** WAIT Forge and code-review
+*** HOLD Forge and code-review
 
 ** Programming languages
 *** TODO Ruby
@@ -545,6 +545,8 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
 #+begin_src emacs-lisp
 (use-package fish-mode)
 (use-package rainbow-mode)
+(use-package vterm)
+(use-package markdown-mode)
 #+end_src
 
 * Org
@@ -629,11 +631,11 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
                         :inherit '(modus-themes-refine-green org-todo))
     (set-face-attribute 'eh/org-keyword-flag nil
                         :inherit '(modus-themes-intense-green org-todo))
-    (set-face-attribute 'eh/org-keyword-hold nil
-                        :inherit '(modus-themes-refine-yellow org-todo))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :inherit '(modus-themes-refine-yellow org-done))
     (set-face-attribute 'eh/org-keyword-block nil
                         :inherit '(modus-themes-intense-red org-todo))
-    (set-face-attribute 'eh/org-keyword-wait nil
+    (set-face-attribute 'eh/org-keyword-hold nil
                         :inherit '(modus-themes-intense-neutral org-done))
     (set-face-attribute 'eh/org-keyword-question nil
                         :inherit '(modus-themes-refine-blue org-todo))
@@ -712,9 +714,9 @@ Added a ~after-enable-theme~ hook where they can be set
         '(("TODO"     . ?›) ;;⭘▢
           ("FLAG"     . ?») ;;◍▶
           ("DONE"     . ?✓)
-          ("WAIT"     . ?~) ;;⏾◷
+          ("WAIT"     . ?≈) ;;⏾◷
           ("BLOK"     . ?◊) ;;▲
-          ("HOLD"     . ?≈)
+          ("HOLD"     . ?~)
           ("KILL"     . ?×) ;;❌×
           ("QSTN"     . ??) ;;◊◇
           ("ANSR"     . ?•) ;;⬥
