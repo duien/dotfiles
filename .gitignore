@@ -13,3 +13,5 @@ home/.scratch-config/straight/
 home/.scratch-config/transient/
 home/.scratch-config/projectile-bookmarks.eld
 home/.scratch-config/recentf
+home/.scratch-config/.persistent-scratch
+home/.scratch-config/.cache

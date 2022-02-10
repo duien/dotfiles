@@ -111,9 +111,9 @@
   (setq enable-local-variables :all)     ; fix =defvar= warnings
 
   ;; stop emacs from littering the file system with backup files
-  (setq make-backup-files nil
-        auto-save-default nil
-        create-lockfiles nil)
+  ;; (setq make-backup-files nil
+  ;;       auto-save-default nil
+  ;;       create-lockfiles nil)
 
   ;; follow symlinks 
   (setq vc-follow-symlinks t)
@@ -127,6 +127,8 @@
   (winner-mode t)
 
   (show-paren-mode t)
+  (display-fill-column-indicator-mode 1)
+  (electric-pair-mode 1)
 
   ;; less noise when compiling elisp
   (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
@@ -142,9 +144,7 @@
   (setq-default indent-tabs-mode nil) ;; never use tabs to indent 
   (setq-default tab-width 2)
 
-  ;; Enable indentation+completion using the TAB key.
-  ;; Completion is often bound to M-TAB.
-  (setq tab-always-indent 'complete)
+  (setq tab-always-indent t)
 
   ;; Some evil stuff that needs to be set early
   (setq evil-want-integration t)
@@ -345,6 +345,17 @@
   )
 )
 
+(use-package treemacs
+  :config
+(treemacs-follow-mode t)
+  :general
+  (eh/global-leader
+    "\\" 'treemacs))
+(use-package treemacs-evil
+  :after (treemacs evil))
+(use-package treemacs-projectile
+  :after (treemacs projectile))
+
 (use-package evil
   :config
   ;; Put cursor in new window after split
@@ -402,6 +413,11 @@
 (use-package rainbow-mode)
 (use-package vterm)
 (use-package markdown-mode)
+(use-package persistent-scratch
+  :demand t
+  :config
+  (persistent-scratch-setup-default)
+  (persistent-scratch-mode 1))
 
 (use-package org
   :config
@@ -413,6 +429,7 @@
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
         org-ellipsis " …"
+        org-fontify-whole-block-delimiter-line nil
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
         org-fontify-done-headline t)
@@ -556,7 +573,7 @@
     (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'mode-line :background)))
   :hook 
   (org-mode . org-superstar-mode)
-  (org-mode . eh/org-superstar-update-theme)
+  (after-enable-theme . eh/org-superstar-update-theme)
   )
 
 (use-package org-auto-tangle
@@ -590,9 +607,17 @@
   (defun eh/modus-customize ()
     ;; deal with git gutter faces? or maybe that's no longer an issue?
     )
+  (defun eh/load-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (modus-themes-load-operandi))
+      ('dark (modus-themes-load-vivendi))))
 
+  (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   ;; load the theme files
   (modus-themes-load-themes)
   :hook (modus-themes-after-load-theme . eh/modus-customize)
-  :config
-  (modus-themes-load-operandi))
+  ;; :config
+  ;; (modus-themes-load-operandi)
+  )
