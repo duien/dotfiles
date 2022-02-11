@@ -412,7 +412,9 @@
 (use-package fish-mode)
 (use-package rainbow-mode)
 (use-package vterm)
-(use-package markdown-mode)
+(use-package markdown-mode
+  :mode
+  (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
 (use-package persistent-scratch
   :demand t
   :config
@@ -421,7 +423,8 @@
 
 (use-package org
   :config
-  (setq org-directory "~/Library/Mobile Documents/com~apple~CloudDocs/Org/"
+  (setq org-directory "~/Org/"
+        org-agenda-files '("~/Org/")
         org-log-done t
         org-log-into-drawer t
         org-insert-heading-respect-content t
