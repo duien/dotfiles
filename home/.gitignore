@@ -10,5 +10,3 @@ tmp
 .nvmrc
 .byebug_history
 *.code-workspace
-home/.scratch-config/projectile.cache
-home/.scratch-config/projects

@@ -111,7 +111,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 
   (set-face-attribute 'default nil :font "IBM Plex Mono" :height 160 :weight 'normal)
   (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
 
   ;; (set-face-attribute 'bold nil :weight 'semibold)
 
@@ -189,6 +189,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
   (setq-default tab-width 2)
 
   (setq tab-always-indent t)
+  (setq require-final-newline t)
 
   ;; Some evil stuff that needs to be set early
   (setq evil-want-integration t)
@@ -257,7 +258,6 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
     :states '(normal movement)
     :prefix "SPC")
   (eh/global-leader
-    "SPC" 'consult-buffer
     "`" '((lambda () (interactive) (switch-to-buffer (other-buffer (current-buffer) 1))) :which-key "prev buffer")
     "<escape>" 'keyboard-escape-quit
     ":" '(execute-extended-command :which-key "execute command")
@@ -303,8 +303,6 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 #+end_src
 
 ** Completion and menus
-Other consult notes: ~consult-buffer~ is great, includes extra stuff
-Take a look at ~consult-project-root-function~ for project functionality, ~consult-buffer-sources~ and ~consult--multi~ for virtual buffer sources
 *** TODO Add binding for =consult-imenu=
 *** Use vertico for interactive completion
 #+begin_src emacs-lisp
@@ -340,13 +338,19 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
 #+end_src
 
 *** Use consult for completing read
+Other consult notes: ~consult-buffer~ is great, includes extra stuff
+Take a look at ~consult-project-root-function~ for project functionality, ~consult-buffer-sources~ and ~consult--multi~ for virtual buffer sources
 #+begin_src emacs-lisp
 ;; `consult' replaces `completing-read' with a nice interface
 ;; that we can extend as we want
 (use-package consult
+  :init
+  (setq consult-project-root-function #'projectile-project-root)
   :general
-
-  )
+  (eh/global-leader
+    "SPC" 'consult-buffer
+    "ha" 'consult-apropos
+  ))
 #+end_src
 
 *** Show marginalia when completing
@@ -395,6 +399,11 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
   :config
   (setq minions-mode-line-lighter "≡")
   :init (minions-mode 1))
+
+(use-package ws-butler
+  :commands (ws-butler-mode)
+  :hook
+  (prog-mode . ws-butler-mode))
 #+end_src
 
 *** HOLD Smartparens has got to be better than electric pairs
@@ -562,6 +571,9 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
 (use-package rainbow-mode)
 (use-package vterm)
 (use-package markdown-mode
+  :hook
+  (gfm-mode . variable-pitch-mode)
+  (markdown-mode . variable-pitch-mode)
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
 (use-package persistent-scratch

@@ -67,7 +67,7 @@
 
   (set-face-attribute 'default nil :font "IBM Plex Mono" :height 160 :weight 'normal)
   (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch' nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
 
   ;; (set-face-attribute 'bold nil :weight 'semibold)
 
@@ -145,6 +145,7 @@
   (setq-default tab-width 2)
 
   (setq tab-always-indent t)
+  (setq require-final-newline t)
 
   ;; Some evil stuff that needs to be set early
   (setq evil-want-integration t)
@@ -201,7 +202,6 @@
     :states '(normal movement)
     :prefix "SPC")
   (eh/global-leader
-    "SPC" 'consult-buffer
     "`" '((lambda () (interactive) (switch-to-buffer (other-buffer (current-buffer) 1))) :which-key "prev buffer")
     "<escape>" 'keyboard-escape-quit
     ":" '(execute-extended-command :which-key "execute command")
@@ -275,9 +275,13 @@
 ;; `consult' replaces `completing-read' with a nice interface
 ;; that we can extend as we want
 (use-package consult
+  :init
+  (setq consult-project-root-function #'projectile-project-root)
   :general
-
-  )
+  (eh/global-leader
+    "SPC" 'consult-buffer
+    "ha" 'consult-apropos
+  ))
 
 (use-package marginalia
   :init
@@ -316,6 +320,11 @@
   :config
   (setq minions-mode-line-lighter "≡")
   :init (minions-mode 1))
+
+(use-package ws-butler
+  :commands (ws-butler-mode)
+  :hook
+  (prog-mode . ws-butler-mode))
 
 (use-package popper
   :ensure t ; or :straight t
@@ -414,6 +423,9 @@
 (use-package rainbow-mode)
 (use-package vterm)
 (use-package markdown-mode
+  :hook
+  (gfm-mode . variable-pitch-mode)
+  (markdown-mode . variable-pitch-mode)
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
 (use-package persistent-scratch
