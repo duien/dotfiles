@@ -147,10 +147,6 @@
   (setq tab-always-indent t)
   (setq require-final-newline t)
 
-  ;; Some evil stuff that needs to be set early
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-
   ;; Enable horizontal scrolling
   (setq mouse-wheel-tilt-scroll t)
 
@@ -197,7 +193,6 @@
 (use-package general
   :demand t
   :config
-  (general-evil-setup)
   (general-create-definer eh/global-leader
     :states '(normal movement)
     :prefix "SPC")
@@ -246,9 +241,6 @@
   )
 
 (use-package vertico
-  :general
-  (eh/global-leader
-    "ff" 'find-file)
   :init
   (vertico-mode)
   )
@@ -277,11 +269,7 @@
 (use-package consult
   :init
   (setq consult-project-root-function #'projectile-project-root)
-  :general
-  (eh/global-leader
-    "SPC" 'consult-buffer
-    "ha" 'consult-apropos
-  ))
+)
 
 (use-package marginalia
   :init
@@ -349,63 +337,15 @@
   (projectile-add-known-project "~/Org/")
   :init
   (projectile-mode +1)
-  :general
-  (eh/global-leader
-    "p" '(:keymap projectile-command-map :package projectile :which-key "project")
-  )
 )
 
 (use-package treemacs
   :config
-(treemacs-follow-mode t)
-  :general
-  (eh/global-leader
-    "\\" 'treemacs))
-(use-package treemacs-evil
-  :after (treemacs evil))
+(treemacs-follow-mode t))
 (use-package treemacs-projectile
   :after (treemacs projectile))
 
-(use-package evil
-  :config
-  ;; Put cursor in new window after split
-  (setq evil-respect-visual-line-mode t)
-  (setq evil-vsplit-window-right t
-        evil-split-window-below t
-        )
-  :general
-  (eh/global-leader
-    "wv" 'evil-window-vsplit
-    "ws" 'evil-window-split
-    "wh" 'evil-window-left
-    "wj" 'evil-window-down
-    "wk" 'evil-window-up
-    "wl" 'evil-window-right
-    )
-  :init
-  (evil-mode 1))
-
-(use-package evil-commentary
-  :init
-  (evil-commentary-mode))
-
-(use-package evil-collection
-  :after evil
-  :init
-  (evil-collection-init))
-(use-package evil-surround
-  :after evil
-  :init
-  (global-evil-surround-mode 1))
-
-(use-package magit
-  :general
-  (eh/global-leader
-    "g" '(:ignore t :which-key "git")
-    "gg" 'magit-status
-
-    )
-  )
+(use-package magit)
 (use-package diff-hl
   :config
 
