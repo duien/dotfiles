@@ -172,7 +172,6 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 
   (show-paren-mode t)
   (display-fill-column-indicator-mode 1)
-  (electric-pair-mode 1)
 
   ;; less noise when compiling elisp
   (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
@@ -205,8 +204,8 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 (use-package emacs
   :init
   (when (eq system-type 'darwin)
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
+    (setq mac-command-modifier 'super)
+    (setq mac-option-modifier 'meta)
     (setq mac-control-modifier 'control)
     )
   ;; when on emacs-mac 
@@ -217,7 +216,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
     (global-set-key [(s c)] 'kill-ring-save)
     (global-set-key [(s v)] 'yank)
     (global-set-key [(s x)] 'kill-region)
-    (global-set-key [(s q)] 'kill-emacs)
+    (global-set-key [(s q)] 'save-buffers-kill-emacs)
     )
   )
 #+end_src
@@ -245,56 +244,11 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 * Set up packages
 ** Keybindings with general
 
-#+begin_src emacs-lisp tangle: no
+#+begin_src emacs-lisp
 (use-package general
   :demand t
   :config
-  (general-create-definer eh/global-leader
-    :states '(normal movement)
-    :prefix "SPC")
-  (eh/global-leader
-    "`" '((lambda () (interactive) (switch-to-buffer (other-buffer (current-buffer) 1))) :which-key "prev buffer")
-    "<escape>" 'keyboard-escape-quit
-    ":" '(execute-extended-command :which-key "execute command")
-    ";" '(eval-expression :which-key "eval sexp")
-
-    "b" '(:ignore t :which-key "buffer")
-    "bd" 'kill-this-buffer
-    "bz" 'bury-buffer
-
-    "f" '(:ignore t :which-key "file")
-    "fs" 'save-buffer
-    "ff" 'project-find-file
-
-    "w" '(:ignore t :which-key "window")
-    "wd" 'delete-window 
-    "ww" 'other-window
-    "wm" '(:ignore t :which-key "maximize")
-    "wmm" 'delete-other-windows
-    "wmv" 'delete-other-windows-vertically
-    ;; "wmh" '
-
-    "q" '(:ignore t :which-key "quit")
-    "qq" 'save-buffers-kill-terminal
-    "qf" 'server-edit
-
-    "t" '(:ignore t :which-key "toggle")
-    "tl" 'display-line-numbers-mode
-    "tr" 'rainbow-mode
-
-    ;; "h" (general-simulate-key "C-h")
-    "h" '(:ignore t :which-key "help")
-    "hv" 'describe-variable
-    "hk" 'describe-key
-    "hf" 'describe-function
-    "hF" 'describe-face
-    "ha" 'apropros-command
-    "hd" 'apropros-documentation
-    "hm" 'describe-mode
-    "hp" 'describe-package
-    "ht" 'consult-theme
-   ) 
-  )
+ )
 #+end_src
 
 ** Completion and menus
@@ -338,6 +292,10 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
 (use-package consult
   :init
   (setq consult-project-root-function #'projectile-project-root)
+  :general
+  ("C-c l" 'consult-line)
+  ("C-x b" 'consult-buffer)
+  ("<help> a" 'consult-apropos)
 )
 #+end_src
 
@@ -396,10 +354,11 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
 
 *** HOLD Smartparens has got to be better than electric pairs
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package smartparens
-
-)
+  :config
+  ;; show-smartparens-mode
+) 
 #+end_src
 
 The =autopair= author says that =electric-pair-mode= is good now. There's also =smartparens= which I guess is something different.
@@ -422,7 +381,12 @@ Basic setup from their README
   (popper-echo-mode +1))                ; For echo area hints
 #+end_src
 
-*** TODO Get visual evil state into mode-line
+*** KILL Get visual evil state into mode-line
+CLOSED: [2022-02-13 Sun 16:13]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-02-13 Sun 16:13] \\
+  Getting rid of evil mode, apparently
+:END:
 
 ** Project management with projectile
 #+begin_src emacs-lisp 
@@ -530,7 +494,7 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
         org-log-done t
         org-log-into-drawer t
         org-insert-heading-respect-content t
-        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
+        org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
         org-ellipsis " …"

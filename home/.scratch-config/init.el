@@ -128,7 +128,6 @@
 
   (show-paren-mode t)
   (display-fill-column-indicator-mode 1)
-  (electric-pair-mode 1)
 
   ;; less noise when compiling elisp
   (setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
@@ -157,8 +156,8 @@
 (use-package emacs
   :init
   (when (eq system-type 'darwin)
-    (setq mac-command-modifier 'meta)
-    (setq mac-option-modifier 'super)
+    (setq mac-command-modifier 'super)
+    (setq mac-option-modifier 'meta)
     (setq mac-control-modifier 'control)
     )
   ;; when on emacs-mac 
@@ -169,7 +168,7 @@
     (global-set-key [(s c)] 'kill-ring-save)
     (global-set-key [(s v)] 'yank)
     (global-set-key [(s x)] 'kill-region)
-    (global-set-key [(s q)] 'kill-emacs)
+    (global-set-key [(s q)] 'save-buffers-kill-emacs)
     )
   )
 
@@ -193,52 +192,7 @@
 (use-package general
   :demand t
   :config
-  (general-create-definer eh/global-leader
-    :states '(normal movement)
-    :prefix "SPC")
-  (eh/global-leader
-    "`" '((lambda () (interactive) (switch-to-buffer (other-buffer (current-buffer) 1))) :which-key "prev buffer")
-    "<escape>" 'keyboard-escape-quit
-    ":" '(execute-extended-command :which-key "execute command")
-    ";" '(eval-expression :which-key "eval sexp")
-
-    "b" '(:ignore t :which-key "buffer")
-    "bd" 'kill-this-buffer
-    "bz" 'bury-buffer
-
-    "f" '(:ignore t :which-key "file")
-    "fs" 'save-buffer
-    "ff" 'project-find-file
-
-    "w" '(:ignore t :which-key "window")
-    "wd" 'delete-window 
-    "ww" 'other-window
-    "wm" '(:ignore t :which-key "maximize")
-    "wmm" 'delete-other-windows
-    "wmv" 'delete-other-windows-vertically
-    ;; "wmh" '
-
-    "q" '(:ignore t :which-key "quit")
-    "qq" 'save-buffers-kill-terminal
-    "qf" 'server-edit
-
-    "t" '(:ignore t :which-key "toggle")
-    "tl" 'display-line-numbers-mode
-    "tr" 'rainbow-mode
-
-    ;; "h" (general-simulate-key "C-h")
-    "h" '(:ignore t :which-key "help")
-    "hv" 'describe-variable
-    "hk" 'describe-key
-    "hf" 'describe-function
-    "hF" 'describe-face
-    "ha" 'apropros-command
-    "hd" 'apropros-documentation
-    "hm" 'describe-mode
-    "hp" 'describe-package
-    "ht" 'consult-theme
-   ) 
-  )
+ )
 
 (use-package vertico
   :init
@@ -269,6 +223,10 @@
 (use-package consult
   :init
   (setq consult-project-root-function #'projectile-project-root)
+  :general
+  ("C-c l" 'consult-line)
+  ("C-x b" 'consult-buffer)
+  ("<help> a" 'consult-apropos)
 )
 
 (use-package marginalia
@@ -313,6 +271,11 @@
   :commands (ws-butler-mode)
   :hook
   (prog-mode . ws-butler-mode))
+
+(use-package smartparens
+  :config
+  ;; show-smartparens-mode
+)
 
 (use-package popper
   :ensure t ; or :straight t
@@ -381,7 +344,7 @@
         org-log-done t
         org-log-into-drawer t
         org-insert-heading-respect-content t
-        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
+        org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
         org-ellipsis " …"
