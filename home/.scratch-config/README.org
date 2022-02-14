@@ -432,7 +432,10 @@ CLOSED: [2021-12-29 Wed 12:16]
 ** Version control
 
 #+begin_src emacs-lisp
-(use-package magit)
+(use-package magit
+  :general
+  ("C-c g" 'magit)
+)
 (use-package diff-hl
   :config
 

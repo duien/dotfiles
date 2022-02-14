@@ -308,7 +308,10 @@
 (use-package treemacs-projectile
   :after (treemacs projectile))
 
-(use-package magit)
+(use-package magit
+  :general
+  ("C-c g" 'magit)
+)
 (use-package diff-hl
   :config
 
