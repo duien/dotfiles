@@ -1,9 +1,10 @@
 function ec --description "open emacs client, starting server if needed"
     argparse -i 'p/with-profile=' -- $argv
+    set -l socket_file
     if test -n "$_flag_p"
-        set -l socket_file (emacsserver -p$_flag_p)
+        set socket_file (emacsserver -p$_flag_p)
     else
-        set -l socket_file (emacsserver)
+        set socket_file (emacsserver)
     end
 
     if test -z "$socket_file"
