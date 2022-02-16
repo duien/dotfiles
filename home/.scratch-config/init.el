@@ -300,6 +300,8 @@
   (projectile-add-known-project "~/Org/")
   :init
   (projectile-mode +1)
+  :general
+  ("C-c p" '(:keymap projectile-command-map :package projectile))
 )
 
 (use-package treemacs
@@ -324,6 +326,9 @@
 
 (use-package elixir-mode)
 (use-package alchemist)
+
+(use-package haml-mode)
+(use-package slim-mode)
 
 (use-package fish-mode)
 (use-package rainbow-mode)
@@ -504,6 +509,16 @@
 
 (use-package toc-org
   :hook (org-mode . toc-org-mode))
+
+(use-package org-super-agenda
+  :config
+  (setq org-super-agenda-groups
+        '(
+          (:name "Flagged" :todo "FLAG")
+          (:name "Follow Up" :todo ("QSTN" "BLOK"))
+          (:name "To Do" :and (:todo "TODO" :children nil))
+          (:name "Stalled" :todo ("HOLD" "WAIT"))
+)))
 
 ;; VISUALS AT THE END FOR SOME REASON
 

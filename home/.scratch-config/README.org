@@ -17,6 +17,11 @@ CLOSED: [2021-12-28 Tue 11:11]
 ** TODO Pop up scratch buffer
 Learning opportunity: grabbing special buffers, popper-mode
 ** TODO Create a function to wrap =set-face-attribute= that will have it reset with the theme change hook
+**  YAK Treemacs styling
+**  YAK Set up todo keywords for project planning?
+Thinking I want this mostly to make it easier to sort them out of agenda views, but that may not really be the right approach. I probably need to think through how (if?) I want to organize planning work in Org.
+**  YAK Maybe set up =org-pomodoro= or similar? Could be interesting to clock into a task and have it stay as a persistent header in the editor
+
 ** Questions to investigate
 ***  YES Is there are way to get rid of the dark background for collapsed headlines that contain source blocks?
 CLOSED: [2021-12-28 Tue 11:22]
@@ -388,6 +393,10 @@ CLOSED: [2022-02-13 Sun 16:13]
   Getting rid of evil mode, apparently
 :END:
 
+*** TODO Try out origami for folding
+https://github.com/gregsexton/origami.el
+*** TODO Try out god-mode maybe?
+
 ** Project management with projectile
 #+begin_src emacs-lisp 
 (use-package projectile
@@ -398,6 +407,8 @@ CLOSED: [2022-02-13 Sun 16:13]
   (projectile-add-known-project "~/Org/")
   :init
   (projectile-mode +1)
+  :general
+  ("C-c p" '(:keymap projectile-command-map :package projectile))
 )
 #+end_src
 I believe this also needs =persp-mode= do really do what I want (which is the isolated buffers, etc.)
@@ -467,7 +478,12 @@ Let's set up basic elixir language support as well as alchemist for fancy docume
 #+end_src
 
 *** TODO Javascript
-*** TODO Web-mode
+*** TODO Templating
+Set up necessary modes for various front-end concerns
+#+begin_src emacs-lisp
+(use-package haml-mode)
+(use-package slim-mode)
+#+end_src
 ** Misc smaller modes
 
 #+begin_src emacs-lisp
@@ -706,6 +722,17 @@ This is a longer bit ... wait ...
 ***   OK This is fine
 ** More complex configuration
 *** TODO Set up super-agenda
+#+begin_src emacs-lisp
+(use-package org-super-agenda
+  :config
+  (setq org-super-agenda-groups
+        '(
+          (:name "Flagged" :todo "FLAG")
+          (:name "Follow Up" :todo ("QSTN" "BLOK"))
+          (:name "To Do" :and (:todo "TODO" :children nil))
+          (:name "Stalled" :todo ("HOLD" "WAIT"))
+)))
+#+end_src
 *** TODO Set up capture templates
 *** TODO Maybe org-journal?
 

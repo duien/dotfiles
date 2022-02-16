@@ -1,8 +1,13 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8 -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("modus vivendi colors"
+(("user full_name"
+ (filename . "~/Code/Dox/doximity/app/models/user.rb")
+ (front-context-string . "(show_credential")
+ (rear-context-string . "\n  def full_name")
+ (position . 61573))
+("modus vivendi colors"
  (filename . "~/.homesick/repos/dotfiles/home/.scratch-config/straight/repos/modus-themes/modus-themes.el")
  (front-context-string . "(defconst modus-")
  (rear-context-string . " Modus Vivendi\n\n")
