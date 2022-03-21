@@ -103,17 +103,21 @@
                           ,(expand-file-name "var/" user-emacs-directory)))
 
   ;; don't want ESC as a modifier
+  ;; advice would say use `keyboard-esc-quit' as the binding here,
+  ;; which is what's originally bound to `ESC-ESC-ESC' but that
+  ;; makes it too easy to end up closing additional windows, which
+  ;; is basically never what I want when hitting `ESC'
+  ;; it turns out, however, that `keyboard-quit' is not what I
+  ;; want either since it doesn't get me out of the minibuffer.
+  ;; UGH
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (setq-default buffer-quit-function
+	              #'(lambda () (beep)))
 
   ;; Don't persist a custom file, this bites me more than it helps
   (setq custom-file (make-temp-file "")) ; use a temp file as a placeholder
   (setq custom-safe-themes t)            ; mark all themes as safe, since we can't persist now
   (setq enable-local-variables :all)     ; fix =defvar= warnings
-
-  ;; stop emacs from littering the file system with backup files
-  ;; (setq make-backup-files nil
-  ;;       auto-save-default nil
-  ;;       create-lockfiles nil)
 
   ;; follow symlinks 
   (setq vc-follow-symlinks t)
@@ -156,8 +160,8 @@
 (use-package emacs
   :init
   (when (eq system-type 'darwin)
-    (setq mac-command-modifier 'super)
-    (setq mac-option-modifier 'meta)
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super)
     (setq mac-control-modifier 'control)
     )
   ;; when on emacs-mac 
@@ -165,10 +169,10 @@
     ;; disable * ligatures for org, enable w for www
     (setq mac-auto-operator-composition-characters "!\"#$%&'()+,-./:;<=>?@[\\]^_`{|}~w")
     (mac-auto-operator-composition-mode)   ;; enables font ligatures
-    (global-set-key [(s c)] 'kill-ring-save)
-    (global-set-key [(s v)] 'yank)
-    (global-set-key [(s x)] 'kill-region)
-    (global-set-key [(s q)] 'save-buffers-kill-emacs)
+    ;; (global-set-key [(s c)] 'kill-ring-save)
+    ;; (global-set-key [(s v)] 'yank)
+    ;; (global-set-key [(s x)] 'kill-region)
+    ;; (global-set-key [(s q)] 'save-buffers-kill-emacs)
     )
   )
 
@@ -180,14 +184,6 @@
    (run-hooks 'after-enable-theme-hook))
 
 (advice-add 'enable-theme :after #'run-after-enable-theme-hook)
-;; (defun eh/set-face-basics ()
-;;   (set-face-attribute 'default nil :font "Cascadia Code" :weight 'semilight :height 150)
-;;   (set-face-attribute 'bold nil :weight 'semibold)
-;;   )
-;; (eh/set-face-basics) ;; do it right now too
-;; (use-package emacs
-;;   :hook
-;;   (after-enable-theme . eh/set-face-basics))
 
 (use-package general
   :demand t
@@ -241,6 +237,9 @@
   (which-key-mode))
 
 ;; when using visual-line-mode, wrap to the `fill-column'
+;; it seems to have a side-effect of not allowing the
+;; window to get narrower than the fill column which
+;; is not exactly helpful
 ;; (use-package window-margin
 ;;   :hook
 ;;   (text-mode . 'turn-on-window-margin-mode)
@@ -258,6 +257,10 @@
   (moody-replace-vc-mode)
   (moody-replace-eldoc-minibuffer-message-function))
 
+;; Use a darker background color for non-file-visiting buffers
+;; Unfortunately, it seems like the methods that solaire and
+;; moody use are incompatible, so the little moody tab doesn't
+;; get swapped to the darker solaire color
 (use-package solaire-mode
   :init
   (solaire-global-mode 1))
@@ -271,6 +274,41 @@
   :commands (ws-butler-mode)
   :hook
   (prog-mode . ws-butler-mode))
+
+(use-package rotate)
+
+(use-package visual-fill-column
+  :config
+  (setq-default visual-fill-column-extra-text-width '(2 . 2))
+  :hook
+  (visual-line-mode . visual-fill-column-mode))
+(use-package adaptive-wrap)
+
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
+(use-package crux
+:bind 
+("C-o" . crux-smart-open-line)
+("M-o" . crux-smart-open-line-above)
+("C-k" . crux-smart-kill-line)
+)
+
+(use-package symbol-overlay
+  :general
+  ;; (global-set-key (kbd "M-i") 'symbol-overlay-put)
+  ;; (global-set-key (kbd "M-n") 'symbol-overlay-switch-forward)
+  ;; (global-set-key (kbd "M-p") 'symbol-overlay-switch-backward)
+  ;; (global-set-key (kbd "<f7>") 'symbol-overlay-mode)
+  ;; (global-set-key (kbd "<f8>") 'symbol-overlay-remove-all)
+  )
+
+(use-package pulsar
+  :straight
+  '(pulsar :type git :host gitlab :repo "protesilaos/pulsar")
+  :init
+  (pulsar-setup)
+  :bind ("C-x l" . pulsar-pulse-line))
 
 (use-package smartparens
   :config
@@ -292,6 +330,38 @@
   (popper-mode +1)
   (popper-echo-mode +1))                ; For echo area hints
 
+(use-package origami)
+
+(use-package god-mode
+  :config
+  ;; This which-key situation does not seem to work at all, sadly
+  ;; (set to t to enable the broken support)
+  (which-key-enable-god-mode-support nil)
+  ;; (global-set-key (kbd "<escape>") #'god-local-mode)
+  (defun my-god-mode-update-cursor-type ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+
+  (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
+  (defun my-god-mode-update-mode-line ()
+    (cond
+     (god-local-mode
+      (set-face-attribute 'mode-line nil
+                          :foreground "#604000"
+                          :background "#fff29a")
+      (set-face-attribute 'mode-line-inactive nil
+                          :foreground "#3f3000"
+                          :background "#fff3da"))
+     (t
+      (set-face-attribute 'mode-line nil
+			                    :foreground "#0a0a0a"
+			                    :background "#d7d7d7")
+      (set-face-attribute 'mode-line-inactive nil
+			                    :foreground "#404148"
+			                    :background "#efefef"))))
+
+  (add-hook 'post-command-hook 'my-god-mode-update-mode-line)
+  )
+
 (use-package projectile
   :config
   (setq projectile-project-search-path
@@ -301,7 +371,7 @@
   :init
   (projectile-mode +1)
   :general
-  ("C-c p" '(:keymap projectile-command-map :package projectile))
+  ("C-x p" '(:keymap projectile-command-map :package projectile))
 )
 
 (use-package treemacs
@@ -309,6 +379,15 @@
 (treemacs-follow-mode t))
 (use-package treemacs-projectile
   :after (treemacs projectile))
+
+(use-package perspective
+  :bind
+  ;; (("C-x b" . persp-switch-to-buffer*)
+  ;;  ("C-x k" . persp-kill-buffer*))
+  :config
+  (setq persp-state-default-file "~/.perspective")
+  (add-hook 'kill-emacs-hook #'persp-state-save)
+  (persp-mode))
 
 (use-package magit
   :general
@@ -318,7 +397,6 @@
   :config
 
   :hook
-  ;; (diff-hl-mode . diff-hl-flydiff-mode) ;; causing indent flicker in org
   (magit-pre-refresh  . diff-hl-magit-pre-refresh)
   (magit-post-refresh . diff-hl-magit-post-refresh)
   :init (global-diff-hl-mode)
@@ -349,10 +427,11 @@
   :config
   (setq org-directory "~/Org/"
         org-agenda-files '("~/Org/")
+        org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
         org-log-done t
         org-log-into-drawer t
         org-insert-heading-respect-content t
-        org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
+        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
         org-ellipsis " …"
@@ -530,12 +609,12 @@
         modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
-        modus-themes-intense-markup t
+        modus-themes-markup '(background intense)
         modus-themes-fringes nil ;; background of fringe area
         modus-themes-mode-line '(moody accented)
         modus-themes-syntax '(green-strings)
         modus-themes-org-blocks 'gray-background
-        modus-themes-completions 'opinionated
+        modus-themes-completions '((t background intense accented))
         modus-themes-region '(bg-only accented)
         ;; modus-themes-headings
         ;; '((1 . (bold))
