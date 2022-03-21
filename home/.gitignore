@@ -10,3 +10,4 @@ tmp
 .nvmrc
 .byebug_history
 *.code-workspace
+.nova
