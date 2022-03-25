@@ -65,16 +65,9 @@
   (setq user-full-name "Emily Hyland"
         user-mail-address "hello@duien.com")
 
-  (set-face-attribute 'default nil :font "IBM Plex Mono" :height 160 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil :font "iA Writer Quattro V" :height 160 :weight 'normal)
-
-  ;; (set-face-attribute 'bold nil :weight 'semibold)
-
-  ;; (set-face-attribute 'default nil :font "IBM Plex Mono" :weight 'semilight :height 150)
-  ;; (set-face-attribute 'fixed-pitch nil :font "IBM Plex Mono" :weight 'semilight :height 150)
-  ;; (set-face-attribute 'variable-pitch' nil :font "IBM Plex Sans" :weight 'semilight :height 150)
-  ;; (set-face-attribute 'bold nil :weight 'semibold)
+  (set-face-attribute 'default nil :font "Rec Mono Duotone" :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil :font "Rec Mono Duotone" :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil :font "Recursive Sans Casual Static" :height 160 :weight 'normal)
 
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -405,6 +398,13 @@
 (use-package elixir-mode)
 (use-package alchemist)
 
+(use-package web-mode
+  :config
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2)
+)
+
 (use-package haml-mode)
 (use-package slim-mode)
 
@@ -492,9 +492,9 @@
                         :inherit 'fixed-pitch
                         :weight (face-attribute 'default :weight))
     (set-face-attribute 'org-headline-todo nil
-                        :foreground 'unspecified
+                        :foreground (modus-themes-color 'fg-main)
                         :weight 'normal
-                        :inherit 'default)
+                        :inherit nil)
     (set-face-attribute 'org-headline-done nil
                         :inherit '(font-lock-comment-face default))
     (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
@@ -610,6 +610,7 @@
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
         modus-themes-markup '(background intense)
+        modus-themes-links '(background)
         modus-themes-fringes nil ;; background of fringe area
         modus-themes-mode-line '(moody accented)
         modus-themes-syntax '(green-strings)
@@ -622,6 +623,7 @@
         )
   (defun eh/modus-customize ()
     ;; deal with git gutter faces? or maybe that's no longer an issue?
+    (set-face-attribute 'font-lock-string-face nil :slant 'italic)
     )
   (defun eh/load-theme (appearance)
     "Load theme, taking current system APPEARANCE into consideration."
