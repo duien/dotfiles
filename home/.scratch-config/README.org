@@ -1,7 +1,7 @@
 #+TITLE: A Beautiful Field Full of Yaks
 #+startup: content
 #+property: header-args:emacs-lisp :tangle init.el
-#+auto_tangle: t
+#+auto_tangle: nil
 
 * Early initialization
 :PROPERTIES:
@@ -26,7 +26,7 @@ A bunch of random performance stuff that I've grabbed up. This remains a part I 
 (setq package-quickstart nil)
 
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
-(push '(menu-bar-lines . 0) default-frame-alist)
+;; (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 (push '(height . 50) default-frame-alist)
@@ -304,21 +304,26 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
   :demand
   :if (display-graphic-p))
 
-(use-package moody
-  :demand
-  :config
-  (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode)
-  (moody-replace-eldoc-minibuffer-message-function))
+;; (use-package moody
+;;   :demand
+;;   :config
+;;   (setq x-underline-at-descent-line t)
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode)
+;;   (moody-replace-eldoc-minibuffer-message-function))
+
+(use-package doom-modeline) ;; available but not using it
+(use-package mood-line
+  :init
+  (mood-line-mode 1))
 
 ;; Use a darker background color for non-file-visiting buffers
 ;; Unfortunately, it seems like the methods that solaire and
 ;; moody use are incompatible, so the little moody tab doesn't
 ;; get swapped to the darker solaire color
-(use-package solaire-mode
-  :init
-  (solaire-global-mode 1))
+;; (use-package solaire-mode
+;;   :init
+;;   (solaire-global-mode 1))
 
 (use-package minions
   :config
@@ -331,15 +336,59 @@ Take a look at ~consult-project-root-function~ for project functionality, ~consu
   (prog-mode . ws-butler-mode))
 
 (use-package rotate)
-#+end_src
 
+(use-package mixed-pitch
+  :ensure t)
+
+(use-package centaur-tabs
+  :init
+  (centaur-tabs-mode t)
+  )
+#+end_src
+*** Set up ligatures
+
+#+begin_src emacs-lisp
+(use-package ligature
+  :straight
+  '(ligature :type git :host github
+             :repo "mickeynp/ligature.el")
+  :config
+  ;; Enable the "www" ligature in every possible major mode
+  (ligature-set-ligatures 't '("www"))
+  ;; Enable traditional ligature support in eww-mode, if the
+  ;; `variable-pitch' face supports it
+  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
+  ;; Enable all Cascadia Code ligatures in programming modes
+  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+                                       "\\\\" "://"))
+  ;; Enables ligature checks globally in all buffers. You can also do it
+  ;; per mode with `ligature-mode'.
+  (global-ligature-mode t))
+#+end_src
 *** Text wrapping enhancements
 #+begin_src emacs-lisp
 (use-package visual-fill-column
   :config
-  (setq-default visual-fill-column-extra-text-width '(2 . 2))
+  ;; (setq-default visual-fill-column-extra-text-width '(2 . 2))
+  (setq visual-fill-column-enable-sensible-window-split t)
   :hook
   (visual-line-mode . visual-fill-column-mode))
+#+end_src
+
+Visually wrap lines in plain text at dynamic indentation based on the begining of the line.
+
+#+begin_src emacs-lisp
 (use-package adaptive-wrap)
 #+end_src
 
@@ -528,7 +577,7 @@ CLOSED: [2021-12-28 Tue 12:04]
 :END:
 *** HOLD Forge and code-review
 
-** Programming languages
+~** Programming languages
 *** TODO Ruby
 Probably want [[https://github.com/zenspider/enhanced-ruby-mode][Enhanced Ruby Mode]] and [[https://github.com/pezra/rspec-mode][Rspec Mode]]
 *** TODO Elixir
@@ -550,6 +599,17 @@ Getting a decent setup for Vue is not trivial. Let's start with web-mode which i
         web-mode-code-indent-offset 2)
 )
 #+end_src
+
+For Vue specifically, there actually is a =vue-mode= that we can use.
+#+begin_src emacs-lisp
+(use-package vue-mode)
+#+end_src
+
+Some resources for getting additional config going in the future:
+- [[https://azzamsa.com/n/vue-emacs/][A blog post detailing lsp language server setup]]
+- [[https://www.reddit.com/r/emacs/comments/orxwhl/emacs_vuejs/][A reddit post that may or may not be useful]]
+- [[https://wikemacs.org/wiki/Vuejs][VueJS on EmacsWiki]]
+
 *** TODO Templating
 Set up necessary modes for various front-end concerns
 #+begin_src emacs-lisp
@@ -564,8 +624,8 @@ Set up necessary modes for various front-end concerns
 (use-package vterm)
 (use-package markdown-mode
   :hook
-  (gfm-mode . variable-pitch-mode)
-  (markdown-mode . variable-pitch-mode)
+  (gfm-mode . mixed-pitch-mode)
+  (markdown-mode . mixed-pitch-mode)
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
 (use-package persistent-scratch
@@ -647,7 +707,7 @@ Set up necessary modes for various front-end concerns
                         :inherit 'fixed-pitch
                         :weight (face-attribute 'default :weight))
     (set-face-attribute 'org-headline-todo nil
-                        :foreground (modus-themes-color 'fg-main)
+                        :foreground (face-attribute 'default :foreground)
                         :weight 'normal
                         :inherit nil)
     (set-face-attribute 'org-headline-done nil
@@ -696,7 +756,7 @@ Set up necessary modes for various front-end concerns
                       (org-indent-mode 1)
                       (electric-indent-local-mode -1)
                       (visual-line-mode 1)
-                      (variable-pitch-mode 1)
+                      (mixed-pitch-mode 1)
                       ))
   (after-enable-theme . eh/org-update-theme)
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
@@ -738,7 +798,7 @@ Added a ~after-enable-theme~ hook where they can be set
         org-superstar-leading-fallback "·"
         org-superstar-leading-bullet "·"
         org-superstar-remove-leading-stars nil
-        org-superstar-headline-bullets-list '("#" "•")) ;;◌◎
+        org-superstar-headline-bullets-list '("◆" "•")) ;;◌◎◆#
   (setq org-superstar-todo-bullet-alist
         '(("TODO"     . ?›) ;;⭘▢
           ("FLAG"     . ?») ;;◍▶
@@ -760,7 +820,10 @@ Added a ~after-enable-theme~ hook where they can be set
         )
   (defun eh/org-superstar-update-theme ()
     (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
-    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'mode-line :background)))
+    ;; (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'mode-line :background)))
+    ;; (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'header-line :foreground))
+    (set-face-attribute 'org-superstar-leading nil :foreground "light gray")
+    )
   :hook 
   (org-mode . org-superstar-mode)
   (after-enable-theme . eh/org-superstar-update-theme)
@@ -810,6 +873,7 @@ This is a longer bit ... wait ...
 *** TODO Maybe org-journal?
 
 * Themes and stuff
+** Modus is the best theme
 
 #+begin_src emacs-lisp
 ;; VISUALS AT THE END FOR SOME REASON
@@ -837,6 +901,7 @@ This is a longer bit ... wait ...
   (defun eh/modus-customize ()
     ;; deal with git gutter faces? or maybe that's no longer an issue?
     (set-face-attribute 'font-lock-string-face nil :slant 'italic)
+    (set-face-attribute 'org-document-title nil :height 320)
     )
   (defun eh/load-theme (appearance)
     "Load theme, taking current system APPEARANCE into consideration."
@@ -845,14 +910,29 @@ This is a longer bit ... wait ...
       ('light (modus-themes-load-operandi))
       ('dark (modus-themes-load-vivendi))))
 
-  (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
+  ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   ;; load the theme files
-  (modus-themes-load-themes)
+  ;; (modus-themes-load-themes)
   :hook (modus-themes-after-load-theme . eh/modus-customize)
-  ;; :config
-  ;; (modus-themes-load-operandi)
   )
 
 #+end_src 
+** But sometimes you have to experiment
+#+begin_src emacs-lisp
+(use-package solo-jazz-theme)
+(use-package kaolin-themes
+  :config
+  (setq kaolin-themes-org-scale-headings nil
+        kaolin-themes-italic-comments t)
+  )
+(use-package doom-themes)
+(use-package twilight-bright-theme)
+(use-package farmhouse-themes
+  :straight
+  '(farmhouse-themes :type git :host github
+                     :repo "mattly/emacs-farmhouse-theme"))
+(use-package iodine-theme)
 
+(load-theme 'iodine)
+#+end_src
 
