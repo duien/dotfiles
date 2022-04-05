@@ -24,9 +24,9 @@ prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/loca
 # This was in universal variables, which are not a great idea for my setup
 prepend_if_exists fish_user_paths "/usr/local/opt/openssl/bin" "/usr/local/opt/postgresql@9.4/bin" "/Users/duien/.yarn/bin"
 
-set -x EDITOR vim
-set -x VISUAL code
-set -x GEMEDITOR code
+set -x EDITOR em
+set -x VISUAL em
+set -x GEMEDITOR em
 
 # Source color theme setup
 source ~/.config/fish/color-theme.fish
@@ -37,7 +37,7 @@ source ~/.config/fish/color-theme.fish
 set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) --with-openssl-dir=(brew --prefix openssl@1.1)
 # set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) -W0
 
-# If `.private.sh` exsits, load it
+# If `.private.sh` exists, load it
 # This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
 if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 
