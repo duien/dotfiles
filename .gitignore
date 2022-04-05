@@ -1,5 +1,6 @@
 home/.vim/.netrwhist
 home/.zsh/cache
+home/.config/fish/fish_variables
 home/.config/fish/fish_history
 home/.config/fish/fish_read_history
 home/.config/fish/fishd.*
@@ -10,6 +11,7 @@ home/.atom/config.cson
 home/.thefuck/*.pyc
 home/.config/karabiner/automatic_backups/
 home/.scratch-config/straight/
+home/.scratch-config/elpa/
 home/.scratch-config/transient/
 home/.scratch-config/projectile-bookmarks.eld
 home/.scratch-config/recentf
