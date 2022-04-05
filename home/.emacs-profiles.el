@@ -9,4 +9,6 @@
                ))
  ("castlemacs" . ((user-emacs-directory . "~/.castlemacs")
                   (server-name . "castlemacs-server")))
+ ("minimal" . ((user-emacs-directory . "~/.minimal-config")
+               (server-name . "minimal-server")))
  )

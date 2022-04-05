@@ -1,0 +1,17 @@
+* This is an org file to test things
+** TODO This is a basic todo item
+** DONE This is a done item
+* These test cases have [[http://example.com][links]]
+** TODO Here is a [[http://example.com][link to test]] on a todo item
+** DONE Here is a [[http://example.com][link to test]] on a done item
+* These test cases have ~verbatim~ text
+** TODO Here is ~verbatim~ on a todo item
+** DONE Here is ~verbatim~ on a done item
+
+* Some additional investigation
+The face for links is =org-link= and it doesn't set anything itself, just inherits from =button=
+The face for what I'm calling verbaitm is =org-code= (I always get those two revered) but either way, both those faces set foreground and background and inherit from =modus-themes-fixed-pitch=
+
+Leuven seems to have the same issue, so maybe it's really an org issue not a modus issue.
+
+org version 9.5.?
