@@ -577,7 +577,7 @@ CLOSED: [2021-12-28 Tue 12:04]
 :END:
 *** HOLD Forge and code-review
 
-~** Programming languages
+** Programming languages
 *** TODO Ruby
 Probably want [[https://github.com/zenspider/enhanced-ruby-mode][Enhanced Ruby Mode]] and [[https://github.com/pezra/rspec-mode][Rspec Mode]]
 *** TODO Elixir
@@ -769,11 +769,24 @@ CLOSED: [2021-12-29 Wed 11:59]
 - State "KILL"       from "TODO"       [2021-12-29 Wed 11:59] \\
   Should be handled by =consult-imenu= binding
 :END:
-**  YAK Why does =consult-headline= not actually find all the headlines?
+** ANSR Why does =consult-headline= not actually find all the headlines?
+CLOSED: [2022-04-04 Mon 16:09]
+:LOGBOOK:
+- State "ANSR"       from " YAK"       [2022-04-04 Mon 16:09] \\
+  There's a function for choosing which headlines it looks at and it has a dumb default
+:END:
 For instance, the "Org" headline doesn't show up when you search for "org"
-** TODO Keys for entering and exiting dedicated editing of org source blocks
+** KILL Keys for entering and exiting dedicated editing of org source blocks
+CLOSED: [2022-04-04 Mon 16:10]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-04-04 Mon 16:10]
+:END:
 Can use =C-c '= which isn't terrible, but isn't evil-ish
-** TODO Key for change todo state
+** KILL Key for change todo state
+CLOSED: [2022-04-04 Mon 16:10]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-04-04 Mon 16:10]
+:END:
 Emacs-style is =C-c C-t=
 ** Theming is complicated
 *** DONE Set todo faces as actual ~defface~ faces for happier theming

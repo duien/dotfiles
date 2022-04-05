@@ -1,11 +1,14 @@
 #+title: Streamline literate config
+#+startup: show2levels
 
 * Commentary
+:PROPERTIES:
+:visibility: folded
+:END:
 ** On early initialization
 My previous approach auto-tangled this out of the same file as everything else. It's not something that I revist often or have all that much commentary on. I think it's OK to have that outside of the tangled file, because I /think/ that the approach then becomes tangling the config on startup.
 ** Startup speed and servers
 I definitely like keeping a server running. I think I'd like to make it easier to leave the server running without a frame, but maybe there's really not that much need.
-I need to revise my ~ec~ fish function into an actual executable so its usable as ~$EDITOR~
 I think terminal for things like git commit message? I wonder if you could make it open the magit changes view alongside it in terminal
 ** Why I'm rewriting this
 I've been using my scratch config full-time for a while, and I think I'm ready for a refactor now that I better understand what I do and don't need, and how it will all fit together
@@ -21,27 +24,7 @@ This could probably be done with a macro but that frightens me.
 
 If I'm going to use narrowing, I think I want that paging package from Prot
 * Bootstrap straight and use-package
-#+begin_src elisp
-;; Bootstrap straight
-(setq straight-use-package-by-default t)
-(setq straight-vc-git-default-clone-depth 1)
-(setq straight-recipes-gnu-elpa-use-mirror t)
-(setq straight-check-for-modifications nil)
-(setq use-package-always-defer t)
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(straight-use-package 'use-package)
-#+end_src
+This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
 
 * Built-in options for basic emacs configuration
 Introduce myself to Emacs:
@@ -69,12 +52,18 @@ Always allow `y' instead of `yes' in all prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
+If you type over a selection, delete it first
+#+begin_src elisp
+(delete-selection-mode t)
+#+end_src
+
 Attempt to make indentation do sensible things:
 #+begin_src elisp
 (setq-default indent-tabs-mode nil) ;; never use tabs to indent
 (setq-default tab-width 2)
 (setq tab-always-indent t
       require-final-newline t)
+
 #+end_src
 
 ** Everything should always be UTF-8
@@ -88,8 +77,6 @@ Attempt to make indentation do sensible things:
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (setq default-process-coding-system '(utf-8-unix . utf-8-unix))
-
-(delete-selection-mode t)
 #+end_src
 ** Set up basic minor modes
 #+begin_src elisp
@@ -129,7 +116,138 @@ Some inside baseball options I don't really understand:
 
 #+end_src
 
-* Set up typography
+* How it looks
+** Set up typography
+*** With the Recursive font
+Set up fixed and variable pitch fonts with very similar character. It's a dynamic font, but unfortunately Emacs doesn't actually know how to handle that. So for now, we use two separate sets of static configs.
+#+begin_src elisp
+(defun eh/set-recursive-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Rec Mono Duotone"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Rec Mono Duotone"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Recursive Sans Casual Static"
+                      :height 160 :weight 'normal)
+  )
+#+end_src
+
+*** With Pragmata Pro
+#+begin_src elisp
+(defun eh/set-pragmata-fonts ()
+  (set-face-attribute 'default nil
+                      :font "PragmataPro Mono Liga"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "PragmataPro Mono Liga"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "PragmataPro Mono Liga"
+                      :height 160 :weight 'normal)
+  )
+#+end_src
+
+**** All the extra ligatures and things
+For PragmataPro, there are so many additional ligatures and things that are beyond what's needed for other fonts. The normal ligature configuration will not be sufficient, so we'd need to add a couple things to really get it working
+
+[[https://github.com/lumiknit/emacs-pragmatapro-ligatures][emacs-pragmatapro-ligatures]] package on Github should set everything up for the most recent version.
+
+However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regular) in the lastest version. I can use the mono version, but it's missing some of the more complex things. It _might_ be possible to set up a fallback font?
+
+[[https://stackoverflow.com/questions/6083496/how-do-you-specify-a-fallback-font-in-emacs][This StackOverflow post]] has some information about how to do that, but not sure if it will really work for this weird situation.
+
+*** With Plex fonts
+#+begin_src elisp
+(defun eh/set-plex-fonts ()
+  (set-face-attribute 'default nil
+                      :font "IBM Plex Mono"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "IBM Plex Mono"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "iA Writer Quattro V"
+                      :height 160 :weight 'semilight)
+  )
+#+end_src
+
+*** With Input fonts
+#+begin_src elisp
+(defun eh/set-input-fonts ()
+  (set-face-attribute 'default nil
+                      :family "Input Mono Condensed"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :family "Input Mono Condensed"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :family "Input Sans Condensed"
+                      :height 160 :weight 'normal)
+  )
+#+end_src
+*** With Sudo fonts
+#+begin_src elisp
+(defun eh/set-sudo-fonts ()
+  (set-face-attribute 'default nil
+		      :font "Sudo"
+		      :height 200 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+		      :font "Sudo"
+		      :height 200 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+		      :font "Sudo UI"
+		      :height 200 :weight 'normal))
+#+end_src
+
+*** With misc fonts
+
+Victor and Galix are a fun combo.
+#+begin_src elisp
+(defun eh/set-victor-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Victor Mono"
+                      :height 140 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Victor Mono"
+                      :height 140 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Galix"
+                      :height 170 :weight 'normal)
+  )
+#+end_src
+
+#+begin_src elisp
+(defun eh/set-belinsky-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Belinsky Text"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Belinsky Text"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Belinsky Text"
+                      :height 160 :weight 'normal)
+  )
+#+end_src
+
+*** And finally, enable a font!
+#+begin_src elisp
+;; (eh/set-recursive-fonts)
+;; (eh/set-pragmata-fonts)
+(eh/set-plex-fonts)
+;; (eh/set-victor-fonts)
+;; (eh/set-input-fonts)
+;; (eh/set-sudo-fonts)
+#+end_src
+
+Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with changing fonts after the fact (even after toggling the mode)
+
+But ~variable-pitch-mode~ seems to do just fine with it. I think I switched because of ... some very specific issues. Let's go back to variable for a while?
+
+I've left mixed installed, but [[*Basic configuration][the org-mode hook configuration]] is what controls what we actually use.
+*** Set up ligatures in various ways
 Turn on automatic ligatures if the feature is available:
 #+begin_src elisp
 (when (fboundp 'mac-auto-operator-composition-mode)
@@ -150,7 +268,7 @@ Or turn it on the hard way:
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+  (ligature-set-ligatures 't '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                                        "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
                                        "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
@@ -166,120 +284,217 @@ Or turn it on the hard way:
                                        "[FAIL]" "[BUG]" "[DEBUG]" "[ERR]" "[ERROR]" "[FAIL]" "[FATAL]"
                                        "[FIXME]" "[HACK]" "[INFO]" "[INFO ]" "[KO]" "[MARK]" "[NOTE]"
                                        "[OK]" "[PASS]" "[PASS ]" "[TODO]" "[TRACE]" "[VERBOSE]"
-                                       "[WARN]" "[WARN ]" "[WARNING]"
-                                       "|\\" "/|")) ;; these are supposed to be for git hist, but require ss13
+                                       "[WARN]" "[WARN ]" "[WARNING]"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 #+end_src
 
-** With the Recursive font
-Set up fixed and variable pitch fonts with very similar character. It's a dynamic font, but unfortunately Emacs doesn't actually know how to handle that. So for now, we use two separate sets of static configs.
+** Color Theming
+*** Set up a hook that's  run after loading a theme
+Any theme customization that's done with ~set-face-attribute~ gets lost whenever we switch themes.  Usually you'd solve that with customize, but I kind of hate it. So, instead, we create our own hook taht's run on theme change to set those sorts of things.
 #+begin_src elisp
-(defun eh/set-recursive-fonts ()
-  (set-face-attribute 'default nil
-                      :font "Rec Mono Duotone"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "Rec Mono Duotone"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil
-                      :font "Recursive Sans Casual Static"
-                      :height 160 :weight 'normal)
+(defvar after-enable-theme-hook nil
+   "Normal hook run after enabling a theme.")
+
+(defun run-after-enable-theme-hook (&rest _args)
+   "Run `after-enable-theme-hook'."
+   (run-hooks 'after-enable-theme-hook))
+
+(advice-add 'enable-theme :after #'run-after-enable-theme-hook)
+#+end_src
+*** Set up Modus
+First, define a few functions that are useful to our use of Modus:
+#+begin_src elisp
+(defun eh/modus-customize ()
+  (set-face-attribute 'font-lock-string-face nil :slant 'italic)
+  (set-face-attribute 'org-document-title nil :height 1.5)
+  )
+
+(defun eh/load-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (modus-themes-load-operandi))
+    ('dark (modus-themes-load-vivendi))))
+
+(defun eh/org-update-modus-theme ()
+    (set-face-attribute 'eh/org-keyword-todo nil
+                        :inherit '(modus-themes-refine-green org-todo))
+    (set-face-attribute 'eh/org-keyword-flag nil
+                        :inherit '(modus-themes-intense-green org-todo))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :inherit '(modus-themes-refine-yellow org-done))
+    (set-face-attribute 'eh/org-keyword-block nil
+                        :inherit '(modus-themes-intense-red org-todo))
+    (set-face-attribute 'eh/org-keyword-hold nil
+                        :inherit '(modus-themes-intense-neutral org-done))
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :inherit '(modus-themes-refine-blue org-todo))
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :inherit '(modus-themes-refine-cyan org-todo))
+    (set-face-attribute 'eh/org-keyword-yak nil
+                        :inherit '(modus-themes-refine-magenta org-todo))
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :inherit '(modus-themes-nuanced-green org-done)
+                        :foreground (modus-themes-color 'green-faint))
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :inherit '(modus-themes-nuanced-red org-done)
+                        :foreground (modus-themes-color 'red-faint))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :inherit '(modus-themes-nuanced-blue org-done)
+                        :foreground (modus-themes-color 'blue-faint))
+    (set-face-attribute 'eh/org-keyword-ok nil
+                        :inherit 'eh/org-keyword-answer
+                        :foreground (modus-themes-color 'blue))
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :inherit 'eh/org-keyword-done
+                        :foreground (modus-themes-color 'green))
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :inherit 'eh/org-keyword-kill
+                        :foreground (modus-themes-color 'red))
+    )
+#+end_src
+
+#+begin_src elisp
+(use-package modus-themes
+  :config
+  (setq modus-themes-mixed-fonts t
+        modus-themes-variable-pitch-ui t
+        modus-themes-italic-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-subtle-line-numbers t
+        modus-themes-markup '(background intense)
+        modus-themes-links '(background)
+        modus-themes-fringes nil ;; background of fringe area
+        modus-themes-mode-line '(moody accented)
+        modus-themes-syntax '(green-strings)
+        modus-themes-org-blocks 'gray-background
+        modus-themes-completions '((t background intense accented))
+        modus-themes-region '(bg-only accented)
+        )
+  (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
+  :init
+  (modus-themes-load-themes)
+  :hook
+  (modus-themes-after-load-theme . eh/modus-customize)
+  (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
 
-** With Pragmata Pro
+*** Set up some alternate color themes
 #+begin_src elisp
-(defun eh/set-pragmata-fonts ()
-  (set-face-attribute 'default nil
-                      :font "PragmataPro Liga"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "PragmataPro Liga"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil
-                      :font "PragmataPro Liga"
-                      :height 160 :weight 'normal)
+(use-package iodine-theme)
+(use-package poet-theme
+  :config
+  (setq poet-theme-variable-headers nil
+        poet-theme-variable-pitch-multiplier 1))
+(use-package spacemacs-theme
+  :custom
+  (spacemacs-theme-comment-bg nil)
+  (spacemacs-theme-comment-italic t)
+  (spacemacs-theme-org-height nil))
+(use-package solo-jazz-theme)
+(use-package flucui-themes)
+(use-package doom-themes
+  :config
+  (setq doom-earl-grey-brighter-modeline t))
+#+end_src
+
+*** View named colors
+#+begin_src elisp
+(use-package rainbow-mode)
+#+end_src
+** Interface
+*** IDEA Make the mark always visible
+This is a start. It adds the ability to visualize the mark, but (at least with transient-mark-mode) it only seems to show them when the mark is active.
+#+begin_src elisp
+(use-package visible-mark
+  :config
+  (setq visible-mark-max 5)
+  :init
+  (global-visible-mark-mode 1))
+#+end_src
+*** Use mixed pitch fonts
+#+begin_src elisp
+(use-package mixed-pitch
+  :ensure t)
+#+end_src
+*** Show horizontal rules instead of =^L= 
+#+begin_src elisp
+(use-package form-feed
+  :init
+  (form-feed-mode t))
+#+end_src
+-
+*** Tab bar with centaur-tabs
+#+begin_src elisp
+(use-package centaur-tabs
+  :init
+  (centaur-tabs-mode t))
+#+end_src
+
+*** A better mode-line
+#+begin_src elisp
+  ;; (use-package mood-line
+  ;;   :init
+  ;;   (mood-line-mode 1))
+  ;; (use-package moody
+  ;;   :config
+  ;;   (moody-replace-mode-line-buffer-identification -1)
+  ;;   (moody-replace-vc-mode -1))
+#+end_src
+
+Use minions to hide all the minor mode indicators in a menu
+#+begin_src elisp
+(use-package minions
+  :config
+  (setq minions-mode-line-lighter "≡")
+  :init (minions-mode 1))
+#+end_src
+*** A dashboard
+#+begin_src elisp
+(use-package dashboard
+  :ensure t
+  :config
+  (setq dashboard-projects-backend 'projectile
+        dashboard-center-content t
+        dashboard-show-shortcuts t
+        dashboard-set-init-info t
+        )
+  (setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)
+                        ))
+  ;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  :init
+  (dashboard-setup-startup-hook))
+#+end_src 
+*** A menu of keybindings when you pause
+#+begin_src elisp
+(use-package which-key
+  :config
+  ;; this is the default
+  (which-key-setup-side-window-bottom)
+  :init
+  (which-key-mode))
+#+end_src
+*** Make help more helpful
+#+begin_src elisp
+(use-package helpful
+  :bind
+  ("C-h f" . helpful-callable)
+  ("C-h v" . helpful-variable)
+  ("C-h k" . helpful-key)
+  ("C-h C" . helpful-command) ;; only interactive functions
+  ;; this is overwritten by set-deadline in org
+  ("C-c C-d" . helpful-at-point)
   )
 #+end_src
-
-** With Plex fonts
-#+begin_src elisp
-(defun eh/set-plex-fonts ()
-  (set-face-attribute 'default nil
-                      :font "IBM Plex Mono"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "IBM Plex Mono"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil
-                      :font "iA Writer Quattro S"
-                      :height 160 :weight 'normal)
-  )
-#+end_src
-
-** With Input fonts
-#+begin_src elisp
-(defun eh/set-input-fonts ()
-  (set-face-attribute 'default nil
-                      :font "Input Mono"
-                      :height 160 :weight 'light)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "Input Mono"
-                      :height 160 :weight 'light)
-  (set-face-attribute 'variable-pitch nil
-                      :font "Input Sans"
-                      :height 160 :weight 'normal)
-  )
-#+end_src
-** With misc fonts
-
-Victor and Galix are a fun combo.
-#+begin_src elisp
-(defun eh/set-victor-fonts ()
-  (set-face-attribute 'default nil
-                      :font "Victor Mono"
-                      :height 140 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "Victor Mono"
-                      :height 140 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil
-                      :font "Galix"
-                      :height 170 :weight 'normal)
-  )
-;; (eh/set-victor-fonts)
-#+end_src
-
-#+begin_src elisp
-(defun eh/set-belinsky-fonts ()
-  (set-face-attribute 'default nil
-                      :font "Belinsky Text"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'fixed-pitch nil
-                      :font "Belinsky Text"
-                      :height 160 :weight 'normal)
-  (set-face-attribute 'variable-pitch nil
-                      :font "Belinsky Text"
-                      :height 160 :weight 'normal)
-  )
-;; (eh/set-victor-fonts)
-#+end_src
-
-
-
-** And finally, enable a font!
-#+begin_src elisp
-  ;; (eh/set-recursive-fonts)
-  (eh/set-pragmata-fonts)
-  ;; (eh/set-plex-fonts)
-#+end_src
-
-Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with changing fonts after the fact (even after toggling the mode)
-
-But ~variable-pitch-mode~ seems to do just fine with it. I think I switched because of ... some very specific issues. Let's go back to variable for a while?
-* Keybindings
-** The surprisingly complicated question of =ESC=
+* What it can do
+** Keybindings
+*** The surprisingly complicated question of =ESC=
 I don't want ESC as a modifier. When I was coming from vim/evil it was just too confusing and tripped me up all the time.
 Advice would say use ~keyboard-escape-quit~ as the binding here, which is what's originally bound to =ESC-ESC-ESC= but that makes it too easy to end up closing additional windows, which is basically never what I want.It turns out, however, that ~keyboard-quit~ is not what I want either since it doesn't get me out of the minibuffer. UGH.
 What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that the function it calls to kill a buffer just beeps instead. I'm not sure if it actually beeps, though. Am I good at ignoring it, have I retrained myself better than expected, or does it just not work?
@@ -288,9 +503,9 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 (setq-default buffer-quit-function
 	            #'(lambda () (beep)))
 #+end_src
-*** IDEA What if ~buffer-quit-function~ closed non-file-visiting buffers but left open any file-visiting? That might let it get out of help windows but not out of actual buffer layout.
+**** IDEA What if ~buffer-quit-function~ closed non-file-visiting buffers but left open any file-visiting? That might let it get out of help windows but not out of actual buffer layout.
 
-** Use general to set up keybindings in a friendlier way
+*** Use general to set up keybindings in a friendlier way
 #+begin_src elisp
 (use-package general
   :demand t
@@ -298,9 +513,10 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 )
 #+end_src
 
-* Completion
-What does vertico do and what does consult do?
-** Set up consult first
+** Vertical completion interface
+This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
+*** Set up consult first
+Consult is what sets the contents of those menus. It provides a really nice buffer switch interface, ~consult-buffer~, which includes a variety of sources and the ability to use a single-letter prefix 
 #+begin_src elisp
   (use-package consult
     :init
@@ -310,17 +526,17 @@ What does vertico do and what does consult do?
     ("<help> a" 'consult-apropros))
 #+end_src
 
-It still only operates in the single line, but it has the preview stuff
-** Set up vertico
+It still only operates on the single line, but it provides the nicer menus, and allows previewing the thing to be switched to (buffers, themes, etc).
+*** Set up vertico
+Vertico is what takes the completion functions from consult and turns them into what we'd normally think of as an autocomplete window. It's a few lines high, shows the input at the top, and provides a list of the possible results. You can move up and down through the list, or continue typing to keep narrowing.
 #+begin_src elisp
   (use-package vertico
     :init
-    (vertico-mode)
-    )
+    (vertico-mode))
 #+end_src
-
-Now it actually shows up as a multi-line menu
-** Use orderless matching
+*** Use orderless matching
+Speaking of matching, it's something that apparently I have Opinions about. It's important for the way I use it (and the organization of the projects I'm often navigating) that I can add additional elements to the match out of order. I might start searching for a model, =mod= then =us= for user. Oh, but I need the spec, so =spec=. In a lot of completion setups, I'd have to go back to the beginning of the string to add a filter that's higher up in the file tree. But with orderless, I can add the tokens in whatever order I want!
+In order for that not to make the search space too big, I then have to separate the tokens with spaces. It can sometimes be annoying, but it's sometimes actually useful for disambiguation.
 #+begin_src emacs-lisp
 (use-package orderless
   :config
@@ -342,135 +558,126 @@ Now it actually shows up as a multi-line menu
         completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
-** Show marginalia when completing
+*** Show marginalia when completing
+This adds the additional columns to the completion window. Extra info, and I think it fixes an alignment issue with variable pitch fonts.
 #+begin_src elisp
 (use-package marginalia
   :init
   (marginalia-mode))
 #+end_src
-
-* Color Theming
-** Set up a hook that's  run after loading a theme
-Any theme customization that's done with ~set-face-attribute~ gets lost whenever we switch themes.  Usually you'd solve that with customize, but I kind of hate it. So, instead, we create our own hook taht's run on theme change to set those sorts of things.
+** Scratch buffer is magic
+I use the scratch buffer a lot, and it's nice to have the things there stick around unless I delete them on purpose. It's a good place to stash log output, temporary shell command editing, things like that, but sometimes I need to restart my editor while still in the middle of those tasks.
 #+begin_src elisp
-(defvar after-enable-theme-hook nil
-   "Normal hook run after enabling a theme.")
-
-(defun run-after-enable-theme-hook (&rest _args)
-   "Run `after-enable-theme-hook'."
-   (run-hooks 'after-enable-theme-hook))
-
-(advice-add 'enable-theme :after #'run-after-enable-theme-hook)
-#+end_src
-
-** Set up some color themes
-#+begin_src elisp
-(use-package iodine-theme)
-(use-package poet-theme
-  :config
-  (setq poet-theme-variable-headers nil
-        poet-theme-variable-pitch-multiplier 1))
-(use-package spacemacs-theme
-  :custom
-  (spacemacs-theme-comment-bg nil)
-  (spacemacs-theme-comment-italic t)
-  (spacemacs-theme-org-height nil))
-(use-package solo-jazz-theme)
-(use-package flucui-themes)
-(use-package doom-themes
-  :config
-  (setq doom-earl-grey-brighter-modeline t))
-#+end_src
-
-And finally, actually load a theme:
-#+begin_src elisp
-(load-theme 'doom-earl-grey t)
-#+end_src
-** View named colors
-#+begin_src elisp
-(use-package rainbow-mode)
-#+end_src
-* Interface
-** Use mixed pitch fonts
-#+begin_src elisp
-(use-package mixed-pitch
-  :ensure t)
-#+end_src
-** Show horizontal rules instead of =^L= 
-#+begin_src elisp
-(use-package form-feed
+(use-package persistent-scratch
+  :demand t
   :init
-  (form-feed-mode t))
-#+end_src
--
-** Tab bar with centaur-tabs
-#+begin_src elisp
-(use-package centaur-tabs
-  :init
-  (centaur-tabs-mode t))
+  (persistent-scratch-setup-default)
+  (persistent-scratch-mode 1))
 #+end_src
 
-** A better mode-line
+** Version control
+Set up the best git interface:
 #+begin_src elisp
-  ;; (use-package mood-line
-  ;;   :init
-  ;;   (mood-line-mode 1))
-  ;; (use-package moody
-  ;;   :config
-  ;;   (moody-replace-mode-line-buffer-identification -1)
-  ;;   (moody-replace-vc-mode -1))
+(use-package magit)
 #+end_src
 
-Use minions to hide all the minor mode indicators in a menu
+See which lines have been modified in the gutter
 #+begin_src elisp
-(use-package minions
-  :config
-  (setq minions-mode-line-lighter "≡")
-  :init (minions-mode 1))
-#+end_src
-** A dashboard
-#+begin_src elisp
-(use-package dashboard
-  :ensure t
-  :config
-  (setq dashboard-projects-backend 'projectile
-        dashboard-center-content t
-        dashboard-show-shortcuts t
-        dashboard-set-init-info t
-        )
-  (setq dashboard-items '((recents  . 5)
-                        (bookmarks . 5)
-                        (projects . 5)
-                        (agenda . 5)
-                        ))
-  ;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+(use-package diff-hl
+  :hook
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh)
   :init
-  (dashboard-setup-startup-hook))
+  (global-diff-hl-mode 1))
 #+end_src
-** A menu of keybindings when you pause
+
+** Use projects for organization
 #+begin_src elisp
-(use-package which-key
+(use-package projectile
   :config
-  ;; this is the default
-  (which-key-setup-side-window-bottom)
+  (setq projectile-project-search-path
+	'(("~/Code" . 3)
+	  ("~/.homesick/repos" . 1)))
+  (projectile-add-known-project "~/Org")
+  (projectile-add-known-project "~/Notes")
+  :general
+  ("C-x p" '(:keymap projectile-command-map :package projectile))
   :init
-  (which-key-mode))
+  (projectile-mode 1))
 #+end_src
-** Make help more helpful
+
+** A shell in the editor
 #+begin_src elisp
-(use-package helpful
-  :bind
-  ("C-h f" . helpful-callable)
-  ("C-h v" . helpful-variable)
-  ("C-h k" . helpful-key)
-  ("C-h C" . helpful-command) ;; only interactive functions
-  ;; this is overwritten by set-deadline in org
-  ("C-c C-d" . helpful-at-point)
+(use-package vterm)
+#+end_src
+
+* Simple utilities for better editing
+Crux has lots of handy utility functions. These are a few of the best:
+#+begin_src elisp
+(use-package crux
+  :bind 
+  ("C-o" . crux-smart-open-line)
+  ("M-o" . crux-smart-open-line-above)
+  ("C-k" . crux-smart-kill-line)
   )
 #+end_src
 
-* Set up org-mode
+Expanding the region incrementally is incredibly helpful:
+#+begin_src elisp
+(use-package expand-region
+  :bind
+  ("C-=" . er/expand-region))
+#+end_src
 
+Allow highlighting color-like things in their colors. This isn't very smart about things, and tends to highlight named colors in an annoying number of places, but when it's useful it's really useful.
+#+begin_src elisp
+(use-package rainbow-mode)
+#+end_src
+
+
+Pulse the cursor line when moving around:
+#+begin_src elisp
+;; (use-package pulsar
+;;   :config
+;;   (add-to-list 'pulsar-pulse-functions 'org-cycle-level)
+;;   :init
+;;   (pulsar-global-mode 1))
+#+end_src
+Note that the function to call for initial setup changed between 0.2 and 0.3 so there might be issues with the above if trying to re-initialize packages. If so, change to ~(pulsar-setup)~
+
+Move forward and backward through pages when the buffer is narrowed:
+#+begin_src elisp
+(use-package logos
+  :config
+  (setq logos-outlines-are-pages t)
+  :general
+  ([remap narrow-to-region] 'logos-narrow-dwim)
+  ([remap forward-page] 'logos-forward-page-dwim)
+  ([remap backward-page] 'logos-backward-page-dwim))
+  
+(use-package olivetti
+  :config
+  (setq olivetti-style fancy))
+#+end_src
+
+Manage whitespace automatically:
+#+begin_src elisp
+(use-package ws-butler
+  :hook
+  (prog-mode . ws-butler-mode))
+#+end_src
+** Do better things with line wrapping
+#+begin_src elisp
+(use-package visual-fill-column
+  :config
+  ;; (setq-default visual-fill-column-extra-text-width '(2 . 2))
+  (setq visual-fill-column-enable-sensible-window-split t)
+  :hook
+  (visual-line-mode . visual-fill-column-mode))
+(use-package adaptive-wrap)
+#+end_src
+** TODO Parentheses matching and surround
+* Set up org-mode
 ** Prepare for org configuration
 
 Define custom faces for all of our keywords. This allows redone styles to be loaded without reload org-mode
@@ -513,62 +720,64 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
 
 Set up some basic org styling that we'll run whenever we change themes:
 #+begin_src elisp
-  (defun eh/org-update-theme ()
-    (set-face-attribute 'org-todo nil
-                        :inherit 'fixed-pitch
-                        :weight (face-attribute 'bold :weight))
-    (set-face-attribute 'org-done nil
-                        :inherit 'fixed-pitch
-                        :weight (face-attribute 'default :weight))
-    (set-face-attribute 'org-headline-todo nil
-                        :foreground (face-attribute 'default :foreground)
-                        :weight 'normal
-                        :inherit nil)
-    (set-face-attribute 'org-headline-done nil
-                        :inherit '(font-lock-comment-face default))
-    (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+(defun eh/org-update-theme ()
+  (set-face-attribute 'org-todo nil
+                      :inherit 'fixed-pitch
+		      :box nil
+		      :height 1.0
+                      :weight (face-attribute 'bold :weight))
+  (set-face-attribute 'org-done nil
+                      :inherit 'fixed-pitch
+           	      :slant 'italic
+                      :weight (face-attribute 'default :weight))
+  (set-face-attribute 'org-headline-todo nil
+                      :foreground (face-attribute 'default :foreground)
+                      :weight 'normal
+                      :inherit nil)
+  (set-face-attribute 'org-headline-done nil
+                      :inherit '(font-lock-comment-face default))
+  (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
 
-    ;; Now set up theme-specific things?
-    (message "Enabled themes: %s" custom-enabled-themes)
-    (message "Should be: %s" (car custom-enabled-themes))
-    (when (eq (car custom-enabled-themes) 'doom-isohedron)
-      ;; some todo faces
-      (set-face-attribute 'org-todo nil
-                          :foreground (doom-color 'bg)
-                          :background (doom-color 'fw-base3))
-      (set-face-attribute 'eh/org-keyword-todo nil
-                          :background (doom-color 'fw-green))
-      (set-face-attribute 'eh/org-keyword-flag nil
-                          :background (doom-color 'fw-orange))
-      (set-face-attribute 'eh/org-keyword-block nil
-                          :background (doom-color 'fw-red))
-      (set-face-attribute 'eh/org-keyword-question nil
-                          :background (doom-color 'fw-blue))
-      (set-face-attribute 'eh/org-keyword-idea nil
-                          :background (doom-color 'fw-teal))
-      (set-face-attribute 'eh/org-keyword-yak nil
-                          :background (doom-color 'fw-purple))
-      (set-face-attribute 'eh/org-keyword-hold nil
-                          :foreground (doom-color 'fw-yellow-text)
-                          :background (doom-color 'fw-yellow))
-      (set-face-attribute 'eh/org-keyword-wait nil
-                          :foreground (doom-color 'fg-alt)
-                          :background (doom-color 'fw-base5))
-      (set-face-attribute 'eh/org-keyword-answer nil
-                          :foreground (doom-color 'fw-blue))
-      (set-face-attribute 'eh/org-keyword-yes nil
-                          :foreground (doom-color 'fw-green))
-      (set-face-attribute 'eh/org-keyword-no nil
-                          :foreground (doom-color 'fw-red))
-      (set-face-attribute 'eh/org-keyword-ok nil
-                          :foreground (doom-color 'fg-alt))
-      (set-face-attribute 'eh/org-keyword-done nil
-                          :foreground (doom-color 'fg-alt))
-      (set-face-attribute 'eh/org-keyword-kill nil
-                          :foreground (doom-color 'fg-alt))
-      )
+  ;; Now set up theme-specific things?
+  (when (eq (car custom-enabled-themes) 'doom-isohedron)
+    (set-face-attribute 'org-todo nil
+                        :foreground (doom-color 'bg)
+                        :background (doom-color 'fw-base3))
+    (set-face-attribute 'eh/org-keyword-todo nil
+                        :background (doom-color 'fw-green))
+    (set-face-attribute 'eh/org-keyword-flag nil
+                        :background (doom-color 'fw-orange))
+    (set-face-attribute 'eh/org-keyword-block nil
+                        :background (doom-color 'fw-red))
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :background (doom-color 'fw-blue))
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :background (doom-color 'fw-teal))
+    (set-face-attribute 'eh/org-keyword-yak nil
+                        :background (doom-color 'fw-purple))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :foreground (doom-color 'fw-yellow-text)
+                        :background (doom-color 'fw-yellow))
+    (set-face-attribute 'eh/org-keyword-hold nil
+                        :foreground (doom-color 'fg-alt)
+                        :background (doom-color 'fw-base5))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :foreground (doom-color 'fw-blue))
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :foreground (doom-color 'fw-green))
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :foreground (doom-color 'fw-red))
+    (set-face-attribute 'eh/org-keyword-ok nil
+                        :foreground (doom-color 'fg-alt))
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :foreground (doom-color 'fg-alt))
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :foreground (doom-color 'fg-alt))
     )
+  )
 
   ;; (eh/org-update-theme)
 #+end_src
@@ -598,8 +807,8 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-startup-truncated t)
     (setq org-todo-keywords
           '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
-            (sequence "QSTN(q)" "|" "  OK(o)" " YES(y)" "  NO(n)" "ANSR(a@)")
-            (type "IDEA(I)" " YAK(Y)" "|")
+            (sequence "QSTN(q)" "|" "OK(o)" "YES(y)" "NO(n)" "ANSR(a@)")
+            (type "IDEA(I)" "YAK(Y)" "|")
             ))
 
     (setq org-todo-keyword-faces
@@ -612,11 +821,11 @@ Set up some basic org styling that we'll run whenever we change themes:
             ("KILL" . eh/org-keyword-kill)
             ("QSTN" . eh/org-keyword-question)
             ("ANSR" . eh/org-keyword-answer)
-            ("  OK" . eh/org-keyword-ok)
-            (" YES" . eh/org-keyword-yes)
-            ("  NO" . eh/org-keyword-no)
+            ("OK"   . eh/org-keyword-ok)
+            ("YES"  . eh/org-keyword-yes)
+            ("NO"   . eh/org-keyword-no)
             ("IDEA" . eh/org-keyword-idea)
-            (" YAK" . eh/org-keyword-yak)
+            ("YAK"  . eh/org-keyword-yak)
             ))
     :hook
     (org-mode . (lambda()
@@ -640,26 +849,26 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-remove-leading-stars nil
         org-superstar-headline-bullets-list '("◆" "•"))
   (setq org-superstar-todo-bullet-alist
-        '(("TODO"     . ?›)
-          ("FLAG"     . ?»)
-          ("DONE"     . ?✓)
-          ("WAIT"     . ?≈)
-          ("BLOK"     . ?◊)
-          ("HOLD"     . ?~)
-          ("KILL"     . ?×)
-          ("QSTN"     . ??)
-          ("ANSR"     . ?•)
-          ("  OK"     . ?·)
-          (" YES"     . ?·)
-          ("  NO"     . ?·)
-          ("IDEA"     . ?•)
-          (" YAK"     . ?∞)
+        '(("TODO" . ?-) ;; ☐ > ›
+          ("FLAG" . ?=) ;; ▲
+          ("DONE" . ?✓) ;; ☑ ✓
+          ("WAIT" . ?≈) ;; ∥
+          ("BLOK" . ?◊)
+          ("HOLD" . ?~)
+          ("KILL" . ?×) ;; × ✕ 
+          ("QSTN" . ??) ;; ◇
+          ("ANSR" . ?•)
+          ("OK"   . ?·)
+          ("YES"  . ?·)
+          ("NO"   . ?·)
+          ("IDEA" . ?•)
+          ("YAK"  . ?∞) ;;♡
           )
         org-superstar-prettify-item-bullets nil
         )
   (defun eh/org-superstar-update-theme ()
     (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
-    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'font-lock-comment-face :foreground))
+    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'org-hide :foreground))
     )
   :config
   (eh/org-superstar-update-theme)
@@ -668,77 +877,30 @@ Set up some basic org styling that we'll run whenever we change themes:
   (after-enable-theme . eh/org-superstar-update-theme)
   )
 #+end_src
-** Testing org styling
-*** TODO A task
-*** DONE This one is doneso
-*** FLAG A flag
-*** HOLD On hold
-*** BLOK Blocked
-*** WAIT Waiting
-*** KILL Not doable
-*** QSTN A question
-*** ANSR An answer
-***   OK Is fine
-***  YES is affirmative
-***   NO Is negative
-*** IDEA Is a maybe
-***  YAK Is a time-sink
-
-* Simple utilities for better editing
-Crux has lots of handy utility functions. These are a few of the best:
+* Language support
+** Misc small packages
 #+begin_src elisp
-(use-package crux
-  :bind 
-  ("C-o" . crux-smart-open-line)
-  ("M-o" . crux-smart-open-line-above)
-  ("C-k" . crux-smart-kill-line)
-  )
+(use-package fish-mode)
+(use-package haml-mode)
+(use-package slim-mode)
 #+end_src
-
-Expanding the region incrementally is incredibly helpful:
+** Writing in Markdown
+As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
 #+begin_src elisp
-(use-package expand-region
-  :bind
-  ("C-=" . er/expand-region))
-#+end_src
-
-Pulse the cursor line when moving around
-#+begin_src elisp
-(use-package pulsar
-  :straight
-  '(pulsar :type git :host gitlab :repo "protesilaos/pulsar")
-  :init
-  (pulsar-setup))
-#+end_src
-
-Move forward and backward through pages when the buffer is narrowed.
-#+begin_src elisp
-(use-package logos
-  :config
-  (setq logos-outlines-are-pages t)
-  :general
-  ([remap narrow-to-region] 'logos-narrow-dwim)
-  ([remap forward-page] 'logos-forward-page-dwim)
-  ([remap backward-page] 'logos-backward-page-dwim))
-  
-(use-package olivetti
-  :config
-  (setq olivetti-style fancy))
-#+end_src
-
-Manage whitespace automatically
-#+begin_src elisp
-(use-package ws-butler
+(use-package markdown-mode
+  :mode
+  (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode))
   :hook
-  (prog-mode . ws-butler-mode))
+  (gfm-mode . variable-pitch-mode)
+  (markdown-mode . variable-pitch-mode))
 #+end_src
-** Do better things with line wrapping
+
+** Javascript with Vue
+I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing.
 #+begin_src elisp
-(use-package visual-fill-column
-  :config
-  ;; (setq-default visual-fill-column-extra-text-width '(2 . 2))
-  (setq visual-fill-column-enable-sensible-window-split t)
-  :hook
-  (visual-line-mode . visual-fill-column-mode))
-(use-package adaptive-wrap)
+(use-package vue-mode)
 #+end_src
+We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
+
+
+
