@@ -1,0 +1,56 @@
+#+title: The Yaks are Doomed
+
+* The basics
+There's a lot less to configure with Doom, since it's doing so much for us.
+
+Introduce myself:
+#+begin_src elisp
+(setq user-full-name "Emily Hyland"
+      user-mail-address "emily@duien.com")
+#+end_src
+
+Set a font and theme:
+#+begin_src elisp
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 16 :weight 'normal)
+     doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 16))
+
+(setq doom-theme 'modus-operandi)
+#+end_src
+
+Set a few simple options:
+#+begin_src elisp
+(setq display-line-numbers-type t)
+(setq org-directory "~/Org/")
+#+end_src
+
+* How it looks
+** Configure modus themes
+#+begin_src elisp :tangle packages.el
+(package! modus-themes)
+#+end_src
+
+#+begin_src elisp
+(use-package! modus-themes
+  :config
+  (setq modus-themes-mixed-fonts t
+        modus-themes-variable-pitch-ui t
+        modus-themes-italic-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-subtle-line-numbers t
+        modus-themes-markup '(background intense)
+        modus-themes-links '(background)
+        modus-themes-fringes nil ;; background of fringe area
+        modus-themes-mode-line '(accented)
+        modus-themes-syntax '(green-strings)
+        modus-themes-org-blocks 'gray-background
+        modus-themes-completions '((t . ( background intense accented)))
+        modus-themes-region '(bg-only accented)
+        )
+  :init
+  (modus-themes-load-themes)
+  )
+#+end_src
+* Transitioning back to Doom
+** TODO Set up all the org-mode stuff
+This always kind of sucked in doom. Can I make it into my own layer somehow?
+** TODO Project paths
