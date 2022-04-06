@@ -12,7 +12,8 @@ Introduce myself:
 Set a font and theme:
 #+begin_src elisp
 (setq doom-font (font-spec :family "IBM Plex Mono" :size 16 :weight 'normal)
-     doom-variable-pitch-font (font-spec :family "iA Writer Quattro V" :size 16))
+     doom-variable-pitch-font (font-spec :family "iA Writer Quattro V"
+                                         :size 16 :weight 'normal))
 
 (setq doom-theme 'modus-operandi)
 #+end_src
@@ -20,10 +21,44 @@ Set a font and theme:
 Set a few simple options:
 #+begin_src elisp
 (setq display-line-numbers-type t)
-(setq org-directory "~/Org/")
+(setq doom-leader-alt-key "C-x m") ;; m for menu
+(map! "C-x b" 'consult-buffer)
+(map! "C-x z" 'bury-buffer)
 #+end_src
 
+Set up where I keep things:
+#+begin_src elisp
+(setq projectile-project-search-path
+      '(("~/Code" . 3)
+        ("~/.homesick/repos" . 1)
+        ("~/Org" . 0)
+        ("~/Notes" . 0)))
+#+end_src
+
+Make modifier keys a less painful experience:
+#+begin_src elisp
+(cond (IS-MAC
+       (setq mac-command-modifier       'meta
+             mac-option-modifier        'alt
+             mac-right-option-modifier  'alt
+             mac-pass-control-to-system nil))) ;; this may be only emacs-mac
+#+end_src
 * How it looks
+** Set up infrastructure for customizing themes
+First, create a general hook that's called whenever a theme is loaded. This is from the Modus documentation, and is definitely useful.
+
+Any theme customization that's done with ~set-face-attribute~ gets lost whenever we switch themes.  Usually you'd solve that with customize, but I kind of hate it. So, instead, we create our own hook taht's run on theme change to set those sorts of things.
+#+begin_src elisp
+(defvar after-enable-theme-hook nil
+   "Normal hook run after enabling a theme.")
+
+(defun run-after-enable-theme-hook (&rest _args)
+   "Run `after-enable-theme-hook'."
+   (run-hooks 'after-enable-theme-hook))
+
+(advice-add 'enable-theme :after #'run-after-enable-theme-hook)
+#+end_src
+
 ** Configure modus themes
 #+begin_src elisp :tangle packages.el
 (package! modus-themes)
@@ -31,6 +66,7 @@ Set a few simple options:
 
 #+begin_src elisp
 (use-package! modus-themes
+  :defer t
   :config
   (setq modus-themes-mixed-fonts t
         modus-themes-variable-pitch-ui t
@@ -47,10 +83,252 @@ Set a few simple options:
         modus-themes-region '(bg-only accented)
         )
   :init
-  (modus-themes-load-themes)
+  (modus-themes-load-themes))
+#+end_src
+
+Add a function that makes the changes that I want to Modus faces, and sets up face inheritance from Modus for my own faces:
+#+begin_src elisp
+(defun eh/modus-customize-org ()
+  (set-face-attribute 'eh/org-keyword-todo nil
+                        :inherit '(modus-themes-refine-green org-todo))
+    (set-face-attribute 'eh/org-keyword-flag nil
+                        :inherit '(modus-themes-intense-green org-todo))
+    (set-face-attribute 'eh/org-keyword-wait nil
+                        :inherit '(modus-themes-refine-yellow org-done))
+    (set-face-attribute 'eh/org-keyword-block nil
+                        :inherit '(modus-themes-intense-red org-todo))
+    (set-face-attribute 'eh/org-keyword-hold nil
+                        :inherit '(modus-themes-intense-neutral org-done))
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :inherit '(modus-themes-refine-blue org-todo))
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :inherit '(modus-themes-refine-cyan org-todo))
+    (set-face-attribute 'eh/org-keyword-yak nil
+                        :inherit '(modus-themes-refine-magenta org-todo))
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :inherit '(modus-themes-nuanced-green org-done)
+                        :foreground (modus-themes-color 'green-faint))
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :inherit '(modus-themes-nuanced-red org-done)
+                        :foreground (modus-themes-color 'red-faint))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :inherit '(modus-themes-nuanced-blue org-done)
+                        :foreground (modus-themes-color 'blue-faint))
+    (set-face-attribute 'eh/org-keyword-ok nil
+                        :inherit 'eh/org-keyword-answer
+                        :foreground (modus-themes-color 'blue))
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :inherit 'eh/org-keyword-done
+                        :foreground (modus-themes-color 'green))
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :inherit 'eh/org-keyword-kill
+                        :foreground (modus-themes-color 'red)))
+#+end_src
+
+And then add that function to the modus hook:
+#+begin_src elisp
+;; (add-hook! 'modus-themes-after-load-theme #'eh/modus-customize)
+(after! org
+  (add-hook! 'after-enable-theme-hook #'eh/modus-customize-org)
+  (eh/modus-customize-org)) ;; run once now
+#+end_src
+
+
+* Configure Org
+Set basic directories that need to be in place before Org loads
+#+begin_src elisp
+(setq org-directory "~/Org/"
+      org-agenda-files '("~/Org/"))
+#+end_src
+
+Set basic settings and todo keywords, which has to be done later to make sure Doom doesn't clobber them.
+#+begin_src elisp
+(after! org
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
+        org-log-done t
+        org-log-into-drawer t
+        org-insert-heading-respect-content t
+        org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
+        org-indent-mode-turns-on-hiding-stars nil
+        org-hide-leading-stars nil
+        org-ellipsis " ↩"
+        org-fontify-whole-block-delimiter-line nil
+        org-fontify-whole-heading-line t
+        org-fontify-todo-headline t
+        org-fontify-done-headline t
+        org-src-preserve-indentation t)
+  (setq org-todo-keywords
+        '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
+          (sequence "QSTN(q)" "|" "OK(o)" "ANSR(a@)" "YES(y)" "NO(n)")
+          (type "IDEA(I)" "YAK(Y)" "|")
+          ))
+  (setq org-todo-keyword-faces
+      `(("TODO" . eh/org-keyword-todo)
+        ("FLAG" . eh/org-keyword-flag)
+        ("DONE" . eh/org-keyword-done)
+        ("HOLD" . eh/org-keyword-hold)
+        ("BLOK" . eh/org-keyword-block)
+        ("WAIT" . eh/org-keyword-wait)
+        ("KILL" . eh/org-keyword-kill)
+        ("QSTN" . eh/org-keyword-question)
+        ("ANSR" . eh/org-keyword-answer)
+        ("OK"   . eh/org-keyword-ok)
+        ("YES"  . eh/org-keyword-yes)
+        ("NO"   . eh/org-keyword-no)
+        ("IDEA" . eh/org-keyword-idea)
+        ("YAK"  . eh/org-keyword-yak)
+        ))
+  (add-hook! 'after-enable-theme  #'eh/org-update-theme)
+  (eh/org-update-theme))
+#+end_src
+
+Set up theme hook:
+#+begin_src elisp
+(defun eh/org-update-theme ()
+  (set-face-attribute 'org-document-title nil :height 1.5)
+  (set-face-attribute 'org-ellipsis nil
+                      :weight (face-attribute 'default :weight))
+  (set-face-attribute 'org-todo nil
+                      :inherit 'fixed-pitch
+                      :box nil
+                      :height 1.0
+                      :weight (face-attribute 'bold :weight))
+  (set-face-attribute 'org-done nil
+                      :inherit 'fixed-pitch
+                      :slant 'italic
+                      :weight (face-attribute 'default :weight))
+  (set-face-attribute 'org-headline-todo nil
+                      :foreground (face-attribute 'default :foreground)
+                      :weight 'normal
+                      :inherit nil)
+  (set-face-attribute 'org-headline-done nil
+                      :inherit '(font-lock-comment-face default))
+  (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch))
+#+end_src
+
+
+Set up superstar bullets:
+#+begin_src elisp
+(after! org-superstar
+  (setq org-superstar-cycle-headline-bullets nil
+        org-superstar-special-todo-items t
+        org-superstar-leading-fallback "·"
+        org-superstar-leading-bullet "·"
+        org-superstar-remove-leading-stars nil
+        org-superstar-headline-bullets-list '("◆" "•"))
+  (setq org-superstar-todo-bullet-alist
+        '(("TODO" . ?-)
+          ("FLAG" . ?=)
+          ("DONE" . ?✓)
+          ("WAIT" . ?≈)
+          ("BLOK" . ?◊)
+          ("HOLD" . ?~)
+          ("KILL" . ?×)
+          ("QSTN" . ??)
+          ("ANSR" . ?•)
+          ("OK"   . ?·)
+          ("YES"  . ?·)
+          ("NO"   . ?·)
+          ("IDEA" . ?•)
+          ("YAK"  . ?∞)
+          )
+        org-superstar-prettify-item-bullets nil)
+  (add-hook! 'after-enable-theme #'eh/org-superstar-update-theme)
+  (eh/org-superstar-update-theme))
+#+end_src
+
+Set up some general org face changes:
+#+begin_src elisp
+(defun eh/org-superstar-update-theme ()
+    (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
+    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'org-hide :foreground)))
+(after! org
   )
 #+end_src
+
+
+Set up capture templates:
+#+begin_src elisp
+(after! org-capture
+  (add-to-list 'org-capture-templates
+               '("k" "Key binding"
+                 entry
+                 (file "~/Org/yaks.org")))
+  (add-to-list 'org-capture-templates
+               '("i" "Idea"
+                 entry
+                 (file "~/Org/yaks.org"))))
+#+end_src
+
+** Details
+*** Set up those org faces
+#+name: define-org-faces
+#+begin_src elisp
+;; Completed states
+(defface eh/org-keyword-done '((t :inherit org-done))
+  "Face used for the DONE keyword in Org")
+(defface eh/org-keyword-kill '((t :inherit org-done))
+  "Face used for the KILL keyword in Org")
+(defface eh/org-keyword-answer '((t :inherit org-done))
+  "Face used for the ANSR keywork in Org")
+(defface eh/org-keyword-ok '((t :inherit org-done))
+  "Face used for the OK keyword in Org")
+(defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
+  "Face used for the YES keyword in Org")
+(defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
+  "Face used for the NO keyword in Org")
+
+;; Incomplete states
+(defface eh/org-keyword-wait '((t :inherit org-done))
+  "Face used for the WAIT keyword in Org")
+(defface eh/org-keyword-flag '((t :inherit org-todo))
+  "Face used for the FLAG keyword in Org")
+(defface eh/org-keyword-todo '((t :inherit org-todo))
+  "Face used for the TODO keyword in Org")
+(defface eh/org-keyword-block '((t :inherit org-todo))
+  "Face used for the BLOK keyword in Org")
+(defface eh/org-keyword-hold '((t :inherit org-todo))
+  "Face used for the HOLD keyword in Org")
+(defface eh/org-keyword-question '((t :inherit org-todo))
+  "Face used for the QSTN keyword in Org")
+(defface eh/org-keyword-idea '((t :inherit org-todo))
+  "Face used for the IDEA keyword in Org")
+(defface eh/org-keyword-yak '((t :inherit org-todo))
+  "Face used for the YAK keyword in Org")
+#+end_src
 * Transitioning back to Doom
-** TODO Set up all the org-mode stuff
+** DONE Set up all the org-mode stuff
+CLOSED: [2022-04-05 Tue 19:22]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-05 Tue 19:22]
+:END:
 This always kind of sucked in doom. Can I make it into my own layer somehow?
-** TODO Project paths
+*** DONE Set up font overrides in hooks
+CLOSED: [2022-04-05 Tue 18:48]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-05 Tue 18:48]
+:END:
+** DONE Project paths
+** TODO [1/2] Figure out a different prefix and local prefix key
+*** DONE Set a different key for prefix
+*** TODO Set a different key for local prefix
+** TODO Keep an eye out for default keybindings doom has overridden
+** TODO Fix modus diff line
+** TODO Fix inheritance for org-ellipsis
+It should inherit from variable-pitch but that doesn't seem to have a defined weight, but I don't know why
+
+* Keybindings
+
+Keeping track of some things I've been wanting and finally found (or figured out how to use)
+| M-h | org-mark-element    |
+| M-m | back-to-indentation |
+|     |                     |
+
+** Maybe reuse?
+*** YES =C-x z= is ~repeat~ which I've never used. Could reuse for bury?
+** Needs a binding
+*** Org: collapse here
+On a heading, it would be the same as tab. But inside a heading, it would jump to the beginning first, then tab (so it actually closes)
