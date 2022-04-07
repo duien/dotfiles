@@ -15,12 +15,13 @@ Set a font and theme:
      doom-variable-pitch-font (font-spec :family "iA Writer Quattro V"
                                          :size 16 :weight 'normal))
 
-(setq doom-theme 'modus-operandi)
+;; (setq doom-theme 'modus-operandi)
+;; (setq doom-theme 'bespoke)
 #+end_src
 
 Set a few simple options:
 #+begin_src elisp
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type nil)
 (setq doom-leader-alt-key "C-x m") ;; m for menu
 (map! "C-x b" 'consult-buffer)
 (map! "C-x z" 'bury-buffer)
@@ -56,10 +57,11 @@ Any theme customization that's done with ~set-face-attribute~ gets lost whenever
    "Run `after-enable-theme-hook'."
    (run-hooks 'after-enable-theme-hook))
 
-(advice-add 'enable-theme :after #'run-after-enable-theme-hook)
+;; (advice-add 'enable-theme :after #'run-after-enable-theme-hook) ;; fijk
 #+end_src
+** Much fumbling with possibilities
 
-** Configure modus themes
+*** Configure modus themes
 #+begin_src elisp :tangle packages.el
 (package! modus-themes)
 #+end_src
@@ -90,47 +92,254 @@ Add a function that makes the changes that I want to Modus faces, and sets up fa
 #+begin_src elisp
 (defun eh/modus-customize-org ()
   (set-face-attribute 'eh/org-keyword-todo nil
-                        :inherit '(modus-themes-refine-green org-todo))
-    (set-face-attribute 'eh/org-keyword-flag nil
-                        :inherit '(modus-themes-intense-green org-todo))
-    (set-face-attribute 'eh/org-keyword-wait nil
-                        :inherit '(modus-themes-refine-yellow org-done))
-    (set-face-attribute 'eh/org-keyword-block nil
-                        :inherit '(modus-themes-intense-red org-todo))
-    (set-face-attribute 'eh/org-keyword-hold nil
-                        :inherit '(modus-themes-intense-neutral org-done))
-    (set-face-attribute 'eh/org-keyword-question nil
-                        :inherit '(modus-themes-refine-blue org-todo))
-    (set-face-attribute 'eh/org-keyword-idea nil
-                        :inherit '(modus-themes-refine-cyan org-todo))
-    (set-face-attribute 'eh/org-keyword-yak nil
-                        :inherit '(modus-themes-refine-magenta org-todo))
-    (set-face-attribute 'eh/org-keyword-done nil
-                        :inherit '(modus-themes-nuanced-green org-done)
-                        :foreground (modus-themes-color 'green-faint))
-    (set-face-attribute 'eh/org-keyword-kill nil
-                        :inherit '(modus-themes-nuanced-red org-done)
-                        :foreground (modus-themes-color 'red-faint))
-    (set-face-attribute 'eh/org-keyword-answer nil
-                        :inherit '(modus-themes-nuanced-blue org-done)
-                        :foreground (modus-themes-color 'blue-faint))
-    (set-face-attribute 'eh/org-keyword-ok nil
-                        :inherit 'eh/org-keyword-answer
-                        :foreground (modus-themes-color 'blue))
-    (set-face-attribute 'eh/org-keyword-yes nil
-                        :inherit 'eh/org-keyword-done
-                        :foreground (modus-themes-color 'green))
-    (set-face-attribute 'eh/org-keyword-no nil
-                        :inherit 'eh/org-keyword-kill
-                        :foreground (modus-themes-color 'red)))
+                      :inherit '(modus-themes-refine-green org-todo))
+  (set-face-attribute 'eh/org-keyword-flag nil
+                      :inherit '(modus-themes-intense-green org-todo))
+  (set-face-attribute 'eh/org-keyword-wait nil
+                      :inherit '(modus-themes-refine-yellow org-done))
+  (set-face-attribute 'eh/org-keyword-block nil
+                      :inherit '(modus-themes-intense-red org-todo))
+  (set-face-attribute 'eh/org-keyword-hold nil
+                      :inherit '(modus-themes-intense-neutral org-done))
+  (set-face-attribute 'eh/org-keyword-question nil
+                      :inherit '(modus-themes-refine-blue org-todo))
+  (set-face-attribute 'eh/org-keyword-idea nil
+                      :inherit '(modus-themes-refine-cyan org-todo))
+  (set-face-attribute 'eh/org-keyword-yak nil
+                      :inherit '(modus-themes-refine-magenta org-todo))
+  (set-face-attribute 'eh/org-keyword-done nil
+                      :inherit '(modus-themes-nuanced-green org-done)
+                      :foreground (modus-themes-color 'green-faint))
+  (set-face-attribute 'eh/org-keyword-kill nil
+                      :inherit '(modus-themes-nuanced-red org-done)
+                      :foreground (modus-themes-color 'red-faint))
+  (set-face-attribute 'eh/org-keyword-answer nil
+                      :inherit '(modus-themes-nuanced-blue org-done)
+                      :foreground (modus-themes-color 'blue-faint))
+  (set-face-attribute 'eh/org-keyword-ok nil
+                      :inherit 'eh/org-keyword-answer
+                      :foreground (modus-themes-color 'blue))
+  (set-face-attribute 'eh/org-keyword-yes nil
+                      :inherit 'eh/org-keyword-done
+                      :foreground (modus-themes-color 'green))
+  (set-face-attribute 'eh/org-keyword-no nil
+                      :inherit 'eh/org-keyword-kill
+                      :foreground (modus-themes-color 'red)))
 #+end_src
 
 And then add that function to the modus hook:
+#+name: modus-customize-org
+#+begin_src elisp :tangle no
+;; (add-hook! 'modus-themes-after-load-theme-hook #'eh/modus-customize)
+;; (add-hook! 'after-enable-theme-hook #'eh/modus-customize-org)
+;; (eh/modus-customize-org) ;; run once now
+#+end_src
+
+*** Configure bespoke theme
+First, install the package
+#+begin_src elisp :tangle packages.el
+(package! bespoke-themes
+  :recipe (:type git :host github :repo "mclear-tools/bespoke-themes" :branch "main"))
+(package! bespoke-modeline
+  :recipe (:type git :host github :repo "mclear-tools/bespoke-modeline" :branch "main"))
+;; (package! nano-modeline)
+(disable-packages! doom-modeline)
+#+end_src
+
+Then configure it:
+
 #+begin_src elisp
-;; (add-hook! 'modus-themes-after-load-theme #'eh/modus-customize)
-(after! org
-  (add-hook! 'after-enable-theme-hook #'eh/modus-customize-org)
-  (eh/modus-customize-org)) ;; run once now
+;; my own additions to bespoke
+(defun eh/bespoke-customize ()
+  (message "Customizing bespoke theme...")
+  ;; org-meta-line (lines starting with #+)
+  (set-face-attribute 'org-todo nil
+                      :inverse-video t
+                      :inherit 'bespoke-faded)
+  (set-face-attribute 'org-block nil
+                      :foreground nil
+                      :background "#F9F9F6"
+                      )
+  (set-face-attribute 'org-meta-line nil
+                      :height 0.8
+                      :box '(:line-width 2 :color "#fffef9"))
+  (set-face-attribute 'org-block-begin-line nil
+                      :inherit 'org-meta-line
+                      :background "#fffef9"
+                      :extend t)
+  (set-face-attribute 'org-block-end-line nil
+                      :inherit 'org-meta-line
+                      :background "#fffef9"
+                      :extend t)
+  (set-face-attribute 'eh/org-keyword-todo nil :inherit '(bespoke-green org-todo))
+  (set-face-attribute 'eh/org-keyword-flag nil :inherit '(bespoke-salient org-todo))
+  (set-face-attribute 'eh/org-keyword-question nil :inherit '(bespoke-blue org-todo))
+  (set-face-attribute 'eh/org-keyword-yak nil :inherit '(bespoke-popout org-todo))
+  (set-face-attribute 'eh/org-keyword-idea nil :inherit '(bespoke-yellow org-todo))
+  (set-face-attribute 'eh/org-keyword-block nil :inherit '(bespoke-critical org-todo))
+  (set-face-attribute 'eh/org-keyword-hold nil :inherit '(bespoke-brown org-todo))
+  (set-face-attribute 'eh/org-keyword-wait nil :inherit '(bespoke-modeline done)
+                      :strike-through nil :slant 'normal)
+  (set-face-attribute 'eh/org-keyword-done nil :inherit '(bespoke-green org-done))
+  (set-face-attribute 'eh/org-keyword-kill nil :inherit '(bespoke-critical org-done))
+  (set-face-attribute 'eh/org-keyword-answer nil :inherit '(bespoke-blue org-done))
+  (set-face-attribute 'eh/org-keyword-ok nil :inherit '(org-done))
+  )
+
+(use-package! bespoke-themes
+  :config
+  (setq bespoke-set-italic-comments t
+        bespoke-set-italic-keywords t)
+  (setq bespoke-set-variable-pitch t)
+  ;; Set initial theme variant
+  (setq bespoke-set-theme 'light)
+  :hook (bespoke-after-load-theme . eh/bespoke-customize))
+(use-package! bespoke-modeline
+  :init
+  (setq bespoke-modeline-position 'top)
+  ;; Set mode-line height ???
+  (setq bespoke-modeline-size 3)
+  (setq bespoke-modeline-git-diff-mode-line nil)
+  ;; Set mode-line cleaner
+  (setq bespoke-modeline-cleaner nil)
+  ;; Use mode-line visual bell
+  (setq bespoke-modeline-visual-bell t)
+  ;; Set vc symbol
+  (setq  bespoke-modeline-vc-symbol "@")
+  :config
+  ;; (bespoke-modeline-mode)
+  )
+#+end_src
+
+**** Set up window borders for bespoke
+Configure the package
+#+begin_src elisp :tangle packages.el
+;; (package! frame :built-in)
+#+end_src
+
+Then set up lots of options:
+#+begin_src elisp
+(use-package! frame
+  :custom
+  (window-divider-default-right-width 12)
+  (window-divider-default-bottom-width 1)
+  (window-divider-default-places 'right-only)
+  (window-divider-mode t)
+  :config
+  (setq-default default-frame-alist
+                (append (list
+                '(internal-border-width . 12)
+                '(left-fringe    . 0)
+                '(right-fringe   . 0)
+                '(tool-bar-lines . 0)
+                '(menu-bar-lines . 0)
+                '(vertical-scroll-bars . nil))))
+  (setq-default window-resize-pixelwise t)
+  (setq-default frame-resize-pixelwise t)
+  )
+;; Make sure new frames use window-divider
+(add-hook! 'before-make-frame-hook 'window-divider-mode)
+#+end_src
+
+**** Dim inactive windows
+Configure the package
+#+begin_src elisp :tangle packages.el
+(package! dimmer
+  :recipe (:host github :repo "gonewest818/dimmer.el"))
+#+end_src
+
+Then, configure it:
+#+begin_src elisp
+(use-package! dimmer
+  :hook (after-init . dimmer-mode)
+  :config
+  (setq dimmer-adjustment-mode :both)
+  (setq dimmer-fraction 0.1)
+  (setq dimmer-use-colorspace :rgb)
+  (setq dimmer-watch-frame-focus-events nil)
+  (dimmer-configure-which-key)
+  (dimmer-configure-magit)
+  (dimmer-configure-org))
+#+end_src
+
+*** Try out a miniframe entry alternative
+
+
+#+begin_src elisp :tangle packages.el
+(package! mini-frame)
+#+end_src
+
+Turn on the mini frame! (disabled for now)
+#+begin_src elisp :tangle no
+(use-package! mini-frame
+  :after vertico
+  :config
+  (setq! mini-frame-show-parameters '((top . 10)
+                                      (width . 0.7)
+                                      (left . 0.5)))
+  (setq! mini-frame-default-height vertico-count)
+  :init
+  ;; (meini-frame-mode 1)
+  )
+
+;; turn of result preview in consult
+(after! consult
+  (setq consult-preview-key nil))
+#+end_src
+
+*** Try out completion positioning alternatives
+#+begin_src elisp :tangle packages.el
+(package! vertico-posframe)
+#+end_src
+
+A minimalist approach using vertico's built-in ability to display in a buffer. Sourced from [[https://gist.github.com/rougier/126e358464e12aa28fac5b4f3dd5eb9c?permalink_comment_id=4115602#gistcomment-4115602][this comment on nano-emacs' minibuffer gist]]
+#+begin_src elisp :tangle no
+(after! vertico
+  (vertico-buffer-mode)
+  (advice-add #'vertico-buffer--setup :after #'my-vertico-buffer-setup)
+  (setq vertico-buffer-display-action
+        '(display-buffer-in-side-window
+          (window-height . 12)
+          (header-line-format . 'none)
+          (mode-line-format . 'none)
+          (side . top)))
+  (defun my-vertico-buffer-setup ()
+    (dolist (win (get-buffer-window-list))
+      (set-window-parameter win 'my-mini-window (window-minibuffer-p win)))
+    (setq-local
+     left-fringe-width 0
+     right-fringe-width 0
+     left-margin-width 0
+     right-margin-width 0
+     fringes-outside-margins t
+     mode-line-format nil
+     header-line-format nil)
+    (dolist (win (get-buffer-window-list))
+      (set-window-buffer win (current-buffer)))))
+
+;; (after! consult
+;;   (setq consult-preview-key nil))
+#+end_src
+
+
+** Configure NANO theme
+#+begin_src elisp :tangle packages.el
+(package! nano-theme
+  :recipe (:type git :host github :repo "rougier/nano-theme"))
+(package! nano-modeline
+  :recipe (:type git :host github :repo "rougier/nano-modeline"))
+#+end_src
+
+Now, actually set up some of that stuff
+#+begin_src elisp
+(setq doom-theme 'nano-light)
+(use-package! nano-theme
+  :config
+  (nano-light))
+
+(use-package! nano-modeline
+  :config
+  (nano-modeline-mode))
 #+end_src
 
 
@@ -142,7 +351,7 @@ Set basic directories that need to be in place before Org loads
 #+end_src
 
 Set basic settings and todo keywords, which has to be done later to make sure Doom doesn't clobber them.
-#+begin_src elisp
+#+begin_src elisp :noweb no-export
 (after! org
   (setq org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
         org-log-done t
@@ -152,8 +361,8 @@ Set basic settings and todo keywords, which has to be done later to make sure Do
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
         org-ellipsis " ↩"
-        org-fontify-whole-block-delimiter-line nil
-        org-fontify-whole-heading-line t
+        org-fontify-whole-block-delimiter-line t
+        org-fontify-whole-heading-line nil
         org-fontify-todo-headline t
         org-fontify-done-headline t
         org-src-preserve-indentation t)
@@ -162,6 +371,7 @@ Set basic settings and todo keywords, which has to be done later to make sure Do
           (sequence "QSTN(q)" "|" "OK(o)" "ANSR(a@)" "YES(y)" "NO(n)")
           (type "IDEA(I)" "YAK(Y)" "|")
           ))
+  <<define-org-faces>>
   (setq org-todo-keyword-faces
       `(("TODO" . eh/org-keyword-todo)
         ("FLAG" . eh/org-keyword-flag)
@@ -178,20 +388,25 @@ Set basic settings and todo keywords, which has to be done later to make sure Do
         ("IDEA" . eh/org-keyword-idea)
         ("YAK"  . eh/org-keyword-yak)
         ))
-  (add-hook! 'after-enable-theme  #'eh/org-update-theme)
-  (eh/org-update-theme))
+  ;; (eh/org-update-theme)
+  <<modus-customize-org>>
+
+  ;; (add-hook! 'after-enable-theme-hook  #'eh/org-update-theme)
+  (add-hook! 'org-mode-hook #'mixed-pitch-mode)
+  ;; (eh/org-update-theme)
+  ;; (eh/bespoke-customize) ;; run on first theme load
+  )
 #+end_src
 
 Set up theme hook:
 #+begin_src elisp
 (defun eh/org-update-theme ()
+  (message "Updating org theming...")
   (set-face-attribute 'org-document-title nil :height 1.5)
   (set-face-attribute 'org-ellipsis nil
                       :weight (face-attribute 'default :weight))
   (set-face-attribute 'org-todo nil
                       :inherit 'fixed-pitch
-                      :box nil
-                      :height 1.0
                       :weight (face-attribute 'bold :weight))
   (set-face-attribute 'org-done nil
                       :inherit 'fixed-pitch
@@ -236,8 +451,9 @@ Set up superstar bullets:
           ("YAK"  . ?∞)
           )
         org-superstar-prettify-item-bullets nil)
-  (add-hook! 'after-enable-theme #'eh/org-superstar-update-theme)
-  (eh/org-superstar-update-theme))
+  (add-hook! 'after-enable-theme-hook #'eh/org-superstar-update-theme)
+  ;; (eh/org-superstar-update-theme)
+  )
 #+end_src
 
 Set up some general org face changes:
@@ -245,8 +461,6 @@ Set up some general org face changes:
 (defun eh/org-superstar-update-theme ()
     (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
     (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'org-hide :foreground)))
-(after! org
-  )
 #+end_src
 
 
@@ -266,7 +480,7 @@ Set up capture templates:
 ** Details
 *** Set up those org faces
 #+name: define-org-faces
-#+begin_src elisp
+#+begin_src elisp :tangle no
 ;; Completed states
 (defface eh/org-keyword-done '((t :inherit org-done))
   "Face used for the DONE keyword in Org")
@@ -316,19 +530,34 @@ CLOSED: [2022-04-05 Tue 18:48]
 *** DONE Set a different key for prefix
 *** TODO Set a different key for local prefix
 ** TODO Keep an eye out for default keybindings doom has overridden
-** TODO Fix modus diff line
 ** TODO Fix inheritance for org-ellipsis
 It should inherit from variable-pitch but that doesn't seem to have a defined weight, but I don't know why
+It's fine in bespoke
+** DONE Why is org hook for mixed-pitch not activating?
+CLOSED: [2022-04-06 Wed 17:26]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-06 Wed 17:26]
+:END:
+** TODO Colors for gutter diff
+** TODO tilde things on empty lines
 
 * Keybindings
 
 Keeping track of some things I've been wanting and finally found (or figured out how to use)
-| M-h | org-mark-element    |
-| M-m | back-to-indentation |
-|     |                     |
+| M-h | org-mark-element       |
+| M-m | back-to-indentation    |
+|     | +default/newline-above |
+|     | +default/newline-below |
+|     | kill-whole-line        |
+|     |                        |
 
 ** Maybe reuse?
 *** YES =C-x z= is ~repeat~ which I've never used. Could reuse for bury?
 ** Needs a binding
 *** Org: collapse here
 On a heading, it would be the same as tab. But inside a heading, it would jump to the beginning first, then tab (so it actually closes)
+* Headline one
+* TODO one
+** Headline two
+** TODO two
+*** Headline three
