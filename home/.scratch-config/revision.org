@@ -17,16 +17,22 @@ I've been using my scratch config full-time for a while, and I think I'm ready f
 I've found that I strongly dislike the huge blocks I end up writing for some of the more  complex packages. It puts too many things in one place to really do the literate thing. But I refuse to have individual blocks that aren't a complete sexp.
 There are a couple options to deal with this. There's a sort of constant substitution thing, which requires listing out all the sections that will be inserted. What I want is to be able to use something like Rails' ~content-for~ directives. The sections I want correspond to the keywords of the ~use-package~ 
 This could probably be done with a macro but that frightens me.
-** Notes on key commands
-| Key       | Command                       |
-| =C-x n=   | prefix for narrowing commands |
-| =C-x n s= | narrow to subtree             |
-| =C-x n p= | narrow to page                |
+* Notes on key commands
+:PROPERTIES:
+:visibility: all
+:END:
+Not any particularly significance or sort order, just things I'm trying to learn:
+| Key         | Command                         |
+| =C-x n=     | prefix for narrowing commands   |
+| =C-x n s=   | narrow to subtree               |
+| =C-x n p=   | narrow to page                  |
+| =C-c C-v d= | insert babel source block[fn:1] |
+| =M-m=       | back-to-indentation             |
+|             |                                 |
 
 If I'm going to use narrowing, I think I want that paging package from Prot
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
-
 * Built-in options for basic emacs configuration
 Introduce myself to Emacs:
 #+begin_src elisp
@@ -66,7 +72,6 @@ Attempt to make indentation do sensible things:
       require-final-newline t)
 
 #+end_src
-
 ** Everything should always be UTF-8
 #+begin_src elisp
 (set-charset-priority 'unicode)
@@ -92,7 +97,6 @@ Attempt to make indentation do sensible things:
 (display-time-mode -1)
 
 #+end_src
-
 ** Configure things for mac
 Set up what seems to be the least annoying modifier key setup:
 #+begin_src elisp
@@ -101,7 +105,6 @@ Set up what seems to be the least annoying modifier key setup:
   (setq mac-option-modifier 'super)
   (setq mac-control-modifier 'control))
 #+end_src
-
 ** Technical bits
 Some inside baseball options I don't really understand:
 #+begin_src elisp
@@ -116,7 +119,6 @@ Some inside baseball options I don't really understand:
   (setq enable-local-variables :all)     ; fix =defvar= warnings
 
 #+end_src
-
 * How it looks
 ** Set up typography
 *** With the Recursive font
@@ -303,10 +305,11 @@ Victor and Galix are a fun combo.
   (set-face-attribute 'org-document-title nil
                       :font "New York Extra Large"
                       :height 2.0 :weight 'bold)
+ 
+  (set-face-attribute 'org-level-1 nil
+                      :family "New York Medium"
+                      :weight 'semibold :height 1.4)
   ;; Causing issues with line-height on TODO items
-  ;; (set-face-attribute 'org-level-1 nil
-  ;;                     :family "New York Medium"
-  ;;                     :weight 'semibold :height 1.4)
   ;; (set-face-attribute 'org-level-2 nil
   ;;                     :family "New York Medium"
   ;;                     :weight 'semibold
@@ -377,7 +380,6 @@ Or turn it on the hard way:
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 #+end_src
-
 ** Color Theming
 *** Set up a hook that's  run after loading a theme
 Any theme customization that's done with ~set-face-attribute~ gets lost whenever we switch themes.  Usually you'd solve that with customize, but I kind of hate it. So, instead, we create our own hook taht's run on theme change to set those sorts of things.
@@ -461,7 +463,7 @@ First, define a few functions that are useful to our use of Modus:
         modus-themes-completions '((t background intense accented))
         modus-themes-region '(bg-only accented)
         )
-  (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
+  ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   :init
   (modus-themes-load-themes)
   :hook
@@ -469,7 +471,6 @@ First, define a few functions that are useful to our use of Modus:
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
-
 *** Set up some alternate color themes
 #+begin_src elisp
 (use-package iodine-theme)
@@ -491,13 +492,13 @@ First, define a few functions that are useful to our use of Modus:
 (use-package nano-theme)
 (use-package bespoke-theme
   :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
-#+end_src
 
+(load-theme 'doom-isohedron)
+#+end_src
 *** View named colors
 #+begin_src elisp
 (use-package rainbow-mode)
 #+end_src
-
 *** Fancy and unnecessary SVG tags
 #+begin_src elisp
 (use-package svg-lib)
@@ -507,7 +508,6 @@ First, define a few functions that are useful to our use of Modus:
   (setq svg-tag-tags
       '((":TODO:" . ((lambda (tag) (svg-tag-make "TODO")))))))
 #+end_src
-
 ** Interface
 *** IDEA Make the mark always visible
 This is a start. It adds the ability to visualize the mark, but (at least with transient-mark-mode) it only seems to show them when the mark is active.
@@ -518,11 +518,13 @@ This is a start. It adds the ability to visualize the mark, but (at least with t
   :init
   (global-visible-mark-mode 1))
 #+end_src
-*** Use mixed pitch fonts
+*** TODO Use mixed pitch fonts
 #+begin_src elisp
 (use-package mixed-pitch
   :ensure t)
 #+end_src
+This is really determined by which mode we load in org. I'd been using variable-pitch-mode but it's doing something weird with tables (every character I check says it's mono, but the lines don't line up). I think overall mixed-pitch-mode works better, but had some compatibility issues, possibly involving dimmer and/or changing fonts.
+**** TODO 
 *** Show horizontal rules instead of =^L= 
 #+begin_src elisp
 (use-package form-feed
@@ -597,6 +599,18 @@ Use minions to hide all the minor mode indicators in a menu
   ("C-c C-d" . helpful-at-point)
   )
 #+end_src
+*** Selectively dim windows
+It's a choice between solaire, which dims non-file-visiting buffers, and dimmer, which dims inactive buffers. Wouldn't rule-based buffer colors be cool?
+**** HOLD Solaire
+**** Dimmer
+#+begin_src elisp
+(use-package dimmer
+  :config
+  (setq dimmer-fraction 0.4) ;; this is right for isohedron
+  
+  )
+#+end_src
+
 * What it can do
 ** Keybindings
 *** The surprisingly complicated question of =ESC=
@@ -609,15 +623,14 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 	            #'(lambda () (beep)))
 #+end_src
 **** IDEA What if ~buffer-quit-function~ closed non-file-visiting buffers but left open any file-visiting? That might let it get out of help windows but not out of actual buffer layout.
-
 *** Use general to set up keybindings in a friendlier way
 #+begin_src elisp
 (use-package general
   :demand t
-  :config
+  :general ;; does this ... work?
+  ("<help> F" 'describe-face)
 )
 #+end_src
-
 ** Vertical completion interface
 This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
 *** Set up consult first
@@ -628,7 +641,8 @@ Consult is what sets the contents of those menus. It provides a really nice buff
     ;(setq consult-project-root-function #'projectile-project-root)
     :general
     ("C-x b" 'consult-buffer)
-    ("<help> a" 'consult-apropros))
+    ("<help> a" 'consult-apropros)
+    ("<help> t" 'consult-theme))
 #+end_src
 
 It still only operates on the single line, but it provides the nicer menus, and allows previewing the thing to be switched to (buffers, themes, etc).
@@ -679,7 +693,6 @@ I use the scratch buffer a lot, and it's nice to have the things there stick aro
   (persistent-scratch-setup-default)
   (persistent-scratch-mode 1))
 #+end_src
-
 ** Version control
 Set up the best git interface:
 #+begin_src elisp
@@ -695,7 +708,6 @@ See which lines have been modified in the gutter
   :init
   (global-diff-hl-mode 1))
 #+end_src
-
 ** Use projects for organization
 #+begin_src elisp
 (use-package projectile
@@ -710,20 +722,16 @@ See which lines have been modified in the gutter
   :init
   (projectile-mode 1))
 #+end_src
-
 ** A shell in the editor
 #+begin_src elisp
 (use-package vterm)
 #+end_src
-
 ** Organize and focus on buffer groups
 #+begin_src elisp
 (use-package bufler
   :init
   (bufler-mode))
 #+end_src
-
-
 * Simple utilities for better editing
 Crux has lots of handy utility functions. These are a few of the best:
 #+begin_src elisp
@@ -790,7 +798,6 @@ Manage whitespace automatically:
 (use-package adaptive-wrap)
 #+end_src
 ** TODO Parentheses matching and surround
-
 ** Toggle between vertical and horizontal split windows
 #+begin_src elisp
 (defun eh/toggle-window-split ()
@@ -817,6 +824,23 @@ Manage whitespace automatically:
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
+#+end_src
+** Pulse the line after movement
+#+begin_src elisp
+(use-package pulsar
+  :config
+  (setq pulsar-pulse t ;; leave the highlight in place until another command
+        pulsar-delay 0.5 ;; how long each step lasts
+        pulsar-iterations 1 ;; how many steps for color
+        pulsar-face 'pulsar-yellow
+        )
+  :general
+  ;; Bind pulsar-hightlight-dwim
+  ;; Bind pulsar-pulse-line
+  :init
+  (pulsar-global-mode 1)
+  ;; pulsar-face
+  )
 #+end_src
 
 * Set up org-mode
@@ -885,6 +909,7 @@ Set up some basic org styling that we'll run whenever we change themes:
 
   ;; Now set up theme-specific things?
   (when (eq (car custom-enabled-themes) 'doom-isohedron)
+    (message "Setting up org faces for Isohedron")
     (set-face-attribute 'org-todo nil
                         :foreground (doom-color 'bg)
                         :background (doom-color 'fw-base3))
@@ -923,7 +948,6 @@ Set up some basic org styling that we'll run whenever we change themes:
 
   ;; (eh/org-update-theme)
 #+end_src
-
 ** Basic configuration
 #+begin_src elisp
   (use-package org
@@ -937,7 +961,7 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-log-done t
           org-log-into-drawer t
           org-insert-heading-respect-content t
-          org-cycle-separator-lines 0 ;; 2 blank lines to keep when collapsed
+          org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
           org-ellipsis " ⏎"
@@ -992,20 +1016,21 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-remove-leading-stars nil
         org-superstar-headline-bullets-list '("◆" "•"))
   (setq org-superstar-todo-bullet-alist
-        '(("TODO" . ?-) ;; ☐ > ›
-          ("FLAG" . ?=) ;; ▲
+        '(("TODO" . ?◦) ;; ☐ > › □ ◦ 
+          ("FLAG" . ?▴) ;; ▲ ⇧ ⌃ =
           ("DONE" . ?✓) ;; ☑ ✓
           ("WAIT" . ?≈) ;; ∥
           ("BLOK" . ?◊)
           ("HOLD" . ?~)
           ("KILL" . ?×) ;; × ✕ 
           ("QSTN" . ??) ;; ◇
-          ("ANSR" . ?•)
+          ("ANSR" . ?·) ;; · 
           ("OK"   . ?·)
           ("YES"  . ?·)
           ("NO"   . ?·)
-          ("IDEA" . ?•)
+          ("IDEA" . ?ҩ)
           ("YAK"  . ?∞) ;;♡
+          ;; ҩ 
           )
         org-superstar-prettify-item-bullets nil
         )
@@ -1020,6 +1045,12 @@ Set up some basic org styling that we'll run whenever we change themes:
   (after-enable-theme . eh/org-superstar-update-theme)
   )
 #+end_src
+** Making org more powerful
+*** For capturing infomation
+Being able to capture ideas from anywhere, especially with the ability to send them to multiple places and link them to where they came from, is amazing.
+
+*** For retrieving information
+The agenda is a big part of the power of org. 
 * Language support
 ** Misc small packages
 #+begin_src elisp
@@ -1037,13 +1068,41 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
   (gfm-mode . variable-pitch-mode)
   (markdown-mode . variable-pitch-mode))
 #+end_src
-
 ** Javascript with Vue
 I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing.
 #+begin_src elisp
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
+* Things that don't work right
+** TODO [#A] Something is getting the toto keyword colors stuck in weird states
+The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
+- Loaded isohedron with =M-x load-theme= and everything looks good
+I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
+** TODO tab after fold indicator
+** TODO newlines between items
+** TODO persistent scratch can get lost in some situations
+It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
+** DONE Binds for help menu
+Changes to help:
+- =C-h F= for ~describe-face~
+- =C-h t= for ~consult-theme~
+** TODO footnote inside table messes up alignment (mixed pitch hierarchy issue)
+Footnote face inherits from button (in modus)
+This same issue exists in Isohedron and 
+** TODO Tables aren't monospaced with isohedron        :isohedron:
+** TODO The goal with typography and theme
+I don't need everything to work with anything. But I do want to have a few sets of config (a few themes, a few fonts) that can all work together with minimal pain. As much as it seems ... dirty ... I wonder if customize might not be the best way to accomplish that. But some hand-rolled functions could probably solve the problem as well.
+- Register change hooks for themes _or_ font stacks
+- The idea of a font stack as a more first-class thing
+** YAK =M-Ret= with list items vs headlines
+** TODO Capture templates
+** TODO Task keywords don't look right after automatic theme change
+It was changing from a non-modus theme. Which ... it should maybe take as a hint to not switch?
+** YAK When I'm on my laptop, the minibuffer is way too invisible. It's fine in windows (which is what I use for actual work) but when it's full-screen, it's a problem (which is how any personal hacking is done)
+** TODO Get Isohedron set up as the default with hooks and whatever
+** TODO Out with centaur-tabs, in with bufler
+* Footnotes
 
-
-
+[fn:1] ~org-babel-demarcate-block~
+Make sure there's some content (not just whitespace) between the point and the last source block, or weird things happen. In that case, you can also select a region before the command to wrap it in a source block, which seem consistently reliable. The upside of the weirdness is that this same command, inside of a source block, will split it into two separate ones at point.
