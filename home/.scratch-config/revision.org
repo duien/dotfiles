@@ -1,3 +1,4 @@
+
 #+title: Streamline literate config
 #+startup: show2levels
 
@@ -205,16 +206,30 @@ However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regul
 
 Victor and Galix are a fun combo.
 #+begin_src elisp
-(defun eh/set-victor-fonts ()
+(defun eh/set-victor-galix-fonts ()
   (set-face-attribute 'default nil
                       :font "Victor Mono"
-                      :height 140 :weight 'normal)
+                      :height 160 :weight 'normal)
   (set-face-attribute 'fixed-pitch nil
                       :font "Victor Mono"
-                      :height 140 :weight 'normal)
+                      :height 160 :weight 'normal)
   (set-face-attribute 'variable-pitch nil
                       :font "Galix"
                       :height 170 :weight 'normal)
+  )
+#+end_src
+
+#+begin_src elisp
+(defun eh/set-victor-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Victor Mono"
+                      :height 170 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Victor Mono"
+                      :height 170 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Overpass"
+                      :height 170 :weight 'semilight)
   )
 #+end_src
 
@@ -232,14 +247,87 @@ Victor and Galix are a fun combo.
   )
 #+end_src
 
+#+begin_src elisp
+(defun eh/set-monolisa-fonts ()
+  (set-face-attribute 'default nil
+                      :font "MonoLisa"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "MonoLisa"
+                      :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                      :font "MonoLisa"
+                      :height 160 :weight 'normal)
+  )
+#+end_src
+
+#+begin_src elisp
+(defun eh/set-cascadia-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Cascadia Code"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Cascadia Code"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Cascadia Code"
+                      :height 160 :weight 'light)
+  )
+#+end_src
+
+#+begin_src elisp
+(defun eh/set-roboto-fonts ()
+  (set-face-attribute 'default nil
+                      :font "Roboto Mono"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Roboto Mono"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Roboto Mono"
+                      :height 160 :weight 'light)
+  )
+#+end_src
+*** With Apple fonts
+#+begin_src elisp
+(defun eh/set-apple-fonts ()
+  (set-face-attribute 'default nil
+                      :font "SF Mono"
+                      :height 160 :weight 'semilight)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "SF Mono"
+                      :height 160 :weight 'semilight)
+  (set-face-attribute 'variable-pitch nil
+                      :font "SF Pro Text"
+                      :height 160 :weight 'semilight)
+  (set-face-attribute 'org-document-title nil
+                      :font "New York Extra Large"
+                      :height 2.0 :weight 'bold)
+  ;; Causing issues with line-height on TODO items
+  ;; (set-face-attribute 'org-level-1 nil
+  ;;                     :family "New York Medium"
+  ;;                     :weight 'semibold :height 1.4)
+  ;; (set-face-attribute 'org-level-2 nil
+  ;;                     :family "New York Medium"
+  ;;                     :weight 'semibold
+  ;;                     :height 1.2)
+  (set-face-attribute 'org-ellipsis nil
+                    :font "SF Mono"
+                    :inherit '(shadow default))
+  )
+#+end_src
+**** TODO Figure out how to actually make all that work at startup
+
 *** And finally, enable a font!
 #+begin_src elisp
 ;; (eh/set-recursive-fonts)
 ;; (eh/set-pragmata-fonts)
-(eh/set-plex-fonts)
+;; (eh/set-plex-fonts)
 ;; (eh/set-victor-fonts)
 ;; (eh/set-input-fonts)
 ;; (eh/set-sudo-fonts)
+;; (eh/set-apple-fonts)
+(add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
 #+end_src
 
 Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with changing fonts after the fact (even after toggling the mode)
@@ -308,7 +396,7 @@ First, define a few functions that are useful to our use of Modus:
 #+begin_src elisp
 (defun eh/modus-customize ()
   (set-face-attribute 'font-lock-string-face nil :slant 'italic)
-  (set-face-attribute 'org-document-title nil :height 1.5)
+  ;; (set-face-attribute 'org-document-title nil :height 1.5)
   )
 
 (defun eh/load-theme (appearance)
@@ -360,7 +448,7 @@ First, define a few functions that are useful to our use of Modus:
 (use-package modus-themes
   :config
   (setq modus-themes-mixed-fonts t
-        modus-themes-variable-pitch-ui t
+        modus-themes-variable-pitch-ui nil ;; bad w/ nano
         modus-themes-italic-constructs t
         modus-themes-bold-constructs t
         modus-themes-subtle-line-numbers t
@@ -398,13 +486,28 @@ First, define a few functions that are useful to our use of Modus:
 (use-package flucui-themes)
 (use-package doom-themes
   :config
+  (setq doom-isohedron-brighter-modeline t)
   (setq doom-earl-grey-brighter-modeline t))
+(use-package nano-theme)
+(use-package bespoke-theme
+  :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
 #+end_src
 
 *** View named colors
 #+begin_src elisp
 (use-package rainbow-mode)
 #+end_src
+
+*** Fancy and unnecessary SVG tags
+#+begin_src elisp
+(use-package svg-lib)
+(use-package svg-tag-mode
+  :straight (:type git :host github :repo "rougier/svg-tag-mode")
+  :config
+  (setq svg-tag-tags
+      '((":TODO:" . ((lambda (tag) (svg-tag-make "TODO")))))))
+#+end_src
+
 ** Interface
 *** IDEA Make the mark always visible
 This is a start. It adds the ability to visualize the mark, but (at least with transient-mark-mode) it only seems to show them when the mark is active.
@@ -443,6 +546,8 @@ This is a start. It adds the ability to visualize the mark, but (at least with t
   ;;   :config
   ;;   (moody-replace-mode-line-buffer-identification -1)
   ;;   (moody-replace-vc-mode -1))
+
+(use-package nano-modeline) ;; (nano-modeline-mode)
 #+end_src
 
 Use minions to hide all the minor mode indicators in a menu
@@ -611,6 +716,14 @@ See which lines have been modified in the gutter
 (use-package vterm)
 #+end_src
 
+** Organize and focus on buffer groups
+#+begin_src elisp
+(use-package bufler
+  :init
+  (bufler-mode))
+#+end_src
+
+
 * Simple utilities for better editing
 Crux has lots of handy utility functions. These are a few of the best:
 #+begin_src elisp
@@ -677,6 +790,35 @@ Manage whitespace automatically:
 (use-package adaptive-wrap)
 #+end_src
 ** TODO Parentheses matching and surround
+
+** Toggle between vertical and horizontal split windows
+#+begin_src elisp
+(defun eh/toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+#+end_src
+
 * Set up org-mode
 ** Prepare for org configuration
 
@@ -733,7 +875,7 @@ Set up some basic org styling that we'll run whenever we change themes:
   (set-face-attribute 'org-headline-todo nil
                       :foreground (face-attribute 'default :foreground)
                       :weight 'normal
-                      :inherit nil)
+                      :inherit 'default)
   (set-face-attribute 'org-headline-done nil
                       :inherit '(font-lock-comment-face default))
   (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
@@ -795,12 +937,12 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-log-done t
           org-log-into-drawer t
           org-insert-heading-respect-content t
-          org-cycle-separator-lines 2 ;; 2 blank lines to keep when collapsed
+          org-cycle-separator-lines 0 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
-          org-ellipsis " …"
+          org-ellipsis " ⏎"
           org-fontify-whole-block-delimiter-line nil
-          org-fontify-whole-heading-line t
+          org-fontify-whole-heading-line nil
           org-fontify-todo-headline t
           org-fontify-done-headline t
           org-src-preserve-indentation t
@@ -809,6 +951,7 @@ Set up some basic org styling that we'll run whenever we change themes:
           '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
             (sequence "QSTN(q)" "|" "OK(o)" "YES(y)" "NO(n)" "ANSR(a@)")
             (type "IDEA(I)" "YAK(Y)" "|")
+            (type "GOAL(g)" "PUNCH(p)" "|" "DONE")
             ))
 
     (setq org-todo-keyword-faces
