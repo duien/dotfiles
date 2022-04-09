@@ -26,3 +26,6 @@ home/.scratch-config/revision.el
 home/.nano-emacs/straight/
 home/.nano-emacs/transient/
 home/.nano-emacs/elpa/
+
+# these files are generated from org on sync
+home/.doom-config/*.el

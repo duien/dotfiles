@@ -70,7 +70,7 @@ Any theme customization that's done with ~set-face-attribute~ gets lost whenever
 (use-package! modus-themes
   :defer t
   :config
-  (setq modus-themes-mixed-fonts t
+  (setq modus-themes-mixd-fonts t
         modus-themes-variable-pitch-ui t
         modus-themes-italic-constructs t
         modus-themes-bold-constructs t
@@ -249,7 +249,7 @@ Configure the package
 #+end_src
 
 Then, configure it:
-#+begin_src elisp
+#+begin_src elisp :tangle no
 (use-package! dimmer
   :hook (after-init . dimmer-mode)
   :config
@@ -340,6 +340,26 @@ Now, actually set up some of that stuff
 (use-package! nano-modeline
   :config
   (nano-modeline-mode))
+
+(after! (nano-theme org)
+  (set-face-attribute 'org-headline-todo nil :inherit '(default) :foreground 'unspecified)
+  (set-face-attribute 'org-headline-done nil :inherit '(nano-faded default))
+  (set-face-attribute 'org-todo nil :inverse-video t)
+  (set-face-attribute 'font-lock-comment-face nil :slant 'italic))
+
+(after! nano-theme
+  (load "~/.doom/.local/straight/repos/nano-sidebar/nano-sidebar-ibuffer.el"))
+#+end_src
+
+*** Trying out some NANO add-ons
+#+begin_src elisp :tangle packages.el
+(package! nano-sidebar
+  :recipe (:type git :host github :repo "rougier/nano-sidebar"))
+#+end_src
+
+Then require the package...
+#+begin_src elisp
+(use-package! nano-sidebar)
 #+end_src
 
 
@@ -370,6 +390,7 @@ Set basic settings and todo keywords, which has to be done later to make sure Do
         '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
           (sequence "QSTN(q)" "|" "OK(o)" "ANSR(a@)" "YES(y)" "NO(n)")
           (type "IDEA(I)" "YAK(Y)" "|")
+          (type "GOAL(g)" "PUNCH(p)" "|" "DONE")
           ))
   <<define-org-faces>>
   (setq org-todo-keyword-faces
@@ -392,7 +413,7 @@ Set basic settings and todo keywords, which has to be done later to make sure Do
   <<modus-customize-org>>
 
   ;; (add-hook! 'after-enable-theme-hook  #'eh/org-update-theme)
-  (add-hook! 'org-mode-hook #'mixed-pitch-mode)
+  ;; (add-hook! 'org-mode-hook #'mixed-pitch-mode)
   ;; (eh/org-update-theme)
   ;; (eh/bespoke-customize) ;; run on first theme load
   )
