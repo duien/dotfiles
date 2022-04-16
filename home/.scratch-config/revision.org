@@ -1,4 +1,3 @@
-
 #+title: Streamline literate config
 #+startup: show2levels
 
@@ -64,14 +63,6 @@ If you type over a selection, delete it first
 (delete-selection-mode t)
 #+end_src
 
-Attempt to make indentation do sensible things:
-#+begin_src elisp
-(setq-default indent-tabs-mode nil) ;; never use tabs to indent
-(setq-default tab-width 2)
-(setq tab-always-indent t
-      require-final-newline t)
-
-#+end_src
 ** Everything should always be UTF-8
 #+begin_src elisp
 (set-charset-priority 'unicode)
@@ -95,7 +86,30 @@ Attempt to make indentation do sensible things:
 (winner-mode t) ;; undo/redo window layout changes
 (show-paren-mode t)
 (display-time-mode -1)
+#+end_src
+** Set up reasonable indentation defaults
+Attempt to make indentation do sensible things:
+#+begin_src elisp
+(setq-default indent-tabs-mode nil) ;; never use tabs to indent
+(setq-default tab-width 2)
+(setq js-indent-level 2)
+(setq tab-always-indent t
+      require-final-newline t)
+#+end_src
 
+And let other people decide per-project values:
+#+begin_src elisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+#+end_src
+** Prevent autosave and backup files littered everywhere
+#+begin_src elisp
+(setq backup-directory-alist
+      '((".*" . "~/.emacs-backups")))
+(setq auto-save-file-name-transforms
+      '((".*" "~/.emacs-backups" t)))
 #+end_src
 ** Configure things for mac
 Set up what seems to be the least annoying modifier key setup:
@@ -319,7 +333,6 @@ Victor and Galix are a fun combo.
                     :inherit '(shadow default))
   )
 #+end_src
-**** TODO Figure out how to actually make all that work at startup
 
 *** And finally, enable a font!
 #+begin_src elisp
@@ -532,13 +545,6 @@ This is really determined by which mode we load in org. I'd been using variable-
   (form-feed-mode t))
 #+end_src
 -
-*** Tab bar with centaur-tabs
-#+begin_src elisp
-(use-package centaur-tabs
-  :init
-  (centaur-tabs-mode t))
-#+end_src
-
 *** A better mode-line
 #+begin_src elisp
   ;; (use-package mood-line
@@ -610,7 +616,6 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
   
   )
 #+end_src
-
 * What it can do
 ** Keybindings
 *** The surprisingly complicated question of =ESC=
@@ -627,9 +632,8 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 #+begin_src elisp
 (use-package general
   :demand t
-  :general ;; does this ... work?
-  ("<help> F" 'describe-face)
 )
+;;   ("<help> F" 'describe-face)
 #+end_src
 ** Vertical completion interface
 This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
@@ -842,7 +846,6 @@ Manage whitespace automatically:
   ;; pulsar-face
   )
 #+end_src
-
 * Set up org-mode
 ** Prepare for org configuration
 
