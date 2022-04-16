@@ -556,7 +556,21 @@ This is really determined by which mode we load in org. I'd been using variable-
   ;;   (moody-replace-vc-mode -1))
 
 (use-package nano-modeline) ;; (nano-modeline-mode)
+(use-package bespoke-modeline
+  :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
+  :config
+  (setq bespoke-modeline-position 'bottom))
 #+end_src
+
+Additional bespoke modeline options:
+#+begin_example
+bespoke-modeline-(gui|tty)-(mod|rw|rw)-symbol
+bespoke-modeline-space-(bottom|top)
+? bespoke-modeline-user-mode
+bespoke-modeline-vc-symbol
+bespoke-modeline-visual-bell
+face for bespoke-modeline-visual-bell-config
+#+end_example
 
 Use minions to hide all the minor mode indicators in a menu
 #+begin_src elisp
@@ -890,21 +904,26 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
 Set up some basic org styling that we'll run whenever we change themes:
 #+begin_src elisp
 (defun eh/org-update-theme ()
+  ;; default styling for task keywords
   (set-face-attribute 'org-todo nil
                       :inherit 'fixed-pitch
-		      :box nil
-		      :height 1.0
+		                  :box nil
+		                  :height 1.0
                       :weight (face-attribute 'bold :weight))
   (set-face-attribute 'org-done nil
                       :inherit 'fixed-pitch
-           	      :slant 'italic
+           	          :slant 'italic
                       :weight (face-attribute 'default :weight))
+
+  ;; styling for headlines with keywords
   (set-face-attribute 'org-headline-todo nil
                       :foreground (face-attribute 'default :foreground)
                       :weight 'normal
                       :inherit 'default)
   (set-face-attribute 'org-headline-done nil
                       :inherit '(font-lock-comment-face default))
+
+  ;; set things up for mixed/variable pitch
   (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
   (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
@@ -967,7 +986,7 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
-          org-ellipsis " ⏎"
+          org-ellipsis "⏎"
           org-fontify-whole-block-delimiter-line nil
           org-fontify-whole-heading-line nil
           org-fontify-todo-headline t
@@ -1001,8 +1020,8 @@ Set up some basic org styling that we'll run whenever we change themes:
     (org-mode . (lambda()
                   (org-indent-mode t)
                   (visual-line-mode t)
-                  (variable-pitch-mode t)
-                  ;; (mixed-pitch-mode t)
+                  ;; (variable-pitch-mode t)
+                  (mixed-pitch-mode t)
                   ))
     (after-enable-theme . eh/org-update-theme)
     )
@@ -1053,7 +1072,28 @@ Set up some basic org styling that we'll run whenever we change themes:
 Being able to capture ideas from anywhere, especially with the ability to send them to multiple places and link them to where they came from, is amazing.
 
 *** For retrieving information
-The agenda is a big part of the power of org. 
+The agenda is a big part of the power of org.
+#+begin_src elisp
+(use-package org-super-agenda)
+#+end_src
+
+Here's some fiddling trying to get a nice agenda going:
+#+begin_src elisp :tangle no
+(let ((org-super-agenda-groups
+       '(
+         (:discard (:tag "meta"))
+         (:name "Today" ; the name of the section
+                ;; :time-grid t ; items that go on the time grid
+                :deadline (past today)
+                :scheduled (past today)
+                :priority "A") ; high priority items
+         (:name "Follow Up"
+                :todo ("BLOCK" "BLOK" "QSTN")) ; wait? hold?
+         )))
+  (org-agenda nil "t"))
+#+end_src
+
+
 * Language support
 ** Misc small packages
 #+begin_src elisp
@@ -1068,8 +1108,8 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode))
   :hook
-  (gfm-mode . variable-pitch-mode)
-  (markdown-mode . variable-pitch-mode))
+  (gfm-mode . mixed-pitch-mode)
+  (markdown-mode . mixed-pitch-mode))
 #+end_src
 ** Javascript with Vue
 I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing.
@@ -1077,7 +1117,10 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right
+* Things that don't work right [3/15]
+:PROPERTIES:
+:visibility: folded
+:END:
 ** TODO [#A] Something is getting the toto keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
@@ -1090,10 +1133,16 @@ It needs backup. I saw some sort of dismissive comment about how you just need t
 Changes to help:
 - =C-h F= for ~describe-face~
 - =C-h t= for ~consult-theme~
+** TODO Redo bind for =C-h F= 
 ** TODO footnote inside table messes up alignment (mixed pitch hierarchy issue)
 Footnote face inherits from button (in modus)
 This same issue exists in Isohedron and 
-** TODO Tables aren't monospaced with isohedron        :isohedron:
+** KILL Tables aren't monospaced with isohedron                  :isohedron:
+CLOSED: [2022-04-12 Tue 16:03]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-04-12 Tue 16:03] \\
+  I think this is more of a variable-pitch-mode vs mixed-pitch-mode issue. The theme could possibly be smarter about it, but it happens all over the place.
+:END:
 ** TODO The goal with typography and theme
 I don't need everything to work with anything. But I do want to have a few sets of config (a few themes, a few fonts) that can all work together with minimal pain. As much as it seems ... dirty ... I wonder if customize might not be the best way to accomplish that. But some hand-rolled functions could probably solve the problem as well.
 - Register change hooks for themes _or_ font stacks
@@ -1103,7 +1152,11 @@ I don't need everything to work with anything. But I do want to have a few sets 
 ** TODO Task keywords don't look right after automatic theme change
 It was changing from a non-modus theme. Which ... it should maybe take as a hint to not switch?
 ** YAK When I'm on my laptop, the minibuffer is way too invisible. It's fine in windows (which is what I use for actual work) but when it's full-screen, it's a problem (which is how any personal hacking is done)
-** TODO Get Isohedron set up as the default with hooks and whatever
+** DONE Get Isohedron set up as the default with hooks and whatever
+CLOSED: [2022-04-12 Tue 16:04]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-12 Tue 16:04]
+:END:
 ** TODO Out with centaur-tabs, in with bufler
 * Footnotes
 
