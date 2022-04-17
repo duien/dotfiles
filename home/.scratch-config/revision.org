@@ -1,5 +1,6 @@
 #+title: Streamline literate config
 #+startup: show2levels
+#+ARCHIVE: ~/Org/archive.org::* From %s
 
 * Commentary
 :PROPERTIES:
@@ -21,15 +22,18 @@ This could probably be done with a macro but that frightens me.
 :visibility: all
 :END:
 Not any particularly significance or sort order, just things I'm trying to learn:
-| Key         | Command                         |
-| =C-x n=     | prefix for narrowing commands   |
-| =C-x n s=   | narrow to subtree               |
-| =C-x n p=   | narrow to page                  |
-| =C-c C-v d= | insert babel source block[fn:1] |
-| =M-m=       | back-to-indentation             |
-|             |                                 |
+| Key               | Command                            |
+|-------------------+------------------------------------|
+| =C-x n=           | prefix for narrowing commands      |
+| =C-x n s=         | narrow to subtree                  |
+| =C-x n p=         | narrow to page                     |
+| =C-c C-v d=       | insert babel source block[fn:1]    |
+| =M-m=             | back-to-indentation                |
+| =C-c C-x C-a=     | archive current subtree            |
+| =C-u C-c C-x C-a= | ask about archiving children       |
+| =C-c C-x b=       | indirect buffer of current subtree |
+|                   |                                    |
 
-If I'm going to use narrowing, I think I want that paging package from Prot
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
 * Built-in options for basic emacs configuration
@@ -49,7 +53,7 @@ Set up some very basic (and mostly self-explanatory) options:
       tool-bar-mode -1
       toggle-scroll-bar -1
       mouse-wheel-tilt-scroll t
-      fill-column 80
+      custom-safe-themes t
       )
 #+end_src
 
@@ -62,7 +66,6 @@ If you type over a selection, delete it first
 #+begin_src elisp
 (delete-selection-mode t)
 #+end_src
-
 ** Everything should always be UTF-8
 #+begin_src elisp
 (set-charset-priority 'unicode)
@@ -424,19 +427,17 @@ First, define a few functions that are useful to our use of Modus:
 (defun eh/org-update-modus-theme ()
     (set-face-attribute 'eh/org-keyword-todo nil
                         :inherit '(modus-themes-refine-green org-todo))
-    (set-face-attribute 'eh/org-keyword-flag nil
-                        :inherit '(modus-themes-intense-green org-todo))
-    (set-face-attribute 'eh/org-keyword-wait nil
+    (set-face-attribute 'eh/org-keyword-next nil
                         :inherit '(modus-themes-refine-yellow org-done))
-    (set-face-attribute 'eh/org-keyword-block nil
+    (set-face-attribute 'eh/org-keyword-halt nil
                         :inherit '(modus-themes-intense-red org-todo))
-    (set-face-attribute 'eh/org-keyword-hold nil
+    (set-face-attribute 'eh/org-keyword-bury nil
                         :inherit '(modus-themes-intense-neutral org-done))
     (set-face-attribute 'eh/org-keyword-question nil
                         :inherit '(modus-themes-refine-blue org-todo))
     (set-face-attribute 'eh/org-keyword-idea nil
                         :inherit '(modus-themes-refine-cyan org-todo))
-    (set-face-attribute 'eh/org-keyword-yak nil
+    (set-face-attribute 'eh/org-keyword-yaks nil
                         :inherit '(modus-themes-refine-magenta org-todo))
     (set-face-attribute 'eh/org-keyword-done nil
                         :inherit '(modus-themes-nuanced-green org-done)
@@ -447,7 +448,7 @@ First, define a few functions that are useful to our use of Modus:
     (set-face-attribute 'eh/org-keyword-answer nil
                         :inherit '(modus-themes-nuanced-blue org-done)
                         :foreground (modus-themes-color 'blue-faint))
-    (set-face-attribute 'eh/org-keyword-ok nil
+    (set-face-attribute 'eh/org-keyword-meh nil
                         :inherit 'eh/org-keyword-answer
                         :foreground (modus-themes-color 'blue))
     (set-face-attribute 'eh/org-keyword-yes nil
@@ -559,12 +560,13 @@ This is really determined by which mode we load in org. I'd been using variable-
 (use-package bespoke-modeline
   :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
   :config
-  (setq bespoke-modeline-position 'bottom))
+  (setq bespoke-modeline-position 'top
+        bespoke-modeline-vc-symbol "#"))
 #+end_src
 
 Additional bespoke modeline options:
 #+begin_example
-bespoke-modeline-(gui|tty)-(mod|rw|rw)-symbol
+bespoke-modeline-(gui|tty)-(mod|rw|ro)-symbol
 bespoke-modeline-space-(bottom|top)
 ? bespoke-modeline-user-mode
 bespoke-modeline-vc-symbol
@@ -621,13 +623,18 @@ Use minions to hide all the minor mode indicators in a menu
 #+end_src
 *** Selectively dim windows
 It's a choice between solaire, which dims non-file-visiting buffers, and dimmer, which dims inactive buffers. Wouldn't rule-based buffer colors be cool?
-**** HOLD Solaire
+**** BURY Solaire
 **** Dimmer
 #+begin_src elisp
 (use-package dimmer
   :config
   (setq dimmer-fraction 0.4) ;; this is right for isohedron
-  
+  (dimmer-configure-which-key)
+  (dimmer-configure-org)
+  (dimmer-configure-magit)
+  ;; (dimmer-configure-posframe)
+  ;; (dimmer-configure-hydra) ;; ??
+  (dimmer-mode 1)
   )
 #+end_src
 * What it can do
@@ -1117,47 +1124,49 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right [3/15]
+* Things that don't work right [3/10]
 :PROPERTIES:
 :visibility: folded
 :END:
-** TODO [#A] Something is getting the toto keyword colors stuck in weird states
+** TODO Something is getting the toto keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
 I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
 ** TODO tab after fold indicator
-** TODO newlines between items
 ** TODO persistent scratch can get lost in some situations
 It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
-** DONE Binds for help menu
-Changes to help:
-- =C-h F= for ~describe-face~
-- =C-h t= for ~consult-theme~
-** TODO Redo bind for =C-h F= 
+** DONE Redo bind for =C-h F= 
+CLOSED: [2022-04-16 Sat 22:24]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-16 Sat 22:24]
+:END:
 ** TODO footnote inside table messes up alignment (mixed pitch hierarchy issue)
 Footnote face inherits from button (in modus)
 This same issue exists in Isohedron and 
-** KILL Tables aren't monospaced with isohedron                  :isohedron:
-CLOSED: [2022-04-12 Tue 16:03]
-:LOGBOOK:
-- State "KILL"       from "TODO"       [2022-04-12 Tue 16:03] \\
-  I think this is more of a variable-pitch-mode vs mixed-pitch-mode issue. The theme could possibly be smarter about it, but it happens all over the place.
-:END:
 ** TODO The goal with typography and theme
 I don't need everything to work with anything. But I do want to have a few sets of config (a few themes, a few fonts) that can all work together with minimal pain. As much as it seems ... dirty ... I wonder if customize might not be the best way to accomplish that. But some hand-rolled functions could probably solve the problem as well.
 - Register change hooks for themes _or_ font stacks
 - The idea of a font stack as a more first-class thing
-** YAK =M-Ret= with list items vs headlines
-** TODO Capture templates
-** TODO Task keywords don't look right after automatic theme change
-It was changing from a non-modus theme. Which ... it should maybe take as a hint to not switch?
-** YAK When I'm on my laptop, the minibuffer is way too invisible. It's fine in windows (which is what I use for actual work) but when it's full-screen, it's a problem (which is how any personal hacking is done)
-** DONE Get Isohedron set up as the default with hooks and whatever
-CLOSED: [2022-04-12 Tue 16:04]
+** DONE =M-Ret= with list items vs headlines
+CLOSED: [2022-04-16 Sat 22:34]
 :LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-12 Tue 16:04]
+- State "DONE"       from "YAKS"       [2022-04-16 Sat 22:34]
 :END:
+On headlines, it works inside the line, on items it ... didn't.
+- this is a list item
+** DONE Capture templates
+CLOSED: [2022-04-16 Sat 22:35]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-16 Sat 22:35]
+:END:
+** YAKS When I'm on my laptop, the minibuffer is way too invisible. It's fine in windows (which is what I use for actual work) but when it's full-screen, it's a problem (which is how any personal hacking is done)
 ** TODO Out with centaur-tabs, in with bufler
+*** DONE Get rid of centaur-tabs
+CLOSED: [2022-04-16 Sat 11:47]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-16 Sat 11:47]
+:END:
+*** TODO Set up some keybindings for bufler
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
