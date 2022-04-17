@@ -645,7 +645,7 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
         (lambda ()
           (face-attribute 'mode-line-inactive :background)))
   (setq mini-frame-show-parameters
-        '((child-frame-border-width . 1) ;; or maybe 12 matching background
+        '((child-frame-border-width . 8) ;; or maybe 12 matching background
           (no-accept-focus . t) ;; makes initial height work correctly
           (left . 0.5) ;; center horizontally
           (top . 0.25) ;; about a quarter down
@@ -653,11 +653,27 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
           (min-width . 80) ;; at least 80 chars
           (height . 1)
           (keep-ratio . t) ;; keep proportion as parent resizes
+          (left-fringe . 8)
+          (right-fringe . 8)
           ))
   (setq mini-frame-resize t)
   :init
   (mini-frame-mode t))
 #+end_src
+*** Tweak frame display
+This uses a background-color column to divide windows instead of drawing a line:
+#+begin_src elisp
+(use-package frame
+  :straight (:type built-in)
+  :custom
+  (window-divider-default-right-width 12)
+  (window-divider-default-bottom-width 1)
+  (window-divider-default-places 'right-only)
+  (window-divider-mode t)
+  :hook
+  (before-make-frame . window-divider-mode))
+#+end_src
+
 
 * What it can do
 ** Keybindings
@@ -674,9 +690,8 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 *** Use general to set up keybindings in a friendlier way
 #+begin_src elisp
 (use-package general
-  :demand t
-)
-;;   ("<help> F" 'describe-face)
+  :demand t)
+(general-define-key "<help> F" 'describe-face)
 #+end_src
 ** Vertical completion interface
 This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
@@ -1078,7 +1093,7 @@ Set up some basic org styling that we'll run whenever we change themes:
 ** Making org prettier
 #+begin_src elisp
 (use-package org-superstar 
-  :init
+  :config
   (setq org-superstar-cycle-headline-bullets nil
         org-superstar-special-todo-items t
         org-superstar-leading-fallback "·"
@@ -1091,7 +1106,7 @@ Set up some basic org styling that we'll run whenever we change themes:
     (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
     (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'org-hide :foreground))
     )
-  :config
+  ;; :init
   (eh/org-superstar-update-theme)
   :hook 
   (org-mode . org-superstar-mode)
@@ -1148,7 +1163,7 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right [3/10]
+* Things that don't work right [4/12]
 :PROPERTIES:
 :visibility: folded
 :END:
@@ -1191,6 +1206,12 @@ CLOSED: [2022-04-16 Sat 11:47]
 - State "DONE"       from "TODO"       [2022-04-16 Sat 11:47]
 :END:
 *** TODO Set up some keybindings for bufler
+** TODO Set a better initial window size
+** DONE Isohedron restyle selected line in mini-frame
+CLOSED: [2022-04-17 Sun 13:03]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-17 Sun 13:03]
+:END:
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
