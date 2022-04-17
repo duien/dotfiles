@@ -57,6 +57,15 @@ Set up some very basic (and mostly self-explanatory) options:
       )
 #+end_src
 
+Putting these here instead of in =early-init= means we get a brief glimpse of the default window position, then resize, but it also means that they respect our actual font size.
+#+begin_src elisp
+(push '(width . 100) default-frame-alist)
+(push '(height . 0.8) default-frame-alist)
+(push '(min-height . 40) default-frame-alist)
+(push '(top . 0.25) default-frame-alist)
+(push '(left . 0.5) default-frame-alist)
+#+end_src
+
 Always allow `y' instead of `yes' in all prompts
 #+begin_src elisp
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -530,9 +539,10 @@ This is a start. It adds the ability to visualize the mark, but (at least with t
   :config
   (setq visible-mark-max 5)
   :init
-  (global-visible-mark-mode 1))
+  ;; (global-visible-mark-mode 1)
+  )
 #+end_src
-*** TODO Use mixed pitch fonts
+*** Use mixed pitch fonts
 #+begin_src elisp
 (use-package mixed-pitch
   :ensure t)
@@ -651,7 +661,8 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
           (top . 0.25) ;; about a quarter down
           (width . 0.8) ;; narrower than the frame usually
           (min-width . 80) ;; at least 80 chars
-          (height . 1)
+          (height . 1) ;; default to one line
+          (min-height . 1) ;; it can be as little as it wants
           (keep-ratio . t) ;; keep proportion as parent resizes
           (left-fringe . 8)
           (right-fringe . 8)
@@ -1064,6 +1075,7 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-log-done t
           org-log-into-drawer t
           org-insert-heading-respect-content t
+          org-M-RET-may-split-line '((default . t))
           org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
@@ -1163,22 +1175,17 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right [4/12]
+* Things that don't work right [0/7]
 :PROPERTIES:
 :visibility: folded
 :END:
-** TODO Something is getting the toto keyword colors stuck in weird states
+** TODO Something is getting the todo keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
 I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
 ** TODO tab after fold indicator
 ** TODO persistent scratch can get lost in some situations
 It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
-** DONE Redo bind for =C-h F= 
-CLOSED: [2022-04-16 Sat 22:24]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-16 Sat 22:24]
-:END:
 ** TODO footnote inside table messes up alignment (mixed pitch hierarchy issue)
 Footnote face inherits from button (in modus)
 This same issue exists in Isohedron and 
@@ -1186,19 +1193,6 @@ This same issue exists in Isohedron and
 I don't need everything to work with anything. But I do want to have a few sets of config (a few themes, a few fonts) that can all work together with minimal pain. As much as it seems ... dirty ... I wonder if customize might not be the best way to accomplish that. But some hand-rolled functions could probably solve the problem as well.
 - Register change hooks for themes _or_ font stacks
 - The idea of a font stack as a more first-class thing
-** DONE =M-Ret= with list items vs headlines
-CLOSED: [2022-04-16 Sat 22:34]
-:LOGBOOK:
-- State "DONE"       from "YAKS"       [2022-04-16 Sat 22:34]
-:END:
-On headlines, it works inside the line, on items it ... didn't.
-- this is a list item
-** DONE Capture templates
-CLOSED: [2022-04-16 Sat 22:35]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-16 Sat 22:35]
-:END:
-** YAKS When I'm on my laptop, the minibuffer is way too invisible. It's fine in windows (which is what I use for actual work) but when it's full-screen, it's a problem (which is how any personal hacking is done)
 ** TODO Out with centaur-tabs, in with bufler
 *** DONE Get rid of centaur-tabs
 CLOSED: [2022-04-16 Sat 11:47]
@@ -1206,12 +1200,8 @@ CLOSED: [2022-04-16 Sat 11:47]
 - State "DONE"       from "TODO"       [2022-04-16 Sat 11:47]
 :END:
 *** TODO Set up some keybindings for bufler
-** TODO Set a better initial window size
-** DONE Isohedron restyle selected line in mini-frame
-CLOSED: [2022-04-17 Sun 13:03]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-17 Sun 13:03]
-:END:
+** TODO Configure the more secondary consult functions
+For instance, =C-x b= uses ~consult-buffer~ but =C-x 4 b= uses the default
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
