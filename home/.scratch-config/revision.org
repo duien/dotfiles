@@ -637,6 +637,28 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
   (dimmer-mode 1)
   )
 #+end_src
+*** Show the minibuffer somewhere more visible
+#+begin_src elisp
+(use-package mini-frame
+  :config
+  (setq mini-frame-background-color-function
+        (lambda ()
+          (face-attribute 'mode-line-inactive :background)))
+  (setq mini-frame-show-parameters
+        '((child-frame-border-width . 1) ;; or maybe 12 matching background
+          (no-accept-focus . t) ;; makes initial height work correctly
+          (left . 0.5) ;; center horizontally
+          (top . 0.25) ;; about a quarter down
+          (width . 0.8) ;; narrower than the frame usually
+          (min-width . 80) ;; at least 80 chars
+          (height . 1)
+          (keep-ratio . t) ;; keep proportion as parent resizes
+          ))
+  (setq mini-frame-resize t)
+  :init
+  (mini-frame-mode t))
+#+end_src
+
 * What it can do
 ** Keybindings
 *** The surprisingly complicated question of =ESC=
