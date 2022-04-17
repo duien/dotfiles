@@ -684,6 +684,8 @@ This is what's used when switching buffers, searching for files, refiling to an 
 Consult is what sets the contents of those menus. It provides a really nice buffer switch interface, ~consult-buffer~, which includes a variety of sources and the ability to use a single-letter prefix 
 #+begin_src elisp
   (use-package consult
+    :config
+    (setq consult-preview-key (kbd "M=."))
     :init
     ;(setq consult-project-root-function #'projectile-project-root)
     :general
@@ -802,17 +804,6 @@ Allow highlighting color-like things in their colors. This isn't very smart abou
 (use-package rainbow-mode)
 #+end_src
 
-
-Pulse the cursor line when moving around:
-#+begin_src elisp
-;; (use-package pulsar
-;;   :config
-;;   (add-to-list 'pulsar-pulse-functions 'org-cycle-level)
-;;   :init
-;;   (pulsar-global-mode 1))
-#+end_src
-Note that the function to call for initial setup changed between 0.2 and 0.3 so there might be issues with the above if trying to re-initialize packages. If so, change to ~(pulsar-setup)~
-
 Move forward and backward through pages when the buffer is narrowed:
 #+begin_src elisp
 (use-package logos
@@ -840,8 +831,9 @@ Manage whitespace automatically:
   :config
   ;; (setq-default visual-fill-column-extra-text-width '(2 . 2))
   (setq visual-fill-column-enable-sensible-window-split t)
-  :hook
-  (visual-line-mode . visual-fill-column-mode))
+  ;; :hook
+  ;; (visual-line-mode . visual-fill-column-mode)
+  )
 (use-package adaptive-wrap)
 #+end_src
 ** TODO Parentheses matching and surround
@@ -894,40 +886,87 @@ Manage whitespace automatically:
 
 Define custom faces for all of our keywords. This allows redone styles to be loaded without reload org-mode
 #+begin_src elisp
-(defun eh/define-org-faces ()
-  
-  ;; Completed states
-  (defface eh/org-keyword-done '((t :inherit org-done))
-    "Face used for the DONE keyword in Org")
-  (defface eh/org-keyword-kill '((t :inherit org-done))
-    "Face used for the KILL keyword in Org")
-  (defface eh/org-keyword-answer '((t :inherit org-done))
-    "Face used for the ANSR keywork in Org")
-  (defface eh/org-keyword-ok '((t :inherit org-done))
-    "Face used for the OK keyword in Org")
-  (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
-    "Face used for the YES keyword in Org")
-  (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
-    "Face used for the NO keyword in Org")
+    (cl-defun eh/org-register-keyword (&key keywords face symbol)
+      (dolist (key keywords)
+        (add-to-list 'org-todo-keyword-faces `(,key . ,face))
+        (add-to-list 'org-superstar-todo-bullet-alist `(,key . ,symbol))
+      ))
+    (defun eh/define-org-keywords ()
+      ;; Register all variations of keywords with faces and symbols
+      ;; Only the ones included in `org-todo-keywords' will be
+      ;; activated by default, but the others will still be styled
+      ;; if activated by buffer properties
 
-  ;; Incomplete states
-  (defface eh/org-keyword-wait '((t :inherit org-done))
-    "Face used for the WAIT keyword in Org")
-  (defface eh/org-keyword-flag '((t :inherit org-todo))
-    "Face used for the FLAG keyword in Org")
-  (defface eh/org-keyword-todo '((t :inherit org-todo))
-    "Face used for the TODO keyword in Org")
-  (defface eh/org-keyword-block '((t :inherit org-todo))
-    "Face used for the BLOK keyword in Org")
-  (defface eh/org-keyword-hold '((t :inherit org-todo))
-    "Face used for the HOLD keyword in Org")
-  (defface eh/org-keyword-question '((t :inherit org-todo))
-    "Face used for the QSTN keyword in Org")
-  (defface eh/org-keyword-idea '((t :inherit org-todo))
-    "Face used for the IDEA keyword in Org")
-  (defface eh/org-keyword-yak '((t :inherit org-todo))
-    "Face used for the YAK keyword in Org")
-  )
+      ;; First, clear out (and register) the two lists we're building up
+      (setq org-todo-keyword-faces '()
+            org-superstar-todo-bullet-alist '())
+
+      (eh/org-register-keyword
+       :keywords '("DONE")
+       :symbol ?✓
+       :face (defface eh/org-keyword-done '((t :inherit org-done))
+               "Face used for the DONE keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("KILL" "CANCEL")
+       :symbol ?×
+       :face (defface eh/org-keyword-kill '((t :inherit org-done))
+               "Face used for the KILL keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("ANSWER" "ANSR")
+       :symbol ?·
+       :face (defface eh/org-keyword-answer '((t :inherit org-done))
+               "Face used for the ANSR keywork in Org"))
+      (eh/org-register-keyword
+       :keywords '("MEH" "OK")
+       :symbol ?·
+       :face (defface eh/org-keyword-meh '((t :inherit org-done))
+               "Face used for the OK keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("YES")
+       :symbol ?·
+       :face (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
+               "Face used for the YES keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("NO")
+       :symbol ?·
+       :face (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
+               "Face used for the NO keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("BURY" "WAIT" "HOLD" "LATER")
+       :symbol ?~
+       :face (defface eh/org-keyword-bury '((t :inherit org-done))
+               "Face used for the WAIT keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("NEXT" "FLAG")
+       :symbol ?◦
+       :face (defface eh/org-keyword-next '((t :inherit org-todo))
+               "Face used for the FLAG keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("TODO")
+       :symbol ?◦
+       :face (defface eh/org-keyword-todo '((t :inherit org-todo))
+               "Face used for the TODO keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("HALT" "BLOK" "BLOCK")
+       :symbol ?◊
+       :face (defface eh/org-keyword-block '((t :inherit org-todo))
+               "Face used for the BLOK keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("QUEST" "QSTN" "QUESTION")
+       :symbol ??
+       :face (defface eh/org-keyword-question '((t :inherit org-todo))
+               "Face used for the QSTN keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("IDEA")
+       :symbol ?ҩ
+       :face (defface eh/org-keyword-idea '((t :inherit org-todo))
+               "Face used for the IDEA keyword in Org"))
+      (eh/org-register-keyword
+       :keywords '("YAKS" "YAK")
+       :symbol ?∞
+       :face (defface eh/org-keyword-yaks '((t :inherit org-todo))
+               "Face used for the YAK keyword in Org"))
+      )
 #+end_src
 
 Set up some basic org styling that we'll run whenever we change themes:
@@ -966,20 +1005,18 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :background (doom-color 'fw-base3))
     (set-face-attribute 'eh/org-keyword-todo nil
                         :background (doom-color 'fw-green))
-    (set-face-attribute 'eh/org-keyword-flag nil
-                        :background (doom-color 'fw-orange))
     (set-face-attribute 'eh/org-keyword-block nil
-                        :background (doom-color 'fw-red))
+                        :background (doom-color 'fw-orange))
     (set-face-attribute 'eh/org-keyword-question nil
                         :background (doom-color 'fw-blue))
     (set-face-attribute 'eh/org-keyword-idea nil
                         :background (doom-color 'fw-teal))
-    (set-face-attribute 'eh/org-keyword-yak nil
+    (set-face-attribute 'eh/org-keyword-yaks nil
                         :background (doom-color 'fw-purple))
-    (set-face-attribute 'eh/org-keyword-wait nil
+    (set-face-attribute 'eh/org-keyword-next nil
                         :foreground (doom-color 'fw-yellow-text)
                         :background (doom-color 'fw-yellow))
-    (set-face-attribute 'eh/org-keyword-hold nil
+    (set-face-attribute 'eh/org-keyword-bury nil
                         :foreground (doom-color 'fg-alt)
                         :background (doom-color 'fw-base5))
     (set-face-attribute 'eh/org-keyword-answer nil
@@ -988,7 +1025,7 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :foreground (doom-color 'fw-green))
     (set-face-attribute 'eh/org-keyword-no nil
                         :foreground (doom-color 'fw-red))
-    (set-face-attribute 'eh/org-keyword-ok nil
+    (set-face-attribute 'eh/org-keyword-meh nil
                         :foreground (doom-color 'fg-alt))
     (set-face-attribute 'eh/org-keyword-done nil
                         :foreground (doom-color 'fg-alt))
@@ -1003,7 +1040,7 @@ Set up some basic org styling that we'll run whenever we change themes:
 #+begin_src elisp
   (use-package org
     :config
-    (eh/define-org-faces)
+    (eh/define-org-keywords)
     (eh/org-update-theme)
     ;; :init
     (setq org-directory "~/Org/"
@@ -1023,27 +1060,9 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-src-preserve-indentation t
           org-startup-truncated t)
     (setq org-todo-keywords
-          '((sequence "WAIT(w)" "FLAG(f)" "TODO(t)" "BLOK(b)" "HOLD(h)" "|" "DONE(d!)" "KILL(k@)")
-            (sequence "QSTN(q)" "|" "OK(o)" "YES(y)" "NO(n)" "ANSR(a@)")
-            (type "IDEA(I)" "YAK(Y)" "|")
-            (type "GOAL(g)" "PUNCH(p)" "|" "DONE")
-            ))
-
-    (setq org-todo-keyword-faces
-          `(("TODO" . eh/org-keyword-todo)
-            ("FLAG" . eh/org-keyword-flag)
-            ("DONE" . eh/org-keyword-done)
-            ("HOLD" . eh/org-keyword-hold)
-            ("BLOK" . eh/org-keyword-block)
-            ("WAIT" . eh/org-keyword-wait)
-            ("KILL" . eh/org-keyword-kill)
-            ("QSTN" . eh/org-keyword-question)
-            ("ANSR" . eh/org-keyword-answer)
-            ("OK"   . eh/org-keyword-ok)
-            ("YES"  . eh/org-keyword-yes)
-            ("NO"   . eh/org-keyword-no)
-            ("IDEA" . eh/org-keyword-idea)
-            ("YAK"  . eh/org-keyword-yak)
+          '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
+            (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
+            (type "IDEA(i)" "YAKS(y)" "GOAL(g)" "|")
             ))
     :hook
     (org-mode . (lambda()
@@ -1065,24 +1084,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-leading-fallback "·"
         org-superstar-leading-bullet "·"
         org-superstar-remove-leading-stars nil
-        org-superstar-headline-bullets-list '("◆" "•"))
-  (setq org-superstar-todo-bullet-alist
-        '(("TODO" . ?◦) ;; ☐ > › □ ◦ 
-          ("FLAG" . ?▴) ;; ▲ ⇧ ⌃ =
-          ("DONE" . ?✓) ;; ☑ ✓
-          ("WAIT" . ?≈) ;; ∥
-          ("BLOK" . ?◊)
-          ("HOLD" . ?~)
-          ("KILL" . ?×) ;; × ✕ 
-          ("QSTN" . ??) ;; ◇
-          ("ANSR" . ?·) ;; · 
-          ("OK"   . ?·)
-          ("YES"  . ?·)
-          ("NO"   . ?·)
-          ("IDEA" . ?ҩ)
-          ("YAK"  . ?∞) ;;♡
-          ;; ҩ 
-          )
+        org-superstar-headline-bullets-list '("◆" "•")
         org-superstar-prettify-item-bullets nil
         )
   (defun eh/org-superstar-update-theme ()
