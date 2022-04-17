@@ -22,17 +22,19 @@ This could probably be done with a macro but that frightens me.
 :visibility: all
 :END:
 Not any particularly significance or sort order, just things I'm trying to learn:
-| Key               | Command                            |
-|-------------------+------------------------------------|
-| =C-x n=           | prefix for narrowing commands      |
-| =C-x n s=         | narrow to subtree                  |
-| =C-x n p=         | narrow to page                     |
-| =C-c C-v d=       | insert babel source block[fn:1]    |
-| =M-m=             | back-to-indentation                |
-| =C-c C-x C-a=     | archive current subtree            |
-| =C-u C-c C-x C-a= | ask about archiving children       |
-| =C-c C-x b=       | indirect buffer of current subtree |
-| =C-u C-x ==       | what-cursor-position               |
+| Prefix | Key           | Command                            |
+|--------+---------------+------------------------------------|
+|        | =C-x n=       | prefix for narrowing commands      |
+|        | =C-x n s=     | narrow to subtree                  |
+|        | =C-x n p=     | narrow to page                     |
+| =C-u=  | =C-x ==       | what-cursor-position               |
+|--------+---------------+------------------------------------|
+|        | =C-c C-v d=   | insert babel source block[fn:1]    |
+|        | =C-c C-x b=   | indirect buffer of current subtree |
+|        | =C-c C-x C-a= | archive current subtree            |
+| =C-u=  | =C-c C-x C-a= | ask about archiving children       |
+|--------+---------------+------------------------------------|
+|        | =M-m=         | back-to-indentation                |
 
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
@@ -1157,7 +1159,6 @@ Here's some fiddling trying to get a nice agenda going:
          )))
   (org-agenda nil "t"))
 #+end_src
-
 * Language support
 ** Misc small packages
 #+begin_src elisp
