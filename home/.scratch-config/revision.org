@@ -124,6 +124,14 @@ And let other people decide per-project values:
       '((".*" . "~/.emacs-backups")))
 (setq auto-save-file-name-transforms
       '((".*" "~/.emacs-backups" t)))
+(setq
+ auto-save-default t
+ version-control t     ; number each backup file
+ backup-by-copying t   ; instead of renaming current file (clobbers links)
+ delete-old-versions t ; clean up after itself
+ kept-old-versions 5
+ kept-new-versions 5
+ auto-save-include-big-deletions t)
 #+end_src
 ** Configure things for mac
 Set up what seems to be the least annoying modifier key setup:
@@ -625,13 +633,13 @@ Use minions to hide all the minor mode indicators in a menu
 *** Make help more helpful
 #+begin_src elisp
 (use-package helpful
-  :bind
-  ("C-h f" . helpful-callable)
-  ("C-h v" . helpful-variable)
-  ("C-h k" . helpful-key)
-  ("C-h C" . helpful-command) ;; only interactive functions
+  :general
+  ("C-h f" 'helpful-callable)
+  ("C-h v" 'helpful-variable)
+  ("C-h k" 'helpful-key)
+  ("C-h C" 'helpful-command) ;; only interactive functions
   ;; this is overwritten by set-deadline in org
-  ("C-c C-d" . helpful-at-point)
+  ("C-c C-d" 'helpful-at-point)
   )
 #+end_src
 *** Selectively dim windows
@@ -658,17 +666,17 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
         (lambda ()
           (face-attribute 'mode-line-inactive :background)))
   (setq mini-frame-show-parameters
-        '((child-frame-border-width . 8) ;; or maybe 12 matching background
+        '((child-frame-border-width . 8) ;; give it breathing room
           (no-accept-focus . t) ;; makes initial height work correctly
           (left . 0.5) ;; center horizontally
           (top . 0.25) ;; about a quarter down
           (width . 0.8) ;; narrower than the frame usually
-          (min-width . 80) ;; at least 80 chars
+          (min-width . 60) ;; never too narrow
           (height . 1) ;; default to one line
           (min-height . 1) ;; it can be as little as it wants
           (keep-ratio . t) ;; keep proportion as parent resizes
-          (left-fringe . 8)
-          (right-fringe . 8)
+          (left-fringe . 8) ;; extra side padding
+          (right-fringe . 8) ;; for both sides
           ))
   (setq mini-frame-resize t)
   :init
@@ -816,21 +824,22 @@ See which lines have been modified in the gutter
   (bufler-mode))
 #+end_src
 * Simple utilities for better editing
+** Miscellaneous commands
 Crux has lots of handy utility functions. These are a few of the best:
 #+begin_src elisp
 (use-package crux
-  :bind 
-  ("C-o" . crux-smart-open-line)
-  ("M-o" . crux-smart-open-line-above)
-  ("C-k" . crux-smart-kill-line)
+  :general
+  ("C-o" 'crux-smart-open-line)
+  ("M-o" 'crux-smart-open-line-above)
+  ("C-k" 'crux-smart-kill-line)
   )
 #+end_src
 
 Expanding the region incrementally is incredibly helpful:
 #+begin_src elisp
 (use-package expand-region
-  :bind
-  ("C-=" . er/expand-region))
+  :general
+  ("C-=" 'er/expand-region))
 #+end_src
 
 Allow highlighting color-like things in their colors. This isn't very smart about things, and tends to highlight named colors in an annoying number of places, but when it's useful it's really useful.
@@ -850,8 +859,9 @@ Move forward and backward through pages when the buffer is narrowed:
   
 (use-package olivetti
   :config
-  (setq olivetti-style fancy))
+  (setq olivetti-style nil))
 #+end_src
+Getting rid of ~visual-fill-column-mode~ in favor of olivetti. I think overall, having regular ~visual-line-mode~ is a better default, and olivetti is simple (and I can remember the dang name!)
 
 Manage whitespace automatically:
 #+begin_src elisp
@@ -861,16 +871,21 @@ Manage whitespace automatically:
 #+end_src
 ** Do better things with line wrapping
 #+begin_src elisp
-(use-package visual-fill-column
-  :config
-  ;; (setq-default visual-fill-column-extra-text-width '(2 . 2))
-  (setq visual-fill-column-enable-sensible-window-split t)
-  ;; :hook
-  ;; (visual-line-mode . visual-fill-column-mode)
-  )
 (use-package adaptive-wrap)
+(setq-default word-wrap t)
+(setq-default truncate-lines t)
 #+end_src
-** TODO Parentheses matching and surround
+
+** Parentheses matching and surround
+#+begin_src elisp
+(use-package smartparens
+  :config
+  :init
+  (require 'smartparens-config)
+  (smartparens-global-mode 1)
+  )
+#+end_src
+
 ** Toggle between vertical and horizontal split windows
 #+begin_src elisp
 (defun eh/toggle-window-split ()
