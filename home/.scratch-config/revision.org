@@ -22,19 +22,21 @@ This could probably be done with a macro but that frightens me.
 :visibility: all
 :END:
 Not any particularly significance or sort order, just things I'm trying to learn:
-| Prefix | Key           | Command                            |
-|--------+---------------+------------------------------------|
-|        | =C-x n=       | prefix for narrowing commands      |
-|        | =C-x n s=     | narrow to subtree                  |
-|        | =C-x n p=     | narrow to page                     |
-| =C-u=  | =C-x ==       | what-cursor-position               |
-|--------+---------------+------------------------------------|
-|        | =C-c C-v d=   | insert babel source block[fn:1]    |
-|        | =C-c C-x b=   | indirect buffer of current subtree |
-|        | =C-c C-x C-a= | archive current subtree            |
-| =C-u=  | =C-c C-x C-a= | ask about archiving children       |
-|--------+---------------+------------------------------------|
-|        | =M-m=         | back-to-indentation                |
+| Prefix | Key           | Command                                |
+|--------+---------------+----------------------------------------|
+|        | =C-x n=       | prefix for narrowing commands          |
+|        | =C-x n s=     | narrow to subtree                      |
+|        | =C-x n p=     | narrow to page                         |
+| =C-u=  | =C-x ==       | what-cursor-position                   |
+|--------+---------------+----------------------------------------|
+|        | =C-c C-v d=   | insert babel source block[fn:1]        |
+|        | =C-c C-x b=   | indirect buffer of current subtree     |
+|        | =C-c C-x C-a= | archive current subtree                |
+| =C-u=  | =C-c C-x C-a= | ask about archiving children           |
+|--------+---------------+----------------------------------------|
+|        | =M-m=         | back-to-indentation                    |
+|        | =M-n=         | (at prompt) next history item (guess)) |
+|        |               |                                        |
 
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
@@ -154,6 +156,23 @@ Some inside baseball options I don't really understand:
   (setq custom-safe-themes t)            ; mark all themes as safe, since we can't persist now
   (setq enable-local-variables :all)     ; fix =defvar= warnings
 
+#+end_src
+** Keybindings
+*** The surprisingly complicated question of =ESC=
+I don't want ESC as a modifier. When I was coming from vim/evil it was just too confusing and tripped me up all the time.
+Advice would say use ~keyboard-escape-quit~ as the binding here, which is what's originally bound to =ESC-ESC-ESC= but that makes it too easy to end up closing additional windows, which is basically never what I want.It turns out, however, that ~keyboard-quit~ is not what I want either since it doesn't get me out of the minibuffer. UGH.
+What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that the function it calls to kill a buffer just beeps instead. I'm not sure if it actually beeps, though. Am I good at ignoring it, have I retrained myself better than expected, or does it just not work?
+#+begin_src elisp
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(setq-default buffer-quit-function
+	            #'(lambda () (beep)))
+#+end_src
+**** IDEA What if ~buffer-quit-function~ closed non-file-visiting buffers but left open any file-visiting? That might let it get out of help windows but not out of actual buffer layout.
+*** Use general to set up keybindings in a friendlier way
+#+begin_src elisp
+(use-package general
+  :demand t)
+(general-define-key "<help> F" 'describe-face)
 #+end_src
 * How it looks
 ** Set up typography
@@ -696,23 +715,6 @@ This uses a background-color column to divide windows instead of drawing a line:
   (before-make-frame . window-divider-mode))
 #+end_src
 * What it can do
-** Keybindings
-*** The surprisingly complicated question of =ESC=
-I don't want ESC as a modifier. When I was coming from vim/evil it was just too confusing and tripped me up all the time.
-Advice would say use ~keyboard-escape-quit~ as the binding here, which is what's originally bound to =ESC-ESC-ESC= but that makes it too easy to end up closing additional windows, which is basically never what I want.It turns out, however, that ~keyboard-quit~ is not what I want either since it doesn't get me out of the minibuffer. UGH.
-What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that the function it calls to kill a buffer just beeps instead. I'm not sure if it actually beeps, though. Am I good at ignoring it, have I retrained myself better than expected, or does it just not work?
-#+begin_src elisp
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(setq-default buffer-quit-function
-	            #'(lambda () (beep)))
-#+end_src
-**** IDEA What if ~buffer-quit-function~ closed non-file-visiting buffers but left open any file-visiting? That might let it get out of help windows but not out of actual buffer layout.
-*** Use general to set up keybindings in a friendlier way
-#+begin_src elisp
-(use-package general
-  :demand t)
-(general-define-key "<help> F" 'describe-face)
-#+end_src
 ** Vertical completion interface
 This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
 *** Set up consult first
@@ -779,6 +781,8 @@ I use the scratch buffer a lot, and it's nice to have the things there stick aro
 #+begin_src elisp
 (use-package persistent-scratch
   :demand t
+  :config
+  (setq persistent-scratch-backup-directory "~/.emacs-backups")
   :init
   (persistent-scratch-setup-default)
   (persistent-scratch-mode 1))
@@ -818,13 +822,14 @@ See which lines have been modified in the gutter
 (use-package vterm)
 #+end_src
 ** Organize and focus on buffer groups
+This is neat to keep around as a tool when I might want it, but not something I expect to get a lot of use from.
 #+begin_src elisp
 (use-package bufler
   :init
   (bufler-mode))
 #+end_src
 * Simple utilities for better editing
-** Miscellaneous commands
+** Miscellaneous commands :crux:expand_region:rainbow:logos:olivetti:ws_butler:
 Crux has lots of handy utility functions. These are a few of the best:
 #+begin_src elisp
 (use-package crux
@@ -875,7 +880,6 @@ Manage whitespace automatically:
 (setq-default word-wrap t)
 (setq-default truncate-lines t)
 #+end_src
-
 ** Parentheses matching and surround
 #+begin_src elisp
 (use-package smartparens
@@ -885,7 +889,6 @@ Manage whitespace automatically:
   (smartparens-global-mode 1)
   )
 #+end_src
-
 ** Toggle between vertical and horizontal split windows
 #+begin_src elisp
 (defun eh/toggle-window-split ()
@@ -917,7 +920,7 @@ Manage whitespace automatically:
 #+begin_src elisp
 (use-package pulsar
   :config
-  (setq pulsar-pulse t ;; leave the highlight in place until another command
+  (setq pulsar-pulse nil ;; nil to leave the highlight in place until another command
         pulsar-delay 0.5 ;; how long each step lasts
         pulsar-iterations 1 ;; how many steps for color
         pulsar-face 'pulsar-yellow
@@ -983,7 +986,7 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
       (eh/org-register-keyword
        :keywords '("BURY" "WAIT" "HOLD" "LATER")
        :symbol ?~
-       :face (defface eh/org-keyword-bury '((t :inherit org-done))
+       :face (defface eh/org-keyword-bury '((t :inherit org-todo))
                "Face used for the WAIT keyword in Org"))
       (eh/org-register-keyword
        :keywords '("NEXT" "FLAG")
@@ -998,7 +1001,7 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
       (eh/org-register-keyword
        :keywords '("HALT" "BLOK" "BLOCK")
        :symbol ?◊
-       :face (defface eh/org-keyword-block '((t :inherit org-todo))
+       :face (defface eh/org-keyword-halt '((t :inherit org-todo))
                "Face used for the BLOK keyword in Org"))
       (eh/org-register-keyword
        :keywords '("QUEST" "QSTN" "QUESTION")
@@ -1031,6 +1034,8 @@ Set up some basic org styling that we'll run whenever we change themes:
                       :inherit 'fixed-pitch
            	          :slant 'italic
                       :weight (face-attribute 'default :weight))
+  (set-face-attribute 'eh/org-keyword-bury nil
+                      :weight (face-attribute 'default :weight))
 
   ;; styling for headlines with keywords
   (set-face-attribute 'org-headline-todo nil
@@ -1054,8 +1059,6 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :background (doom-color 'fw-base3))
     (set-face-attribute 'eh/org-keyword-todo nil
                         :background (doom-color 'fw-green))
-    (set-face-attribute 'eh/org-keyword-block nil
-                        :background (doom-color 'fw-orange))
     (set-face-attribute 'eh/org-keyword-question nil
                         :background (doom-color 'fw-blue))
     (set-face-attribute 'eh/org-keyword-idea nil
@@ -1085,7 +1088,7 @@ Set up some basic org styling that we'll run whenever we change themes:
 
   ;; (eh/org-update-theme)
 #+end_src
-** Basic configuration
+** Basic configuration :org:
 #+begin_src elisp
   (use-package org
     :config
@@ -1099,6 +1102,7 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-log-into-drawer t
           org-insert-heading-respect-content t
           org-M-RET-may-split-line '((default . t))
+          org-todo-fast-selection 'expert
           org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
@@ -1115,18 +1119,28 @@ Set up some basic org styling that we'll run whenever we change themes:
             (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
             (type "IDEA(i)" "YAKS(y)" "GOAL(g)" "|")
             ))
+
+    (setq org-capture-templates
+          '(("t" "Some thing" entry (file "~/Org/inbox.org")
+             "* TODO %?\n%a\n%i")
+            ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
+             "* TODO %?\n%a\n%i")
+            ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
+             "* YAKS %?\n%a\n%i")
+            ("b" "Key binding" entry
+             (file+headline "~/.scratch-config/revision.org" "Missing bindings")
+             "* TODO Binding for %?")
+            ))
     :hook
     (org-mode . (lambda()
                   (org-indent-mode t)
                   (visual-line-mode t)
-                  ;; (variable-pitch-mode t)
                   (mixed-pitch-mode t)
                   ))
     (after-enable-theme . eh/org-update-theme)
     )
-  ;; (eh/org-update-theme)
 #+end_src
-** Making org prettier
+** Making org prettier :org_superstar:
 #+begin_src elisp
 (use-package org-superstar 
   :config
@@ -1150,10 +1164,7 @@ Set up some basic org styling that we'll run whenever we change themes:
   )
 #+end_src
 ** Making org more powerful
-*** For capturing infomation
-Being able to capture ideas from anywhere, especially with the ability to send them to multiple places and link them to where they came from, is amazing.
-
-*** For retrieving information
+*** For retrieving information :org_super_agenda:
 The agenda is a big part of the power of org.
 #+begin_src elisp
 (use-package org-super-agenda)
@@ -1175,13 +1186,13 @@ Here's some fiddling trying to get a nice agenda going:
   (org-agenda nil "t"))
 #+end_src
 * Language support
-** Misc small packages
+** Misc small packages :fish:haml:slim:
 #+begin_src elisp
 (use-package fish-mode)
 (use-package haml-mode)
 (use-package slim-mode)
 #+end_src
-** Writing in Markdown
+** Writing in Markdown :markdown:
 As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
 #+begin_src elisp
 (use-package markdown-mode
@@ -1191,34 +1202,51 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
   (gfm-mode . mixed-pitch-mode)
   (markdown-mode . mixed-pitch-mode))
 #+end_src
-** Javascript with Vue
+** Javascript with Vue :vue:
 I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing.
 #+begin_src elisp
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right [1/6]
+* Things that don't work right [3/8]
 :PROPERTIES:
 :visibility: folded
 :END:
-** TODO Something is getting the todo keyword colors stuck in weird states
+** Missing bindings :bind:
+*** TODO Binding for ~org-capture~
+*** TODO Binding for ~org-agenda~
+*** TODO Binding for ~bury-buffer~
+** BURY Something is getting the todo keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
 I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
 ** TODO tab after fold indicator
 ** TODO persistent scratch can get lost in some situations
 It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
-** TODO footnote inside table messes up alignment (mixed pitch hierarchy issue)
+** DONE Use expert mode for todo state input
+CLOSED: [2022-04-17 Sun 20:34]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-17 Sun 20:34]
+:END:
+** BURY footnote inside table messes up alignment (mixed pitch hierarchy issue)
 Footnote face inherits from button (in modus)
 This same issue exists in Isohedron and that face just sets a foreground
 This is something to do with org faces overlapping... there's a lot of weird there
-** TODO Out with centaur-tabs, in with bufler
+** DONE Out with centaur-tabs, in with bufler
+CLOSED: [2022-04-17 Sun 19:18]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-17 Sun 19:18]
+:END:
 *** DONE Get rid of centaur-tabs
 CLOSED: [2022-04-16 Sat 11:47]
 :LOGBOOK:
 - State "DONE"       from "TODO"       [2022-04-16 Sat 11:47]
 :END:
-*** TODO Set up some keybindings for bufler
+*** KILL Set up some keybindings for bufler
+CLOSED: [2022-04-17 Sun 19:18]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-04-17 Sun 19:18]
+:END:
 ** DONE Configure the more secondary consult functions
 CLOSED: [2022-04-17 Sun 14:28]
 :LOGBOOK:
@@ -1229,11 +1257,14 @@ For instance, =C-x b= uses ~consult-buffer~ but =C-x 4 b= uses the default
 ** Pulsar additions
 *** TODO Add a highlight (persistent) to headline during ~org-archive-subtree-default~
 *** TODO Pulse when cycling org headlines scrolls the buffer
-** Commands to unbind
+** Commands to unbind :bind:
 These case-changers just litter files I visit with random case-changes.
 - =M-l= downcase-word (=C-x C-l= is downcase-region, there's unbound ~capitalize-dwim~ that will do region or word)
 - =M-c= capitalize-word
 - =M-u= upcase-word
+** IDEA Put tags on headline with the names of packages/modes
+Another option might be to put names on all the source blocks and navigate by those somehow
+Starting to add this, and while I like the look, it seems like they'll get out of date
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
