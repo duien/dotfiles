@@ -22,21 +22,21 @@ This could probably be done with a macro but that frightens me.
 :visibility: all
 :END:
 Not any particularly significance or sort order, just things I'm trying to learn:
-| Prefix | Key           | Command                                |
-|--------+---------------+----------------------------------------|
-|        | =C-x n=       | prefix for narrowing commands          |
-|        | =C-x n s=     | narrow to subtree                      |
-|        | =C-x n p=     | narrow to page                         |
-| =C-u=  | =C-x ==       | what-cursor-position                   |
-|--------+---------------+----------------------------------------|
-|        | =C-c C-v d=   | insert babel source block[fn:1]        |
-|        | =C-c C-x b=   | indirect buffer of current subtree     |
-|        | =C-c C-x C-a= | archive current subtree                |
-| =C-u=  | =C-c C-x C-a= | ask about archiving children           |
-|--------+---------------+----------------------------------------|
-|        | =M-m=         | back-to-indentation                    |
-|        | =M-n=         | (at prompt) next history item (guess)) |
-|        |               |                                        |
+| Prefix | Key           | Command                               |
+|--------+---------------+---------------------------------------|
+|        | =C-x n=       | prefix for narrowing commands         |
+|        | =C-x n s=     | narrow to subtree                     |
+|        | =C-x n p=     | narrow to page                        |
+| =C-u=  | =C-x ==       | what-cursor-position                  |
+|--------+---------------+---------------------------------------|
+|        | =C-c C-v d=   | insert babel source block[fn:1]       |
+|        | =C-c C-x b=   | indirect buffer of current subtree    |
+|        | =C-c C-x C-a= | archive current subtree               |
+| =C-u=  | =C-c C-x C-a= | ask about archiving children          |
+|--------+---------------+---------------------------------------|
+|        | =M-m=         | back-to-indentation                   |
+|        | =M-n=         | (at prompt) next history item (guess) |
+|        |               |                                       |
 
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
@@ -519,6 +519,7 @@ First, define a few functions that are useful to our use of Modus:
   :init
   (modus-themes-load-themes)
   :hook
+  (modus-themes-after-load-theme . eh/set-apple-fonts)
   (modus-themes-after-load-theme . eh/modus-customize)
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
@@ -596,7 +597,13 @@ This is really determined by which mode we load in org. I'd been using variable-
   ;;   (moody-replace-mode-line-buffer-identification -1)
   ;;   (moody-replace-vc-mode -1))
 
-(use-package nano-modeline) ;; (nano-modeline-mode)
+(use-package nano-modeline
+  :config
+  (setq nano-modeline-position 'bottom
+        nano-modeline-space-top 0.4 ;; 0.15
+        nano-modeline-space-bottom -0.4 ;; -0.2
+        )
+  :hook (after-init . nano-modeline-mode))
 (use-package bespoke-modeline
   :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
   :config
@@ -1208,7 +1215,7 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 #+end_src
 We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
-* Things that don't work right [3/8]
+* Things that don't work right [4/8]
 :PROPERTIES:
 :visibility: folded
 :END:
@@ -1216,12 +1223,18 @@ We may also need web-mode but it's such a huge general-purpose ball of mud that 
 *** TODO Binding for ~org-capture~
 *** TODO Binding for ~org-agenda~
 *** TODO Binding for ~bury-buffer~
+*** TODO Binding for ~eh/toggle-window-split~
+*** TODO Binding for ~crux-swap-windows~
 ** BURY Something is getting the todo keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
 I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
 ** TODO tab after fold indicator
-** TODO persistent scratch can get lost in some situations
+** DONE persistent scratch can get lost in some situations
+CLOSED: [2022-04-17 Sun 20:52]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-17 Sun 20:52]
+:END:
 It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
 ** DONE Use expert mode for todo state input
 CLOSED: [2022-04-17 Sun 20:34]
@@ -1254,6 +1267,8 @@ CLOSED: [2022-04-17 Sun 14:28]
   There's more I'd like to do, specifically in projects, but this gets the basic buffer functions set up
 :END:
 For instance, =C-x b= uses ~consult-buffer~ but =C-x 4 b= uses the default
+** TODO When org marks something as done and that gives it content for the first time, it should be automatically folded
+If it's already folded, it stays that way, so it does think about folding (I think?)
 ** Pulsar additions
 *** TODO Add a highlight (persistent) to headline during ~org-archive-subtree-default~
 *** TODO Pulse when cycling org headlines scrolls the buffer
