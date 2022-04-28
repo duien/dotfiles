@@ -10,7 +10,7 @@
 	default = simple
 [core]
     excludesfile = ~/.gitignore
-	editor = em -t
+	editor = em -w
 	attributesfile = /Users/ehyland/.gitattributes
 [alias]
     vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"

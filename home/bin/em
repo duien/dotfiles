@@ -3,6 +3,7 @@
 # function ec --description "open emacs client, starting server if needed"
     argparse -i 'p/with-profile=' -- $argv
     argparse -i 't/tty' -- $argv
+    argparse -i 'w/wait' -- $argv
     set -l socket_file
     if test -n "$_flag_p"
         set socket_file (emacsserver -p$_flag_p)
@@ -23,6 +24,13 @@
         if test -n "$_flag_tty"
             set clientflag "-t"
         end
-        emacsclient $clientflag $argv --socket-name $socket_file
+        if test -n "$_flag_wait"
+            # sending an empty $clientflag sends a literal "" which emacs
+            # interprets as the filename, and then it can't deal with the
+            # actual filename
+            emacsclient --socket-name=$socket_file $argv
+        else
+            emacsclient $clientflag --socket-name=$socket_file $argv
+        end
     end
 # end
