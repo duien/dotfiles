@@ -36,7 +36,8 @@ Not any particularly significance or sort order, just things I'm trying to learn
 |--------+---------------+---------------------------------------|
 |        | =M-m=         | back-to-indentation                   |
 |        | =M-n=         | (at prompt) next history item (guess) |
-|        |               |                                       |
+|--------+---------------+---------------------------------------|
+|        | =M-s h .=     | highlight symbol at point             |
 
 * Bootstrap straight and use-package
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
@@ -173,9 +174,13 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 (use-package general
   :demand t)
 (general-define-key "<help> F" 'describe-face)
+(general-define-key "C-x z" 'bury-buffer)
 #+end_src
 * How it looks
 ** Set up typography
+Typography in Emacs can be very fiddly. Some links that might help sometimes?
+[[https://stackoverflow.com/questions/67555133/emacs-not-listing-semilight-fonts][Emacs and fontconfig disagree about font weights]]
+
 *** With the Recursive font
 Set up fixed and variable pitch fonts with very similar character. It's a dynamic font, but unfortunately Emacs doesn't actually know how to handle that. So for now, we use two separate sets of static configs.
 #+begin_src elisp
@@ -259,7 +264,7 @@ However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regul
 		      :height 200 :weight 'normal))
 #+end_src
 
-*** With misc fonts
+*** Combinations with Victor
 
 Victor and Galix are a fun combo.
 #+begin_src elisp
@@ -290,6 +295,7 @@ Victor and Galix are a fun combo.
   )
 #+end_src
 
+*** Belinsky
 #+begin_src elisp
 (defun eh/set-belinsky-fonts ()
   (set-face-attribute 'default nil
@@ -303,21 +309,22 @@ Victor and Galix are a fun combo.
                       :height 160 :weight 'normal)
   )
 #+end_src
-
+*** MonoLisa
+MonoLisa is such a good font. The script version (installed as "MonoLisa Script") is also very good, but can be a little overwhelming for longer blocks of text. It might be interesting to try using both the italic and the script for different faces.
 #+begin_src elisp
 (defun eh/set-monolisa-fonts ()
   (set-face-attribute 'default nil
-                      :font "MonoLisa"
-                      :height 160 :weight 'normal)
+                      :family "MonoLisa Custom"
+                      :height 160 :weight 'light)
   (set-face-attribute 'fixed-pitch nil
-                      :font "MonoLisa"
-                      :height 160 :weight 'normal)
+                      :font "MonoLisa Custom"
+                      :height 160 :weight 'light)
   (set-face-attribute 'variable-pitch nil
-                      :font "MonoLisa"
-                      :height 160 :weight 'normal)
+                      :font "MonoLisa Custom"
+                      :height 160 :weight 'light)
   )
 #+end_src
-
+*** Cascadia
 #+begin_src elisp
 (defun eh/set-cascadia-fonts ()
   (set-face-attribute 'default nil
@@ -329,25 +336,43 @@ Victor and Galix are a fun combo.
   (set-face-attribute 'variable-pitch nil
                       :font "Cascadia Code"
                       :height 160 :weight 'light)
+  ;; hack
+  (set-face-attribute 'font-lock-function-name-face nil
+                      :weight 'medium)
   )
 #+end_src
-
+*** With Operator fonts
 #+begin_src elisp
-(defun eh/set-roboto-fonts ()
+(defun eh/set-operator-fonts ()
   (set-face-attribute 'default nil
-                      :font "Roboto Mono"
+                      :font "Operator Mono SSm"
                       :height 160 :weight 'light)
   (set-face-attribute 'fixed-pitch nil
-                      :font "Roboto Mono"
+                      :font "Operator Mono SSm"
                       :height 160 :weight 'light)
   (set-face-attribute 'variable-pitch nil
-                      :font "Roboto Mono"
+                      :font "Operator Mono SSm"
                       :height 160 :weight 'light)
   )
 #+end_src
+*** With Codelia
+#+begin_src elisp
+(defun eh/set-codelia-fonts ()
+  (set-face-attribute 'default nil
+                    :font "Codelia Ligatures"
+                    :height 160 :weight 'normal)
+  (set-face-attribute 'fixed-pitch nil
+                    :font "Codelia Ligatures"
+                    :height 160 :weight 'normal)
+  (set-face-attribute 'variable-pitch nil
+                    :font "Codelia Ligatures"
+                    :height 160 :weight 'normal))
+#+end_src
+
+
 *** With Apple fonts
 #+begin_src elisp
-(defun eh/set-apple-fonts ()
+(defun eh/set-simple-apple-fonts ()
   (set-face-attribute 'default nil
                       :font "SF Mono"
                       :height 160 :weight 'semilight)
@@ -357,6 +382,8 @@ Victor and Galix are a fun combo.
   (set-face-attribute 'variable-pitch nil
                       :font "SF Pro Text"
                       :height 160 :weight 'semilight)
+  )
+(defun eh/set-fancy-apple-fonts ()
   (set-face-attribute 'org-document-title nil
                       :font "New York Extra Large"
                       :height 2.0 :weight 'bold)
@@ -373,6 +400,10 @@ Victor and Galix are a fun combo.
                     :font "SF Mono"
                     :inherit '(shadow default))
   )
+(defun eh/set-apple-fonts ()
+  (eh/set-simple-apple-fonts)
+  (eh/set-fancy-apple-fonts)
+  )
 #+end_src
 
 *** And finally, enable a font!
@@ -384,14 +415,16 @@ Victor and Galix are a fun combo.
 ;; (eh/set-input-fonts)
 ;; (eh/set-sudo-fonts)
 ;; (eh/set-apple-fonts)
-(add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
+;; (eh/set-monolisa-fonts)
+;; (add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
+(add-hook 'after-enable-theme-hook #'eh/set-monolisa-fonts)
 #+end_src
 
 Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with changing fonts after the fact (even after toggling the mode)
 
 But ~variable-pitch-mode~ seems to do just fine with it. I think I switched because of ... some very specific issues. Let's go back to variable for a while?
 
-I've left mixed installed, but [[*Basic configuration][the org-mode hook configuration]] is what controls what we actually use.
+I've left mixed installed, but [[*Basic configuration][the org-mode hook configuration]] is what controls what we actually use. It's also set in [[*Writing in Markdown][markdown/gfm mode configuration]] as well.
 *** Set up ligatures in various ways
 Turn on automatic ligatures if the feature is available:
 #+begin_src elisp
@@ -413,7 +446,7 @@ Or turn it on the hard way:
   ;; `variable-pitch' face supports it
   (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
   ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 't '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                                        "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
                                        "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
@@ -432,7 +465,8 @@ Or turn it on the hard way:
                                        "[WARN]" "[WARN ]" "[WARNING]"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
-  (global-ligature-mode t))
+  ;; (global-ligature-mode t)
+  )
 #+end_src
 ** Color Theming
 *** Set up a hook that's  run after loading a theme
@@ -463,39 +497,41 @@ First, define a few functions that are useful to our use of Modus:
     ('dark (modus-themes-load-vivendi))))
 
 (defun eh/org-update-modus-theme ()
-    (set-face-attribute 'eh/org-keyword-todo nil
-                        :inherit '(modus-themes-refine-green org-todo))
-    (set-face-attribute 'eh/org-keyword-next nil
-                        :inherit '(modus-themes-refine-yellow org-done))
-    (set-face-attribute 'eh/org-keyword-halt nil
-                        :inherit '(modus-themes-intense-red org-todo))
-    (set-face-attribute 'eh/org-keyword-bury nil
-                        :inherit '(modus-themes-intense-neutral org-done))
-    (set-face-attribute 'eh/org-keyword-question nil
-                        :inherit '(modus-themes-refine-blue org-todo))
-    (set-face-attribute 'eh/org-keyword-idea nil
-                        :inherit '(modus-themes-refine-cyan org-todo))
-    (set-face-attribute 'eh/org-keyword-yaks nil
-                        :inherit '(modus-themes-refine-magenta org-todo))
-    (set-face-attribute 'eh/org-keyword-done nil
-                        :inherit '(modus-themes-nuanced-green org-done)
-                        :foreground (modus-themes-color 'green-faint))
-    (set-face-attribute 'eh/org-keyword-kill nil
-                        :inherit '(modus-themes-nuanced-red org-done)
-                        :foreground (modus-themes-color 'red-faint))
-    (set-face-attribute 'eh/org-keyword-answer nil
-                        :inherit '(modus-themes-nuanced-blue org-done)
-                        :foreground (modus-themes-color 'blue-faint))
-    (set-face-attribute 'eh/org-keyword-meh nil
-                        :inherit 'eh/org-keyword-answer
-                        :foreground (modus-themes-color 'blue))
-    (set-face-attribute 'eh/org-keyword-yes nil
-                        :inherit 'eh/org-keyword-done
-                        :foreground (modus-themes-color 'green))
-    (set-face-attribute 'eh/org-keyword-no nil
-                        :inherit 'eh/org-keyword-kill
-                        :foreground (modus-themes-color 'red))
-    )
+  (set-face-attribute 'org-headline-todo nil
+                      :foreground nil)
+  (set-face-attribute 'eh/org-keyword-todo nil
+                      :inherit '(modus-themes-refine-green org-todo))
+  (set-face-attribute 'eh/org-keyword-next nil
+                      :inherit '(modus-themes-refine-yellow org-todo))
+  (set-face-attribute 'eh/org-keyword-halt nil
+                      :inherit '(modus-themes-intense-red org-todo))
+  (set-face-attribute 'eh/org-keyword-bury nil
+                      :inherit '(modus-themes-intense-neutral org-done))
+  (set-face-attribute 'eh/org-keyword-question nil
+                      :inherit '(modus-themes-refine-blue org-todo))
+  (set-face-attribute 'eh/org-keyword-idea nil
+                      :inherit '(modus-themes-refine-cyan org-todo))
+  (set-face-attribute 'eh/org-keyword-yaks nil
+                      :inherit '(modus-themes-refine-magenta org-todo))
+  (set-face-attribute 'eh/org-keyword-done nil
+                      :inherit '(modus-themes-nuanced-green org-done)
+                      :foreground (modus-themes-color 'green-faint))
+  (set-face-attribute 'eh/org-keyword-kill nil
+                      :inherit '(modus-themes-nuanced-red org-done)
+                      :foreground (modus-themes-color 'red-faint))
+  (set-face-attribute 'eh/org-keyword-answer nil
+                      :inherit '(modus-themes-nuanced-blue org-done)
+                      :foreground (modus-themes-color 'blue-faint))
+  (set-face-attribute 'eh/org-keyword-meh nil
+                      :inherit 'eh/org-keyword-answer
+                      :foreground (modus-themes-color 'blue))
+  (set-face-attribute 'eh/org-keyword-yes nil
+                      :inherit 'eh/org-keyword-done
+                      :foreground (modus-themes-color 'green))
+  (set-face-attribute 'eh/org-keyword-no nil
+                      :inherit 'eh/org-keyword-kill
+                      :foreground (modus-themes-color 'red))
+  )
 #+end_src
 
 #+begin_src elisp
@@ -509,7 +545,7 @@ First, define a few functions that are useful to our use of Modus:
         modus-themes-markup '(background intense)
         modus-themes-links '(background)
         modus-themes-fringes nil ;; background of fringe area
-        modus-themes-mode-line '(moody accented)
+        modus-themes-mode-line '(accented)
         modus-themes-syntax '(green-strings)
         modus-themes-org-blocks 'gray-background
         modus-themes-completions '((t background intense accented))
@@ -519,7 +555,7 @@ First, define a few functions that are useful to our use of Modus:
   :init
   (modus-themes-load-themes)
   :hook
-  (modus-themes-after-load-theme . eh/set-apple-fonts)
+  ;; (modus-themes-after-load-theme . eh/set-apple-fonts)
   (modus-themes-after-load-theme . eh/modus-customize)
   (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
@@ -547,7 +583,10 @@ First, define a few functions that are useful to our use of Modus:
 (use-package bespoke-theme
   :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
 
-(load-theme 'doom-isohedron)
+;; (load-theme 'modus-operandi)
+
+;; (with-eval-after-load 'org
+;; (modus-themes-load-operandi))
 #+end_src
 *** View named colors
 #+begin_src elisp
@@ -589,19 +628,11 @@ This is really determined by which mode we load in org. I'd been using variable-
 -
 *** A better mode-line
 #+begin_src elisp
-  ;; (use-package mood-line
-  ;;   :init
-  ;;   (mood-line-mode 1))
-  ;; (use-package moody
-  ;;   :config
-  ;;   (moody-replace-mode-line-buffer-identification -1)
-  ;;   (moody-replace-vc-mode -1))
-
 (use-package nano-modeline
   :config
   (setq nano-modeline-position 'bottom
-        nano-modeline-space-top 0.4 ;; 0.15
-        nano-modeline-space-bottom -0.4 ;; -0.2
+        nano-modeline-space-top 0.15 ;; 0.15
+        nano-modeline-space-bottom -0.2 ;; -0.2
         )
   :hook (after-init . nano-modeline-mode))
 (use-package bespoke-modeline
@@ -706,7 +737,8 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
           ))
   (setq mini-frame-resize t)
   :init
-  (mini-frame-mode t))
+  ;; (mini-frame-mode t)
+  )
 #+end_src
 *** Tweak frame display
 This uses a background-color column to divide windows instead of drawing a line:
@@ -731,7 +763,7 @@ Consult is what sets the contents of those menus. It provides a really nice buff
     :demand t
     :config
     ;; Don't automatically preview things
-    (setq consult-preview-key (kbd "M=."))
+    (setq consult-preview-key (kbd "M-."))
     ;; :init
     (setq consult-project-root-function #'projectile-project-root)
     :general
@@ -887,7 +919,7 @@ Manage whitespace automatically:
 (setq-default word-wrap t)
 (setq-default truncate-lines t)
 #+end_src
-** Parentheses matching and surround
+** Parentheses matching and surround :smartparens:
 #+begin_src elisp
 (use-package smartparens
   :config
@@ -923,7 +955,7 @@ Manage whitespace automatically:
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 #+end_src
-** Pulse the line after movement
+** Pulse the line after movement :pulsar:
 #+begin_src elisp
 (use-package pulsar
   :config
@@ -937,8 +969,17 @@ Manage whitespace automatically:
   ;; Bind pulsar-pulse-line
   :init
   (pulsar-global-mode 1)
+  (add-to-list 'pulsar-pulse-functions 'org-cycle)
+  (add-to-list 'pulsar-pulse-functions 'isearch-repeat-forward)
   ;; pulsar-face
   )
+#+end_src
+** Highlight occurrences of multiple symbols :highlight_symbol:
+#+begin_src elisp
+(use-package highlight-symbol)
+;; highlight-symbol-mode for persistent highlights
+;; highlight-symbol-nav-mode for M-n / M-p navigation through occurrences
+;; highlight-symbol to highlight symbol at point
 #+end_src
 * Set up org-mode
 ** Prepare for org configuration
@@ -997,12 +1038,12 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
                "Face used for the WAIT keyword in Org"))
       (eh/org-register-keyword
        :keywords '("NEXT" "FLAG")
-       :symbol ?◦
+       :symbol ?☐ ;; ?◦
        :face (defface eh/org-keyword-next '((t :inherit org-todo))
                "Face used for the FLAG keyword in Org"))
       (eh/org-register-keyword
        :keywords '("TODO")
-       :symbol ?◦
+       :symbol ?☐ ;; ?◦
        :face (defface eh/org-keyword-todo '((t :inherit org-todo))
                "Face used for the TODO keyword in Org"))
       (eh/org-register-keyword
@@ -1017,7 +1058,7 @@ Define custom faces for all of our keywords. This allows redone styles to be loa
                "Face used for the QSTN keyword in Org"))
       (eh/org-register-keyword
        :keywords '("IDEA")
-       :symbol ?ҩ
+       :symbol ?ҩ ;; ¤φ
        :face (defface eh/org-keyword-idea '((t :inherit org-todo))
                "Face used for the IDEA keyword in Org"))
       (eh/org-register-keyword
@@ -1046,9 +1087,8 @@ Set up some basic org styling that we'll run whenever we change themes:
 
   ;; styling for headlines with keywords
   (set-face-attribute 'org-headline-todo nil
-                      :foreground (face-attribute 'default :foreground)
-                      :weight 'normal
-                      :inherit 'default)
+                      ;; :foreground (face-attribute 'default :foreground)
+                      :weight (face-attribute 'default :weight))
   (set-face-attribute 'org-headline-done nil
                       :inherit '(font-lock-comment-face default))
 
@@ -1113,14 +1153,15 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
           org-indent-mode-turns-on-hiding-stars nil
           org-hide-leading-stars nil
-          org-ellipsis "⏎"
+          org-ellipsis " ↵" ;; ↵⏎¶
           org-fontify-whole-block-delimiter-line nil
           org-fontify-whole-heading-line nil
           org-fontify-todo-headline t
           org-fontify-done-headline t
           org-src-preserve-indentation t
           org-use-fast-todo-selection 'expert
-          org-startup-truncated t)
+          org-startup-truncated t
+          org-element-use-cache nil)
     (setq org-todo-keywords
           '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
             (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
@@ -1142,7 +1183,7 @@ Set up some basic org styling that we'll run whenever we change themes:
     (org-mode . (lambda()
                   (org-indent-mode t)
                   (visual-line-mode t)
-                  (mixed-pitch-mode t)
+                  ;; (mixed-pitch-mode t)
                   ))
     (after-enable-theme . eh/org-update-theme)
     )
@@ -1205,16 +1246,17 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode))
-  :hook
-  (gfm-mode . mixed-pitch-mode)
-  (markdown-mode . mixed-pitch-mode))
+  ;; :hook
+  ;; (gfm-mode . mixed-pitch-mode)
+  ;; (markdown-mode . mixed-pitch-mode)
+  )
 #+end_src
 ** Javascript with Vue :vue:
-I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing.
+I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing. In some cases, web-mode can be better, since it supports reasonable folding for HTML elements. It's also useful to have for non-vue mixed-language templates.
 #+begin_src elisp
 (use-package vue-mode)
+(use-package web-mode)
 #+end_src
-We may also need web-mode but it's such a huge general-purpose ball of mud that I'm hesitant to add it unless it's definitely needed.
 * Things that don't work right [4/8]
 :PROPERTIES:
 :visibility: folded
@@ -1222,9 +1264,20 @@ We may also need web-mode but it's such a huge general-purpose ball of mud that 
 ** Missing bindings :bind:
 *** TODO Binding for ~org-capture~
 *** TODO Binding for ~org-agenda~
-*** TODO Binding for ~bury-buffer~
+*** KILL Binding for ~bury-buffer~
+CLOSED: [2022-04-28 Thu 16:04]
+:LOGBOOK:
+- State "KILL"       from "TODO"       [2022-04-28 Thu 16:04] \\
+  Duplicate
+:END:
 *** TODO Binding for ~eh/toggle-window-split~
+Nothing seems to be bound to =C-x w= which could be a prefix for these window arrangement things
 *** TODO Binding for ~crux-swap-windows~
+*** DONE Binding for ~bury-buffer~ could be =C-z= which is currently ~suspend-frame~
+CLOSED: [2022-04-28 Thu 16:03]
+:LOGBOOK:
+- State "DONE"       from "TODO"       [2022-04-28 Thu 16:03]
+:END:
 ** BURY Something is getting the todo keyword colors stuck in weird states
 The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
 - Loaded isohedron with =M-x load-theme= and everything looks good
