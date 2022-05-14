@@ -1162,6 +1162,8 @@ Set up some basic org styling that we'll run whenever we change themes:
           org-use-fast-todo-selection 'expert
           org-startup-truncated t
           org-element-use-cache nil)
+
+    (setq org-src-window-setup 'current-window)
     (setq org-todo-keywords
           '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
             (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
@@ -1179,6 +1181,15 @@ Set up some basic org styling that we'll run whenever we change themes:
              (file+headline "~/.scratch-config/revision.org" "Missing bindings")
              "* TODO Binding for %?")
             ))
+
+    ;; Each function will be called with no arguments.  The function
+    ;; must check if the context is appropriate for it to act.  If yes,
+    ;; it should do its thing and then return a non-nil value.  If the
+    ;; context is wrong, just do nothing and return nil.
+    (defun eh/hook-edit-src-block ()
+      (cond ((org-in-src-block-p) (org-edit-src-code))))
+    :general
+    (:keymap 'org-src-mode-map "C-c C-c" #'org-edit-src-exit)
     :hook
     (org-mode . (lambda()
                   (org-indent-mode t)
@@ -1186,6 +1197,7 @@ Set up some basic org styling that we'll run whenever we change themes:
                   ;; (mixed-pitch-mode t)
                   ))
     (after-enable-theme . eh/org-update-theme)
+    (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
     )
 #+end_src
 ** Making org prettier :org_superstar:
