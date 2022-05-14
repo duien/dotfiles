@@ -17,6 +17,13 @@ I've been using my scratch config full-time for a while, and I think I'm ready f
 I've found that I strongly dislike the huge blocks I end up writing for some of the more  complex packages. It puts too many things in one place to really do the literate thing. But I refuse to have individual blocks that aren't a complete sexp.
 There are a couple options to deal with this. There's a sort of constant substitution thing, which requires listing out all the sections that will be inserted. What I want is to be able to use something like Rails' ~content-for~ directives. The sections I want correspond to the keywords of the ~use-package~ 
 This could probably be done with a macro but that frightens me.
+** Which emacs to use?
+The options are basically emacs-plus or emacs-mac. Until recently, emacs-plus was the only /real/ option, since emacs-mac was stuck on 27, but now they both have 28.1 available
+*** Advantages of emacs-mac
+- Mostly ~mac-auto-operator-composition-mode~
+*** Advantages of emacs-plus
+- I'm not sure, but I get the impression it's more standard
+- There are hooks for when system appearance changes between light and dark, and the title bar actually works without ~defaults write~ shennanigans
 * Notes on key commands
 :PROPERTIES:
 :visibility: all
@@ -336,9 +343,6 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
   (set-face-attribute 'variable-pitch nil
                       :font "Cascadia Code"
                       :height 160 :weight 'light)
-  ;; hack
-  (set-face-attribute 'font-lock-function-name-face nil
-                      :weight 'medium)
   )
 #+end_src
 *** With Operator fonts
@@ -414,10 +418,9 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
 ;; (eh/set-victor-fonts)
 ;; (eh/set-input-fonts)
 ;; (eh/set-sudo-fonts)
-;; (eh/set-apple-fonts)
-;; (eh/set-monolisa-fonts)
+;; (eh/set-simple-apple-fonts)
+(eh/set-monolisa-fonts)
 ;; (add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
-(add-hook 'after-enable-theme-hook #'eh/set-monolisa-fonts)
 #+end_src
 
 Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with changing fonts after the fact (even after toggling the mode)
@@ -436,16 +439,14 @@ Turn on automatic ligatures if the feature is available:
 Or turn it on the hard way:
 #+begin_src elisp
 (use-package ligature
+  :if (not (fboundp 'mac-auto-operator-composition-mode))
   :straight
   '(ligature :type git :host github
              :repo "mickeynp/ligature.el")
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
-  ;; Enable traditional ligature support in eww-mode, if the
-  ;; `variable-pitch' face supports it
-  (ligature-set-ligatures 'eww-mode '("ff" "fi" "ffi"))
-  ;; Enable all Cascadia Code ligatures in programming modes
+  ;; Enable some common and uncommon ligature in programming modes
   (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
                                        ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
                                        "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
@@ -465,7 +466,7 @@ Or turn it on the hard way:
                                        "[WARN]" "[WARN ]" "[WARNING]"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
-  ;; (global-ligature-mode t)
+  (global-ligature-mode t)
   )
 #+end_src
 ** Color Theming
@@ -557,7 +558,6 @@ First, define a few functions that are useful to our use of Modus:
   :hook
   ;; (modus-themes-after-load-theme . eh/set-apple-fonts)
   (modus-themes-after-load-theme . eh/modus-customize)
-  (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
 *** Set up some alternate color themes
@@ -587,6 +587,7 @@ First, define a few functions that are useful to our use of Modus:
 
 ;; (with-eval-after-load 'org
 ;; (modus-themes-load-operandi))
+(modus-themes-load-operandi)
 #+end_src
 *** View named colors
 #+begin_src elisp
@@ -1087,7 +1088,6 @@ Set up some basic org styling that we'll run whenever we change themes:
 
   ;; styling for headlines with keywords
   (set-face-attribute 'org-headline-todo nil
-                      ;; :foreground (face-attribute 'default :foreground)
                       :weight (face-attribute 'default :weight))
   (set-face-attribute 'org-headline-done nil
                       :inherit '(font-lock-comment-face default))
@@ -1137,68 +1137,74 @@ Set up some basic org styling that we'll run whenever we change themes:
 #+end_src
 ** Basic configuration :org:
 #+begin_src elisp
-  (use-package org
-    :config
-    (eh/define-org-keywords)
-    (eh/org-update-theme)
-    ;; :init
-    (setq org-directory "~/Org/"
-          org-agenda-files '("~/Org/")
-          org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
-          org-log-done t
-          org-log-into-drawer t
-          org-insert-heading-respect-content t
-          org-M-RET-may-split-line '((default . t))
-          org-todo-fast-selection 'expert
-          org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
-          org-indent-mode-turns-on-hiding-stars nil
-          org-hide-leading-stars nil
-          org-ellipsis " ↵" ;; ↵⏎¶
-          org-fontify-whole-block-delimiter-line nil
-          org-fontify-whole-heading-line nil
-          org-fontify-todo-headline t
-          org-fontify-done-headline t
-          org-src-preserve-indentation t
-          org-use-fast-todo-selection 'expert
-          org-startup-truncated t
-          org-element-use-cache nil)
+(use-package org
+  :config
+  (eh/define-org-keywords)
+  (eh/org-update-theme)
+  ;; :init
+  (setq org-directory "~/Org/"
+        org-agenda-files '("~/Org/")
+        org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
+        org-log-done t
+        org-log-into-drawer t
+        org-insert-heading-respect-content t
+        org-M-RET-may-split-line '((default . t))
+        org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
+        org-indent-mode-turns-on-hiding-stars nil
+        org-hide-leading-stars nil
+        org-ellipsis " ↵" ;; ↵⏎¶
+        org-fontify-whole-block-delimiter-line nil
+        org-fontify-whole-heading-line nil
+        org-fontify-todo-headline t
+        org-fontify-done-headline t
+        org-src-preserve-indentation t
+        org-use-fast-todo-selection 'expert
+        org-startup-truncated t
+        org-element-use-cache nil
+        org-element-cache-persist nil
+        org-ctrl-k-protect-subtree t
+        org-fold-catch-invisible-edits 'show
+        org-blank-before-new-entry '((heading . nil)
+                                     (plain-list-item . nil)))
 
-    (setq org-src-window-setup 'current-window)
-    (setq org-todo-keywords
-          '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
-            (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
-            (type "IDEA(i)" "YAKS(y)" "GOAL(g)" "|")
-            ))
 
-    (setq org-capture-templates
-          '(("t" "Some thing" entry (file "~/Org/inbox.org")
-             "* TODO %?\n%a\n%i")
-            ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
-             "* TODO %?\n%a\n%i")
-            ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
-             "* YAKS %?\n%a\n%i")
-            ("b" "Key binding" entry
-             (file+headline "~/.scratch-config/revision.org" "Missing bindings")
-             "* TODO Binding for %?")
-            ))
+  (setq org-src-window-setup 'current-window)
+  (setq org-todo-keywords
+        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
+          (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
+          (type "IDEA(i)" "YAKS(y)" "GOAL(g)" "|")
+          ))
 
-    ;; Each function will be called with no arguments.  The function
-    ;; must check if the context is appropriate for it to act.  If yes,
-    ;; it should do its thing and then return a non-nil value.  If the
-    ;; context is wrong, just do nothing and return nil.
-    (defun eh/hook-edit-src-block ()
-      (cond ((org-in-src-block-p) (org-edit-src-code))))
-    :general
-    (:keymap 'org-src-mode-map "C-c C-c" #'org-edit-src-exit)
-    :hook
-    (org-mode . (lambda()
-                  (org-indent-mode t)
-                  (visual-line-mode t)
-                  ;; (mixed-pitch-mode t)
-                  ))
-    (after-enable-theme . eh/org-update-theme)
-    (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
-    )
+  (setq org-capture-templates
+        '(("t" "Some thing" entry (file "~/Org/inbox.org")
+           "* TODO %?\n%a\n%i")
+          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
+           "* TODO %?\n%a\n%i")
+          ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
+           "* YAKS %?\n%a\n%i")
+          ("b" "Key binding" entry
+           (file+headline "~/.scratch-config/revision.org" "Missing bindings")
+           "* TODO Binding for %?")
+          ))
+
+  ;; Each function will be called with no arguments.  The function
+  ;; must check if the context is appropriate for it to act.  If yes,
+  ;; it should do its thing and then return a non-nil value.  If the
+  ;; context is wrong, just do nothing and return nil.
+  (defun eh/hook-edit-src-block ()
+    (cond ((org-in-src-block-p) (org-edit-src-code))))
+  :general
+  (:keymap 'org-src-mode-map "C-c C-c" #'org-edit-src-exit)
+  :hook
+  (org-mode . (lambda()
+                (org-indent-mode t)
+                (visual-line-mode t)
+                ;; (mixed-pitch-mode t)
+                ))
+  (after-enable-theme . eh/org-update-theme)
+  (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
+  (modus-themes-after-load-theme . eh/org-update-modus-theme)
+  )
 #+end_src
 ** Making org prettier :org_superstar:
 #+begin_src elisp
@@ -1269,7 +1275,7 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 (use-package web-mode)
 #+end_src
-* Things that don't work right [4/8]
+* Things that don't work right [5/9]
 :PROPERTIES:
 :visibility: folded
 :END:
@@ -1342,7 +1348,8 @@ These case-changers just litter files I visit with random case-changes.
 - =M-l= downcase-word (=C-x C-l= is downcase-region, there's unbound ~capitalize-dwim~ that will do region or word)
 - =M-c= capitalize-word
 - =M-u= upcase-word
-** IDEA Put tags on headline with the names of packages/modes
+** NO Put tags on headline with the names of packages/modes
+CLOSED: [2022-05-13 Fri 23:06]
 Another option might be to put names on all the source blocks and navigate by those somehow
 Starting to add this, and while I like the look, it seems like they'll get out of date
 * Footnotes
