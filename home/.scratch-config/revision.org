@@ -69,6 +69,14 @@ Set up some very basic (and mostly self-explanatory) options:
       )
 #+end_src
 
+When we turn on visual line mode, turn off mouse wheel tilt scroll:
+#+begin_src elisp
+(defun eh/disable-horiz-scroll-with-visual-line ()
+  (setq-local mouse-wheel-tilt-scroll (not visual-line-mode)))
+(add-hook 'visual-line-mode-hook 'eh/disable-horiz-scroll-with-visual-line)
+#+end_src
+
+
 Putting these here instead of in =early-init= means we get a brief glimpse of the default window position, then resize, but it also means that they respect our actual font size.
 #+begin_src elisp
 (push '(width . 100) default-frame-alist)
@@ -80,7 +88,8 @@ Putting these here instead of in =early-init= means we get a brief glimpse of th
 
 Always allow `y' instead of `yes' in all prompts
 #+begin_src elisp
-(defalias 'yes-or-no-p 'y-or-n-p)
+;; (defalias 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 #+end_src
 
 If you type over a selection, delete it first
@@ -110,6 +119,7 @@ If you type over a selection, delete it first
 (winner-mode t) ;; undo/redo window layout changes
 (show-paren-mode t)
 (display-time-mode -1)
+(setq bookmark-set-fringe-mark nil)
 #+end_src
 ** Set up reasonable indentation defaults
 Attempt to make indentation do sensible things:
@@ -182,6 +192,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   :demand t)
 (general-define-key "<help> F" 'describe-face)
 (general-define-key "C-x z" 'bury-buffer)
+(global-unset-key (kbd "C-x m"))
 #+end_src
 * How it looks
 ** Set up typography
@@ -409,6 +420,34 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
   (eh/set-fancy-apple-fonts)
   )
 #+end_src
+*** With JetBrains
+#+begin_src elisp
+(defun eh/set-jetbrains-fonts ()
+  (set-face-attribute 'default nil
+                      :family "JetBrains Mono"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "JetBrains Mono"
+                      :height 160 :weight 'light)
+  (set-face-attribute 'variable-pitch nil
+                      :font "JetBrains Mono"
+                      :height 160 :weight 'light)
+  )
+#+end_src
+*** With Attribute fonts
+#+begin_src elisp
+(defun eh/set-attribute-fonts ()
+  (set-face-attribute 'default nil
+                      :family "Attribute Mono"
+                      :height 160 :weight 'regular)
+  (set-face-attribute 'fixed-pitch nil
+                      :font "Attribute Mono"
+                      :height 160 :weight 'regular)
+  (set-face-attribute 'variable-pitch nil
+                      :font "Attribute Mono"
+                      :height 160 :weight 'regular)
+  )
+#+end_src
 
 *** And finally, enable a font!
 #+begin_src elisp
@@ -419,7 +458,8 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
 ;; (eh/set-input-fonts)
 ;; (eh/set-sudo-fonts)
 ;; (eh/set-simple-apple-fonts)
-(eh/set-monolisa-fonts)
+;; (eh/set-monolisa-fonts)
+(eh/set-jetbrains-fonts)
 ;; (add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
 #+end_src
 
@@ -488,6 +528,20 @@ First, define a few functions that are useful to our use of Modus:
 (defun eh/modus-customize ()
   (set-face-attribute 'font-lock-string-face nil :slant 'italic)
   ;; (set-face-attribute 'org-document-title nil :height 1.5)
+  (set-face-attribute 'window-divider nil
+                      :foreground (modus-themes-color 'bg-main))
+  (set-face-attribute 'window-divider-first-pixel nil
+                      :foreground (modus-themes-color 'bg-main))
+  (set-face-attribute 'window-divider-last-pixel nil
+                      :foreground (modus-themes-color 'bg-main))
+
+  ;; for mini-frame-mode, match border to child frame background
+  (set-face-attribute 'child-frame-border nil
+                      :background (modus-themes-color 'bg-inactive))
+  ;; (set-face-attribute 'org-agenda-structure nil
+  ;;                     :background 'unspecified
+  ;;                     :foreground 'unspecified
+  ;;                     :inherit '(modus-themes-markup-macro))
   )
 
 (defun eh/load-theme (appearance)
@@ -503,7 +557,9 @@ First, define a few functions that are useful to our use of Modus:
   (set-face-attribute 'eh/org-keyword-todo nil
                       :inherit '(modus-themes-refine-green org-todo))
   (set-face-attribute 'eh/org-keyword-next nil
-                      :inherit '(modus-themes-refine-yellow org-todo))
+                      :background (modus-themes-color 'yellow-graph-0-bg)
+                      :foreground (modus-themes-color 'orange-intense)
+                      :inherit '(org-todo))
   (set-face-attribute 'eh/org-keyword-halt nil
                       :inherit '(modus-themes-intense-red org-todo))
   (set-face-attribute 'eh/org-keyword-bury nil
@@ -511,9 +567,9 @@ First, define a few functions that are useful to our use of Modus:
   (set-face-attribute 'eh/org-keyword-question nil
                       :inherit '(modus-themes-refine-blue org-todo))
   (set-face-attribute 'eh/org-keyword-idea nil
-                      :inherit '(modus-themes-refine-cyan org-todo))
-  (set-face-attribute 'eh/org-keyword-yaks nil
                       :inherit '(modus-themes-refine-magenta org-todo))
+  (set-face-attribute 'eh/org-keyword-read nil
+                      :inherit '(modus-themes-special-warm org-todo))
   (set-face-attribute 'eh/org-keyword-done nil
                       :inherit '(modus-themes-nuanced-green org-done)
                       :foreground (modus-themes-color 'green-faint))
@@ -524,14 +580,15 @@ First, define a few functions that are useful to our use of Modus:
                       :inherit '(modus-themes-nuanced-blue org-done)
                       :foreground (modus-themes-color 'blue-faint))
   (set-face-attribute 'eh/org-keyword-meh nil
-                      :inherit 'eh/org-keyword-answer
-                      :foreground (modus-themes-color 'blue))
+                      :inherit '(modus-themes-subtle-neutral org-done))
   (set-face-attribute 'eh/org-keyword-yes nil
                       :inherit 'eh/org-keyword-done
                       :foreground (modus-themes-color 'green))
   (set-face-attribute 'eh/org-keyword-no nil
                       :inherit 'eh/org-keyword-kill
                       :foreground (modus-themes-color 'red))
+  (set-face-attribute 'eh/org-keyword-rode nil
+                      :inherit '(modus-themes-nuanced-yellow org-done))
   )
 #+end_src
 
@@ -551,6 +608,10 @@ First, define a few functions that are useful to our use of Modus:
         modus-themes-org-blocks 'gray-background
         modus-themes-completions '((t background intense accented))
         modus-themes-region '(bg-only accented)
+        modus-themes-org-agenda '((header-block . (no-scale))
+                                  (header-date . (bold-today underline-today))
+                                  (scheduled . (rainbow))
+                                  (event . (varied italic)))
         )
   ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   :init
@@ -623,6 +684,7 @@ This is really determined by which mode we load in org. I'd been using variable-
 *** Show horizontal rules instead of =^L= 
 #+begin_src elisp
 (use-package form-feed
+  :ensure t
   :init
   (form-feed-mode t))
 #+end_src
@@ -631,10 +693,13 @@ This is really determined by which mode we load in org. I'd been using variable-
 #+begin_src elisp
 (use-package nano-modeline
   :config
-  (setq nano-modeline-position 'bottom
+  (setq nano-modeline-position 'top
         nano-modeline-space-top 0.15 ;; 0.15
         nano-modeline-space-bottom -0.2 ;; -0.2
+        nano-modeline-prefix-padding t
+        nano-modeline-prefix 'status
         )
+  
   :hook (after-init . nano-modeline-mode))
 (use-package bespoke-modeline
   :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
@@ -880,6 +945,14 @@ Crux has lots of handy utility functions. These are a few of the best:
   )
 #+end_src
 
+Make the current window strongly dedicated to the current buffer (don't allow commands to replace the buffer). Main use case is a single-window frame that shows my org file and won't accidentally get replaced with something else when (for instance) opening a file from the command line.
+#+begin_src elisp
+(defun eh/anchor-buffer ()
+  (interactive)
+  (set-window-dedicated-p (get-buffer-window (current-buffer)) t))
+#+end_src
+
+
 Expanding the region incrementally is incredibly helpful:
 #+begin_src elisp
 (use-package expand-region
@@ -987,87 +1060,116 @@ Manage whitespace automatically:
 
 Define custom faces for all of our keywords. This allows redone styles to be loaded without reload org-mode
 #+begin_src elisp
-    (cl-defun eh/org-register-keyword (&key keywords face symbol)
-      (dolist (key keywords)
-        (add-to-list 'org-todo-keyword-faces `(,key . ,face))
-        (add-to-list 'org-superstar-todo-bullet-alist `(,key . ,symbol))
-      ))
-    (defun eh/define-org-keywords ()
-      ;; Register all variations of keywords with faces and symbols
-      ;; Only the ones included in `org-todo-keywords' will be
-      ;; activated by default, but the others will still be styled
-      ;; if activated by buffer properties
+(cl-defun eh/org-register-keyword (&key keywords face symbol)
+  (dolist (key keywords)
+    (add-to-list 'org-todo-keyword-faces `(,key . ,face))
+    (add-to-list 'org-superstar-todo-bullet-alist `(,key . ,symbol))
+    ))
+#+end_src
+** Define org keywords
+I've been slowly refining this set of org keywords for a very long time. But that evolution also means that sometimes I forget what was the new meaning vs. the old meaning for things.
 
-      ;; First, clear out (and register) the two lists we're building up
-      (setq org-todo-keyword-faces '()
-            org-superstar-todo-bullet-alist '())
+*** The keywords themselves
+So, here are the keywords as they stand now, and what the intention is for each one. First the incomplete items and then the completed ones. Certain types of items tend to use certain types of completions, but it's not a hard and fast rule
 
-      (eh/org-register-keyword
-       :keywords '("DONE")
-       :symbol ?✓
-       :face (defface eh/org-keyword-done '((t :inherit org-done))
-               "Face used for the DONE keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("KILL" "CANCEL")
-       :symbol ?×
-       :face (defface eh/org-keyword-kill '((t :inherit org-done))
-               "Face used for the KILL keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("ANSWER" "ANSR")
-       :symbol ?·
-       :face (defface eh/org-keyword-answer '((t :inherit org-done))
-               "Face used for the ANSR keywork in Org"))
-      (eh/org-register-keyword
-       :keywords '("MEH" "OK")
-       :symbol ?·
-       :face (defface eh/org-keyword-meh '((t :inherit org-done))
-               "Face used for the OK keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("YES")
-       :symbol ?·
-       :face (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
-               "Face used for the YES keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("NO")
-       :symbol ?·
-       :face (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
-               "Face used for the NO keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("BURY" "WAIT" "HOLD" "LATER")
-       :symbol ?~
-       :face (defface eh/org-keyword-bury '((t :inherit org-todo))
-               "Face used for the WAIT keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("NEXT" "FLAG")
-       :symbol ?☐ ;; ?◦
-       :face (defface eh/org-keyword-next '((t :inherit org-todo))
-               "Face used for the FLAG keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("TODO")
-       :symbol ?☐ ;; ?◦
-       :face (defface eh/org-keyword-todo '((t :inherit org-todo))
-               "Face used for the TODO keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("HALT" "BLOK" "BLOCK")
-       :symbol ?◊
-       :face (defface eh/org-keyword-halt '((t :inherit org-todo))
-               "Face used for the BLOK keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("QUEST" "QSTN" "QUESTION")
-       :symbol ??
-       :face (defface eh/org-keyword-question '((t :inherit org-todo))
-               "Face used for the QSTN keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("IDEA")
-       :symbol ?ҩ ;; ¤φ
-       :face (defface eh/org-keyword-idea '((t :inherit org-todo))
-               "Face used for the IDEA keyword in Org"))
-      (eh/org-register-keyword
-       :keywords '("YAKS" "YAK")
-       :symbol ?∞
-       :face (defface eh/org-keyword-yaks '((t :inherit org-todo))
-               "Face used for the YAK keyword in Org"))
-      )
+**** TODO A task that needs to be done, or a problem that needs to be solved. No question about whether it's a good idea
+**** IDEA Something to think about doing, but that requires investigation. Maybe it's not thought all the way through yet, maybe I'm not sure yet if it's a /good/ idea. Sort of like a spike for a programming project
+**** READ A blog post or article that I think has information I want. It might fill in information I need to answer a question, or it might be inspiration for some new ideas or tasks
+**** QUEST A question that needs an answer. Might be yes/no, might be something requiring research and producing some sort of output
+**** BURY Is for things that have lost relevance or importance, but might come back later. The back-burner.
+**** NEXT For a larger project, the thing to focus on to move it forward. Also a way to flag things that I want to get to soon, sort of like the star in Things. Possibly would be better represented by priority, but I like a separate keyword
+**** HALT Something that needs to be moving forward but can't for some external reason. Basically means blocked, but is 4 letters long
+**** DONE The basic successful completion of something. Used for basically anything other than questions
+**** KILL Something that I've decided against doing or that is no longer relevant
+**** YES is a fairly self-explanatory answer to questions
+**** NO goes along with it
+**** ANSWER records the results of a question that required more research. Likely to contain interesting and valuable things
+**** MEH A question that I've decided I no longer care about. Either not worth answering or the answer no longer matters. The equivalent of kill
+**** RODE would be a very silly past tense of read.
+*** Define the keywords
+  
+#+begin_src elisp
+(defun eh/define-org-keywords ()
+  ;; Register all variations of keywords with faces and symbols
+  ;; Only the ones included in `org-todo-keywords' will be
+  ;; activated by default, but the others will still be styled
+  ;; if activated by buffer properties
+
+  ;; First, clear out (and register) the two lists we're building up
+  (setq org-todo-keyword-faces '()
+        org-superstar-todo-bullet-alist '())
+
+  (eh/org-register-keyword
+   :keywords '("DONE")
+   :symbol ?✓
+   :face (defface eh/org-keyword-done '((t :inherit org-done))
+           "Face used for the DONE keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("KILL" "CANCEL")
+   :symbol ?× ;; ✗ ;;×
+   :face (defface eh/org-keyword-kill '((t :inherit org-done))
+           "Face used for the KILL keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("ANSWER" "ANSR")
+   :symbol ?·
+   :face (defface eh/org-keyword-answer '((t :inherit org-done))
+           "Face used for the ANSR keywork in Org"))
+  (eh/org-register-keyword
+   :keywords '("MEH" "OK")
+   :symbol ?·
+   :face (defface eh/org-keyword-meh '((t :inherit org-done))
+           "Face used for the OK keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("YES")
+   :symbol ?·
+   :face (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
+           "Face used for the YES keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("NO")
+   :symbol ?·
+   :face (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
+           "Face used for the NO keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("RODE")
+   :symbol ?·
+   :face (defface eh/org-keyword-rode '((t :inherit 'org-done))
+           "Face used for RODE keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("BURY" "WAIT" "HOLD" "LATER")
+   :symbol ?~
+   :face (defface eh/org-keyword-bury '((t :inherit org-todo))
+           "Face used for the WAIT keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("NEXT" "FLAG")
+   :symbol ?● ;;◯ ;;☐ ;; ?◦●
+   :face (defface eh/org-keyword-next '((t :inherit org-todo))
+           "Face used for the FLAG keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("TODO")
+   :symbol ?◯ ;;☐ ;; ?◦
+   :face (defface eh/org-keyword-todo '((t :inherit org-todo))
+           "Face used for the TODO keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("HALT" "BLOK" "BLOCK")
+   :symbol ?▲ ;;△ ;;◊▲
+   :face (defface eh/org-keyword-halt '((t :inherit org-todo))
+           "Face used for the BLOK keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("QUEST" "QSTN" "QUESTION")
+   :symbol ?◇ ;;?
+   :face (defface eh/org-keyword-question '((t :inherit org-todo))
+           "Face used for the QSTN keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("IDEA" "YAKS" "YAK")
+   :symbol ?◌ ;; ∞ ҩ ¤ φ
+   :face (defface eh/org-keyword-idea '((t :inherit org-todo))
+           "Face used for the IDEA keyword in Org"))
+  (eh/org-register-keyword
+   :keywords '("READ")
+   :symbol ?◇
+   :face (defface eh/org-keyword-read '((t :inherit org-todo))
+           "Face used for the READ keyword in Org"))
+  )
 #+end_src
 
 Set up some basic org styling that we'll run whenever we change themes:
@@ -1093,47 +1195,72 @@ Set up some basic org styling that we'll run whenever we change themes:
                       :inherit '(font-lock-comment-face default))
 
   ;; set things up for mixed/variable pitch
-  (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  ;; (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
 
+  ;; Unset the foreground and background of my org faces
+  ;; try pulling the list from org-todo-keyword-faces
+  (dolist (face
+           '(org-todo
+             org-done
+             eh/org-keyword-todo
+             eh/org-keyword-question
+             eh/org-keyword-idea
+             eh/org-keyword-next
+             eh/org-keyword-bury
+             eh/org-keyword-halt
+             eh/org-keyword-read
+             eh/org-keyword-answer
+             eh/org-keyword-yes
+             eh/org-keyword-no
+             eh/org-keyword-meh
+             eh/org-keyword-kill
+             eh/org-keyword-rode
+             ))
+    (set-face-attribute face nil
+                        :foreground 'unspecified
+                        :background 'unspecified))
+  
   ;; Now set up theme-specific things?
-  (when (eq (car custom-enabled-themes) 'doom-isohedron)
-    (message "Setting up org faces for Isohedron")
-    (set-face-attribute 'org-todo nil
-                        :foreground (doom-color 'bg)
-                        :background (doom-color 'fw-base3))
-    (set-face-attribute 'eh/org-keyword-todo nil
-                        :background (doom-color 'fw-green))
-    (set-face-attribute 'eh/org-keyword-question nil
-                        :background (doom-color 'fw-blue))
-    (set-face-attribute 'eh/org-keyword-idea nil
-                        :background (doom-color 'fw-teal))
-    (set-face-attribute 'eh/org-keyword-yaks nil
-                        :background (doom-color 'fw-purple))
-    (set-face-attribute 'eh/org-keyword-next nil
-                        :foreground (doom-color 'fw-yellow-text)
-                        :background (doom-color 'fw-yellow))
-    (set-face-attribute 'eh/org-keyword-bury nil
-                        :foreground (doom-color 'fg-alt)
-                        :background (doom-color 'fw-base5))
-    (set-face-attribute 'eh/org-keyword-answer nil
-                        :foreground (doom-color 'fw-blue))
-    (set-face-attribute 'eh/org-keyword-yes nil
-                        :foreground (doom-color 'fw-green))
-    (set-face-attribute 'eh/org-keyword-no nil
-                        :foreground (doom-color 'fw-red))
-    (set-face-attribute 'eh/org-keyword-meh nil
-                        :foreground (doom-color 'fg-alt))
-    (set-face-attribute 'eh/org-keyword-done nil
-                        :foreground (doom-color 'fg-alt))
-    (set-face-attribute 'eh/org-keyword-kill nil
-                        :foreground (doom-color 'fg-alt))
-    )
+  (pcase (car custom-enabled-themes)
+    ((or 'modus-operandi 'modus-vivendi)
+     (message "Setting up org faces for Modus")
+     (eh/org-update-modus-theme))
+    ('doom-isohedron
+     (message "Setting up org faces for Isohedron")
+     (set-face-attribute 'org-todo nil
+                         :foreground (doom-color 'bg)
+                         :background (doom-color 'fw-base3))
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :background (doom-color 'fw-green))
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :background (doom-color 'fw-blue))
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :background (doom-color 'fw-purple))
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :foreground (doom-color 'fw-yellow-text)
+                         :background (doom-color 'fw-yellow))
+     (set-face-attribute 'eh/org-keyword-bury nil
+                         :foreground (doom-color 'fg-alt)
+                         :background (doom-color 'fw-base5))
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :foreground (doom-color 'fw-blue))
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :foreground (doom-color 'fw-green))
+     (set-face-attribute 'eh/org-keyword-no nil
+                         :foreground (doom-color 'fw-red))
+     (set-face-attribute 'eh/org-keyword-meh nil
+                         :foreground (doom-color 'fg-alt))
+     (set-face-attribute 'eh/org-keyword-done nil
+                         :foreground (doom-color 'fg-alt))
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :foreground (doom-color 'fg-alt))
+     ))
   )
 
-  ;; (eh/org-update-theme)
+;; (eh/org-update-theme)
 #+end_src
 ** Basic configuration :org:
 #+begin_src elisp
@@ -1152,7 +1279,6 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
-        org-ellipsis " ↵" ;; ↵⏎¶
         org-fontify-whole-block-delimiter-line nil
         org-fontify-whole-heading-line nil
         org-fontify-todo-headline t
@@ -1163,16 +1289,21 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-element-use-cache nil
         org-element-cache-persist nil
         org-ctrl-k-protect-subtree t
+        org-tags-column 0
+        org-auto-align-tags nil
         org-fold-catch-invisible-edits 'show
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil)))
-
-
+  ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯
+  (setq org-ellipsis " ⋯")
   (setq org-src-window-setup 'current-window)
+  (setq org-agenda-window-setup 'other-window
+        org-agenda-restore-windows-after-quit t)
   (setq org-todo-keywords
         '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
           (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
-          (type "IDEA(i)" "YAKS(y)" "GOAL(g)" "|")
+          (type "IDEA(i)" "GOAL(g)" "|")
+          (sequence "READ(R)" "|" "RODE(r)")
           ))
 
   (setq org-capture-templates
@@ -1181,11 +1312,42 @@ Set up some basic org styling that we'll run whenever we change themes:
           ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
            "* TODO %?\n%a\n%i")
           ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
-           "* YAKS %?\n%a\n%i")
+           "* TODO %?\n%a\n%i")
           ("b" "Key binding" entry
            (file+headline "~/.scratch-config/revision.org" "Missing bindings")
            "* TODO Binding for %?")
           ))
+
+  ;; Set up custom agenda
+  (defun eh/org-skip-subtree-if-bury ()
+    "If this entry has the BURY keyword, skip it and its children"
+    (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+      (if (string= (org-get-todo-state) "BURY")
+          subtree-end
+        nil)))
+  (setq org-agenda-custom-commands
+        '(("w" "Agenda and work-related tasks"
+           ((agenda "Calendar" ((org-agenda-span 1))
+                    ((org-agenda-overriding-header "Today")
+                     (org-agenda-use-time-grid nil)))
+            (todo "NEXT|HALT" ((org-agenda-overriding-header "Look here first")))
+            (todo ""
+                  ((org-agenda-overriding-header "Get things done")
+                   (org-agenda-sorting-strategy '(priority-down))
+                   (org-agenda-todo-ignore-with-date t)
+                   (org-agenda-skip-function
+                    '(or
+                      (eh/org-skip-subtree-if-bury)
+                      (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "BURY" "GOAL"))
+                      ))
+                   ))
+            (todo "READ" ((org-agenda-overriding-header "Do some reading")))
+            (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
+           ((org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
+            (org-agenda-tag-filter-preset '("-meta"))
+            ;; (org-agenda-compact-blocks t)
+            (org-agenda-prefix-format "  %?s"))
+           )))
 
   ;; Each function will be called with no arguments.  The function
   ;; must check if the context is appropriate for it to act.  If yes,
@@ -1203,7 +1365,7 @@ Set up some basic org styling that we'll run whenever we change themes:
                 ))
   (after-enable-theme . eh/org-update-theme)
   (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
-  (modus-themes-after-load-theme . eh/org-update-modus-theme)
+  ;; (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
 ** Making org prettier :org_superstar:
@@ -1275,83 +1437,6 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package vue-mode)
 (use-package web-mode)
 #+end_src
-* Things that don't work right [5/9]
-:PROPERTIES:
-:visibility: folded
-:END:
-** Missing bindings :bind:
-*** TODO Binding for ~org-capture~
-*** TODO Binding for ~org-agenda~
-*** KILL Binding for ~bury-buffer~
-CLOSED: [2022-04-28 Thu 16:04]
-:LOGBOOK:
-- State "KILL"       from "TODO"       [2022-04-28 Thu 16:04] \\
-  Duplicate
-:END:
-*** TODO Binding for ~eh/toggle-window-split~
-Nothing seems to be bound to =C-x w= which could be a prefix for these window arrangement things
-*** TODO Binding for ~crux-swap-windows~
-*** DONE Binding for ~bury-buffer~ could be =C-z= which is currently ~suspend-frame~
-CLOSED: [2022-04-28 Thu 16:03]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-28 Thu 16:03]
-:END:
-** BURY Something is getting the todo keyword colors stuck in weird states
-The automatic theme change might be where things are going wrong. Or maybe it's modus. It seems like ... wait ... I did a few switches in a row and now the keyword colors are gone entirely.
-- Loaded isohedron with =M-x load-theme= and everything looks good
-I suspect I need to do something smarter with my various ~set-face-attribute~ calls. They get overridden by themes, but they don't ever get explicitly unset, so they tend to interact strangely. 
-** TODO tab after fold indicator
-** DONE persistent scratch can get lost in some situations
-CLOSED: [2022-04-17 Sun 20:52]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-17 Sun 20:52]
-:END:
-It needs backup. I saw some sort of dismissive comment about how you just need to have it, but it's not actually clear /how/ to have it. Was is a different package?
-** DONE Use expert mode for todo state input
-CLOSED: [2022-04-17 Sun 20:34]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-17 Sun 20:34]
-:END:
-** BURY footnote inside table messes up alignment (mixed pitch hierarchy issue)
-Footnote face inherits from button (in modus)
-This same issue exists in Isohedron and that face just sets a foreground
-This is something to do with org faces overlapping... there's a lot of weird there
-** DONE Out with centaur-tabs, in with bufler
-CLOSED: [2022-04-17 Sun 19:18]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-17 Sun 19:18]
-:END:
-*** DONE Get rid of centaur-tabs
-CLOSED: [2022-04-16 Sat 11:47]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-16 Sat 11:47]
-:END:
-*** KILL Set up some keybindings for bufler
-CLOSED: [2022-04-17 Sun 19:18]
-:LOGBOOK:
-- State "KILL"       from "TODO"       [2022-04-17 Sun 19:18]
-:END:
-** DONE Configure the more secondary consult functions
-CLOSED: [2022-04-17 Sun 14:28]
-:LOGBOOK:
-- State "DONE"       from "TODO"       [2022-04-17 Sun 14:28] \\
-  There's more I'd like to do, specifically in projects, but this gets the basic buffer functions set up
-:END:
-For instance, =C-x b= uses ~consult-buffer~ but =C-x 4 b= uses the default
-** TODO When org marks something as done and that gives it content for the first time, it should be automatically folded
-If it's already folded, it stays that way, so it does think about folding (I think?)
-** Pulsar additions
-*** TODO Add a highlight (persistent) to headline during ~org-archive-subtree-default~
-*** TODO Pulse when cycling org headlines scrolls the buffer
-** Commands to unbind :bind:
-These case-changers just litter files I visit with random case-changes.
-- =M-l= downcase-word (=C-x C-l= is downcase-region, there's unbound ~capitalize-dwim~ that will do region or word)
-- =M-c= capitalize-word
-- =M-u= upcase-word
-** NO Put tags on headline with the names of packages/modes
-CLOSED: [2022-05-13 Fri 23:06]
-Another option might be to put names on all the source blocks and navigate by those somehow
-Starting to add this, and while I like the look, it seems like they'll get out of date
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
