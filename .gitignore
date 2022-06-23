@@ -23,6 +23,8 @@ home/.scratch-config/tutorial/
 home/.scratch-config/bookmarks
 home/.scratch-config/url/
 home/.scratch-config/revision.el
+home/.scratch-config/history
+home/.scratch-config/forge-database.sqlite
 home/.nano-emacs/straight/
 home/.nano-emacs/transient/
 home/.nano-emacs/elpa/
