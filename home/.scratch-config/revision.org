@@ -926,13 +926,6 @@ See which lines have been modified in the gutter
 #+begin_src elisp
 (use-package vterm)
 #+end_src
-** Organize and focus on buffer groups
-This is neat to keep around as a tool when I might want it, but not something I expect to get a lot of use from.
-#+begin_src elisp
-(use-package bufler
-  :init
-  (bufler-mode))
-#+end_src
 * Simple utilities for better editing
 ** Miscellaneous commands :crux:expand_region:rainbow:logos:olivetti:ws_butler:
 Crux has lots of handy utility functions. These are a few of the best:
