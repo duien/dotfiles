@@ -214,7 +214,6 @@ Set up fixed and variable pitch fonts with very similar character. It's a dynami
                       :height 160 :weight 'normal)
   )
 #+end_src
-
 *** With Pragmata Pro
 #+begin_src elisp
 (defun eh/set-pragmata-fonts ()
@@ -238,7 +237,6 @@ For PragmataPro, there are so many additional ligatures and things that are beyo
 However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regular) in the lastest version. I can use the mono version, but it's missing some of the more complex things. It _might_ be possible to set up a fallback font?
 
 [[https://stackoverflow.com/questions/6083496/how-do-you-specify-a-fallback-font-in-emacs][This StackOverflow post]] has some information about how to do that, but not sure if it will really work for this weird situation.
-
 *** With Plex fonts
 #+begin_src elisp
 (defun eh/set-plex-fonts ()
@@ -253,7 +251,6 @@ However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regul
                       :height 160 :weight 'semilight)
   )
 #+end_src
-
 *** With Input fonts
 #+begin_src elisp
 (defun eh/set-input-fonts ()
@@ -281,7 +278,6 @@ However, MyFonts is stupid, and so I'm missing one style (PragmataPro Liga Regul
 		      :font "Sudo UI"
 		      :height 200 :weight 'normal))
 #+end_src
-
 *** Combinations with Victor
 
 Victor and Galix are a fun combo.
@@ -312,7 +308,6 @@ Victor and Galix are a fun combo.
                       :height 170 :weight 'semilight)
   )
 #+end_src
-
 *** Belinsky
 #+begin_src elisp
 (defun eh/set-belinsky-fonts ()
@@ -383,8 +378,6 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
                     :font "Codelia Ligatures"
                     :height 160 :weight 'normal))
 #+end_src
-
-
 *** With Apple fonts
 #+begin_src elisp
 (defun eh/set-simple-apple-fonts ()
@@ -448,7 +441,6 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
                       :height 160 :weight 'regular)
   )
 #+end_src
-
 *** And finally, enable a font!
 #+begin_src elisp
 ;; (eh/set-recursive-fonts)
