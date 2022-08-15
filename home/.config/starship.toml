@@ -51,7 +51,8 @@ disabled = true
 [git_branch]
 # symbol = "🌱 "
 # always_show_remote = true
-symbol = "¬ "
+# symbol = "¬ "
+symbol = "⌥ "
 style = "italic purple"
 format = "[$symbol$branch]($style) "
 only_attached = true
