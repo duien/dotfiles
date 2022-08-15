@@ -1411,7 +1411,8 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode))
-  ;; :hook
+  :hook
+  (gfm-mode . visual-line-mode)
   ;; (gfm-mode . mixed-pitch-mode)
   ;; (markdown-mode . mixed-pitch-mode)
   )
@@ -1421,6 +1422,7 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 #+begin_src elisp
 (use-package vue-mode)
 (use-package web-mode)
+(use-package typescript-mode)
 #+end_src
 * Footnotes
 
