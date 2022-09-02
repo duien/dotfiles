@@ -20,4 +20,9 @@
 
 (straight-use-package 'org)
 
+;; Ensure correct modifiers even when config is busted
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'super)
+  (setq mac-control-modifier 'control))
 (org-babel-load-file "~/.scratch-config/revision.org")
