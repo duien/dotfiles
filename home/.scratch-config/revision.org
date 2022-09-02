@@ -641,9 +641,6 @@ First, define a few functions that are useful to our use of Modus:
 (use-package ef-themes
   :straight (:type git :host github :repo "protesilaos/ef-themes")
   :config
-  (defun eh/get-ef-color (name)
-    (cadr (assoc name (ef-themes--current-theme-palette)))
-    )
   (setq ef-themes-headings
         '((0 . (1.8))
           (1 . (1.3)))))
@@ -696,8 +693,9 @@ This is really determined by which mode we load in org. I'd been using variable-
         nano-modeline-prefix-padding t
         nano-modeline-prefix 'status
         )
-  
-  :hook (after-init . nano-modeline-mode))
+
+  ;; :hook (after-init . nano-modeline-mode)
+  )
 (use-package bespoke-modeline
   :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
   :config
@@ -1275,36 +1273,27 @@ Set up some basic org styling that we'll run whenever we change themes:
      )
     ((or 'ef-light 'ef-day 'ef-summer 'ef-spring)
      (message "Setting up ef-theme overrides")
-     ;; (set-face-attribute 'org-level-1 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-2 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-3 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-4 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-5 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-6 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-7 nil :height 'unspecified)
-     ;; (set-face-attribute 'org-level-8 nil :height 'unspecified)
+     (ef-themes-with-colors
+       (set-face-attribute 'eh/org-keyword-todo nil
+                           :foreground green
+                           :background bg-green)
+       (set-face-attribute 'eh/org-keyword-question nil
+                           :foreground blue
+                           :background bg-blue)
+       (set-face-attribute 'eh/org-keyword-idea nil
+                           :foreground magenta
+                           :background bg-magenta)
+       (set-face-attribute 'eh/org-keyword-next nil
+                           :foreground yellow
+                           :background bg-yellow)
+       (set-face-attribute 'eh/org-keyword-halt nil
+                           :foreground red
+                           :background bg-red)
+       (set-face-attribute 'eh/org-keyword-read nil
+                           :foreground cyan
+                           :background bg-cyan)
 
-     ;; set up todo keywords in ef themes (extract colors in general way?)
-     
-     (set-face-attribute 'eh/org-keyword-todo nil
-                         :foreground (eh/get-ef-color 'green)
-                         :background (eh/get-ef-color 'bg-green))
-     (set-face-attribute 'eh/org-keyword-question nil
-                         :foreground (eh/get-ef-color 'blue)
-                         :background (eh/get-ef-color 'bg-blue))
-     (set-face-attribute 'eh/org-keyword-idea nil
-                         :foreground (eh/get-ef-color 'magenta)
-                         :background (eh/get-ef-color 'bg-magenta))
-     (set-face-attribute 'eh/org-keyword-next nil
-                         :foreground (eh/get-ef-color 'yellow)
-                         :background (eh/get-ef-color 'bg-yellow))
-     (set-face-attribute 'eh/org-keyword-halt nil
-                         :foreground (eh/get-ef-color 'red)
-                         :background (eh/get-ef-color 'bg-red))
-     (set-face-attribute 'eh/org-keyword-read nil
-                         :foreground (eh/get-ef-color 'cyan)
-                         :background (eh/get-ef-color 'bg-cyan))
-     ))
+       )))
   )
 
 ;; (eh/org-update-theme)
