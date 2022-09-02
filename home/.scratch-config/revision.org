@@ -1292,8 +1292,52 @@ Set up some basic org styling that we'll run whenever we change themes:
        (set-face-attribute 'eh/org-keyword-read nil
                            :foreground cyan
                            :background bg-cyan)
-
-       )))
+       (set-face-attribute 'eh/org-keyword-bury nil
+                           :foreground fg-main
+                           :background bg-alt)
+       (set-face-attribute 'org-done nil
+                           :foreground fg-dim
+                           :background bg-dim)
+       ))
+    ((or 'ef-winter 'ef-autumn)
+     (message "Setting up ef-theme overrides (dark)")
+     (ef-themes-with-colors
+       (set-face-attribute 'eh/org-keyword-todo nil
+                           :foreground bg-green-subtle
+                           :background green)
+       (set-face-attribute 'eh/org-keyword-question nil
+                           :foreground bg-blue-subtle
+                           :background blue)
+       (set-face-attribute 'eh/org-keyword-idea nil
+                           :foreground bg-magenta-subtle
+                           :background magenta)
+       (set-face-attribute 'eh/org-keyword-next nil
+                           :foreground bg-yellow
+                           :background yellow-graph-0-bg)
+       (set-face-attribute 'eh/org-keyword-halt nil
+                           :foreground bg-main
+                           :background red-graph-0-bg)
+       (set-face-attribute 'eh/org-keyword-read nil
+                           :foreground bg-dim
+                           :background fg-dim)
+       (set-face-attribute 'org-done nil
+                           :foreground fg-dim
+                           :background bg-dim)
+       (set-face-attribute 'eh/org-keyword-done nil
+                           :foreground green-graph-1-bg)
+       (set-face-attribute 'eh/org-keyword-kill nil
+                           :foreground red-graph-1-bg)
+       (set-face-attribute 'eh/org-keyword-answer nil
+                           :foreground bg-blue)
+       (set-face-attribute 'eh/org-keyword-yes nil
+                           :background bg-added)
+       (set-face-attribute 'eh/org-keyword-no nil
+                           :background bg-removed-faint)
+       (set-face-attribute 'eh/org-keyword-answer nil
+                           :background 'unspecified)
+       )
+     )
+    )
   )
 
 ;; (eh/org-update-theme)
