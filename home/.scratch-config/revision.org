@@ -79,11 +79,11 @@ When we turn on visual line mode, turn off mouse wheel tilt scroll:
 
 Putting these here instead of in =early-init= means we get a brief glimpse of the default window position, then resize, but it also means that they respect our actual font size.
 #+begin_src elisp
-(push '(width . 100) default-frame-alist)
-(push '(height . 0.8) default-frame-alist)
-(push '(min-height . 40) default-frame-alist)
-(push '(top . 0.25) default-frame-alist)
-(push '(left . 0.5) default-frame-alist)
+  ;; (push '(width . 100) default-frame-alist)
+  ;; (push '(height . 0.8) default-frame-alist)
+  ;; (push '(min-height . 40) default-frame-alist)
+  ;; (push '(top . 0.25) default-frame-alist)
+  ;; (push '(left . 0.5) default-frame-alist)
 #+end_src
 
 Always allow `y' instead of `yes' in all prompts
@@ -520,12 +520,12 @@ First, define a few functions that are useful to our use of Modus:
 (defun eh/modus-customize ()
   (set-face-attribute 'font-lock-string-face nil :slant 'italic)
   ;; (set-face-attribute 'org-document-title nil :height 1.5)
-  (set-face-attribute 'window-divider nil
-                      :foreground (modus-themes-color 'bg-main))
-  (set-face-attribute 'window-divider-first-pixel nil
-                      :foreground (modus-themes-color 'bg-main))
-  (set-face-attribute 'window-divider-last-pixel nil
-                      :foreground (modus-themes-color 'bg-main))
+  ;;(set-face-attribute 'window-divider nil
+  ;;                    :foreground (modus-themes-color 'bg-main))
+  ;;(set-face-attribute 'window-divider-first-pixel nil
+  ;;                    :foreground (modus-themes-color 'bg-main))
+  ;;(set-face-attribute 'window-divider-last-pixel nil
+  ;;                    :foreground (modus-themes-color 'bg-main))
 
   ;; for mini-frame-mode, match border to child frame background
   (set-face-attribute 'child-frame-border nil
@@ -955,6 +955,7 @@ Allow highlighting color-like things in their colors. This isn't very smart abou
 Move forward and backward through pages when the buffer is narrowed:
 #+begin_src elisp
 (use-package logos
+  :straight (logos :type git :host github :repo "protesilaos/logos")
   :config
   (setq logos-outlines-are-pages t)
   :general
@@ -1043,6 +1044,8 @@ Manage whitespace automatically:
 ;; highlight-symbol to highlight symbol at point
 #+end_src
 ** TODO Don't silently kill buffers that don't have a file yet
+It seems completely unreasonable that I'm trying to do this with buffer-name regexes. What I want is to prompt before killing (or mostly before quitting) if there's a buffer I've been writing things in that hasn't been saved.
+But there's seemingly no reliable way to find out whether something is a real buffer without a file, or whether it's just a temporary/internal buffer other than ... regex.
 #+begin_src elisp
 ;; (setq-default buffer-offer-save t)
 (defun confirm-buffer-kill-modified ()
