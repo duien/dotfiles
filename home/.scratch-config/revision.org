@@ -645,8 +645,14 @@ First, define a few functions that are useful to our use of Modus:
         '((0 . (1.8))
           (1 . (1.3)))))
 
+;; somehow, this theme hangs emacs if I enable moody
+;; (use-package kaolin-themes
+;;   :config
+;;   (setq kaolin-themes-italic-comments t))
+
 ;; (modus-themes-load-operandi)
 (load-theme 'ef-day)
+;; (load-theme 'kaolin-breeze)
 #+end_src
 *** Fancy and unnecessary SVG tags
 #+begin_src elisp
@@ -674,7 +680,6 @@ This is a start. It adds the ability to visualize the mark, but (at least with t
   :ensure t)
 #+end_src
 This is really determined by which mode we load in org. I'd been using variable-pitch-mode but it's doing something weird with tables (every character I check says it's mono, but the lines don't line up). I think overall mixed-pitch-mode works better, but had some compatibility issues, possibly involving dimmer and/or changing fonts.
-**** TODO 
 *** Show horizontal rules instead of =^L= 
 #+begin_src elisp
 (use-package form-feed
@@ -691,27 +696,21 @@ This is really determined by which mode we load in org. I'd been using variable-
         nano-modeline-space-top 0.15 ;; 0.15
         nano-modeline-space-bottom -0.2 ;; -0.2
         nano-modeline-prefix-padding t
-        nano-modeline-prefix 'status
-        )
-
+        nano-modeline-prefix 'status)
   ;; :hook (after-init . nano-modeline-mode)
   )
-(use-package bespoke-modeline
-  :straight (bespoke-modeline :type git :host github :repo "mclear-tools/bespoke-modeline")
-  :config
-  (setq bespoke-modeline-position 'top
-        bespoke-modeline-vc-symbol "#"))
-#+end_src
 
-Additional bespoke modeline options:
-#+begin_example
-bespoke-modeline-(gui|tty)-(mod|rw|ro)-symbol
-bespoke-modeline-space-(bottom|top)
-? bespoke-modeline-user-mode
-bespoke-modeline-vc-symbol
-bespoke-modeline-visual-bell
-face for bespoke-modeline-visual-bell-config
-#+end_example
+;; removing information from the mode line
+(setq mode-line-percent-position nil)
+(line-number-mode -1)
+
+(use-package moody
+  :config
+  (setq x-underline-at-descent-line t
+        moody-mode-line-height nil)
+  :init
+  (moody-replace-mode-line-buffer-identification))
+#+end_src
 
 Use minions to hide all the minor mode indicators in a menu
 #+begin_src elisp
@@ -773,8 +772,7 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
   (dimmer-configure-magit)
   ;; (dimmer-configure-posframe)
   ;; (dimmer-configure-hydra) ;; ??
-  :init
-  (dimmer-mode 1)
+  ;; :init (dimmer-mode 1)
   )
 #+end_src
 *** Show the minibuffer somewhere more visible
@@ -805,15 +803,15 @@ It's a choice between solaire, which dims non-file-visiting buffers, and dimmer,
 *** Tweak frame display
 This uses a background-color column to divide windows instead of drawing a line:
 #+begin_src elisp
-(use-package frame
-  :straight (:type built-in)
-  :custom
-  (window-divider-default-right-width 12)
-  (window-divider-default-bottom-width 1)
-  (window-divider-default-places 'right-only)
-  (window-divider-mode t)
-  :hook
-  (before-make-frame . window-divider-mode))
+;; (use-package frame
+;;   :straight (:type built-in)
+;;   :custom
+;;   (window-divider-default-right-width 12)
+;;   (window-divider-default-bottom-width 1)
+;;   (window-divider-default-places 'right-only)
+;;   (window-divider-mode t)
+;;   :hook
+;;   (before-make-frame . window-divider-mode))
 #+end_src
 * What it can do
 ** Vertical completion interface
@@ -1031,9 +1029,9 @@ Manage whitespace automatically:
   ;; Bind pulsar-hightlight-dwim
   ;; Bind pulsar-pulse-line
   :init
-  (pulsar-global-mode 1)
-  (add-to-list 'pulsar-pulse-functions 'org-cycle)
-  (add-to-list 'pulsar-pulse-functions 'isearch-repeat-forward)
+  ;; (pulsar-global-mode 1)
+  ;; (add-to-list 'pulsar-pulse-functions 'org-cycle)
+  ;; (add-to-list 'pulsar-pulse-functions 'isearch-repeat-forward)
   ;; pulsar-face
   )
 #+end_src
@@ -1200,12 +1198,12 @@ Set up some basic org styling that we'll run whenever we change themes:
                       :inherit '(font-lock-comment-face default))
 
   ;; this is not actually org-related but I'm lazy
-  (set-face-attribute 'window-divider nil
-                      :foreground (face-attribute 'default :background))
-  (set-face-attribute 'window-divider-first-pixel nil
-                      :foreground (face-attribute 'default :background))
-  (set-face-attribute 'window-divider-last-pixel nil
-                      :foreground (face-attribute 'default :background))
+  ;; (set-face-attribute 'window-divider nil
+  ;;                     :foreground (face-attribute 'default :background))
+  ;; (set-face-attribute 'window-divider-first-pixel nil
+  ;;                     :foreground (face-attribute 'default :background))
+  ;; (set-face-attribute 'window-divider-last-pixel nil
+  ;;                     :foreground (face-attribute 'default :background))
 
   ;; set things up for mixed/variable pitch
   ;; (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
