@@ -120,6 +120,7 @@ If you type over a selection, delete it first
 (show-paren-mode t)
 (display-time-mode -1)
 (setq bookmark-set-fringe-mark nil)
+(repeat-mode t)
 #+end_src
 ** Set up reasonable indentation defaults
 Attempt to make indentation do sensible things:
@@ -719,25 +720,6 @@ Use minions to hide all the minor mode indicators in a menu
   (setq minions-mode-line-lighter "≡")
   :init (minions-mode 1))
 #+end_src
-*** A dashboard
-#+begin_src elisp
-(use-package dashboard
-  :ensure t
-  :config
-  (setq dashboard-projects-backend 'projectile
-        dashboard-center-content t
-        dashboard-show-shortcuts t
-        dashboard-set-init-info t
-        )
-  (setq dashboard-items '((recents  . 5)
-                        (bookmarks . 5)
-                        (projects . 5)
-                        (agenda . 5)
-                        ))
-  ;; (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-  :init
-  (dashboard-setup-startup-hook))
-#+end_src 
 *** A menu of keybindings when you pause
 #+begin_src elisp
 (use-package which-key
@@ -920,6 +902,7 @@ See which lines have been modified in the gutter
 #+begin_src elisp
 (use-package vterm)
 #+end_src
+
 * Simple utilities for better editing
 ** Miscellaneous commands :crux:expand_region:rainbow:logos:olivetti:ws_butler:
 Crux has lots of handy utility functions. These are a few of the best:
@@ -950,6 +933,7 @@ Expanding the region incrementally is incredibly helpful:
 Allow highlighting color-like things in their colors. This isn't very smart about things, and tends to highlight named colors in an annoying number of places, but when it's useful it's really useful.
 #+begin_src elisp
 (use-package rainbow-mode)
+(use-package fontify-face)
 #+end_src
 
 Move forward and backward through pages when the buffer is narrowed:
@@ -1182,23 +1166,23 @@ Set up some basic org styling that we'll run whenever we change themes:
 #+begin_src elisp
 (defun eh/org-update-theme ()
   ;; default styling for task keywords
-  (set-face-attribute 'org-todo nil
-                      :inherit 'fixed-pitch
-		                  :box nil
-		                  :height 1.0
-                      :weight (face-attribute 'bold :weight))
-  (set-face-attribute 'org-done nil
-                      :inherit 'fixed-pitch
-           	          :slant 'italic
-                      :weight (face-attribute 'default :weight))
-  (set-face-attribute 'eh/org-keyword-bury nil
-                      :weight (face-attribute 'default :weight))
+  ;; (set-face-attribute 'org-todo nil
+  ;;                     :inherit 'fixed-pitch
+	;; 	                  :box nil
+	;; 	                  :height 1.0
+  ;;                     :weight (face-attribute 'bold :weight))
+  ;; (set-face-attribute 'org-done nil
+  ;;                     :inherit 'fixed-pitch
+  ;;          	          :slant 'italic
+  ;;                     :weight (face-attribute 'default :weight))
+  ;; (set-face-attribute 'eh/org-keyword-bury nil
+  ;;                     :weight (face-attribute 'default :weight))
 
   ;; styling for headlines with keywords
-  (set-face-attribute 'org-headline-todo nil
-                      :weight (face-attribute 'default :weight))
-  (set-face-attribute 'org-headline-done nil
-                      :inherit '(font-lock-comment-face default))
+  ;; (set-face-attribute 'org-headline-todo nil
+  ;;                     :weight (face-attribute 'default :weight))
+  ;; (set-face-attribute 'org-headline-done nil
+  ;;                     :inherit '(font-lock-comment-face default))
 
   ;; this is not actually org-related but I'm lazy
   ;; (set-face-attribute 'window-divider nil
@@ -1217,8 +1201,9 @@ Set up some basic org styling that we'll run whenever we change themes:
   ;; Unset the foreground and background of my org faces
   ;; try pulling the list from org-todo-keyword-faces
   (dolist (face
-           '(org-todo
-             org-done
+           '(
+             ;; org-todo
+             ;; org-done
              eh/org-keyword-todo
              eh/org-keyword-question
              eh/org-keyword-idea
@@ -1272,72 +1257,72 @@ Set up some basic org styling that we'll run whenever we change themes:
      (set-face-attribute 'eh/org-keyword-kill nil
                          :foreground (doom-color 'fg-alt))
      )
-    ((or 'ef-light 'ef-day 'ef-summer 'ef-spring)
-     (message "Setting up ef-theme overrides")
-     (ef-themes-with-colors
-       (set-face-attribute 'eh/org-keyword-todo nil
-                           :foreground green
-                           :background bg-green)
-       (set-face-attribute 'eh/org-keyword-question nil
-                           :foreground blue
-                           :background bg-blue)
-       (set-face-attribute 'eh/org-keyword-idea nil
-                           :foreground magenta
-                           :background bg-magenta)
-       (set-face-attribute 'eh/org-keyword-next nil
-                           :foreground yellow
-                           :background bg-yellow)
-       (set-face-attribute 'eh/org-keyword-halt nil
-                           :foreground red
-                           :background bg-red)
-       (set-face-attribute 'eh/org-keyword-read nil
-                           :foreground cyan
-                           :background bg-cyan)
-       (set-face-attribute 'eh/org-keyword-bury nil
-                           :foreground fg-main
-                           :background bg-alt)
-       (set-face-attribute 'org-done nil
-                           :foreground fg-dim
-                           :background bg-dim)
-       ))
-    ((or 'ef-winter 'ef-autumn)
-     (message "Setting up ef-theme overrides (dark)")
-     (ef-themes-with-colors
-       (set-face-attribute 'eh/org-keyword-todo nil
-                           :foreground bg-green-subtle
-                           :background green)
-       (set-face-attribute 'eh/org-keyword-question nil
-                           :foreground bg-blue-subtle
-                           :background blue)
-       (set-face-attribute 'eh/org-keyword-idea nil
-                           :foreground bg-magenta-subtle
-                           :background magenta)
-       (set-face-attribute 'eh/org-keyword-next nil
-                           :foreground bg-yellow
-                           :background yellow-graph-0-bg)
-       (set-face-attribute 'eh/org-keyword-halt nil
-                           :foreground bg-main
-                           :background red-graph-0-bg)
-       (set-face-attribute 'eh/org-keyword-read nil
-                           :foreground bg-dim
-                           :background fg-dim)
-       (set-face-attribute 'org-done nil
-                           :foreground fg-dim
-                           :background bg-dim)
-       (set-face-attribute 'eh/org-keyword-done nil
-                           :foreground green-graph-1-bg)
-       (set-face-attribute 'eh/org-keyword-kill nil
-                           :foreground red-graph-1-bg)
-       (set-face-attribute 'eh/org-keyword-answer nil
-                           :foreground bg-blue)
-       (set-face-attribute 'eh/org-keyword-yes nil
-                           :background bg-added)
-       (set-face-attribute 'eh/org-keyword-no nil
-                           :background bg-removed-faint)
-       (set-face-attribute 'eh/org-keyword-answer nil
-                           :background 'unspecified)
-       )
-     )
+    ;; ((or 'ef-light 'ef-day 'ef-summer 'ef-spring)
+    ;;  (message "Setting up ef-theme overrides")
+    ;;  (ef-themes-with-colors
+    ;;    (set-face-attribute 'eh/org-keyword-todo nil
+    ;;                        :foreground green
+    ;;                        :background bg-green)
+    ;;    (set-face-attribute 'eh/org-keyword-question nil
+    ;;                        :foreground blue
+    ;;                        :background bg-blue)
+    ;;    (set-face-attribute 'eh/org-keyword-idea nil
+    ;;                        :foreground magenta
+    ;;                        :background bg-magenta)
+    ;;    (set-face-attribute 'eh/org-keyword-next nil
+    ;;                        :foreground yellow
+    ;;                        :background bg-yellow)
+    ;;    (set-face-attribute 'eh/org-keyword-halt nil
+    ;;                        :foreground red
+    ;;                        :background bg-red)
+    ;;    (set-face-attribute 'eh/org-keyword-read nil
+    ;;                        :foreground cyan
+    ;;                        :background bg-cyan)
+    ;;    (set-face-attribute 'eh/org-keyword-bury nil
+    ;;                        :foreground fg-main
+    ;;                        :background bg-alt)
+    ;;    (set-face-attribute 'org-done nil
+    ;;                        :foreground fg-dim
+    ;;                        :background bg-dim)
+    ;;    ))
+    ;; ((or 'ef-winter 'ef-autumn)
+    ;;  (message "Setting up ef-theme overrides (dark)")
+    ;;  (ef-themes-with-colors
+    ;;    (set-face-attribute 'eh/org-keyword-todo nil
+    ;;                        :foreground bg-green-subtle
+    ;;                        :background green)
+    ;;    (set-face-attribute 'eh/org-keyword-question nil
+    ;;                        :foreground bg-blue-subtle
+    ;;                        :background blue)
+    ;;    (set-face-attribute 'eh/org-keyword-idea nil
+    ;;                        :foreground bg-magenta-subtle
+    ;;                        :background magenta)
+    ;;    (set-face-attribute 'eh/org-keyword-next nil
+    ;;                        :foreground bg-yellow
+    ;;                        :background yellow-graph-0-bg)
+    ;;    (set-face-attribute 'eh/org-keyword-halt nil
+    ;;                        :foreground bg-main
+    ;;                        :background red-graph-0-bg)
+    ;;    (set-face-attribute 'eh/org-keyword-read nil
+    ;;                        :foreground bg-dim
+    ;;                        :background fg-dim)
+    ;;    (set-face-attribute 'org-done nil
+    ;;                        :foreground fg-dim
+    ;;                        :background bg-dim)
+    ;;    (set-face-attribute 'eh/org-keyword-done nil
+    ;;                        :foreground green-graph-1-bg)
+    ;;    (set-face-attribute 'eh/org-keyword-kill nil
+    ;;                        :foreground red-graph-1-bg)
+    ;;    (set-face-attribute 'eh/org-keyword-answer nil
+    ;;                        :foreground bg-blue)
+    ;;    (set-face-attribute 'eh/org-keyword-yes nil
+    ;;                        :background bg-added)
+    ;;    (set-face-attribute 'eh/org-keyword-no nil
+    ;;                        :background bg-removed-faint)
+    ;;    (set-face-attribute 'eh/org-keyword-answer nil
+    ;;                        :background 'unspecified)
+    ;;    )
+    ;;  )
     )
   )
 
@@ -1500,6 +1485,7 @@ Here's some fiddling trying to get a nice agenda going:
 (use-package fish-mode)
 (use-package haml-mode)
 (use-package slim-mode)
+(use-package sass-mode)
 #+end_src
 ** Writing in Markdown :markdown:
 As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
