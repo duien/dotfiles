@@ -24,9 +24,9 @@ prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/loca
 # This was in universal variables, which are not a great idea for my setup
 prepend_if_exists fish_user_paths "/usr/local/opt/openssl/bin" "/usr/local/opt/postgresql@9.4/bin" "/Users/duien/.yarn/bin"
 
-set -x EDITOR em -w
-set -x VISUAL em -w
-set -x GEMEDITOR em -w
+set -x EDITOR ew
+set -x VISUAL ew
+set -x GEMEDITOR ew
 
 # Source color theme setup
 source ~/.config/fish/color-theme.fish
