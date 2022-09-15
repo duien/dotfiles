@@ -200,7 +200,46 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 (global-unset-key (kbd "C-x m"))
 #+end_src
 * How it looks
+** Set up typography with fontaine
+#+begin_src elisp
+(use-package fontaine
+  :config
+  (setq fontaine-presets
+      '((comic-code
+         :default-family "Comic Code Ligatures")
+        (jetbrains-mono
+         :default-family "Jetbrains Mono"
+         :default-weight light)
+        (apple
+         :default-family "SF Mono"
+         :default-weight semilight)
+        (apple-variable
+         :default-family "SF Mono"
+         :default-weight semilight
+         :variable-pitch-family "SF Pro Text")
+        (plex-variable
+         :default-family "IBM Plex Mono"
+         :variable-pitch-family "iA Writer Quattro V")
+        (t ;; shared fallback values
+         :default-family "Menlo"
+         :default-weight normal
+         :default-height 140
+         :fixed-pitch-family nil
+         :variable-pitch-family nil)
+        )
+      )
+  )
+(setq ef-themes-mixed-fonts t)
+(load-theme 'ef-day)
+(fontaine-set-preset 'comic-code)
+(fontaine-set-preset 'jetbrains-mono)
+#+end_src
+
 ** Set up typography
+:PROPERTIES:
+:tangle:   nil
+:END:
+
 Typography in Emacs can be very fiddly. Some links that might help sometimes?
 [[https://stackoverflow.com/questions/67555133/emacs-not-listing-semilight-fonts][Emacs and fontconfig disagree about font weights]]
 
@@ -472,8 +511,8 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
 ;; (eh/set-sudo-fonts)
 ;; (eh/set-simple-apple-fonts)
 ;; (eh/set-monolisa-fonts)
-;; (eh/set-jetbrains-fonts)
-(eh/set-comic-code-fonts)
+(eh/set-jetbrains-fonts)
+;; (eh/set-comic-code-fonts)
 ;; (add-hook 'after-enable-theme-hook #'eh/set-apple-fonts)
 #+end_src
 
