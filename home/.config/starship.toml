@@ -35,9 +35,10 @@ truncation_symbol = "…/"
 format = "[$duration]($style) "
 
 [character]
-success_symbol = "[▷](bold green)"
+# success_symbol = "[▷](bold green)"
 # error_symbol = "[✗](bold red) "
-error_symbol = "[▶](bold red)"
+success_symbol = "[►](bold green)"
+error_symbol = "[►](bold red)"
 
 [status]
 format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
@@ -51,8 +52,8 @@ disabled = true
 [git_branch]
 # symbol = "🌱 "
 # always_show_remote = true
-# symbol = "¬ "
-symbol = "⌥ "
+symbol = "¬ "
+# symbol = "⌥ "
 style = "italic purple"
 format = "[$symbol$branch]($style) "
 only_attached = true
@@ -70,8 +71,12 @@ ahead = "[↑](cyan)"
 behind = "[↓](bright-cyan)"
 diverged = "[↑↓](bold bright-cyan)"
 untracked = "[·](blue)"
-stashed = " [△ $count](bright-black)"
-modified = "[◇](yellow)"
-staged = "[◆](green)"
+# untracked = "[+](blue)"
+# stashed = " [△ $count](bright-black)"
+stashed = " [∆ $count](bright-black)"
+# modified = "[◇](yellow)"
+modified = "[~](yellow)"
+# staged = "[◆](green)"
+staged = "[+](green)"
 renamed = "[≈](blue)"
 deleted = "[∙](red)"
