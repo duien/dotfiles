@@ -1229,39 +1229,6 @@ So, here are the keywords as they stand now, and what the intention is for each 
 Set up some basic org styling that we'll run whenever we change themes:
 #+begin_src elisp
 (defun eh/org-update-theme ()
-  ;; default styling for task keywords
-  ;; (set-face-attribute 'org-todo nil
-  ;;                     :inherit 'fixed-pitch
-	;; 	                  :box nil
-	;; 	                  :height 1.0
-  ;;                     :weight (face-attribute 'bold :weight))
-  ;; (set-face-attribute 'org-done nil
-  ;;                     :inherit 'fixed-pitch
-  ;;          	          :slant 'italic
-  ;;                     :weight (face-attribute 'default :weight))
-  ;; (set-face-attribute 'eh/org-keyword-bury nil
-  ;;                     :weight (face-attribute 'default :weight))
-
-  ;; styling for headlines with keywords
-  ;; (set-face-attribute 'org-headline-todo nil
-  ;;                     :weight (face-attribute 'default :weight))
-  ;; (set-face-attribute 'org-headline-done nil
-  ;;                     :inherit '(font-lock-comment-face default))
-
-  ;; this is not actually org-related but I'm lazy
-  ;; (set-face-attribute 'window-divider nil
-  ;;                     :foreground (face-attribute 'default :background))
-  ;; (set-face-attribute 'window-divider-first-pixel nil
-  ;;                     :foreground (face-attribute 'default :background))
-  ;; (set-face-attribute 'window-divider-last-pixel nil
-  ;;                     :foreground (face-attribute 'default :background))
-
-  ;; set things up for mixed/variable pitch
-  ;; (set-face-attribute 'org-hide nil :inherit 'fixed-pitch)
-  ;; (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-  ;; (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
-  ;; (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
-
   ;; Unset the foreground and background of my org faces
   ;; and reset inheritance
   ;; try pulling the list from org-todo-keyword-faces
@@ -1417,7 +1384,61 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :foreground (eh/get-ef-color 'blue-faint))
     (set-face-attribute 'eh/org-keyword-rode nil
                         :foreground (eh/get-ef-color 'cyan-graph-1-bg))
-    )))
+    )
+    ('spacemacs-light
+     (set-face-attribute 'org-hide nil
+                         :foreground (face-attribute 'default :background))
+     (set-face-attribute 'org-drawer nil
+                         :foreground nil
+                         :inherit 'shadow)
+     (set-face-attribute 'org-headline-todo nil
+                         :foreground nil)
+     (set-face-attribute 'org-headline-done nil
+                         :foreground nil
+                         :inherit '(shadow italic))
+
+     (set-face-attribute 'org-todo nil
+                         :reverse-video nil)
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :foreground (face-attribute 'success :foreground)
+                         :background "#dae6d0")
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :foreground "#715ab1"
+                         :background "#e2e0ea")
+     (set-face-attribute 'eh/org-keyword-read nil
+                         :foreground "#da8b55"
+                         :background "#eed9d2")
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :foreground "#3a81c3"
+                         :background "#d1dcdf")
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :foreground "#b1951d"
+                         :background "#eed962")
+     (set-face-attribute 'eh/org-keyword-halt nil
+                         :foreground "#ba2f59"
+                         :background "#eed9d2")
+
+     (set-face-attribute 'org-done nil
+                         :foreground "#a094a2"
+                         :background "#efeae9"
+                         :weight (face-attribute 'default :weight))
+     (set-face-attribute 'eh/org-keyword-done nil
+                         :background "#edf2e9")
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :background "#faede4")
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :inherit 'eh/org-keyword-done
+                         :foreground "#67b11d")
+     (set-face-attribute 'eh/org-keyword-no nil
+                         :inherit 'eh/org-keyword-kill
+                         :foreground "#dc752f")
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :foreground "#3a81c3"
+                         :background "#edf1ed")
+     (set-face-attribute 'eh/org-keyword-rode nil
+                         :foreground "#b1951d"
+                         :background "#f6f1e1")
+     )))
 
 ;; (eh/org-update-theme)
 #+end_src
