@@ -8,6 +8,11 @@ function colors -d "What do my terminal colors look like?"
     set_color --bold br$color
     echo -n " on self "
     set_color normal
+    set_color $color
+    echo -n " regular"
+    set_color br$color
+    echo -n " bright"
+    set_color normal
     echo " "
   end
 end

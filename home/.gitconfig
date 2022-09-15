@@ -25,7 +25,7 @@
 	patch = add --patch
 	cm = commit -m
 [format]
-    pretty = format:%C(yellow)%h %C(red)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
+    pretty = format:%C(brightyellow)%h %C(cyan)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
 [difftool]
 	prompt = false
 [diff]
