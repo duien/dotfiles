@@ -229,17 +229,9 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
         )
       )
   )
-(setq ef-themes-mixed-fonts t)
-(load-theme 'ef-day)
 (fontaine-set-preset 'comic-code)
-(fontaine-set-preset 'jetbrains-mono)
 #+end_src
-
-** Set up typography
-:PROPERTIES:
-:tangle:   nil
-:END:
-
+** COMMENT Set up typography
 Typography in Emacs can be very fiddly. Some links that might help sometimes?
 [[https://stackoverflow.com/questions/67555133/emacs-not-listing-semilight-fonts][Emacs and fontconfig disagree about font weights]]
 
@@ -521,7 +513,7 @@ Interestingly, it turns out that ~mixed-pitch-mode~ doesn't deal well with chang
 But ~variable-pitch-mode~ seems to do just fine with it. I think I switched because of ... some very specific issues. Let's go back to variable for a while?
 
 I've left mixed installed, but [[*Basic configuration][the org-mode hook configuration]] is what controls what we actually use. It's also set in [[*Writing in Markdown][markdown/gfm mode configuration]] as well.
-*** Set up ligatures in various ways
+** Set up ligatures in various ways
 Turn on automatic ligatures if the feature is available:
 #+begin_src elisp
 (when (fboundp 'mac-auto-operator-composition-mode)
