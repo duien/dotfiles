@@ -47,7 +47,8 @@ Not any particularly significance or sort order, just things I'm trying to learn
 |        | =M-s h .=     | highlight symbol at point             |
 
 * Bootstrap straight and use-package
-This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one. There's still probably some issues with getting configuration to all happen at the right time, though...
+This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one.
+[[file:init.el][Check it out]]
 * Built-in options for basic emacs configuration
 Introduce myself to Emacs:
 #+begin_src elisp
@@ -123,6 +124,7 @@ If you type over a selection, delete it first
 (setq bookmark-set-fringe-mark nil)
 (repeat-mode t)
 #+end_src
+*** QUEST What commands does repeat-mode work for? Does this replace my desire for hydra?
 ** Set up reasonable indentation defaults
 Attempt to make indentation do sensible things:
 #+begin_src elisp
@@ -155,6 +157,7 @@ And let other people decide per-project values:
  kept-new-versions 5
  auto-save-include-big-deletions t)
 #+end_src
+*** TODO This does not at all work. Look into the package that does it for you?
 ** Configure things for mac
 Set up what seems to be the least annoying modifier key setup:
 #+begin_src elisp
@@ -454,7 +457,9 @@ MonoLisa is such a good font. The script version (installed as "MonoLisa Script"
                       :height 160 :weight 'regular)
   (set-face-attribute 'variable-pitch nil
                       :family "Comic Code Ligatures"
-                      :height 160 :weight 'regular))
+                      :height 160 :weight 'regular)
+  (set-face-attribute 'fixed-pitch-serif nil
+                      :family "Comic Code Ligatures"))
 #+end_src
 
 *** And finally, enable a font!
@@ -662,6 +667,9 @@ First, define a few functions that are useful to our use of Modus:
   :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
 
 (use-package ef-themes
+  :preface
+  (defun eh/get-ef-color (name)
+    (car (cdr (assoc name (ef-themes--current-theme-palette)))))
   :straight (:type git :host github :repo "protesilaos/ef-themes")
   :config
   (setq ef-themes-headings
@@ -671,6 +679,9 @@ First, define a few functions that are useful to our use of Modus:
 (use-package kaolin-themes
   :config
   (setq kaolin-themes-italic-comments t))
+
+(use-package isohedron-theme
+  :straight (:type git :host github :repo "duien/isohedron-theme"))
 
 ;; (modus-themes-load-operandi)
 (load-theme 'ef-day)
@@ -1279,34 +1290,51 @@ Set up some basic org styling that we'll run whenever we change themes:
      (set-face-attribute 'eh/org-keyword-kill nil
                          :foreground (doom-color 'fg-alt))
      )
-    ;; ((or 'ef-light 'ef-day 'ef-summer 'ef-spring)
-    ;;  (message "Setting up ef-theme overrides")
-    ;;  (ef-themes-with-colors
-    ;;    (set-face-attribute 'eh/org-keyword-todo nil
-    ;;                        :foreground green
-    ;;                        :background bg-green)
-    ;;    (set-face-attribute 'eh/org-keyword-question nil
-    ;;                        :foreground blue
-    ;;                        :background bg-blue)
-    ;;    (set-face-attribute 'eh/org-keyword-idea nil
-    ;;                        :foreground magenta
-    ;;                        :background bg-magenta)
-    ;;    (set-face-attribute 'eh/org-keyword-next nil
-    ;;                        :foreground yellow
-    ;;                        :background bg-yellow)
-    ;;    (set-face-attribute 'eh/org-keyword-halt nil
-    ;;                        :foreground red
-    ;;                        :background bg-red)
-    ;;    (set-face-attribute 'eh/org-keyword-read nil
-    ;;                        :foreground cyan
-    ;;                        :background bg-cyan)
-    ;;    (set-face-attribute 'eh/org-keyword-bury nil
-    ;;                        :foreground fg-main
-    ;;                        :background bg-alt)
-    ;;    (set-face-attribute 'org-done nil
-    ;;                        :foreground fg-dim
-    ;;                        :background bg-dim)
-    ;;    ))
+    ((pred (lambda (theme) (member theme ef-themes-light-themes)))
+     (message "Setting up ef-theme overrides (light)")
+     (set-face-attribute 'org-headline-todo nil
+                         :inherit nil
+                         :weight 'normal)
+     (set-face-attribute 'org-headline-done nil
+                         :inherit nil
+                         :foreground (eh/get-ef-color 'fg-dim)
+                         :slant 'italic
+                         :weight 'normal)
+     (set-face-attribute 'org-done nil
+                         :weight 'normal
+                         :foreground (eh/get-ef-color 'fg-dim)
+                         :background (eh/get-ef-color 'bg-dim))
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :foreground (eh/get-ef-color 'green)
+                         :background (eh/get-ef-color 'bg-green))
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :foreground (eh/get-ef-color 'blue)
+                         :background (eh/get-ef-color 'bg-blue))
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :foreground (eh/get-ef-color 'magenta)
+                         :background (eh/get-ef-color 'bg-magenta))
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :foreground (eh/get-ef-color 'yellow)
+                         :background (eh/get-ef-color 'bg-yellow))
+     (set-face-attribute 'eh/org-keyword-halt nil
+                         :foreground (eh/get-ef-color 'red)
+                         :background (eh/get-ef-color 'bg-red))
+     (set-face-attribute 'eh/org-keyword-read nil
+                         :foreground (eh/get-ef-color 'cyan)
+                         :background (eh/get-ef-color 'bg-cyan))
+     (set-face-attribute 'eh/org-keyword-bury nil
+                         :foreground (eh/get-ef-color 'fg-main)
+                         :background (eh/get-ef-color 'bg-alt))
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :foreground (eh/get-ef-color 'red-faint)
+                         :background (eh/get-ef-color 'bg-removed-faint))
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :foreground (eh/get-ef-color 'green-faint)
+                         :background (eh/get-ef-color 'bg-added-faint))
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :foreground (eh/get-ef-color 'blue-faint)
+                         :background (eh/get-ef-color 'bg-blue-subtle))
+     )
     ;; ((or 'ef-winter 'ef-autumn)
     ;;  (message "Setting up ef-theme overrides (dark)")
     ;;  (ef-themes-with-colors
