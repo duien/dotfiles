@@ -1232,28 +1232,32 @@ Set up some basic org styling that we'll run whenever we change themes:
   ;; (set-face-attribute 'org-verbatim nil :inherit 'fixed-pitch)
 
   ;; Unset the foreground and background of my org faces
+  ;; and reset inheritance
   ;; try pulling the list from org-todo-keyword-faces
   (dolist (face
-           '(
-             ;; org-todo
-             ;; org-done
-             eh/org-keyword-todo
+           '(eh/org-keyword-todo
              eh/org-keyword-question
              eh/org-keyword-idea
              eh/org-keyword-next
-             eh/org-keyword-bury
              eh/org-keyword-halt
-             eh/org-keyword-read
+             eh/org-keyword-read))
+    (set-face-attribute face nil
+                        :foreground 'unspecified
+                        :background 'unspecified
+                        :inherit 'org-todo))
+  (dolist (face
+           '(eh/org-keyword-bury
+             eh/org-keyword-done
              eh/org-keyword-answer
              eh/org-keyword-yes
              eh/org-keyword-no
              eh/org-keyword-meh
              eh/org-keyword-kill
-             eh/org-keyword-rode
-             ))
+             eh/org-keyword-rode))
     (set-face-attribute face nil
                         :foreground 'unspecified
-                        :background 'unspecified))
+                        :background 'unspecified
+                        :inherit 'org-done))
   
   ;; Now set up theme-specific things?
   (pcase (car custom-enabled-themes)
@@ -1335,46 +1339,54 @@ Set up some basic org styling that we'll run whenever we change themes:
                          :foreground (eh/get-ef-color 'blue-faint)
                          :background (eh/get-ef-color 'bg-blue-subtle))
      )
-    ;; ((or 'ef-winter 'ef-autumn)
-    ;;  (message "Setting up ef-theme overrides (dark)")
-    ;;  (ef-themes-with-colors
-    ;;    (set-face-attribute 'eh/org-keyword-todo nil
-    ;;                        :foreground bg-green-subtle
-    ;;                        :background green)
-    ;;    (set-face-attribute 'eh/org-keyword-question nil
-    ;;                        :foreground bg-blue-subtle
-    ;;                        :background blue)
-    ;;    (set-face-attribute 'eh/org-keyword-idea nil
-    ;;                        :foreground bg-magenta-subtle
-    ;;                        :background magenta)
-    ;;    (set-face-attribute 'eh/org-keyword-next nil
-    ;;                        :foreground bg-yellow
-    ;;                        :background yellow-graph-0-bg)
-    ;;    (set-face-attribute 'eh/org-keyword-halt nil
-    ;;                        :foreground bg-main
-    ;;                        :background red-graph-0-bg)
-    ;;    (set-face-attribute 'eh/org-keyword-read nil
-    ;;                        :foreground bg-dim
-    ;;                        :background fg-dim)
-    ;;    (set-face-attribute 'org-done nil
-    ;;                        :foreground fg-dim
-    ;;                        :background bg-dim)
-    ;;    (set-face-attribute 'eh/org-keyword-done nil
-    ;;                        :foreground green-graph-1-bg)
-    ;;    (set-face-attribute 'eh/org-keyword-kill nil
-    ;;                        :foreground red-graph-1-bg)
-    ;;    (set-face-attribute 'eh/org-keyword-answer nil
-    ;;                        :foreground bg-blue)
-    ;;    (set-face-attribute 'eh/org-keyword-yes nil
-    ;;                        :background bg-added)
-    ;;    (set-face-attribute 'eh/org-keyword-no nil
-    ;;                        :background bg-removed-faint)
-    ;;    (set-face-attribute 'eh/org-keyword-answer nil
-    ;;                        :background 'unspecified)
-    ;;    )
-    ;;  )
-    )
-  )
+    ((pred (lambda (theme) (member theme ef-themes-dark-themes)))
+     (message "Setting up ef-theme overrides (dark)")
+     (set-face-attribute 'org-headline-todo nil
+                         :inherit nil
+                         :weight (face-attribute 'default :weight))
+     (set-face-attribute 'org-headline-done nil
+                         :inherit 'italic
+                         :weight (face-attribute 'default :weight))
+    (set-face-attribute 'eh/org-keyword-todo nil
+                        :foreground (eh/get-ef-color 'bg-green-subtle)
+                        :background (eh/get-ef-color 'green))
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :foreground (eh/get-ef-color 'bg-blue-subtle)
+                        :background (eh/get-ef-color 'blue))
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :foreground (eh/get-ef-color 'bg-magenta-subtle)
+                        :background (eh/get-ef-color 'magenta))
+    (set-face-attribute 'eh/org-keyword-next nil
+                        :foreground (eh/get-ef-color 'bg-yellow)
+                        :background (eh/get-ef-color 'yellow-graph-0-bg))
+    (set-face-attribute 'eh/org-keyword-halt nil
+                        :foreground (eh/get-ef-color 'bg-main)
+                        :background (eh/get-ef-color 'red-graph-0-bg))
+    (set-face-attribute 'eh/org-keyword-read nil
+                        :foreground (eh/get-ef-color 'bg-dim)
+                        :background (eh/get-ef-color 'fg-dim))
+    (set-face-attribute 'org-done nil
+                        :weight (face-attribute 'default :weight)
+                        :foreground (eh/get-ef-color 'fg-dim)
+                        :background (eh/get-ef-color 'bg-dim))
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :foreground (eh/get-ef-color 'green-graph-1-bg))
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :foreground (eh/get-ef-color 'red-graph-1-bg))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :foreground (eh/get-ef-color 'bg-blue))
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :inherit 'eh/org-keyword-done
+                        :background (eh/get-ef-color 'bg-added))
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :inherit 'eh/org-keyword-kill
+                        :background (eh/get-ef-color 'bg-removed-faint))
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :background (eh/get-ef-color 'bg-blue-subtle)
+                        :foreground (eh/get-ef-color 'blue-faint))
+    (set-face-attribute 'eh/org-keyword-rode nil
+                        :foreground (eh/get-ef-color 'cyan-graph-1-bg))
+    )))
 
 ;; (eh/org-update-theme)
 #+end_src
