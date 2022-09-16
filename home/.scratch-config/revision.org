@@ -220,17 +220,24 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
         (plex-variable
          :default-family "IBM Plex Mono"
          :variable-pitch-family "iA Writer Quattro V")
+        (system
+         :default-family "Menlo")
         (t ;; shared fallback values
          :default-family "Menlo"
          :default-weight normal
          :default-height 140
          :fixed-pitch-family nil
          :variable-pitch-family nil)
-        )
-      )
+        ))
+  (fontaine-set-preset (or (fontaine-restore-latest-preset) 'system))
+  :hook
+  (kill-emacs . fontaine-store-latest-preset)
+  (after-enable-theme . fontaine-apply-current-preset)
   )
-(fontaine-set-preset 'comic-code)
+;; (fontaine-store-latest-preset)
 #+end_src
+*** TODO Try to set default height based on screen resolution
+Use ~(display-pixel-width)~ and ~(display-pixel-height)~
 ** COMMENT Set up typography
 Typography in Emacs can be very fiddly. Some links that might help sometimes?
 [[https://stackoverflow.com/questions/67555133/emacs-not-listing-semilight-fonts][Emacs and fontconfig disagree about font weights]]
@@ -708,8 +715,23 @@ First, define a few functions that are useful to our use of Modus:
           (1 . (1.3)))))
 
 (use-package kaolin-themes
+  :preface
+  (defun eh/update-kaolin-theme ()
+    (when (member (car custom-enabled-themes) '(kaolin-light kaolin-breeze))
+      (set-face-attribute 'mode-line-inactive nil
+                          :box `(:line-width 2 :color ,(face-attribute 'mode-line :background)) ;; #D1D4CD
+                          :background (face-attribute 'default :background))
+      (set-face-attribute 'tab-bar nil
+                          :background (face-attribute 'mode-line :background))
+      (set-face-attribute 'tab-bar-tab nil
+                          :background (face-attribute 'default :background))
+      (set-face-attribute 'tab-bar-tab-inactive nil
+                          :background (plist-get (face-attribute 'mode-line :box) :color))
+      ))
   :config
-  (setq kaolin-themes-italic-comments t))
+  (setq kaolin-themes-italic-comments t)
+  :hook
+  (after-enable-theme . eh/update-kaolin-theme))
 
 (use-package isohedron-theme
   :straight (:type git :host github :repo "duien/isohedron-theme"))
@@ -859,6 +881,18 @@ This uses a background-color column to divide windows instead of drawing a line:
 ;;   :hook
 ;;   (before-make-frame . window-divider-mode))
 #+end_src
+*** Set up tab bar
+#+begin_src elisp
+(use-package tab-bar
+  :preface
+  ;; add spaces around the tab name
+  (defun eh/tab-bar-tab-name-format-comfortable (tab i)
+    (propertize (concat " " (tab-bar-tab-name-format-default tab i) " ")
+                'face (funcall tab-bar-tab-face-function tab)))
+  :config
+  (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
+  )
+#+end_src
 * What it can do
 ** Vertical completion interface
 This is what's used when switching buffers, searching for files, refiling to an org headline, all that stuff.
@@ -966,7 +1000,6 @@ See which lines have been modified in the gutter
 #+begin_src elisp
 (use-package vterm)
 #+end_src
-
 * Simple utilities for better editing
 ** Miscellaneous commands :crux:expand_region:rainbow:logos:olivetti:ws_butler:
 Crux has lots of handy utility functions. These are a few of the best:
@@ -1108,7 +1141,6 @@ But there's seemingly no reliable way to find out whether something is a real bu
 
 ;; (add-hook 'kill-buffer-query-functions #'confirm-buffer-kill-modified)
 #+end_src
-
 * Set up org-mode
 ** Prepare for org configuration
 
