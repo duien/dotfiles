@@ -1,3 +1,6 @@
+;;; init.el --- Personal Config Setup -*- lexical-binding: t; no-byte-compile: t -*-
+
+
 ;; Bootstrap straight
 (setq straight-use-package-by-default t)
 (setq straight-vc-git-default-clone-depth 1)

@@ -234,7 +234,6 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   (kill-emacs . fontaine-store-latest-preset)
   (after-enable-theme . fontaine-apply-current-preset)
   )
-;; (fontaine-store-latest-preset)
 #+end_src
 *** TODO Try to set default height based on screen resolution
 Use ~(display-pixel-width)~ and ~(display-pixel-height)~
