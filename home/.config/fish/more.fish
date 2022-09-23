@@ -7,6 +7,7 @@ alias rehash     "rbenv rehash"
 alias ll         "ls -lA"
 alias la         "ls -A"
 alias more-fish "source ~/.config/fish/more.fish"
+alias ffpull "git switch master ; and git pull ; and git switch - ; and git merge master --ff-only"
 
 # Basic environment
 prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/Code/Dox $HOME/.homesick/repos
