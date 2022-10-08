@@ -197,6 +197,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   :demand t)
 (general-define-key "<help> F" 'describe-face)
 (general-define-key "C-x z" 'bury-buffer)
+(general-define-key "C-x K" 'kill-this-buffer)
 (global-unset-key (kbd "C-x m"))
 #+end_src
 * How it looks
@@ -985,12 +986,16 @@ This adds the additional columns to the completion window. Extra info, and I thi
 #+end_src
 ** Scratch buffer is magic
 I use the scratch buffer a lot, and it's nice to have the things there stick around unless I delete them on purpose. It's a good place to stash log output, temporary shell command editing, things like that, but sometimes I need to restart my editor while still in the middle of those tasks.
+
+Persistent scratch does bad things if the scratch buffer is ever killed, so use emacs-lock to make sure that it never is. See https://www.emacswiki.org/emacs/ProtectingBuffers for various other possible approaches and packages.
 #+begin_src elisp
 (use-package persistent-scratch
   :demand t
-  :config
-  (setq persistent-scratch-backup-directory "~/.emacs-backups")
   :init
+  (setq persistent-scratch-backup-directory "~/.emacs-backups")
+  (with-current-buffer "*scratch*"
+    (emacs-lock-mode 'kill))
+  :config
   (persistent-scratch-setup-default)
   (persistent-scratch-mode 1))
 #+end_src
