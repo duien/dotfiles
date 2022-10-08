@@ -703,9 +703,33 @@ First, define a few functions that are useful to our use of Modus:
   (setq doom-isohedron-brighter-modeline t)
   (setq doom-earl-grey-brighter-modeline t)
   )
-(use-package nano-theme)
-(use-package bespoke-theme
-  :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
+;; (use-package nano-theme)
+;; (use-package bespoke-theme
+;;   :straight (:host github :repo "mclear-tools/bespoke-themes" :branch "main"))
+(use-package cloud-theme
+  :preface
+  (defun eh/customize-cloud ()
+    ;; still needs some tweaking and a lot more org customization, but these
+    ;; tweaks are getting closer. They also need to be run automatically.
+    (set-face-attribute 'org-todo nil :box nil)
+    (set-face-attribute 'org-done nil :box nil :weight 'normal)
+    (set-face-attribute 'org-headline-done nil
+                        :inherit 'font-lock-comment-face
+                        :strike-through nil
+                        :foreground 'unspecified)
+    (set-face-attribute 'org-headline-todo nil :foreground 'unspecified)
+    (set-face-attribute 'org-block nil :background "#ededed")
+    (set-face-attribute 'org-table nil :inherit 'shadow :foreground 'unspecified)
+    (set-face-attribute 'org-drawer nil
+                        :inherit 'org-block-begin-line
+                        :foreground 'unspecified)
+    (set-face-attribute 'org-ellipsis nil
+                        :inherit 'font-lock-comment-face
+                        :underline 'unspecified
+                        :foreground 'unspecified)
+    )
+  ;; (eh/customize-cloud)
+  )
 
 (use-package ef-themes
   :preface
@@ -740,8 +764,9 @@ First, define a few functions that are useful to our use of Modus:
   :straight (:type git :host github :repo "duien/isohedron-theme"))
 
 ;; (modus-themes-load-operandi)
-(load-theme 'ef-day)
+;; (load-theme 'ef-day)
 ;; (load-theme 'kaolin-breeze)
+(load-theme 'isohedron)
 #+end_src
 *** Fancy and unnecessary SVG tags
 #+begin_src elisp
@@ -1034,6 +1059,10 @@ Allow highlighting color-like things in their colors. This isn't very smart abou
 #+begin_src elisp
 (use-package rainbow-mode)
 (use-package fontify-face)
+
+;; remove some of the things that rainbow-mode colors
+;; (setq rainbow-ansi-colors nil)
+;; (setq rainbow-x-colors nil)
 #+end_src
 
 Move forward and backward through pages when the buffer is narrowed:
@@ -1327,7 +1356,46 @@ Set up some basic org styling that we'll run whenever we change themes:
      (set-face-attribute 'eh/org-keyword-kill nil
                          :foreground (doom-color 'fg-alt))
      )
-    ((pred (lambda (theme) (member theme ef-themes-light-themes)))
+    ('isohedron
+     (message "Setting up org faces for isohedron")
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :background "#84bd00"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :background "#ce5cff"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-read nil
+                         :background "#B9A992"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :background "#75a3ff"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-bury nil
+                         :foreground "#93836C"
+                         :slant 'normal)
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :background "#f0b400"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-halt nil
+                         :background "#F08C00"
+                         :foreground "#f7f3ee")
+     (set-face-attribute 'eh/org-keyword-done nil
+                         :foreground "#81895d")
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :foreground "#957F5F")
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :background "#e2e9ca"
+                         :foreground "#84BD00")
+     (set-face-attribute 'eh/org-keyword-no nil
+                         :background "#f6e1ca"
+                         :foreground "#FB6C6A")
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :background "#dde3f2"
+                         :foreground "#75A3FF")
+     )
+    ((pred (lambda (theme)
+             (and (boundp 'ef-themes-light-themes)
+                  (member theme ef-themes-light-themes))))
      (message "Setting up ef-theme overrides (light)")
      (set-face-attribute 'org-headline-todo nil
                          :inherit nil
@@ -1372,7 +1440,9 @@ Set up some basic org styling that we'll run whenever we change themes:
                          :foreground (eh/get-ef-color 'blue-faint)
                          :background (eh/get-ef-color 'bg-blue-subtle))
      )
-    ((pred (lambda (theme) (member theme ef-themes-dark-themes)))
+    ((pred (lambda (theme)
+             (and (boundp 'ef-themes-dark-themes)
+                  (member theme ef-themes-dark-themes))))
      (message "Setting up ef-theme overrides (dark)")
      (set-face-attribute 'org-headline-todo nil
                          :inherit nil
@@ -1380,46 +1450,46 @@ Set up some basic org styling that we'll run whenever we change themes:
      (set-face-attribute 'org-headline-done nil
                          :inherit 'italic
                          :weight (face-attribute 'default :weight))
-    (set-face-attribute 'eh/org-keyword-todo nil
-                        :foreground (eh/get-ef-color 'bg-green-subtle)
-                        :background (eh/get-ef-color 'green))
-    (set-face-attribute 'eh/org-keyword-question nil
-                        :foreground (eh/get-ef-color 'bg-blue-subtle)
-                        :background (eh/get-ef-color 'blue))
-    (set-face-attribute 'eh/org-keyword-idea nil
-                        :foreground (eh/get-ef-color 'bg-magenta-subtle)
-                        :background (eh/get-ef-color 'magenta))
-    (set-face-attribute 'eh/org-keyword-next nil
-                        :foreground (eh/get-ef-color 'bg-yellow)
-                        :background (eh/get-ef-color 'yellow-graph-0-bg))
-    (set-face-attribute 'eh/org-keyword-halt nil
-                        :foreground (eh/get-ef-color 'bg-main)
-                        :background (eh/get-ef-color 'red-graph-0-bg))
-    (set-face-attribute 'eh/org-keyword-read nil
-                        :foreground (eh/get-ef-color 'bg-dim)
-                        :background (eh/get-ef-color 'fg-dim))
-    (set-face-attribute 'org-done nil
-                        :weight (face-attribute 'default :weight)
-                        :foreground (eh/get-ef-color 'fg-dim)
-                        :background (eh/get-ef-color 'bg-dim))
-    (set-face-attribute 'eh/org-keyword-done nil
-                        :foreground (eh/get-ef-color 'green-graph-1-bg))
-    (set-face-attribute 'eh/org-keyword-kill nil
-                        :foreground (eh/get-ef-color 'red-graph-1-bg))
-    (set-face-attribute 'eh/org-keyword-answer nil
-                        :foreground (eh/get-ef-color 'bg-blue))
-    (set-face-attribute 'eh/org-keyword-yes nil
-                        :inherit 'eh/org-keyword-done
-                        :background (eh/get-ef-color 'bg-added))
-    (set-face-attribute 'eh/org-keyword-no nil
-                        :inherit 'eh/org-keyword-kill
-                        :background (eh/get-ef-color 'bg-removed-faint))
-    (set-face-attribute 'eh/org-keyword-answer nil
-                        :background (eh/get-ef-color 'bg-blue-subtle)
-                        :foreground (eh/get-ef-color 'blue-faint))
-    (set-face-attribute 'eh/org-keyword-rode nil
-                        :foreground (eh/get-ef-color 'cyan-graph-1-bg))
-    )
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :foreground (eh/get-ef-color 'bg-green-subtle)
+                         :background (eh/get-ef-color 'green))
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :foreground (eh/get-ef-color 'bg-blue-subtle)
+                         :background (eh/get-ef-color 'blue))
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :foreground (eh/get-ef-color 'bg-magenta-subtle)
+                         :background (eh/get-ef-color 'magenta))
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :foreground (eh/get-ef-color 'bg-yellow)
+                         :background (eh/get-ef-color 'yellow-graph-0-bg))
+     (set-face-attribute 'eh/org-keyword-halt nil
+                         :foreground (eh/get-ef-color 'bg-main)
+                         :background (eh/get-ef-color 'red-graph-0-bg))
+     (set-face-attribute 'eh/org-keyword-read nil
+                         :foreground (eh/get-ef-color 'bg-dim)
+                         :background (eh/get-ef-color 'fg-dim))
+     (set-face-attribute 'org-done nil
+                         :weight (face-attribute 'default :weight)
+                         :foreground (eh/get-ef-color 'fg-dim)
+                         :background (eh/get-ef-color 'bg-dim))
+     (set-face-attribute 'eh/org-keyword-done nil
+                         :foreground (eh/get-ef-color 'green-graph-1-bg))
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :foreground (eh/get-ef-color 'red-graph-1-bg))
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :foreground (eh/get-ef-color 'bg-blue))
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :inherit 'eh/org-keyword-done
+                         :background (eh/get-ef-color 'bg-added))
+     (set-face-attribute 'eh/org-keyword-no nil
+                         :inherit 'eh/org-keyword-kill
+                         :background (eh/get-ef-color 'bg-removed-faint))
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :background (eh/get-ef-color 'bg-blue-subtle)
+                         :foreground (eh/get-ef-color 'blue-faint))
+     (set-face-attribute 'eh/org-keyword-rode nil
+                         :foreground (eh/get-ef-color 'cyan-graph-1-bg))
+     )
     ('spacemacs-light
      (set-face-attribute 'org-hide nil
                          :foreground (face-attribute 'default :background))
