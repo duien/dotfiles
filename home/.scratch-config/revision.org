@@ -1078,7 +1078,11 @@ Move forward and backward through pages when the buffer is narrowed:
   
 (use-package olivetti
   :config
-  (setq olivetti-style nil))
+  (setq olivetti-style nil)
+  :hook
+  org-mode
+  gfm-mode
+  markdown-mode)
 #+end_src
 Getting rid of ~visual-fill-column-mode~ in favor of olivetti. I think overall, having regular ~visual-line-mode~ is a better default, and olivetti is simple (and I can remember the dang name!)
 
@@ -1284,7 +1288,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the IDEA keyword in Org"))
   (eh/org-register-keyword
    :keywords '("READ")
-   :symbol ?◊ ;;◇
+   :symbol ?□  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
   )
@@ -1320,7 +1324,7 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :foreground 'unspecified
                         :background 'unspecified
                         :inherit 'org-done))
-  
+
   ;; Now set up theme-specific things?
   (pcase (car custom-enabled-themes)
     ((or 'modus-operandi 'modus-vivendi)
