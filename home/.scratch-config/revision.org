@@ -204,8 +204,12 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 #+begin_src elisp
 (use-package fontaine
   :config
+  (defvar eh/base-font-height
+    (if (> (x-display-pixel-width) 2500)
+        160 140)
+    "The main font size, based on display resolution.")
   (setq fontaine-presets
-      '((comic-code
+      `((comic-code
          :default-family "Comic Code Ligatures")
         (jetbrains-mono
          :default-family "Jetbrains Mono"
@@ -225,7 +229,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
         (t ;; shared fallback values
          :default-family "Menlo"
          :default-weight normal
-         :default-height 140
+         :default-height ,eh/base-font-height
          :fixed-pitch-family nil
          :variable-pitch-family nil)
         ))
@@ -233,10 +237,10 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   :hook
   (kill-emacs . fontaine-store-latest-preset)
   (after-enable-theme . fontaine-apply-current-preset)
+  ;; this needs to be done when font size changes
+  ;; (diff-hl-maybe-redefine-bitmaps)
   )
 #+end_src
-*** TODO Try to set default height based on screen resolution
-Use ~(display-pixel-width)~ and ~(display-pixel-height)~
 ** COMMENT Set up typography
 Typography in Emacs can be very fiddly. Some links that might help sometimes?
 [[https://stackoverflow.com/questions/67555133/emacs-not-listing-semilight-fonts][Emacs and fontconfig disagree about font weights]]
