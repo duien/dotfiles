@@ -819,13 +819,13 @@ This is really determined by which mode we load in org. I'd been using variable-
 (setq mode-line-percent-position nil)
 (line-number-mode -1)
 
-(use-package moody
-  :config
-  (setq x-underline-at-descent-line t
-        moody-mode-line-height nil)
-  ;; :init
-  ;; (moody-replace-mode-line-buffer-identification)
-  )
+;; (use-package moody
+;;   :config
+;;   (setq x-underline-at-descent-line t
+;;         moody-mode-line-height nil)
+;;   ;; :init
+;;   ;; (moody-replace-mode-line-buffer-identification)
+;;   )
 #+end_src
 
 Use minions to hide all the minor mode indicators in a menu
@@ -1228,7 +1228,8 @@ So, here are the keywords as they stand now, and what the intention is for each 
 
   (eh/org-register-keyword
    :keywords '("DONE")
-   :symbol ?- ;;✓
+   ;; :symbol ?- ;; comic-code
+   :symbol ?✓ ;; other
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
   (eh/org-register-keyword
@@ -1273,7 +1274,9 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the FLAG keyword in Org"))
   (eh/org-register-keyword
    :keywords '("TODO")
-   :symbol ?○ ;;◯ ;;☐ ;; ?◦ ○
+   ;; :symbol ?○ ;; comic-code
+   :symbol ?◯ ;; other
+   ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
            "Face used for the TODO keyword in Org"))
   (eh/org-register-keyword
@@ -1283,12 +1286,16 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the BLOK keyword in Org"))
   (eh/org-register-keyword
    :keywords '("QUEST" "QSTN" "QUESTION")
-   :symbol ?◊ ;;◇ ;;?
+   ;; :symbol ?◊ ;; comic-code
+   :symbol ?◇ ;; other
+   ;;?
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
   (eh/org-register-keyword
    :keywords '("IDEA" "YAKS" "YAK")
-   :symbol ?♡ ;;◌ ;; ∞ ҩ ¤ φ
+   ;; :symbol ?♡ ;; comic-code
+   :symbol ?◌ ;; jetbrains
+   ;; ∞ ҩ ¤ φ
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
            "Face used for the IDEA keyword in Org"))
   (eh/org-register-keyword
@@ -1297,6 +1304,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
   )
+;; (eh/define-org-keywords)
 #+end_src
 ** Set up theme-specific org styling
 Set up some basic org styling that we'll run whenever we change themes:
@@ -1588,8 +1596,10 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-fold-catch-invisible-edits 'show
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil)))
-  ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯
-  (setq org-ellipsis " ⋯")
+  ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
+  ;; ⤵ ⬎ [+] ▼ 
+  (setq org-ellipsis " [+]") ;; comic-code
+  (setq org-ellipsis " ⋯") ;; other
   (setq org-src-window-setup 'current-window)
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
@@ -1672,7 +1682,8 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-leading-bullet "·"
         org-superstar-remove-leading-stars nil
         ;; org-superstar-headline-bullets-list '("◆" "•")
-        org-superstar-headline-bullets-list '("♦" "•")
+        ;; org-superstar-headline-bullets-list '("♦" "•") ;; comic-code
+        org-superstar-headline-bullets-list '("◆" "•") ;; other
         org-superstar-prettify-item-bullets nil
         )
   (defun eh/org-superstar-update-theme ()
