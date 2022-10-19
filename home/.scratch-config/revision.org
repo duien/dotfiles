@@ -1726,6 +1726,7 @@ Here's some fiddling trying to get a nice agenda going:
 (use-package haml-mode)
 (use-package slim-mode)
 (use-package sass-mode)
+(use-package json-mode)
 #+end_src
 ** Writing in Markdown :markdown:
 As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
