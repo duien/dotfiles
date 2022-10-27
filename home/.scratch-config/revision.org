@@ -544,23 +544,25 @@ Or turn it on the hard way:
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
   ;; Enable some common and uncommon ligature in programming modes
-  (ligature-set-ligatures 'prog-mode '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                                       ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                                       "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                                       "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                                       "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                                       "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                                       "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                                       "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                                       ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                                       "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                                       "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                                       "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                                       "\\\\" "://"
-                                       "[FAIL]" "[BUG]" "[DEBUG]" "[ERR]" "[ERROR]" "[FAIL]" "[FATAL]"
-                                       "[FIXME]" "[HACK]" "[INFO]" "[INFO ]" "[KO]" "[MARK]" "[NOTE]"
-                                       "[OK]" "[PASS]" "[PASS ]" "[TODO]" "[TRACE]" "[VERBOSE]"
-                                       "[WARN]" "[WARN ]" "[WARNING]"))
+  (ligature-set-ligatures
+   '(prog-mode html-mode web-mode)
+   '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+     ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+     "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+     "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+     "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+     "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+     "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+     "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+     ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+     "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+     "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+     "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+     "\\\\" "://"
+     "[FAIL]" "[BUG]" "[DEBUG]" "[ERR]" "[ERROR]" "[FAIL]" "[FATAL]"
+     "[FIXME]" "[HACK]" "[INFO]" "[INFO ]" "[KO]" "[MARK]" "[NOTE]"
+     "[OK]" "[PASS]" "[PASS ]" "[TODO]" "[TRACE]" "[VERBOSE]"
+     "[WARN]" "[WARN ]" "[WARNING]"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t)
@@ -1035,7 +1037,7 @@ See which lines have been modified in the gutter
 (use-package vterm)
 #+end_src
 * Simple utilities for better editing
-** Miscellaneous commands :crux:expand_region:rainbow:logos:olivetti:ws_butler:
+** Miscellaneous commands
 Crux has lots of handy utility functions. These are a few of the best:
 #+begin_src elisp
 (use-package crux
@@ -1104,7 +1106,7 @@ Manage whitespace automatically:
 (setq-default word-wrap t)
 (setq-default truncate-lines t)
 #+end_src
-** Parentheses matching and surround :smartparens:
+** Parentheses matching and surround
 #+begin_src elisp
 (use-package smartparens
   :config
@@ -1140,7 +1142,7 @@ Manage whitespace automatically:
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 #+end_src
-** Pulse the line after movement :pulsar:
+** Pulse the line after movement
 #+begin_src elisp
 (use-package pulsar
   :config
@@ -1159,7 +1161,7 @@ Manage whitespace automatically:
   ;; pulsar-face
   )
 #+end_src
-** Highlight occurrences of multiple symbols :highlight_symbol:
+** Highlight occurrences of multiple symbols
 #+begin_src elisp
 (use-package highlight-symbol)
 ;; highlight-symbol-mode for persistent highlights
@@ -1565,7 +1567,7 @@ Set up some basic org styling that we'll run whenever we change themes:
 
 ;; (eh/org-update-theme)
 #+end_src
-** Basic configuration :org:
+** Basic configuration
 #+begin_src elisp
 (use-package org
   :config
@@ -1673,7 +1675,7 @@ Set up some basic org styling that we'll run whenever we change themes:
   ;; (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
-** Making org prettier :org_superstar:
+** Making org prettier
 #+begin_src elisp
 (use-package org-superstar 
   :config
@@ -1721,7 +1723,7 @@ Here's some fiddling trying to get a nice agenda going:
   (org-agenda nil "t"))
 #+end_src
 * Language support
-** Misc small packages :fish:haml:slim:
+** Misc small packages
 #+begin_src elisp
 (use-package fish-mode)
 (use-package haml-mode)
@@ -1729,7 +1731,7 @@ Here's some fiddling trying to get a nice agenda going:
 (use-package sass-mode)
 (use-package json-mode)
 #+end_src
-** Writing in Markdown :markdown:
+** Writing in Markdown
 As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
 #+begin_src elisp
 (use-package markdown-mode
@@ -1741,7 +1743,7 @@ As much as I love org, sometimes I do still have to deal with Markdown. And it's
   ;; (markdown-mode . mixed-pitch-mode)
   )
 #+end_src
-** Javascript with Vue :vue:
+** Javascript with Vue
 I think vue-mode gets us most of what we need. It handles markup and JS in the same file, which is the main thing. In some cases, web-mode can be better, since it supports reasonable folding for HTML elements. It's also useful to have for non-vue mixed-language templates.
 #+begin_src elisp
 (use-package vue-mode)
