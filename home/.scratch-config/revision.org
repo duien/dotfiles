@@ -1195,6 +1195,12 @@ But there's seemingly no reliable way to find out whether something is a real bu
 
 ;; (add-hook 'kill-buffer-query-functions #'confirm-buffer-kill-modified)
 #+end_src
+** Add a package for searching
+Using projectile's search in project requires a package for a search tool. Ag seems like a reasonable choice, and has the best default keybinding.
+#+begin_src elisp
+(use-package ag)
+#+end_src
+
 * Set up org-mode
 ** Prepare for org configuration
 
@@ -1741,6 +1747,7 @@ Here's some fiddling trying to get a nice agenda going:
 (use-package slim-mode)
 (use-package sass-mode)
 (use-package json-mode)
+(use-package yaml-mode)
 #+end_src
 ** Writing in Markdown
 As much as I love org, sometimes I do still have to deal with Markdown. And it's usually github-flavored, so we'll need a package for that.
