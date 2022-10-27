@@ -212,7 +212,8 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
     "The main font size, based on display resolution.")
   (setq fontaine-presets
       `((comic-code
-         :default-family "Comic Code Ligatures")
+         :default-family "Comic Code Ligatures"
+         :default-weight normal)
         (jetbrains-mono
          :default-family "Jetbrains Mono"
          :default-weight light)
@@ -226,6 +227,15 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
         (plex-variable
          :default-family "IBM Plex Mono"
          :variable-pitch-family "iA Writer Quattro V")
+        (victor-mono
+         :default-family "Victor Mono"
+         :default-weight normal)
+        (iosevka-variable
+         :default-family "Iosevka SS14"
+         :variable-pitch-family "Iosevka Aile"
+         )
+
+        ;; fallbacks
         (system
          :default-family "Menlo")
         (t ;; shared fallback values
@@ -1231,8 +1241,9 @@ So, here are the keywords as they stand now, and what the intention is for each 
 
   (eh/org-register-keyword
    :keywords '("DONE")
-   ;; :symbol ?- ;; comic-code
-   :symbol ?✓ ;; other
+   ;; ✓✔︎
+   :symbol ?· ;; comic-code
+   ;; :symbol ?✓ ;; other
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
   (eh/org-register-keyword
@@ -1277,8 +1288,8 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the FLAG keyword in Org"))
   (eh/org-register-keyword
    :keywords '("TODO")
-   ;; :symbol ?○ ;; comic-code
-   :symbol ?◯ ;; other
+   :symbol ?○ ;; comic-code
+   ;; :symbol ?◯ ;; other
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
            "Face used for the TODO keyword in Org"))
@@ -1289,15 +1300,15 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the BLOK keyword in Org"))
   (eh/org-register-keyword
    :keywords '("QUEST" "QSTN" "QUESTION")
-   ;; :symbol ?◊ ;; comic-code
-   :symbol ?◇ ;; other
+   :symbol ?◊ ;; comic-code
+   ;; :symbol ?◇ ;; other
    ;;?
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
   (eh/org-register-keyword
    :keywords '("IDEA" "YAKS" "YAK")
-   ;; :symbol ?♡ ;; comic-code
-   :symbol ?◌ ;; jetbrains
+   :symbol ?¤  ;;♡ ;; comic-code
+   ;; :symbol ?◌ ;; jetbrains
    ;; ∞ ҩ ¤ φ
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
            "Face used for the IDEA keyword in Org"))
@@ -1600,9 +1611,9 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil)))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
-  ;; ⤵ ⬎ [+] ▼ 
+  ;; ⤵ ⬎ [+] ▼ ↯
   (setq org-ellipsis " [+]") ;; comic-code
-  (setq org-ellipsis " ⋯") ;; other
+  ;; (setq org-ellipsis " ⋯") ;; other
   (setq org-src-window-setup 'current-window)
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
@@ -1685,8 +1696,8 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-leading-bullet "·"
         org-superstar-remove-leading-stars nil
         ;; org-superstar-headline-bullets-list '("◆" "•")
-        ;; org-superstar-headline-bullets-list '("♦" "•") ;; comic-code
-        org-superstar-headline-bullets-list '("◆" "•") ;; other
+        org-superstar-headline-bullets-list '("♦" "•") ;; comic-code
+        ;; org-superstar-headline-bullets-list '("◆" "•") ;; other
         org-superstar-prettify-item-bullets nil
         )
   (defun eh/org-superstar-update-theme ()
