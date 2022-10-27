@@ -37,8 +37,14 @@ format = "[$duration]($style) "
 [character]
 # success_symbol = "[▷](bold green)"
 # error_symbol = "[✗](bold red) "
+
+# arrow for comic code
 success_symbol = "[►](bold green)"
 error_symbol = "[►](bold red)"
+
+# arrow for jetbrains
+# success_symbol = "[▶](bold green)"
+# error_symbol = "[▶](bold red)"
 
 [status]
 format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
