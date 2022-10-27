@@ -62,12 +62,13 @@ Set up some very basic (and mostly self-explanatory) options:
       sentence-end-double-space nil
       vc-follow-symlinks t
       dired-use-ls-dired nil
-      fill-column 80
+      ;; fill-column 80
       tool-bar-mode -1
       toggle-scroll-bar -1
       mouse-wheel-tilt-scroll t
       custom-safe-themes t
       )
+(setq-default fill-column 80)
 #+end_src
 
 When we turn on visual line mode, turn off mouse wheel tilt scroll:
@@ -1575,7 +1576,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-agenda-files '("~/Org/")
         org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
         org-log-done t
-        org-log-into-drawer t
+        org-log-into-drawer nil
         org-insert-heading-respect-content t
         org-M-RET-may-split-line '((default . t))
         org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
@@ -1604,7 +1605,7 @@ Set up some basic org styling that we'll run whenever we change themes:
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
   (setq org-todo-keywords
-        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d!)" "KILL(k@)")
+        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d)" "KILL(k@)")
           (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
           (type "IDEA(i)" "GOAL(g)" "|")
           (sequence "READ(R)" "|" "RODE(r)")
