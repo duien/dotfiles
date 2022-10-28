@@ -1782,6 +1782,11 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package web-mode)
 (use-package typescript-mode)
 #+end_src
+** Elixir
+#+begin_src elisp
+(use-package elixir)
+#+end_src
+
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~
