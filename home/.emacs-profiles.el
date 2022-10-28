@@ -9,6 +9,4 @@
             ))
  ("minimal" . ((user-emacs-directory . "~/.minimal-config")
                (server-name . "minimal-server")))
- ("nano" . ((user-emacs-directory . "~/.nano-emacs")
-            (server-name . "nano-server")))
  )
