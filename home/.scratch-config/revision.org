@@ -944,30 +944,39 @@ This is what's used when switching buffers, searching for files, refiling to an 
 *** Set up consult first
 Consult is what sets the contents of those menus. It provides a really nice buffer switch interface, ~consult-buffer~, which includes a variety of sources and the ability to use a single-letter prefix to filter them exclusively.
 #+begin_src elisp
-  (use-package consult
-    :demand t
-    :config
-    ;; Don't automatically preview things
-    (setq consult-preview-key (kbd "M-."))
-    ;; :init
-    (setq consult-project-root-function #'projectile-project-root)
-    :general
-    ("C-x b" 'consult-buffer)
-    ("C-x 4 b" 'consult-buffer-other-window)
-    ("C-x 5 b" 'consult-buffer-other-frame)
-    ;; consult-yank-from-kill-ring
-    ;; consult-yank-pop
-    ("<help> a" 'consult-apropos)
-    ("<help> t" 'consult-theme))
+(use-package consult
+  :demand t
+  :config
+  ;; Don't automatically preview things
+  (setq consult-preview-key (kbd "M-."))
+  (defvar eh/org-source
+    (list :name "Org Files"
+          :category 'file
+          :narrow ?o
+          :face 'consult-file
+          :items
+          (org-agenda-files)
+          ))
+  (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
+  ;; :init
+  (setq consult-project-root-function #'projectile-project-root)
+  :general
+  ("C-x b" 'consult-buffer)
+  ("C-x 4 b" 'consult-buffer-other-window)
+  ("C-x 5 b" 'consult-buffer-other-frame)
+  ;; consult-yank-from-kill-ring
+  ;; consult-yank-pop
+  ("<help> a" 'consult-apropos)
+  ("<help> t" 'consult-theme))
 #+end_src
 
 It still only operates on the single line, but it provides the nicer menus, and allows previewing the thing to be switched to (buffers, themes, etc).
 *** Set up vertico
 Vertico is what takes the completion functions from consult and turns them into what we'd normally think of as an autocomplete window. It's a few lines high, shows the input at the top, and provides a list of the possible results. You can move up and down through the list, or continue typing to keep narrowing.
 #+begin_src elisp
-  (use-package vertico
-    :init
-    (vertico-mode))
+(use-package vertico
+  :init
+  (vertico-mode))
 #+end_src
 *** Use orderless matching
 Speaking of matching, it's something that apparently I have Opinions about. It's important for the way I use it (and the organization of the projects I'm often navigating) that I can add additional elements to the match out of order. I might start searching for a model, =mod= then =us= for user. Oh, but I need the spec, so =spec=. In a lot of completion setups, I'd have to go back to the beginning of the string to add a filter that's higher up in the file tree. But with orderless, I can add the tokens in whatever order I want!
