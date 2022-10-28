@@ -946,12 +946,14 @@ Consult is what sets the contents of those menus. It provides a really nice buff
     :config
     ;; Don't automatically preview things
     (setq consult-preview-key (kbd "M-."))
+    (setq consult-narrow-key "<")
     ;; :init
     (setq consult-project-root-function #'projectile-project-root)
     :general
     ("C-x b" 'consult-buffer)
     ("C-x 4 b" 'consult-buffer-other-window)
     ("C-x 5 b" 'consult-buffer-other-frame)
+
     ;; consult-yank-from-kill-ring
     ;; consult-yank-pop
     ("<help> a" 'consult-apropos)
