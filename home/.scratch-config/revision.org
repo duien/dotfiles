@@ -213,6 +213,9 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   (setq fontaine-presets
       `((comic-code
          :default-family "Comic Code Ligatures"
+         ;; We actually want the light weight, but emacs doesn't detect
+         ;; it correctly. Therefore, handle that by disabling unwanted
+         ;; weights in FontBook and using `normal'
          :default-weight normal)
         (jetbrains-mono
          :default-family "Jetbrains Mono"
@@ -1618,8 +1621,9 @@ Set up some basic org styling that we'll run whenever we change themes:
                                      (plain-list-item . nil)))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
-  (setq org-ellipsis " [+]") ;; comic-code
+  ;; (setq org-ellipsis " [+]") ;; comic-code
   ;; (setq org-ellipsis " ⋯") ;; other
+  (setq org-ellipsis " ↓")
   (setq org-src-window-setup 'current-window)
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
@@ -1633,7 +1637,8 @@ Set up some basic org styling that we'll run whenever we change themes:
   (setq org-capture-templates
         '(("t" "Some thing" entry (file "~/Org/inbox.org")
            "* TODO %?\n%a\n%i")
-          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
+          ;; TODO Find a way to dynamically grab the latest dox file
+          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q3.org" "Inbox")
            "* TODO %?\n%a\n%i")
           ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
            "* TODO %?\n%a\n%i")
