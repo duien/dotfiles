@@ -945,21 +945,18 @@ This is what's used when switching buffers, searching for files, refiling to an 
 Consult is what sets the contents of those menus. It provides a really nice buffer switch interface, ~consult-buffer~, which includes a variety of sources and the ability to use a single-letter prefix to filter them exclusively.
 #+begin_src elisp
 (use-package consult
-  :demand t
   :config
-  ;; Don't automatically preview things
   (setq consult-preview-key (kbd "M-."))
-  (defvar eh/org-source
-    (list :name "Org Files"
-          :category 'file
-          :narrow ?o
-          :face 'consult-file
-          :items
-          (org-agenda-files)
-          ))
-  (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
-  ;; :init
+  (setq consult-narrow-key "<")
   (setq consult-project-root-function #'projectile-project-root)
+  (defvar eh/org-source
+    `(:name "Org Files"
+            :category file
+            :narrow ?o
+            :face 'consult-file
+            :items ,#'org-agenda-files))
+  (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
+
   :general
   ("C-x b" 'consult-buffer)
   ("C-x 4 b" 'consult-buffer-other-window)
