@@ -32,3 +32,7 @@ home/.nano-emacs/elpa/
 # these files are generated from org on sync
 home/.doom-config/*.el
 home/.scratch-config/fontaine-latest-state.eld
+/home/.minimal-config/elpa/
+/home/.minimal-config/projects
+/home/.scratch-config/eln-cache/
+/home/.scratch-config/games/

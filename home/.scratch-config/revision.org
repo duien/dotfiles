@@ -213,6 +213,9 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   (setq fontaine-presets
       `((comic-code
          :default-family "Comic Code Ligatures"
+         ;; We actually want the light weight, but emacs doesn't detect
+         ;; it correctly. Therefore, handle that by disabling unwanted
+         ;; weights in FontBook and using `normal'
          :default-weight normal)
         (jetbrains-mono
          :default-family "Jetbrains Mono"
@@ -941,32 +944,36 @@ This is what's used when switching buffers, searching for files, refiling to an 
 *** Set up consult first
 Consult is what sets the contents of those menus. It provides a really nice buffer switch interface, ~consult-buffer~, which includes a variety of sources and the ability to use a single-letter prefix to filter them exclusively.
 #+begin_src elisp
-  (use-package consult
-    :demand t
-    :config
-    ;; Don't automatically preview things
-    (setq consult-preview-key (kbd "M-."))
-    (setq consult-narrow-key "<")
-    ;; :init
-    (setq consult-project-root-function #'projectile-project-root)
-    :general
-    ("C-x b" 'consult-buffer)
-    ("C-x 4 b" 'consult-buffer-other-window)
-    ("C-x 5 b" 'consult-buffer-other-frame)
+(use-package consult
+  :config
+  (setq consult-preview-key (kbd "M-."))
+  (setq consult-narrow-key "<")
+  (setq consult-project-root-function #'projectile-project-root)
+  (defvar eh/org-source
+    `(:name "Org Files"
+            :category file
+            :narrow ?o
+            :face 'consult-file
+            :items ,#'org-agenda-files))
+  (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
 
-    ;; consult-yank-from-kill-ring
-    ;; consult-yank-pop
-    ("<help> a" 'consult-apropos)
-    ("<help> t" 'consult-theme))
+  :general
+  ("C-x b" 'consult-buffer)
+  ("C-x 4 b" 'consult-buffer-other-window)
+  ("C-x 5 b" 'consult-buffer-other-frame)
+  ;; consult-yank-from-kill-ring
+  ;; consult-yank-pop
+  ("<help> a" 'consult-apropos)
+  ("<help> t" 'consult-theme))
 #+end_src
 
 It still only operates on the single line, but it provides the nicer menus, and allows previewing the thing to be switched to (buffers, themes, etc).
 *** Set up vertico
 Vertico is what takes the completion functions from consult and turns them into what we'd normally think of as an autocomplete window. It's a few lines high, shows the input at the top, and provides a list of the possible results. You can move up and down through the list, or continue typing to keep narrowing.
 #+begin_src elisp
-  (use-package vertico
-    :init
-    (vertico-mode))
+(use-package vertico
+  :init
+  (vertico-mode))
 #+end_src
 *** Use orderless matching
 Speaking of matching, it's something that apparently I have Opinions about. It's important for the way I use it (and the organization of the projects I'm often navigating) that I can add additional elements to the match out of order. I might start searching for a model, =mod= then =us= for user. Oh, but I need the spec, so =spec=. In a lot of completion setups, I'd have to go back to the beginning of the string to add a filter that's higher up in the file tree. But with orderless, I can add the tokens in whatever order I want!
@@ -1620,8 +1627,9 @@ Set up some basic org styling that we'll run whenever we change themes:
                                      (plain-list-item . nil)))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
-  (setq org-ellipsis " [+]") ;; comic-code
+  ;; (setq org-ellipsis " [+]") ;; comic-code
   ;; (setq org-ellipsis " ⋯") ;; other
+  (setq org-ellipsis " ↓")
   (setq org-src-window-setup 'current-window)
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
@@ -1635,7 +1643,8 @@ Set up some basic org styling that we'll run whenever we change themes:
   (setq org-capture-templates
         '(("t" "Some thing" entry (file "~/Org/inbox.org")
            "* TODO %?\n%a\n%i")
-          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q1.org" "Inbox")
+          ;; TODO Find a way to dynamically grab the latest dox file
+          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q3.org" "Inbox")
            "* TODO %?\n%a\n%i")
           ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
            "* TODO %?\n%a\n%i")
@@ -1770,6 +1779,11 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 (use-package web-mode)
 (use-package typescript-mode)
 #+end_src
+** Elixir
+#+begin_src elisp
+(use-package elixir)
+#+end_src
+
 * Footnotes
 
 [fn:1] ~org-babel-demarcate-block~

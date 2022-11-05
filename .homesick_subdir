@@ -1,9 +1,4 @@
 .config
 .config/fish
 .config/fish/functions
-.atom
-.atom/packages
 bin
-.spacemacs.d
-.config/nvim
-.castlemacs

@@ -4,3 +4,5 @@
 --ignore-dir=log
 --ignore-dir=public/packs-test
 --ignore-dir=coverage
+--ignore-dir=node_modules
+--ignore-dir=vendor
