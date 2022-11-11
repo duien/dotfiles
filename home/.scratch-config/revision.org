@@ -936,6 +936,11 @@ This uses a background-color column to divide windows instead of drawing a line:
                 'face (funcall tab-bar-tab-face-function tab)))
   :config
   (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
+  (setq tab-bar-close-button-show nil)
+  (setq tab-bar-close-last-tab-choice 'tab-bar-mode-disable)
+  (setq tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator))
+  ;; (setq tab-bar-new-tab-choice #'consult-buffer)
+  ;; (setq tab-bar-tab-hints t)
   )
 #+end_src
 * What it can do
