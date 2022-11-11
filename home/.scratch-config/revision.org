@@ -1724,8 +1724,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         )
   (defun eh/org-superstar-update-theme ()
     (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
-    (set-face-attribute 'org-superstar-leading nil :foreground (face-attribute 'org-hide :foreground))
-    )
+   ) 
   ;; :init
   (eh/org-superstar-update-theme)
   :hook 
