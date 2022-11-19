@@ -10,21 +10,6 @@ fi
 
 trap 'exit 1' 2
 
-echo "Please connect the $(tput bold)right$(tput sgr0) half.\nWaiting for Zen to connect\c"
-while [ ! -d /Volumes/CORNEISHZEN ]
-do
-    echo '.\c'
-    sleep 1
-done
-sleep 1
-mv corneish_zen_v2_right-zmk.uf2 /Volumes/CORNEISHZEN/
-
-echo "\n"
-while [ -d /Volumes/CORNEISHZEN ]
-do
-    sleep 1
-done
-
 echo "Please connect the $(tput bold)left$(tput sgr0) half.\nWaiting for Zen to connect\c"
 while [ ! -d /Volumes/CORNEISHZEN ]
 do
@@ -33,5 +18,21 @@ do
 done
 sleep 1
 mv corneish_zen_v2_left-zmk.uf2 /Volumes/CORNEISHZEN/
+echo "\n"
+
+
+while [ -d /Volumes/CORNEISHZEN ]
+do
+    sleep 1
+done
+
+echo "Please connect the $(tput bold)right$(tput sgr0) half.\nWaiting for Zen to connect\c"
+while [ ! -d /Volumes/CORNEISHZEN ]
+do
+    echo '.\c'
+    sleep 1
+done
+sleep 1
+mv corneish_zen_v2_right-zmk.uf2 /Volumes/CORNEISHZEN/
 
 echo "\nDone!"
