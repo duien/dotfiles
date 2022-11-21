@@ -1,1 +1,0 @@
-fish_prompt-pure.fish
