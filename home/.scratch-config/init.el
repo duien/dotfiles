@@ -21,11 +21,12 @@
   (load bootstrap-file nil 'nomessage))
 (straight-use-package 'use-package)
 
-(straight-use-package 'org)
-
 ;; Ensure correct modifiers even when config is busted
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'super)
   (setq mac-control-modifier 'control))
+
+;; make sure we get the straight version of org the first time
+(straight-use-package 'org)
 (org-babel-load-file "~/.scratch-config/revision.org")

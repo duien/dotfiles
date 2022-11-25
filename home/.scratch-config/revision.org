@@ -1615,7 +1615,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-cycle-separator-lines 1 ;; 2 blank lines to keep when collapsed
         org-indent-mode-turns-on-hiding-stars nil
         org-hide-leading-stars nil
-        org-fontify-whole-block-delimiter-line nil
+        org-fontify-whole-block-delimiter-line t
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
         org-fontify-done-headline t
@@ -1698,11 +1698,9 @@ Set up some basic org styling that we'll run whenever we change themes:
   :general
   (:keymap 'org-src-mode-map "C-c C-c" #'org-edit-src-exit)
   :hook
-  (org-mode . (lambda()
-                (org-indent-mode t)
-                (visual-line-mode t)
-                ;; (mixed-pitch-mode t)
-                ))
+  (org-mode . org-indent-mode)
+  (org-mode . visual-line-mode)
+  ;; (org-mode . mixed-pitch-mode)
   (after-enable-theme . eh/org-update-theme)
   (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
   ;; (modus-themes-after-load-theme . eh/org-update-modus-theme)
