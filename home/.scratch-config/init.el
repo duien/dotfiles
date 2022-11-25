@@ -29,4 +29,7 @@
 
 ;; make sure we get the straight version of org the first time
 (straight-use-package 'org)
+
+(setq org-confirm-babel-evaluate nil)
 (org-babel-load-file "~/.scratch-config/revision.org")
+(setq org-confirm-babel-evaluate t)

@@ -50,6 +50,22 @@ Not any particularly significance or sort order, just things I'm trying to learn
 This is now done directly in =init.el= so that we pick up the straight-managed version of org instead of the built in one.
 [[file:init.el][Check it out]]
 * Built-in options for basic emacs configuration
+Set up proper file headers and commentary:
+#+begin_src elisp :noweb yes
+;;; revision.el --- Tangled configuration -*- lexical-binding: t; no-byte-compile: t -*-
+
+;; Last regenerated from `revision.org' <<timestamp()>>
+#+end_src
+
+Use noweb executed code block to put a handy timestamp for when the file was last tangled.
+
+#+name: timestamp
+#+begin_src elisp :tangle no
+(format-time-string "on %x at %r")
+#+end_src
+
+
+
 Introduce myself to Emacs:
 #+begin_src elisp
 (setq user-full-name "Emily Hyland"
