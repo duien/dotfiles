@@ -1691,8 +1691,10 @@ Set up some basic org styling that we'll run whenever we change themes:
         nil)))
   (setq org-agenda-custom-commands
         '(("w" "Agenda and work-related tasks"
-           ((agenda "Calendar" ((org-agenda-span 1))
-                    ((org-agenda-overriding-header "Today")
+           ((agenda "Calendar"
+                    ((org-agenda-span 1)
+                     (org-agenda-overriding-header "Today")
+                     (org-agenda-show-log t)
                      (org-agenda-use-time-grid nil)))
             (todo "NEXT|HALT" ((org-agenda-overriding-header "Look here first")))
             (todo ""
