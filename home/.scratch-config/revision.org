@@ -852,7 +852,11 @@ This is really determined by which mode we load in org. I'd been using variable-
 
 ;; removing information from the mode line
 (setq mode-line-percent-position nil)
-(line-number-mode -1)
+;; (line-number-mode -1)
+(setq mode-line-position-line-format '(" %l"))
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'vue-mode-hook 'display-line-numbers-mode)
 
 ;; (use-package moody
 ;;   :config
