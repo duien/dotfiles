@@ -1326,7 +1326,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the WAIT keyword in Org"))
   (eh/org-register-keyword
    :keywords '("NEXT" "FLAG")
-   :symbol ?● ;;◯ ;;☐ ;; ?◦●
+   :symbol ?■ ;;◯ ;;☐ ;; ?◦●
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
            "Face used for the FLAG keyword in Org"))
   (eh/org-register-keyword
