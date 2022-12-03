@@ -70,4 +70,4 @@
 [advice]
 	detachedHead = false
 [init]
-	defaultBranch = master
+	defaultBranch = main
