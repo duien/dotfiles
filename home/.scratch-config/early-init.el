@@ -8,6 +8,7 @@
 
 ;; basic frame properties
 (tool-bar-mode -1)
+(push '(vertical-scroll-bars . nil) default-frame-alist)
 
 ;; prevent loading package.el and prepare for straight
 (setq package-enable-at-startup nil)
