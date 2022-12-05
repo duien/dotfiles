@@ -4,7 +4,7 @@ function emacsserver --description "find the running emacs server"
     if test -n "$_flag_p"
         set server $_flag_p-server
     else
-        set server (cat ~/.emacs-profile | string trim)-server
+        set server (cat ~/.emacs-profile | string trim)
     end
     lsof -c Emacs | grep $server | tr -s " " | cut -d' ' -f8
 end
