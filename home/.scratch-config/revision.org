@@ -1395,6 +1395,8 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :background 'unspecified
                         :inherit 'org-done))
 
+  (modify-frame-parameters nil `((ns-appearance . ,(frame-parameter nil 'background-mode))))
+  
   ;; Now set up theme-specific things?
   (pcase (car custom-enabled-themes)
     ((or 'modus-operandi 'modus-vivendi)
