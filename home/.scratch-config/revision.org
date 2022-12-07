@@ -702,7 +702,7 @@ First, define a few functions that are useful to our use of Modus:
         modus-themes-markup '(background intense)
         modus-themes-links '(background)
         modus-themes-fringes nil ;; background of fringe area
-        modus-themes-mode-line '(accented)
+        modus-themes-mode-line '(accented moody borderless)
         modus-themes-syntax '(green-strings)
         modus-themes-org-blocks 'gray-background
         modus-themes-completions '((t background intense accented))
@@ -1149,7 +1149,8 @@ Manage whitespace automatically:
 #+end_src
 ** Do better things with line wrapping
 #+begin_src elisp
-(use-package adaptive-wrap)
+(use-package adaptive-wrap
+  :hook (markdown-mode gfm-mode))
 (setq-default word-wrap t)
 (setq-default truncate-lines t)
 #+end_src
@@ -1758,29 +1759,16 @@ Set up some basic org styling that we'll run whenever we change themes:
   (after-enable-theme . eh/org-superstar-update-theme)
   )
 #+end_src
-** Making org more powerful
-*** For retrieving information :org_super_agenda:
-The agenda is a big part of the power of org.
+
+* Language support
+** Ruby
+There's not much to do here right now, but it would be nice to get tree-sitter working.
+
+Add rspec-mode to have specs added to imenu
 #+begin_src elisp
-(use-package org-super-agenda)
+(use-package rspec-mode)
 #+end_src
 
-Here's some fiddling trying to get a nice agenda going:
-#+begin_src elisp :tangle no
-(let ((org-super-agenda-groups
-       '(
-         (:discard (:tag "meta"))
-         (:name "Today" ; the name of the section
-                ;; :time-grid t ; items that go on the time grid
-                :deadline (past today)
-                :scheduled (past today)
-                :priority "A") ; high priority items
-         (:name "Follow Up"
-                :todo ("BLOCK" "BLOK" "QSTN")) ; wait? hold?
-         )))
-  (org-agenda nil "t"))
-#+end_src
-* Language support
 ** Misc small packages
 #+begin_src elisp
 (use-package fish-mode)

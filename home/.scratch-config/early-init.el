@@ -7,8 +7,9 @@
   (setq mac-control-modifier 'control))
 
 ;; basic frame properties
-(tool-bar-mode -1)
+(push '(ns-transparent-titlebar . t) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
+(push '(tool-bar-lines . 0) default-frame-alist)
 
 ;; prevent loading package.el and prepare for straight
 (setq package-enable-at-startup nil)
