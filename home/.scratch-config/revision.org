@@ -1256,10 +1256,15 @@ Using projectile's search in project requires a package for a search tool. Ag se
 Define custom faces for all of our keywords. This allows redone styles to be loaded without reload org-mode
 #+begin_src elisp
 (cl-defun eh/org-register-keyword (&key keywords face symbol)
-  (dolist (key keywords)
-    (add-to-list 'org-todo-keyword-faces `(,key . ,face))
-    (add-to-list 'org-superstar-todo-bullet-alist `(,key . ,symbol))
-    ))
+  (let ((symbol-for-face (if (listp symbol)
+                             ;; with a list, car is a fontaine preset or `t' for fallback
+                             (or (cdr (or (assoc fontaine-current-preset symbol)
+                                          (assoc t symbol)))
+                                 ?·)
+                           symbol)))
+    (dolist (key keywords)
+      (add-to-list 'org-todo-keyword-faces `(,key . ,face))
+      (add-to-list 'org-superstar-todo-bullet-alist `(,key . ,symbol-for-face)))))
 #+end_src
 ** Define org keywords
 I've been slowly refining this set of org keywords for a very long time. But that evolution also means that sometimes I forget what was the new meaning vs. the old meaning for things.
