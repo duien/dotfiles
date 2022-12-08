@@ -1302,8 +1302,8 @@ So, here are the keywords as they stand now, and what the intention is for each 
   (eh/org-register-keyword
    :keywords '("DONE")
    ;; ✓✔︎
-   :symbol ?· ;; comic-code
-   ;; :symbol ?✓ ;; other
+   :symbol '((comic-code . ?·)
+             (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
   (eh/org-register-keyword
@@ -1348,8 +1348,8 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the FLAG keyword in Org"))
   (eh/org-register-keyword
    :keywords '("TODO")
-   :symbol ?○ ;; comic-code
-   ;; :symbol ?◯ ;; other
+   :symbol '((comic-code . ?○)
+             (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
            "Face used for the TODO keyword in Org"))
@@ -1360,15 +1360,14 @@ So, here are the keywords as they stand now, and what the intention is for each 
            "Face used for the BLOK keyword in Org"))
   (eh/org-register-keyword
    :keywords '("QUEST" "QSTN" "QUESTION")
-   :symbol ?◊ ;; comic-code
-   ;; :symbol ?◇ ;; other
-   ;;?
+   :symbol '((comic-code . ?◊)
+             (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
   (eh/org-register-keyword
    :keywords '("IDEA" "YAKS" "YAK")
-   :symbol ?¤  ;;♡ ;; comic-code
-   ;; :symbol ?◌ ;; jetbrains
+   :symbol '((jetbrains-mono . ?◌)
+             (t         . ?¤))
    ;; ∞ ҩ ¤ φ
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
            "Face used for the IDEA keyword in Org"))
