@@ -1376,8 +1376,19 @@ So, here are the keywords as they stand now, and what the intention is for each 
    :symbol ?□  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
+
+  ;; hack for now: move other symbol-setting into this function
+  ;; for easier reset after font change
+  (setq org-ellipsis (if (eq fontaine-current-preset 'comic-code)
+                         " ↓" " ⋯"))
+  ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
+  ;; ⤵ ⬎ [+] ▼ ↯
+  (setq org-superstar-headline-bullets-list
+        (if (eq fontaine-current-preset 'comic-code)
+            '("♦" "•")
+          '("◆" "•")))
   )
-;; (eh/define-org-keywords)
+;; (let () (eh/define-org-keywords) (org-mode-restart) (org-superstar-restart))
 #+end_src
 ** Set up theme-specific org styling
 Set up some basic org styling that we'll run whenever we change themes:
@@ -1672,11 +1683,6 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-fold-catch-invisible-edits 'show
         org-blank-before-new-entry '((heading . nil)
                                      (plain-list-item . nil)))
-  ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
-  ;; ⤵ ⬎ [+] ▼ ↯
-  ;; (setq org-ellipsis " [+]") ;; comic-code
-  ;; (setq org-ellipsis " ⋯") ;; other
-  (setq org-ellipsis " ↓")
   (setq org-src-window-setup 'current-window)
   (setq org-agenda-window-setup 'other-window
         org-agenda-restore-windows-after-quit t)
@@ -1760,7 +1766,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-leading-bullet "·"
         org-superstar-remove-leading-stars nil
         ;; org-superstar-headline-bullets-list '("◆" "•")
-        org-superstar-headline-bullets-list '("♦" "•") ;; comic-code
+        ;; org-superstar-headline-bullets-list '("♦" "•") ;; comic-code
         ;; org-superstar-headline-bullets-list '("◆" "•") ;; other
         org-superstar-prettify-item-bullets nil
         )
