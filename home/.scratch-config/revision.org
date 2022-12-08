@@ -235,6 +235,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-weight normal)
         (jetbrains-mono
          :default-family "Jetbrains Mono"
+         :line-spacing 2
          :default-weight light)
         (apple
          :default-family "SF Mono"
@@ -253,6 +254,16 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-family "Iosevka SS14"
          :variable-pitch-family "Iosevka Aile"
          )
+        (cascadia
+         :default-family "Cascadia Code PL"
+         :default-weight light)
+        (nuvo
+         :default-family "Nuvo Mono Offc Pro")
+        (operator
+         :default-family "Operator Mono SSm"
+         :default-weight light)
+        (pragmata
+         :default-family "PragmataPro Mono Liga")
 
         ;; fallbacks
         (system
