@@ -215,6 +215,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
 (general-define-key "<help> F" 'describe-face)
 (general-define-key "C-x z" 'bury-buffer)
 (general-define-key "C-x K" 'kill-this-buffer)
+(general-define-key "C-x C-d" 'dired)
 (global-unset-key (kbd "C-x m"))
 #+end_src
 * How it looks
@@ -1045,6 +1046,15 @@ This adds the additional columns to the completion window. Extra info, and I thi
   :init
   (marginalia-mode))
 #+end_src
+*** Experiment with autocompletion in buffers
+I've started using hippie-expand sometimes. What if I actually used some sort of autocomplete framework?
+#+begin_src elisp
+(use-package corfu
+  :custom
+  (corfu-auto t)
+  :init
+  (global-corfu-mode))
+#+end_src
 ** Scratch buffer is magic
 I use the scratch buffer a lot, and it's nice to have the things there stick around unless I delete them on purpose. It's a good place to stash log output, temporary shell command editing, things like that, but sometimes I need to restart my editor while still in the middle of those tasks.
 
@@ -1820,7 +1830,8 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 #+end_src
 ** Elixir
 #+begin_src elisp
-(use-package elixir)
+(use-package elixir
+  :defer t)
 #+end_src
 
 * Footnotes
