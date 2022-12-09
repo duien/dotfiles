@@ -236,8 +236,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-weight normal)
         (jetbrains-mono
          :default-family "Jetbrains Mono"
-         :line-spacing 2
-         :default-weight light)
+         :default-weight light) ;; same deal with the weights sort of
         (apple
          :default-family "SF Mono"
          :default-weight semilight)
@@ -276,6 +275,19 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :fixed-pitch-family nil
          :variable-pitch-family nil)
         ))
+  ;; (setq fontaine-presets
+  ;;       `((jetbrains-mono
+  ;;          :default-family "Jetbrains Mono"
+  ;;          :default-weight light)
+  ;;         (plex-mono
+  ;;          :default-family "IBM Plex Mono"
+  ;;          :default-weight normal)
+  ;;         ;; (system
+  ;;         ;;  :default-family "Menlo"
+  ;;         ;;  :default-weight normal)
+  ;;         (t
+  ;;          :default-family "Menlo"
+  ;;          :default-height ,eh/base-font-height)))
   (fontaine-set-preset (or (fontaine-restore-latest-preset) 'system))
   :hook
   (kill-emacs . fontaine-store-latest-preset)
@@ -739,11 +751,11 @@ First, define a few functions that are useful to our use of Modus:
   :config
   (setq poet-theme-variable-headers nil
         poet-theme-variable-pitch-multiplier 1))
-(use-package spacemacs-theme
-  :custom
-  (spacemacs-theme-comment-bg nil)
-  (spacemacs-theme-comment-italic t)
-  (spacemacs-theme-org-height nil))
+;; (use-package spacemacs-theme
+;;   :custom
+;;   (spacemacs-theme-comment-bg nil)
+;;   (spacemacs-theme-comment-italic t)
+;;   (spacemacs-theme-org-height nil))
 (use-package solo-jazz-theme)
 (use-package flucui-themes)
 (use-package doom-themes

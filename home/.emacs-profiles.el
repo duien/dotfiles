@@ -9,5 +9,6 @@
             (straight-p)
             ))
  ("minimal" . ((user-emacs-directory . "~/.minimal-config")
-               (server-name . "minimal")))
+               (server-name . "minimal")
+               (straight-p . t)))
  )
