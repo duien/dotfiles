@@ -264,6 +264,10 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-weight light)
         (pragmata
          :default-family "PragmataPro Mono Liga")
+        (ellograph
+         :default-family "Ellograph CF"
+         :default-weight light
+         :line-spacing 2)
 
         ;; fallbacks
         (system
@@ -988,6 +992,7 @@ This uses a background-color column to divide windows instead of drawing a line:
   (setq tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator))
   ;; (setq tab-bar-new-tab-choice #'consult-buffer)
   ;; (setq tab-bar-tab-hints t)
+  (setq tab-bar-auto-width nil)
   )
 #+end_src
 * What it can do
@@ -1276,7 +1281,7 @@ Using projectile's search in project requires a package for a search tool. Ag se
 ** Prepare for org configuration
 
 Define custom faces for all of our keywords. This allows redone styles to be loaded without reload org-mode
-#+begin_src elisp
+#+begin_src elisp :tangle no :noweb-ref org-preface
 (cl-defun eh/org-register-keyword (&key keywords face symbol)
   (let ((symbol-for-face (if (listp symbol)
                              ;; with a list, car is a fontaine preset or `t' for fallback
@@ -1310,7 +1315,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
 **** RODE would be a very silly past tense of read.
 *** Define the keywords
   
-#+begin_src elisp
+#+begin_src elisp :tangle no :noweb-ref org-preface
 (defun eh/define-org-keywords ()
   ;; Register all variations of keywords with faces and symbols
   ;; Only the ones included in `org-todo-keywords' will be
@@ -1414,7 +1419,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
 #+end_src
 ** Set up theme-specific org styling
 Set up some basic org styling that we'll run whenever we change themes:
-#+begin_src elisp
+#+begin_src elisp :tangle no :noweb-ref org-preface
 (defun eh/org-update-theme ()
   ;; Unset the foreground and background of my org faces
   ;; and reset inheritance
@@ -1674,8 +1679,10 @@ Set up some basic org styling that we'll run whenever we change themes:
 ;; (eh/org-update-theme)
 #+end_src
 ** Basic configuration
-#+begin_src elisp
+#+begin_src elisp :noweb yes
 (use-package org
+  :preface
+  <<org-preface>>
   :config
   (eh/define-org-keywords)
   (eh/org-update-theme)
