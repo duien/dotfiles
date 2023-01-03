@@ -601,7 +601,7 @@ Or turn it on the hard way:
              :repo "mickeynp/ligature.el")
   :config
   ;; Enable the "www" ligature in every possible major mode
-  (ligature-set-ligatures 't '("www"))
+  (ligature-set-ligatures 't '("www" "->" "<-"))
   ;; Enable some common and uncommon ligature in programming modes
   (ligature-set-ligatures
    '(prog-mode html-mode web-mode)
@@ -1189,8 +1189,9 @@ Manage whitespace automatically:
 #+end_src
 ** Do better things with line wrapping
 #+begin_src elisp
-(use-package adaptive-wrap
-  :hook (markdown-mode gfm-mode))
+;; (use-package adaptive-wrap
+;;   :hook (markdown-mode gfm-mode))
+;; something isn't working in the autoload for this and is breaking other things
 (setq-default word-wrap t)
 (setq-default truncate-lines t)
 #+end_src
