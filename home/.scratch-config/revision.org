@@ -268,6 +268,8 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-family "Ellograph CF"
          :default-weight light
          :line-spacing 2)
+        (sometype
+         :default-family "Sometype Mono")
 
         ;; fallbacks
         (system
@@ -1449,13 +1451,18 @@ Set up some basic org styling that we'll run whenever we change themes:
                         :background 'unspecified
                         :inherit 'org-done))
 
-  (modify-frame-parameters nil `((ns-appearance . ,(frame-parameter nil 'background-mode))))
+  ;; set system appearance (light/dark) based on color theme for readability
+  (modify-frame-parameters
+   nil
+   `((ns-appearance . ,(frame-parameter nil 'background-mode))))
+
   
   ;; Now set up theme-specific things?
   (pcase (car custom-enabled-themes)
     ((or 'modus-operandi 'modus-vivendi)
      (message "Setting up org faces for Modus")
      (eh/org-update-modus-theme))
+
     ('doom-isohedron
      (message "Setting up org faces for Isohedron")
      (set-face-attribute 'org-todo nil
@@ -1522,6 +1529,33 @@ Set up some basic org styling that we'll run whenever we change themes:
      (set-face-attribute 'eh/org-keyword-answer nil
                          :background "#dde3f2"
                          :foreground "#75A3FF")
+     )
+    ('caves-of-qud
+     (message "Setting up org faces for caves-of-qud")
+     (set-face-attribute 'eh/org-keyword-todo nil
+                         :background "#009403")
+     (set-face-attribute 'eh/org-keyword-idea nil
+                         :background "#b154cf")
+     (set-face-attribute 'eh/org-keyword-question nil
+                         :background "#0096ff")
+     (set-face-attribute 'eh/org-keyword-read nil
+                         :background "#98875f")
+     (set-face-attribute 'eh/org-keyword-next nil
+                         :background "#cfc041")
+     (set-face-attribute 'eh/org-keyword-halt nil
+                         :background "#f15f22")
+     (set-face-attribute 'eh/org-keyword-answer nil
+                         :foreground "#0096ff")
+     (set-face-attribute 'eh/org-keyword-yes nil
+                         :foreground "#00c420")
+     (set-face-attribute 'eh/org-keyword-kill nil
+                         :foreground "#a64a2e")
+     (set-face-attribute 'eh/org-keyword-no nil
+                         :foreground "#d74200")
+     (set-face-attribute 'eh/org-keyword-done nil
+                         :foreground "#009403")
+     (set-face-attribute 'eh/org-keyword-rode nil
+                         :foreground "#98875f")
      )
     ((pred (lambda (theme)
              (and (boundp 'ef-themes-light-themes)
