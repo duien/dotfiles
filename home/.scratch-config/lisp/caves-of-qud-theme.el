@@ -67,22 +67,31 @@
   (link (:foreground blue :underline t))
   (link-visited (:foreground purple :underline t))
 
+  ;;; Package-specific faces
+
+  ;; Diff markers in fringe
   (diff-hl-change (:background purple :foreground purple))
   (diff-hl-insert (:background dark-green :foreground dark-green))
   (diff-hl-delete (:background crimson :foreground crimson))
 
-  (org-level-1 (:foreground magenta :underline t :extend t :inherit 'bold :height 1.125))
-  (org-level-2 (:inherit 'bold))
-  (org-level-3 (:inherit 'bold))
-  (org-level-4 (:inherit 'bold))
-  (org-level-5 (:inherit 'bold))
-  (org-level-6 (:inherit 'bold))
-  (org-level-7 (:inherit 'bold))
-  (org-level-8 (:inherit 'bold))
+  ;; Vue/MMM
+  (mmm-default-submode-face (:background 'unspecified))
+
+  ;; Org-Mode
+  (org-document-title (:foreground white :height 1.25))
+  (org-level-1 (:foreground white :background darker-gray :extend t :inherit 'bold :height 1.125))
+  ;; (org-level-1 (:foreground purple :inherit 'bold :height 1.125))
+  (org-level-2 (:foreground white :inherit 'bold))
+  (org-level-3 (:inherit 'org-level-2))
+  (org-level-4 (:inherit 'org-level-2))
+  (org-level-5 (:inherit 'org-level-2))
+  (org-level-6 (:inherit 'org-level-2))
+  (org-level-7 (:inherit 'org-level-2))
+  (org-level-8 (:inherit 'org-level-2))
   (org-block (:background deepest))
   (org-block-begin-line (:foreground dark-gray))
   (org-block-end-line (:inherit 'org-block-begin-line))
-  (org-ellipsis (:inherit 'shadow))
+  (org-ellipsis (:inherit 'shadow :background 'reset))
   (org-headline-todo (:weight 'reset :slant 'reset))
   (org-headline-done (:inherit '(italic) :weight 'reset :foreground dark-gray))
   (org-todo (:foreground viridian :background dark-gray :inherit 'bold))
