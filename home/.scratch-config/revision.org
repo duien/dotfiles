@@ -192,9 +192,11 @@ Some inside baseball options I don't really understand:
 (setq native-comp-async-report-warnings-errors nil)
 (setq load-prefer-newer t)
 
-  (setq custom-file (make-temp-file "")) ; use a temp file as a placeholder
-  (setq custom-safe-themes t)            ; mark all themes as safe, since we can't persist now
-  (setq enable-local-variables :all)     ; fix =defvar= warnings
+(setq custom-file (make-temp-file "")) ; use a temp file as a placeholder
+(setq custom-safe-themes t)            ; mark all themes as safe, since we can't persist now
+(setq enable-local-variables :all)     ; fix =defvar= warnings
+
+(setq custom-theme-directory (concat (file-name-as-directory user-emacs-directory) "lisp"))
 
 #+end_src
 ** Keybindings
@@ -251,9 +253,16 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-family "Victor Mono"
          :default-weight normal)
         (iosevka-variable
-         :default-family "Iosevka SS14"
-         :variable-pitch-family "Iosevka Aile"
+         ;; 14: jetbrains-style
+         ;; 15: plex-style
+         ;; 17: recursive-style
+         :default-family "Iosevka SS17"
+         :default-weight light
+         :default-height ,(+ eh/base-font-height 10)
+         :variable-pitch-family "Iosevka Aile" ;; sans-serif
+         ;; :variable-pitch-family "Iosevka Etoile" ;; slab-serif
          )
+
         (cascadia
          :default-family "Cascadia Code PL"
          :default-weight light)
@@ -269,7 +278,8 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          :default-weight light
          :line-spacing 2)
         (sometype
-         :default-family "Sometype Mono")
+         :default-family "Sometype Mono"
+         :default-height ,(+ eh/base-font-height 10))
 
         ;; fallbacks
         (system
@@ -1152,7 +1162,10 @@ Expanding the region incrementally is incredibly helpful:
 
 Allow highlighting color-like things in their colors. This isn't very smart about things, and tends to highlight named colors in an annoying number of places, but when it's useful it's really useful.
 #+begin_src elisp
-(use-package rainbow-mode)
+(use-package rainbow-mode
+  :init
+  (setq rainbow-ansi-colors nil
+        rainbow-x-colors nil))
 (use-package fontify-face)
 
 ;; remove some of the things that rainbow-mode colors
