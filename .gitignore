@@ -10,6 +10,7 @@ home/.atom/compile-cache
 home/.atom/config.cson
 home/.thefuck/*.pyc
 home/.config/karabiner/automatic_backups/
+
 home/.scratch-config/straight/
 home/.scratch-config/elpa/
 home/.scratch-config/transient/
@@ -25,16 +26,19 @@ home/.scratch-config/url/
 home/.scratch-config/revision.el
 home/.scratch-config/history
 home/.scratch-config/forge-database.sqlite
+home/.scratch-config/fontaine-latest-state.eld
+home/.scratch-config/eln-cache/
+home/.scratch-config/games/
+home/.scratch-config/.org-id-locations
+home/.scratch-config/speed-type/
+
 home/.nano-emacs/straight/
 home/.nano-emacs/transient/
 home/.nano-emacs/elpa/
 
-# these files are generated from org on sync
 home/.doom-config/*.el
-home/.scratch-config/fontaine-latest-state.eld
-/home/.minimal-config/elpa/
-/home/.minimal-config/projects
-/home/.scratch-config/eln-cache/
-/home/.scratch-config/games/
-/home/.scratch-config/.org-id-locations
-/home/.scratch-config/speed-type/
+
+home/.minimal-config/elpa/
+home/.minimal-config/projects
+home/.minimal-config/eln-cache/
+home/.minimal-config/straight/
