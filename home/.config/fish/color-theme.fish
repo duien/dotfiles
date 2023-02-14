@@ -3,7 +3,7 @@
 # purple, cyan, white or normal
 
 set -x fish_color_normal "normal"
-set -x fish_color_command "blue"
+set -x fish_color_command "brblue"
 set -x fish_color_substitution "magenta"
 set -x fish_color_redirection "cyan"
 set -x fish_color_end "magenta"

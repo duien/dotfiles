@@ -53,7 +53,7 @@
   ;;; Font Lock Faces
   (font-lock-comment-face (:foreground dark-cyan :slant 'italic))
   (font-lock-comment-delimiter-face (:inherit 'font-lock-comment-face))
-  (font-lock-string-face (:foreground green))
+  (font-lock-string-face (:foreground green :slant 'italic))
   (font-lock-keyword-face (:foreground persimmon))
   (font-lock-builtin-face (:foreground brown))
   (font-lock-constant-face (:foreground yellow))
@@ -91,7 +91,7 @@
   (org-block (:background deepest))
   (org-block-begin-line (:foreground dark-gray))
   (org-block-end-line (:inherit 'org-block-begin-line))
-  (org-ellipsis (:inherit 'shadow :background 'reset))
+  (org-ellipsis (:inherit 'shadow :background viridian :underline nil))
   (org-headline-todo (:weight 'reset :slant 'reset))
   (org-headline-done (:inherit '(italic) :weight 'reset :foreground dark-gray))
   (org-todo (:foreground viridian :background dark-gray :inherit 'bold))

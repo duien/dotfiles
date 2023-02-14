@@ -256,7 +256,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          ;; 14: jetbrains-style
          ;; 15: plex-style
          ;; 17: recursive-style
-         :default-family "Iosevka SS17"
+         :default-family "Iosevka Term SS14"
          :default-weight light
          :default-height ,(+ eh/base-font-height 10)
          :variable-pitch-family "Iosevka Aile" ;; sans-serif
@@ -754,7 +754,7 @@ First, define a few functions that are useful to our use of Modus:
         )
   ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   :init
-  (modus-themes-load-themes)
+  ;; (modus-themes-load-themes)
   :hook
   ;; (modus-themes-after-load-theme . eh/set-apple-fonts)
   (modus-themes-after-load-theme . eh/modus-customize)
@@ -1078,11 +1078,11 @@ This adds the additional columns to the completion window. Extra info, and I thi
 *** Experiment with autocompletion in buffers
 I've started using hippie-expand sometimes. What if I actually used some sort of autocomplete framework?
 #+begin_src elisp
-(use-package corfu
-  :custom
-  (corfu-auto t)
-  :init
-  (global-corfu-mode))
+;; (use-package corfu
+;;   :custom
+;;   (corfu-auto t)
+;;   :init
+;;   (global-corfu-mode))
 #+end_src
 ** Scratch buffer is magic
 I use the scratch buffer a lot, and it's nice to have the things there stick around unless I delete them on purpose. It's a good place to stash log output, temporary shell command editing, things like that, but sometimes I need to restart my editor while still in the middle of those tasks.
@@ -1200,6 +1200,17 @@ Manage whitespace automatically:
   :hook
   (prog-mode . ws-butler-mode))
 #+end_src
+
+Add a confirmation message to the new ~elisp-eval-region-or-buffer~ function that has bitten me a few times. It's default binding of =C-c C-e= is too similar to =C-x C-e= and evaluating my entire scratch buffer is _not_ a good idea.
+#+begin_src elisp
+(defun confirm-eval (&optional ARG PRED)
+  (interactive)
+  (if (use-region-p)
+      (yes-or-no-p "Evaluate region?")
+    (yes-or-no-p "Evaluate buffer?")))
+(advice-add 'elisp-eval-region-or-buffer :before-while 'confirm-eval)
+#+end_src
+
 ** Do better things with line wrapping
 #+begin_src elisp
 ;; (use-package adaptive-wrap
@@ -1774,7 +1785,7 @@ Set up some basic org styling that we'll run whenever we change themes:
         '(("t" "Some thing" entry (file "~/Org/inbox.org")
            "* TODO %?\n%a\n%i")
           ;; TODO Find a way to dynamically grab the latest dox file
-          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q3.org" "Inbox")
+          ("w" "Work thing" entry (file+headline "~/Org/dox-23Q4.org" "Inbox")
            "* TODO %?\n%a\n%i")
           ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
            "* TODO %?\n%a\n%i")
@@ -1897,8 +1908,8 @@ I think vue-mode gets us most of what we need. It handles markup and JS in the s
 #+end_src
 ** Elixir
 #+begin_src elisp
-(use-package elixir
-  :defer t)
+;; (use-package elixir
+;;   :defer t)
 #+end_src
 
 * Footnotes
