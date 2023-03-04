@@ -11,4 +11,6 @@
  ("minimal" . ((user-emacs-directory . "~/.minimal-config")
                (server-name . "minimal")
                (straight-p . t)))
+ ("yak" . ((user-emacs-directory . "~/.yak-emacs")
+(server-name . "yak")))
  )
