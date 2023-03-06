@@ -1,4 +1,4 @@
-#!/usr/local/bin/fish
+#!/usr/bin/env fish
 
 # function ec --description "open emacs client, starting server if needed"
     argparse -i 'p/with-profile=' -- $argv
