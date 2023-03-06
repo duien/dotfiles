@@ -26,6 +26,7 @@
 (setq sentence-end-double-space t
       vc-folow-symlinks t
       dired-use-ls-dired nil
+      mouse-wheel-flip-direction t
       mouse-wheel-tilt-scroll t
       custom-safe-themes t
       use-short-answers t
@@ -62,6 +63,7 @@
 ;; attemp to tame indentation
 (use-package emacs
   :straight nil
+  :init
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 2)
   (setq js-indent-level 2)
@@ -73,6 +75,15 @@
   :config
   (editorconfig-mode))
 
+;; show line numbers in programming modes
+(use-package display-line-numbers
+  :straight nil
+  :init
+  (setq-default display-line-numbers-widen t
+                display-line-numbers-width 3)
+  :hook
+  prog-mode)
+
 ;;; Manageable mode-line
 
 ;; don't junk up the mode-line
@@ -82,9 +93,10 @@
   :config
   (minions-mode))
 
+;; TODO Put this somewhere better
 (setq mode-line-position-line-format '(" %l"))
-(setq mode-line-position-line-format '(" +%l"))
-(setq mode-line-position-column-line-format '(" +%l:%c"))
+;; (setq mode-line-position-line-format '(" +%l"))
+;; (setq mode-line-position-column-line-format '(" +%l:%c"))
 
 
 ;;; Minibuffer completion
@@ -147,7 +159,12 @@
 
 ;; a theme for all seasons
 (use-package modus-themes
-  :straight nil
+  :preface
+  (defun eh/load-modus-appearance-theme (appearance)
+    "Load the appropriate light or dark modus theme based on APPEARANCE"
+    (pcase appearance
+      ('light (modus-themes-load-theme 'modus-operandi-tinted))
+      ('dark (modus-themes-load-theme 'modus-vivendi-tinted))))
   :init
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs t)
@@ -156,8 +173,10 @@
 	  (border-mode-line-inactive unspecified)
 	  (comment fg-dim)
 	  (string green)))
-  (setq modus-themes-vivendi-tinted-palette-overrides
-	'((string cyan))))
+  (setq modus-vivendi-tinted-palette-overrides
+	      '((string cyan)))
+  :config
+  (eh/load-modus-appearance-theme ns-system-appearance))
 
 ;;; Manage windows and buffers
 
@@ -193,24 +212,40 @@
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
   ;; Enable all Cascadia Code ligatures in programming modes
-  (ligature-set-ligatures 'prog-mode
-			  '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
-                            ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
-                            "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
-                            "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
-                            "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-                            "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
-                            "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
-                            "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
-                            ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
-                            "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
-                            "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
-                            "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
-                            "\\\\" "://"))
+  (ligature-set-ligatures
+   'prog-mode
+	 '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
+     ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
+     "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
+     "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
+     "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
+     "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+     "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
+     "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
+     ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
+     "<$" "<=" "<>" "<-" "<<" "<+" "</" "#{" "#[" "#:" "#=" "#!"
+     "##" "#(" "#?" "#_" "%%" ".=" ".-" ".." ".?" "+>" "++" "?:"
+     "?=" "?." "??" ";;" "/*" "/=" "/>" "//" "__" "~~" "(*" "*)"
+     "\\\\" "://"))
   ;; Enables ligature checks globally in all buffers. You can also do it
   ;; per mode with `ligature-mode'.
   (global-ligature-mode)
-  :hook
+  ;; :hook
   ;; regenerate ligatures when switching fonts (somehow)
   ;; (fontaine-set-preset . )
   )
+
+;;; Version control
+
+;; the best git interface
+(use-package magit)
+
+;; show diff in fringe
+(use-package diff-hl
+  :after (magit)
+  :demand
+  :config
+  (global-diff-hl-mode)
+  :hook
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh))

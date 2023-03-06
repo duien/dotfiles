@@ -42,3 +42,7 @@ home/.minimal-config/elpa/
 home/.minimal-config/projects
 home/.minimal-config/eln-cache/
 home/.minimal-config/straight/
+/home/.yak-emacs/eln-cache/
+/home/.yak-emacs/straight/
+/home/.yak-emacs/var/
+/home/.yak-emacs/etc/
