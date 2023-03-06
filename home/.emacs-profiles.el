@@ -12,5 +12,6 @@
                (server-name . "minimal")
                (straight-p . t)))
  ("yak" . ((user-emacs-directory . "~/.yak-emacs")
-(server-name . "yak")))
+	   (server-name . "yak")
+	   (straight-p . t)))
  )

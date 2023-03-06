@@ -14,9 +14,9 @@
     if test -z "$socket_file"
         echo "Starting emacs server..."
         if test -n "$_flag_p"
-            emacs --with-profile $_flag_p --chdir $PWD --execute '(server-start)' $argv &
+            emacs --with-profile $_flag_p --chdir $PWD --execute '(server-start)' $argv 2>/dev/null &
         else
-            emacs --chdir $PWD --execute '(server-start)' $argv &
+            emacs --chdir $PWD --execute '(server-start)' $argv 2>/dev/null &
         end
         disown
     else
