@@ -130,6 +130,7 @@ If you type over a selection, delete it first
 ** Set up basic minor modes
 #+begin_src elisp
 (delete-selection-mode t)
+(setq recentf-max-saved-items 100)
 (recentf-mode t)
 (setq recentf-exclude `(,(expand-file-name "straight/build/" user-emacs-directory)
                         ,(expand-file-name "eln-cache/" user-emacs-directory)
@@ -264,8 +265,10 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
          )
 
         (cascadia
-         :default-family "Cascadia Code PL"
-         :default-weight light)
+         :default-family "Cascadia Code"
+         :default-weight normal
+         :default-height ,(+ eh/base-font-height 10)
+         :bold-weight semibold)
         (nuvo
          :default-family "Nuvo Mono Offc Pro")
         (operator
@@ -1046,7 +1049,7 @@ Consult is what sets the contents of those menus. It provides a really nice buff
 #+begin_src elisp
 (use-package consult
   :config
-  (setq consult-preview-key (kbd "M-."))
+  (setq consult-preview-key "M-.")
   (setq consult-narrow-key "<")
   (setq consult-project-root-function #'projectile-project-root)
   (defvar eh/org-source
@@ -1173,6 +1176,7 @@ Crux has lots of handy utility functions. These are a few of the best:
   ("C-o" 'crux-smart-open-line)
   ("M-o" 'crux-smart-open-line-above)
   ("C-k" 'crux-smart-kill-line)
+  ("C-a" 'crux-move-beginning-of-line)
   )
 #+end_src
 
@@ -1241,7 +1245,6 @@ Add a confirmation message to the new ~elisp-eval-region-or-buffer~ function tha
     (yes-or-no-p "Evaluate buffer?")))
 (advice-add 'elisp-eval-region-or-buffer :before-while 'confirm-eval)
 #+end_src
-
 ** Do better things with line wrapping
 #+begin_src elisp
 ;; (use-package adaptive-wrap
@@ -1434,6 +1437,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
   (eh/org-register-keyword
    :keywords '("TODO")
    :symbol '((comic-code . ?○)
+             (cascadia   . ?○)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -1452,6 +1456,7 @@ So, here are the keywords as they stand now, and what the intention is for each 
   (eh/org-register-keyword
    :keywords '("IDEA" "YAKS" "YAK")
    :symbol '((jetbrains-mono . ?◌)
+             (cascadia . ?◌)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
@@ -1464,8 +1469,8 @@ So, here are the keywords as they stand now, and what the intention is for each 
 
   ;; hack for now: move other symbol-setting into this function
   ;; for easier reset after font change
-  (setq org-ellipsis (if (eq fontaine-current-preset 'comic-code)
-                         " ↓" " ⋯"))
+  (setq org-ellipsis (if (eq fontaine-current-preset 'jetbrains)
+                         " ⋯" " ↓"))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
   (setq org-superstar-headline-bullets-list
