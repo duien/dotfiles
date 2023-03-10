@@ -734,30 +734,61 @@ First, define a few functions that are useful to our use of Modus:
 #+begin_src elisp
 (use-package modus-themes
   :config
+  ;; (setq modus-themes-mixed-fonts t
+  ;;       modus-themes-variable-pitch-ui nil ;; bad w/ nano
+  ;;       modus-themes-italic-constructs t
+  ;;       modus-themes-bold-constructs t
+  ;;       ; modus-themes-subtle-line-numbers t
+  ;;       ; modus-themes-markup '(background intense)
+  ;;       ; modus-themes-links '(background)
+  ;;       ; modus-themes-fringes nil ;; background of fringe area
+  ;;       ; modus-themes-mode-line '(accented moody borderless)
+  ;;       ; modus-themes-syntax '(green-strings)
+  ;;       modus-themes-org-blocks 'gray-background
+  ;;       ; modus-themes-completions '((t background intense accented))
+  ;;       ; modus-themes-region '(bg-only accented)
+  ;;       ; modus-themes-org-agenda '((header-block . (no-scale))
+  ;;       ;                           (header-date . (bold-today underline-today))
+  ;;       ;                           (scheduled . (rainbow))
+  ;;       ;                           (event . (varied italic)))
+  ;;       )
   (setq modus-themes-mixed-fonts t
-        modus-themes-variable-pitch-ui nil ;; bad w/ nano
+        modus-themes-variable-pitch-ui nil
         modus-themes-italic-constructs t
         modus-themes-bold-constructs t
-        modus-themes-subtle-line-numbers t
-        modus-themes-markup '(background intense)
-        modus-themes-links '(background)
-        modus-themes-fringes nil ;; background of fringe area
-        modus-themes-mode-line '(accented moody borderless)
-        modus-themes-syntax '(green-strings)
-        modus-themes-org-blocks 'gray-background
-        modus-themes-completions '((t background intense accented))
-        modus-themes-region '(bg-only accented)
-        modus-themes-org-agenda '((header-block . (no-scale))
-                                  (header-date . (bold-today underline-today))
-                                  (scheduled . (rainbow))
-                                  (event . (varied italic)))
-        )
+        modus-themes-disable-other-themes t
+        modus-themes-org-blocks 'gray-background)
+  ;; (setq modus-themes-common-palette-overrides
+  ;;       `((border-mode-line-inactive unspecified)
+  ;;         (border-mode-line-active unspecified)
+  ;;         (bg-mode-line-active bg-magenta-intense)
+  ;;         ;; (bg-tab-bar bg-cyan-nuanced)
+  ;;         ;; (bg-tab-current bg-magenta-intense)
+  ;;         ;; (bg-tab-other bg-cyan-subtle)
+  ;;         (fringe unspecified)
+  ;;         (string green-warmer)
+  ;;         ,@modus-themes-preset-overrides-intense))
+  (setq modus-themes-common-palette-overrides
+        '((fringe unspecified)
+          (bg-mode-line-active indigo)
+          (fg-mode-line-active bg-main)
+          (border-mode-line-active bg-mode-line-active)
+          (border-mode-line-inactive bg-mode-line-inactive)
+          (bg-line-number-inactive bg-main)
+          (bg-line-number-active bg-dim)
+          (fg-line-number-inactive bg-inactive)
+          (fg-line-number-active bg-active)
+          (string green)
+          (comment dim)))
+  
+
+
   ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   :init
   ;; (modus-themes-load-themes)
-  :hook
+  ;; :hook
   ;; (modus-themes-after-load-theme . eh/set-apple-fonts)
-  (modus-themes-after-load-theme . eh/modus-customize)
+  ;; (modus-themes-after-load-theme . eh/modus-customize)
   )
 #+end_src
 *** Set up some alternate color themes
@@ -1486,7 +1517,8 @@ Set up some basic org styling that we'll run whenever we change themes:
   (pcase (car custom-enabled-themes)
     ((or 'modus-operandi 'modus-vivendi)
      (message "Setting up org faces for Modus")
-     (eh/org-update-modus-theme))
+     ;; (eh/org-update-modus-theme)
+     )
 
     ('doom-isohedron
      (message "Setting up org faces for Isohedron")
