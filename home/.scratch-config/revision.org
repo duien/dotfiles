@@ -1853,10 +1853,10 @@ Set up some basic org styling that we'll run whenever we change themes:
                    (org-agenda-skip-function
                     '(or
                       (eh/org-skip-subtree-if-bury)
-                      (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "BURY" "GOAL"))
+                      (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "IDEA" "BURY" "GOAL"))
                       ))
                    ))
-            (todo "READ" ((org-agenda-overriding-header "Do some reading")))
+            (todo "READ|IDEA" ((org-agenda-overriding-header "Investigate")))
             (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
            ((org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
             (org-agenda-tag-filter-preset '("-meta"))
