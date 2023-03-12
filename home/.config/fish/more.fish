@@ -11,7 +11,6 @@ alias ffpull "git switch master ; and git pull ; and git switch - ; and git merg
 
 # Basic environment
 prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/Code/Dox $HOME/.homesick/repos
-prepend_if_exists PATH /usr/local/bin /usr/local/sbin
 prepend_if_exists PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 
 prepend_if_exists PATH "$HOME/bin"

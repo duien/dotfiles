@@ -18,6 +18,12 @@ if contains (whoami) duien ehyland
 	set -x default_user (whoami)
 end
 
+if [ -x '/opt/homebrew/bin/brew' ]
+  /opt/homebrew/bin/brew shellenv | source
+else if [ -x '/usr/local/bin/brew' ]
+  /usr/local/bin/brew shellenv | source
+end
+
 # Load my aliases and environment
 source ~/.config/fish/more.fish
 
