@@ -1,4 +1,4 @@
-;;; init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
+;; init.el -*- lexical-binding: t; -*- no-byte-compile: t -*- 
 
 ;;; Prepare for configuration
 
@@ -91,6 +91,20 @@
   :hook
   prog-mode)
 
+;; show tabs
+(use-package tab-bar
+  :straight nil
+  :preface
+  ;; add spaces around the tab name
+  (defun eh/tab-bar-tab-name-format-comfortable (tab i)
+    (propertize (concat " " (tab-bar-tab-name-format-default tab i) " ")
+                'face (funcall tab-bar-tab-face-function tab)))
+  :init
+  (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
+  (setq tab-bar-close-button-show nil
+        tab-bar-auto-width nil)
+  (setq tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator)))
+
 ;;; Manageable mode-line
 
 ;; don't junk up the mode-line
@@ -155,7 +169,8 @@
 	   :default-family "JetBrains Mono"
 	   :default-weight light)
 	  (cascadia
-	   :default-family "Cascadia Code"
+	   :default-family "Cascadia Code PL"
+     :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
 	  (t
 	   :default-height ,eh/base-font-height)))
@@ -246,7 +261,9 @@
 
 (use-package olivetti
   :init
-  (setq olivetti-style nil))
+  (setq olivetti-style nil)
+  :hook
+  org-mode)
 
 ;;; Version control
 
@@ -271,3 +288,25 @@
 (use-package sass-mode)
 (use-package json-mode)
 (use-package yaml-mode)
+
+;;; Extra color themes
+
+(use-package autothemer)
+(use-package isohedron-theme
+  :straight '(isohedron-theme :type git :host github
+		                          :repo "duien/isohedron-theme"))
+(use-package caves-of-qud-theme
+  :straight '(caves-of-qud-theme :type git :host github
+                                 :repo "duien/caves-of-qud-theme"))
+
+;;; Misc Stuff to be Organized
+
+(use-package outline
+  :straight (:type built-in)
+  :config
+  (setq outline-blank-line t
+        outline-minor-mode-use-buttons 'in-margins))
+
+;; Local Variables:
+;; eval: (outline-minor-mode)
+;; End:
