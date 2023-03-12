@@ -17,6 +17,8 @@
 ;; put config files in reasonable places
 (use-package no-littering)
 
+;; TODO don't litter backup files everywhere
+
 ;;; Set basic variables
 
 (setq user-full-name "Emily Hyland"
@@ -57,6 +59,9 @@
   :preface
   (defun eh/disable-horiz-scroll-with-visual-line ()
     (setq-local mouse-wheel-tilt-scroll (not visual-line-mode)))
+  :config
+  (setq-default word-wrap t)
+  (setq-default truncate-lines t)
   :hook
   (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
 
@@ -66,9 +71,11 @@
   :init
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 2)
+  (setq standard-indent 2)
   (setq js-indent-level 2)
+  (setq fish-indent-offset 2)
   (setq tab-always-indent t
-	require-final-newline t))
+	      require-final-newline t))
 
 ;; attempt to let someone else tame indentation
 (use-package editorconfig
@@ -167,15 +174,17 @@
       ('dark (modus-themes-load-theme 'modus-vivendi-tinted))))
   :init
   (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs t)
+	      modus-themes-bold-constructs t)
   (setq modus-themes-common-palette-overrides
-	'((border-mode-line-active unspecified)
-	  (border-mode-line-inactive unspecified)
-	  (comment fg-dim)
-	  (string green)))
+	      '((border-mode-line-active unspecified)
+	        (border-mode-line-inactive unspecified)
+	        (comment fg-dim)
+	        (string green)))
   (setq modus-vivendi-tinted-palette-overrides
 	      '((string cyan)))
+  (add-hook 'ns-system-appearance-change-functions #'eh/load-modus-appearance-theme)
   :config
+  ;; TODO this may not be necessary since the hook is called on startup
   (eh/load-modus-appearance-theme ns-system-appearance))
 
 ;;; Manage windows and buffers
@@ -235,6 +244,10 @@
   ;; (fontaine-set-preset . )
   )
 
+(use-package olivetti
+  :init
+  (setq olivetti-style nil))
+
 ;;; Version control
 
 ;; the best git interface
@@ -249,3 +262,12 @@
   :hook
   (magit-pre-refresh . diff-hl-magit-pre-refresh)
   (magit-post-refresh . diff-hl-magit-post-refresh))
+
+;;; Languages
+
+(use-package fish-mode)
+(use-package haml-mode)
+(use-package slim-mode)
+(use-package sass-mode)
+(use-package json-mode)
+(use-package yaml-mode)
