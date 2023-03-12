@@ -43,8 +43,10 @@ if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
 
 
 # Enable rbenv
-set -gx RBENV_ROOT /usr/local/var/rbenv
-status --is-interactive; and source (rbenv init -|psub)
+if [ -x /usr/local/bin/brew ]
+  set -gx RBENV_ROOT /usr/local/var/rbenv
+end
+rbenv init - fish | source
 
 # Set up NVM
 # if test -d "$HOME/.nvm"
