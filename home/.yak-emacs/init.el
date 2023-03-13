@@ -34,6 +34,9 @@
       use-short-answers t
       bookmark-set-fringe-mark nil)
 
+(add-to-list 'load-path (concat user-emacs-directory
+        (convert-standard-filename "lisp/")))
+
 ;;; Some foundational pieces to make a functional UI
 
 ;; stop shouting at me all the time
@@ -51,7 +54,8 @@
   :bind
   ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
   ([remap kill-line] . 'crux-smart-kill-line)
-  ([remap open-line] . 'crux-smart-open-line))
+  ([remap open-line] . 'crux-smart-open-line)
+  ("C-x w s" . 'crux-swap-windows))
 
 ;; set up soft-wrapping 
 (use-package emacs
@@ -103,7 +107,16 @@
   (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
   (setq tab-bar-close-button-show nil
         tab-bar-auto-width nil)
-  (setq tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator)))
+  (setq tab-bar-new-tab-choice "*scratch*")
+  (setq tab-bar-format
+        '(tab-bar-format-history
+          tab-bar-format-tabs
+          tab-bar-separator))
+  :bind
+  ("C-x t n" . tab-bar-new-tab)
+  ;; ("C-x t <return>" . +tab-bar-dwim)
+  ("C-x t <return>" . tab-switch)
+  ) ;; tab-switch
 
 ;;; Manageable mode-line
 
@@ -127,10 +140,20 @@
   :init
   (setq consult-preview-key "M-.")
   (setq consult-narrow-key "<")
+  :config
+  (consult-customize consult-theme
+                     :preview-key
+                     '("M-."
+                       :debounce 0.5 "<up>" "<down>"
+                       :debounce 1 any))
+  (load "consult-tab-bar")
   :bind
   ("C-x b" . 'consult-buffer)
   ("C-x 4 b" . 'consult-buffer-other-window)
-  ("C-x 5 b" . 'consult-buffer-other-frame))
+  ("C-x 5 b" . 'consult-buffer-other-frame)
+  ("C-h t" . 'consult-theme)
+  ;; ("C-x t t" . '+tab-bar-dwim)
+  )
 
 ;; vertical completion menu
 (use-package vertico
@@ -208,17 +231,43 @@
 (use-package recentf
   :straight (:type built-in)
   :init
+  (setq recentf-max-saved-items 100)
   (setq recentf-exclude
-	`(,(expand-file-name "straight/build/" user-emacs-directory)
+	      `(,(expand-file-name "straight/build/" user-emacs-directory)
           ,(expand-file-name "eln-cache/" user-emacs-directory)
           ,(expand-file-name "etc/" user-emacs-directory)
           ,(expand-file-name "var/" user-emacs-directory)))
-  :config (recentf-mode))
+  :config (recentf-mode)
+  :hook
+  (buffer-list-update . recentf-track-opened-file))
 
 ;; allow undoing and redoing window layout changes
 (use-package winner
   :straight (:type built-in)
   :config (winner-mode))
+
+;; projects defined mostly by git repos
+(use-package projectile
+  :preface
+  ;; https://www.rousette.org.uk/archives/using-the-tab-bar-in-emacs/
+  (defun my/name-tab-by-project-or-default ()
+    "Return project name if in a project, or default tab-bar name if not.
+The default tab-bar name uses the buffer name."
+    (let ((project-name (projectile-project-name)))
+      (if (string= "-" project-name)
+          (tab-bar-tab-name-current)
+        (projectile-project-name)f)))
+  :init
+  (setq tab-bar-tab-name-function #'my/name-tab-by-project-or-default)
+  (setq projectile-project-search-path '(("~/Code" . 3)
+                                         ("~/.homesick/repos" . 1)))
+  (bind-key "C-x p" 'projectile-command-map)
+  :config
+  (projectile-add-known-project "~/Org")
+  (projectile-add-known-project "~/Notes")
+  (projectile-mode)
+  :bind
+  ("C-x p b" . 'consult-project-buffer))
 
 ;;; Utilities
 
@@ -231,7 +280,7 @@
 
 (use-package ligature
   :straight '(ligature :type git :host github
-		       :repo "mickeynp/ligature.el")
+		                   :repo "mickeynp/ligature.el")
   :config
   ;; Enable the "www" ligature in every possible major mode
   (ligature-set-ligatures 't '("www"))
@@ -299,13 +348,92 @@
   :straight '(caves-of-qud-theme :type git :host github
                                  :repo "duien/caves-of-qud-theme"))
 
+;;; Org
+
+(use-package org
+  :straight (:type built-in)
+  :init
+  ;; where to put things
+  (setq org-directory "~/Org/"
+        org-adenda-files `(,org-directory) ;; could we just '(org-directory)?
+        org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
+  ;; logging
+  (setq org-log-done t
+        org-log-into-drawer nil)
+  ;; startup
+  (setq org-startup-truncated t)
+  ;; how commands work - movement
+  (setq org-insert-heading-respect-content t
+        org-cycle-separator-lines 1
+        org-M-RET-may-split-lines '((default . t)
+                                    (item . nil)))
+  ;; how commands work - editing
+  (setq org-ctrl-k-protect-subtree t
+        org-fold-catch-invisible-edits 'show
+        org-src-preserve-indentation t
+        org-blank-before-new-entry '((heading . nil)
+                                     (plain-list-item . nil)))
+  ;; stars (combine with org-superstar)
+  (setq org-hide-leading-stars nil
+        org-indent-mode-turns-on-hiding-stars nil)
+  ;; fontification
+  (setq org-fontify-whole-block-delimiter-line t
+        org-fontity-whole-heading-line t
+        org-fontity-todo-headline t
+        org-fontity-done-headline t)
+  ;; popup buffers
+  (setq org-use-fast-todo-selection 'expert
+        org-src-window-setup 'current-window
+        org-agenda-window-setup 'other-window
+        org-agenda-restore-windows-after-quit t)
+  ;; todo keywords - current suggested
+  (setq org-todo-keywords
+        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d)" "KILL(k@)")
+          (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
+          (type "IDEA(i)" "GOAL(g)" "|")
+          (sequence "READ(R)" "|" "RODE(r)")
+          ))
+  :hook
+  (org-mode . org-indent-mode))
+
 ;;; Misc Stuff to be Organized
 
 (use-package outline
   :straight (:type built-in)
-  :config
+  :init
   (setq outline-blank-line t
         outline-minor-mode-use-buttons 'in-margins))
+
+(use-package ws-butler
+  :config
+  (ws-butler-global-mode))
+
+
+(defun eh/toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+(bind-key "C-x w r" #'eh/toggle-window-split)
 
 ;; Local Variables:
 ;; eval: (outline-minor-mode)
