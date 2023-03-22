@@ -872,6 +872,8 @@ First, define a few functions that are useful to our use of Modus:
 
 (use-package isohedron-theme
   :straight (:type git :host github :repo "duien/isohedron-theme"))
+(use-package caves-of-qud-theme
+  :straight (:type git :host github :repo "duien/caves-of-qud-theme"))
 
 ;; (modus-themes-load-operandi)
 ;; (load-theme 'ef-day)
@@ -1151,7 +1153,16 @@ See which lines have been modified in the gutter
 ** Use projects for organization
 #+begin_src elisp
 (use-package projectile
+  :preface
+  (defun my/name-tab-by-project-or-default ()
+    "Return project name if in a project, or default tab-bar name if not.
+The default tab-bar name uses the buffer name."
+    (let ((project-name (projectile-project-name)))
+      (if (string= "-" project-name)
+          (tab-bar-tab-name-current)
+        (projectile-project-name))))
   :config
+  (setq tab-bar-tab-name-function #'my/name-tab-by-project-or-default)
   (setq projectile-project-search-path
 	'(("~/Code" . 3)
 	  ("~/.homesick/repos" . 1)))
@@ -1914,7 +1925,6 @@ Add rspec-mode to have specs added to imenu
 #+begin_src elisp
 (use-package rspec-mode)
 #+end_src
-
 ** Misc small packages
 #+begin_src elisp
 (use-package fish-mode)
