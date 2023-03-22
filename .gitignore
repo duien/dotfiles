@@ -46,3 +46,6 @@ home/.minimal-config/straight/
 /home/.yak-emacs/straight/
 /home/.yak-emacs/var/
 /home/.yak-emacs/etc/
+/home/.scratch-config/tramp
+/home/.scratch-config/tree-sitter/
+/home/.yak-emacs/tree-sitter/
