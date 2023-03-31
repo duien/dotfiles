@@ -1054,13 +1054,13 @@ Consult is what sets the contents of those menus. It provides a really nice buff
   (setq consult-preview-key "M-.")
   (setq consult-narrow-key "<")
   (setq consult-project-root-function #'projectile-project-root)
-  (defvar eh/org-source
-    `(:name "Org Files"
-            :category file
-            :narrow ?o
-            :face 'consult-file
-            :items ,#'org-agenda-files))
-  (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
+  ;; (defvar eh/org-source
+  ;;   `(:name "Org Files"
+  ;;           :category file
+  ;;           :narrow ?o
+  ;;           :face 'consult-file
+  ;;           :items ,#'org-agenda-files))
+  ;; (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
 
   :general
   ("C-x b" 'consult-buffer)
@@ -1133,7 +1133,8 @@ Persistent scratch does bad things if the scratch buffer is ever killed, so use 
     (emacs-lock-mode 'kill))
   :config
   (persistent-scratch-setup-default)
-  (persistent-scratch-mode 1))
+  ;; (persistent-scratch-mode 1)
+  )
 #+end_src
 ** Version control
 Set up the best git interface:
