@@ -378,9 +378,9 @@ The default tab-bar name uses the buffer name."
         org-indent-mode-turns-on-hiding-stars nil)
   ;; fontification
   (setq org-fontify-whole-block-delimiter-line t
-        org-fontity-whole-heading-line t
-        org-fontity-todo-headline t
-        org-fontity-done-headline t)
+        org-fontify-whole-heading-line t
+        org-fontify-todo-headline t
+        org-fontify-done-headline t)
   ;; popup buffers
   (setq org-use-fast-todo-selection 'expert
         org-src-window-setup 'current-window
