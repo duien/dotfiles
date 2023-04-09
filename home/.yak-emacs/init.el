@@ -256,13 +256,16 @@ The default tab-bar name uses the buffer name."
     (let ((project-name (projectile-project-name)))
       (if (string= "-" project-name)
           (tab-bar-tab-name-current)
-        (projectile-project-name)f)))
+        (projectile-project-name))))
   :init
   (setq tab-bar-tab-name-function #'my/name-tab-by-project-or-default)
   (setq projectile-project-search-path '(("~/Code" . 3)
                                          ("~/.homesick/repos" . 1)))
   (bind-key "C-x p" 'projectile-command-map)
   :config
+  ;; the `Project.toml' file used to detect a julia project is also used to
+  ;; configure Maestro, and was clobbering rails
+  (projectile-update-project-type 'julia :precedence 'low)
   (projectile-add-known-project "~/Org")
   (projectile-add-known-project "~/Notes")
   (projectile-mode)
@@ -337,6 +340,9 @@ The default tab-bar name uses the buffer name."
 (use-package sass-mode)
 (use-package json-mode)
 (use-package yaml-mode)
+(use-package markdown-mode
+  :mode
+  (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
 
 ;;; Extra color themes
 
@@ -434,6 +440,12 @@ The default tab-bar name uses the buffer name."
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 (bind-key "C-x w r" #'eh/toggle-window-split)
+
+
+;;; TODO
+;; - kill-visual-line in visual-line-mode-map
+;; - project detection in scratch buffer
+
 
 ;; Local Variables:
 ;; eval: (outline-minor-mode)

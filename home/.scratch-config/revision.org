@@ -231,69 +231,69 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
         160 140)
     "The main font size, based on display resolution.")
   (setq fontaine-presets
-      `((comic-code
-         :default-family "Comic Code Ligatures"
-         ;; We actually want the light weight, but emacs doesn't detect
-         ;; it correctly. Therefore, handle that by disabling unwanted
-         ;; weights in FontBook and using `normal'
-         :default-weight normal)
-        (jetbrains-mono
-         :default-family "Jetbrains Mono"
-         :default-weight light) ;; same deal with the weights sort of
-        (apple
-         :default-family "SF Mono"
-         :default-weight semilight)
-        (apple-variable
-         :default-family "SF Mono"
-         :default-weight semilight
-         :variable-pitch-family "SF Pro Text")
-        (plex-variable
-         :default-family "IBM Plex Mono"
-         :variable-pitch-family "iA Writer Quattro V")
-        (victor-mono
-         :default-family "Victor Mono"
-         :default-weight normal)
-        (iosevka-variable
-         ;; 14: jetbrains-style
-         ;; 15: plex-style
-         ;; 17: recursive-style
-         :default-family "Iosevka Term SS14"
-         :default-weight light
-         :default-height ,(+ eh/base-font-height 10)
-         :variable-pitch-family "Iosevka Aile" ;; sans-serif
-         ;; :variable-pitch-family "Iosevka Etoile" ;; slab-serif
-         )
+        `((comic-code
+           :default-family "Comic Code Ligatures"
+           ;; We actually want the light weight, but emacs doesn't detect
+           ;; it correctly. Therefore, handle that by disabling unwanted
+           ;; weights in FontBook and using `normal'
+           :default-weight normal)
+          (jetbrains-mono
+           :default-family "Jetbrains Mono"
+           :default-weight light) ;; same deal with the weights sort of
+          (apple
+           :default-family "SF Mono"
+           :default-weight semilight)
+          (apple-variable
+           :default-family "SF Mono"
+           :default-weight semilight
+           :variable-pitch-family "SF Pro Text")
+          (plex-variable
+           :default-family "IBM Plex Mono"
+           :variable-pitch-family "iA Writer Quattro V")
+          (victor-mono
+           :default-family "Victor Mono"
+           :default-weight normal)
+          (iosevka-variable
+           ;; 14: jetbrains-style
+           ;; 15: plex-style
+           ;; 17: recursive-style
+           :default-family "Iosevka Term SS14"
+           :default-weight light
+           :default-height ,(+ eh/base-font-height 10)
+           :variable-pitch-family "Iosevka Aile" ;; sans-serif
+           ;; :variable-pitch-family "Iosevka Etoile" ;; slab-serif
+           )
 
-        (cascadia
-         :default-family "Cascadia Code"
-         :default-weight normal
-         :default-height ,(+ eh/base-font-height 10)
-         :bold-weight semibold)
-        (nuvo
-         :default-family "Nuvo Mono Offc Pro")
-        (operator
-         :default-family "Operator Mono SSm"
-         :default-weight light)
-        (pragmata
-         :default-family "PragmataPro Mono Liga")
-        (ellograph
-         :default-family "Ellograph CF"
-         :default-weight light
-         :line-spacing 2)
-        (sometype
-         :default-family "Sometype Mono"
-         :default-height ,(+ eh/base-font-height 10))
+          (cascadia
+           :default-family "Cascadia Code"
+           :default-weight normal
+           :default-height ,(+ eh/base-font-height 10)
+           :bold-weight semibold)
+          (nuvo
+           :default-family "Nuvo Mono Offc Pro")
+          (operator
+           :default-family "Operator Mono SSm"
+           :default-weight light)
+          (pragmata
+           :default-family "PragmataPro Mono Liga")
+          (ellograph
+           :default-family "Ellograph CF"
+           :default-weight light
+           :line-spacing 2)
+          (sometype
+           :default-family "Sometype Mono"
+           :default-height ,(+ eh/base-font-height 10))
 
-        ;; fallbacks
-        (system
-         :default-family "Menlo")
-        (t ;; shared fallback values
-         :default-family "Menlo"
-         :default-weight normal
-         :default-height ,eh/base-font-height
-         :fixed-pitch-family nil
-         :variable-pitch-family nil)
-        ))
+          ;; fallbacks
+          (system
+           :default-family "Menlo")
+          (t ;; shared fallback values
+           :default-family "Menlo"
+           :default-weight normal
+           :default-height ,eh/base-font-height
+           :fixed-pitch-family nil
+           :variable-pitch-family nil)
+          ))
   ;; (setq fontaine-presets
   ;;       `((jetbrains-mono
   ;;          :default-family "Jetbrains Mono"
@@ -313,6 +313,7 @@ What I've ended up with is using ~keyboard-escape-quit~ but modifying it so that
   (after-enable-theme . fontaine-apply-current-preset)
   ;; this needs to be done when font size changes
   ;; (diff-hl-maybe-redefine-bitmaps)
+  ;; (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps)
   )
 #+end_src
 ** COMMENT Set up typography
@@ -685,53 +686,59 @@ First, define a few functions that are useful to our use of Modus:
     ('dark (modus-themes-load-vivendi))))
 
 (defun eh/org-update-modus-theme ()
-  (set-face-attribute 'org-superstar-leading nil
-                      :weight 'normal
-                      :foreground (modus-themes-color 'fg-window-divider-inner))
-  (set-face-attribute 'org-done nil :weight 'normal)
-  (set-face-attribute 'org-headline-todo nil
-                      :weight 'normal
-                      :foreground nil)
-  (set-face-attribute 'org-headline-done nil
-                      :weight 'normal
-                      :foreground (modus-themes-color 'fg-window-divider-inner)
-                      :inherit '(font-lock-comment-face))
-  (set-face-attribute 'eh/org-keyword-todo nil
-                      :inherit '(modus-themes-refine-green org-todo))
-  (set-face-attribute 'eh/org-keyword-next nil
-                      :background (modus-themes-color 'yellow-graph-0-bg)
-                      :foreground (modus-themes-color 'orange-intense)
-                      :inherit '(org-todo))
-  (set-face-attribute 'eh/org-keyword-halt nil
-                      :inherit '(modus-themes-intense-red org-todo))
-  (set-face-attribute 'eh/org-keyword-bury nil
-                      :inherit '(modus-themes-intense-neutral org-done))
-  (set-face-attribute 'eh/org-keyword-question nil
-                      :inherit '(modus-themes-refine-blue org-todo))
-  (set-face-attribute 'eh/org-keyword-idea nil
-                      :inherit '(modus-themes-refine-magenta org-todo))
-  (set-face-attribute 'eh/org-keyword-read nil
-                      :inherit '(modus-themes-special-warm org-todo))
-  (set-face-attribute 'eh/org-keyword-done nil
-                      :inherit '(modus-themes-nuanced-green org-done)
-                      :foreground (modus-themes-color 'green-faint))
-  (set-face-attribute 'eh/org-keyword-kill nil
-                      :inherit '(modus-themes-nuanced-red org-done)
-                      :foreground (modus-themes-color 'red-faint))
-  (set-face-attribute 'eh/org-keyword-answer nil
-                      :inherit '(modus-themes-nuanced-blue org-done)
-                      :foreground (modus-themes-color 'blue-faint))
-  (set-face-attribute 'eh/org-keyword-meh nil
-                      :inherit '(modus-themes-subtle-neutral org-done))
-  (set-face-attribute 'eh/org-keyword-yes nil
-                      :inherit 'eh/org-keyword-done
-                      :foreground (modus-themes-color 'green))
-  (set-face-attribute 'eh/org-keyword-no nil
-                      :inherit 'eh/org-keyword-kill
-                      :foreground (modus-themes-color 'red))
-  (set-face-attribute 'eh/org-keyword-rode nil
-                      :inherit '(modus-themes-nuanced-yellow org-done))
-  )
+  (modus-themes-with-colors
+    ;; this new set of colors is only tested with operandi-tinted
+    (set-face-attribute 'org-block-begin-line nil
+                        :background bg-main
+                        :foreground border)
+    (set-face-attribute 'org-headline-done nil
+                        :weight 'reset
+                        :inherit 'font-lock-comment-face)
+    (set-face-attribute 'org-headline-todo nil
+                        :weight 'reset
+                        :inherit nil)
+    
+    (set-face-attribute 'org-todo nil
+                        :background olive
+                        :foreground bg-main) 
+    (set-face-attribute 'eh/org-keyword-todo nil
+                        :background green-intense)
+    (set-face-attribute 'eh/org-keyword-next nil
+                        :foreground gold
+                        :background bg-graph-yellow-0)
+    (set-face-attribute 'eh/org-keyword-halt nil
+                        :background red-intense)
+    (set-face-attribute 'eh/org-keyword-bury nil
+                        :foreground bg-main
+                        :background bg-active)
+    (set-face-attribute 'eh/org-keyword-question nil
+                        :background blue-warmer)
+    (set-face-attribute 'eh/org-keyword-idea nil
+                        :background magenta-warmer)
+    (set-face-attribute 'eh/org-keyword-read nil
+                        :background gold)
+
+    (set-face-attribute 'org-done nil
+                        :foreground fg-dim
+                        :background bg-dim
+                        :weight 'reset)
+    (set-face-attribute 'eh/org-keyword-done nil
+                        :foreground olive)
+    (set-face-attribute 'eh/org-keyword-kill nil
+                        :foreground rust)
+    (set-face-attribute 'eh/org-keyword-answer nil
+                        :foreground blue
+                        :background bg-blue-nuanced)
+    (set-face-attribute 'eh/org-keyword-yes nil
+                        :foreground green
+                        :background bg-green-nuanced)
+    (set-face-attribute 'eh/org-keyword-no nil
+                        :foreground red
+                        :background bg-red-nuanced)
+    (set-face-attribute 'eh/org-keyword-meh nil
+                        :foreground slate)
+    (set-face-attribute 'eh/org-keyword-rode nil
+                        :foreground gold)))
 #+end_src
 
 #+begin_src elisp
@@ -782,16 +789,17 @@ First, define a few functions that are useful to our use of Modus:
           (fg-line-number-inactive bg-inactive)
           (fg-line-number-active bg-active)
           (string green)
-          (comment dim)))
+          (comment fg-dim)))
   
 
 
   ;; (add-hook 'ns-system-appearance-change-functions #'eh/load-theme)
   :init
   ;; (modus-themes-load-themes)
-  ;; :hook
+  :hook
   ;; (modus-themes-after-load-theme . eh/set-apple-fonts)
   ;; (modus-themes-after-load-theme . eh/modus-customize)
+  (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
 *** Set up some alternate color themes
@@ -1061,7 +1069,11 @@ Consult is what sets the contents of those menus. It provides a really nice buff
   ;;           :face 'consult-file
   ;;           :items ,#'org-agenda-files))
   ;; (add-to-list 'consult-buffer-sources 'eh/org-source 'append)
-
+  (consult-customize consult-theme
+                     :preview-key
+                     '("M-."
+                       :debounce 0.5 "<up>" "<down>"
+                       :debounce 1 any))
   :general
   ("C-x b" 'consult-buffer)
   ("C-x 4 b" 'consult-buffer-other-window)
@@ -1145,9 +1157,11 @@ Set up the best git interface:
 See which lines have been modified in the gutter
 #+begin_src elisp
 (use-package diff-hl
+  :after (fontaine)
   :hook
   (magit-pre-refresh . diff-hl-magit-pre-refresh)
   (magit-post-refresh . diff-hl-magit-post-refresh)
+  (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps)
   :init
   (global-diff-hl-mode 1))
 #+end_src
@@ -1256,6 +1270,11 @@ Add a confirmation message to the new ~elisp-eval-region-or-buffer~ function tha
       (yes-or-no-p "Evaluate region?")
     (yes-or-no-p "Evaluate buffer?")))
 (advice-add 'elisp-eval-region-or-buffer :before-while 'confirm-eval)
+#+end_src
+
+Show a side window with imenu entries for current buffer
+#+begin_src elisp
+(use-package imenu-list)
 #+end_src
 ** Do better things with line wrapping
 #+begin_src elisp
@@ -1890,6 +1909,10 @@ Set up some basic org styling that we'll run whenever we change themes:
   ;; (org-mode . mixed-pitch-mode)
   (after-enable-theme . eh/org-update-theme)
   (org-ctrl-c-ctrl-c . eh/hook-edit-src-block)
+  ;; we have the hook we need now, but redefining keyword symbols doesn't work
+  ;; without restarting org-mode
+  ;; (fontaine-set-preset . eh/define-org-keywords)
+  ;; this needs to be updated for newer modus versions
   ;; (modus-themes-after-load-theme . eh/org-update-modus-theme)
   )
 #+end_src
@@ -1908,7 +1931,9 @@ Set up some basic org styling that we'll run whenever we change themes:
         org-superstar-prettify-item-bullets nil
         )
   (defun eh/org-superstar-update-theme ()
-    (set-face-attribute 'org-superstar-header-bullet nil :weight (face-attribute 'default :weight) :font (face-attribute 'fixed-pitch :font))
+    (set-face-attribute 'org-superstar-header-bullet nil
+                        :weight (face-attribute 'default :weight)
+                        :font (face-attribute 'fixed-pitch :font))
    ) 
   ;; :init
   (eh/org-superstar-update-theme)

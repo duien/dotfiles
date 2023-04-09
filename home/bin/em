@@ -1,9 +1,9 @@
 #!/usr/bin/env fish
 
 # function ec --description "open emacs client, starting server if needed"
-    argparse -i 'p/with-profile=' -- $argv
-    argparse -i 't/tty' -- $argv
-    argparse -i 'w/wait' -- $argv
+    argparse -i 'p/with-profile=' 't/tty' 'w/wait' -- $argv
+    # argparse -i 't/tty' -- $argv
+    # argparse -i 'w/wait' -- $argv
     set -l socket_file
     if test -n "$_flag_p"
         set socket_file (emacsserver -p$_flag_p)

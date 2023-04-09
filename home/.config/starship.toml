@@ -27,7 +27,11 @@ style = "bright-black"
 time_format = "%R"
 
 [directory]
-style = "bold blue"
+truncation_length = 0
+style = "bright-blue"
+repo_root_style = "bold bright-blue"
+before_repo_root_style = "blue"
+truncate_to_repo = false
 # fish_style_pwd_dir_length = 2
 truncation_symbol = "…/"
 
