@@ -401,7 +401,37 @@
 ;; TODO make these themes properly load autothemer
 (use-package isohedron-theme
   :straight '(isohedron-theme :type git :host github
-		                          :repo "duien/isohedron-theme"))
+		                          :repo "duien/isohedron-theme")
+  :config
+  (custom-theme-set-faces
+   'isohedron
+   ;; faces for incomplete items
+   '(eh/org-keyword-todo
+     ((t :background "#84bd00" :foreground "#f7f3ee" :inherit org-todo)))
+   '(eh/org-keyword-idea
+     ((t :background "#ce5cff" :foreground "#f7f3ee" :inherit org-todo)))
+   '(eh/org-keyword-read
+     ((t :background "#b9a992" :foreground "#f7f3ee" :inherit org-todo)))
+   '(eh/org-keyword-question
+     ((t :background "#75a3ff" :foreground "#f7f3ee" :inherit org-todo)))
+   '(eh/org-keyword-bury
+     ((t :background "#f1ece4" :foreground "#93836c" :inherit org-todo)))
+   '(eh/org-keyword-next
+     ((t :background "#f0b400" :foreground "#f7f3ee" :inherit org-todo)))
+   '(eh/org-keyword-halt
+     ((t :background "#f08c00" :foreground "#f7f3ee" :inherit org-todo)))
+   ;; faces for complete items
+   '(eh/org-keyword-done
+     ((t :foreground "#81895d" :inherit org-done)))
+   '(eh/org-keyword-kill
+     ((t :foreground "#957f5f" :inherit org-done)))
+   '(eh/org-keyword-yes
+     ((t :background "#e2e9ca" :foreground "#84bd00" :inherit org-done)))
+   '(eh/org-keyword-no
+     ((t :background "#f6e1ca" :foreground "#fb6c6a" :inherit org-done)))
+   '(eh/org-keyword-answer
+     ((t :background "#dde3f2" :foreground "#75a3ff" :inherit org-done)))
+   ))
 (use-package caves-of-qud-theme
   :straight '(caves-of-qud-theme :type git :host github
                                  :repo "duien/caves-of-qud-theme")
@@ -421,11 +451,7 @@
    '(eh/org-keyword-answer   ((t :foreground "#0096ff" :inherit org-done)))
    '(eh/org-keyword-yes      ((t :foreground "#00c420" :inherit org-done)))
    '(eh/org-keyword-no       ((t :foreground "#d74200" :inherit org-done)))
-   '(eh/org-keyword-rode     ((t :foreground "#98875f" :inherit org-done)))
-   ;; nano modeline faces
-   '(nano-modeline-active-status-** ((t :background "#cfc041" :inherit nano-modeline-active)))
-   '(nano-modeline-active-status-RO ((t :background "#a64a2e" :inherit nano-modeline-active)))
-   '(nano-modeline-active-status-RW ((t :background "#40a4b9" :inherit nano-modeline-active)))))
+   '(eh/org-keyword-rode     ((t :foreground "#98875f" :inherit org-done)))))
 
 ;;; Org
 
