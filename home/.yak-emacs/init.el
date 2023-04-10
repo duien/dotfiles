@@ -1,4 +1,4 @@
-;; init.el -*- lexical-binding: t; -*- no-byte-compile: t -*- 
+;; init.el -*- lexical-binding: t; -*- no-byte-compile: t -*-
 
 ;;; Prepare for configuration
 
@@ -24,15 +24,20 @@
 (setq user-full-name "Emily Hyland"
       user-mail-address "hello@duien.com")
 
+;; make home the default directory regardless of where emacs is started from
+(cd "~/")
+
+
 (setq-default fill-column 80)
 (setq sentence-end-double-space t
-      vc-folow-symlinks t
+      vc-follow-symlinks t
       dired-use-ls-dired nil
       mouse-wheel-flip-direction t
       mouse-wheel-tilt-scroll t
       custom-safe-themes t
       use-short-answers t
       bookmark-set-fringe-mark nil)
+(setq frame-inhibit-implied-resize t)
 
 (add-to-list 'load-path (concat user-emacs-directory
         (convert-standard-filename "lisp/")))
@@ -57,7 +62,7 @@
   ([remap open-line] . 'crux-smart-open-line)
   ("C-x w s" . 'crux-swap-windows))
 
-;; set up soft-wrapping 
+;; set up soft-wrapping
 (use-package emacs
   :straight nil
   :preface
@@ -99,9 +104,14 @@
 (use-package tab-bar
   :straight nil
   :preface
-  ;; add spaces around the tab name
+  ;; add spaces around the tab name (horizontally with spaces, and vertically
+  ;; with text properties)
   (defun eh/tab-bar-tab-name-format-comfortable (tab i)
-    (propertize (concat " " (tab-bar-tab-name-format-default tab i) " ")
+    (propertize (concat
+                 (propertize " " 'display `(raise ,nano-modeline-space-top))
+                 (tab-bar-tab-name-format-default tab i)
+                 (propertize " " 'display `(raise ,nano-modeline-space-bottom))
+                 )
                 'face (funcall tab-bar-tab-face-function tab)))
   :init
   (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
@@ -114,9 +124,7 @@
           tab-bar-separator))
   :bind
   ("C-x t n" . tab-bar-new-tab)
-  ;; ("C-x t <return>" . +tab-bar-dwim)
-  ("C-x t <return>" . tab-switch)
-  ) ;; tab-switch
+  ("C-x t <return>" . tab-switch))
 
 ;;; Manageable mode-line
 
@@ -146,14 +154,14 @@
                      '("M-."
                        :debounce 0.5 "<up>" "<down>"
                        :debounce 1 any))
-  (load "consult-tab-bar")
+  ;; (load "consult-tab-bar")
   :bind
   ("C-x b" . 'consult-buffer)
   ("C-x 4 b" . 'consult-buffer-other-window)
   ("C-x 5 b" . 'consult-buffer-other-frame)
+  ("C-x i" . 'consult-imenu)
   ("C-h t" . 'consult-theme)
-  ;; ("C-x t t" . '+tab-bar-dwim)
-  )
+  ("C-h i" . 'consult-info))
 
 ;; vertical completion menu
 (use-package vertico
@@ -195,12 +203,22 @@
 	   :default-family "Cascadia Code PL"
      :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
+    (comic-code
+     :default-family "Comic Code Ligatures")
+    (input
+     :default-family "Input Mono Narrow")
+    (monolisa
+     :default-family "MonoLisa")
+    (plex
+     :default-family "IBM Plex Mono"
+     :variable-pitch-family "iA Writer Quattro V")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
   (fontaine-set-preset (fontaine-restore-latest-preset))
   :hook
-  (fontaine-set-preset . fontaine-store-latest-preset))
+  (fontaine-set-preset . fontaine-store-latest-preset)
+  (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps))
 
 ;; a theme for all seasons
 (use-package modus-themes
@@ -212,7 +230,8 @@
       ('dark (modus-themes-load-theme 'modus-vivendi-tinted))))
   :init
   (setq modus-themes-italic-constructs t
-	      modus-themes-bold-constructs t)
+	      modus-themes-bold-constructs t
+        modus-themes-mixed-fonts t)
   (setq modus-themes-common-palette-overrides
 	      '((border-mode-line-active unspecified)
 	        (border-mode-line-inactive unspecified)
@@ -249,35 +268,65 @@
 ;; projects defined mostly by git repos
 (use-package projectile
   :preface
-  ;; https://www.rousette.org.uk/archives/using-the-tab-bar-in-emacs/
-  (defun my/name-tab-by-project-or-default ()
-    "Return project name if in a project, or default tab-bar name if not.
-The default tab-bar name uses the buffer name."
+  (defun eh/wrapped-project-name (before after &optional fallback)
     (let ((project-name (projectile-project-name)))
       (if (string= "-" project-name)
-          (tab-bar-tab-name-current)
-        (projectile-project-name))))
+          fallback (concat before (projectile-project-name) after))))
+  (defun eh/name-tab-with-project-or-default ()
+    (eh/wrapped-project-name "[" "]" (tab-bar-tab-name-current)))
   :init
-  (setq tab-bar-tab-name-function #'my/name-tab-by-project-or-default)
+  (setq tab-bar-tab-name-function #'eh/name-tab-with-project-or-default)
   (setq projectile-project-search-path '(("~/Code" . 3)
                                          ("~/.homesick/repos" . 1)))
-  (bind-key "C-x p" 'projectile-command-map)
+  ;; ignoring specific buffers by name
+  (setq projectile-globally-ignored-buffers
+        '("*scratch*"
+          "*lsp-log*"))
+
+  ;; ignoring buffers by their major mode
+  (setq projectile-globally-ignored-modes
+        '("erc-mode"
+          "help-mode"
+          "info-mode"
+          "completion-list-mode"
+          "Buffer-menu-mode"
+          "gnus-.*-mode"
+          "occur-mode"))
+  ;; (bind-key "C-x p" 'projectile-command-map)
   :config
   ;; the `Project.toml' file used to detect a julia project is also used to
   ;; configure Maestro, and was clobbering rails
   (projectile-update-project-type 'julia :precedence 'low)
   (projectile-add-known-project "~/Org")
   (projectile-add-known-project "~/Notes")
+  (setq frame-title-format
+      '("%b" (:eval (eh/wrapped-project-name " [" "]"))))
   (projectile-mode)
   :bind
-  ("C-x p b" . 'consult-project-buffer))
+  (("C-x p" . 'projectile-command-map)
+   ("C-x p b" . 'consult-project-buffer)))
+
+;; integrate projectile with perspectives and tabs
+(use-package perspective
+  ;; this doesn't work when opening files from the command-line, so disable
+  :disabled
+  :init
+  (setq persp-suppress-no-prefix-key-warning t)
+  (setq persp-show-modestring nil)
+  :config (persp-mode))
+(use-package perspective-tabs
+  :after (perspective)
+  :straight (:host sourcehut :repo "woozong/perspective-tabs")
+  :config (perspective-tabs-mode))
+(use-package persp-projectile
+  :after (perspective projectile))
 
 ;;; Utilities
 
 ;; show imenu entries in a sidebar
 (use-package imenu-list
-  ;; TODO bind imenu-list-smart-toggle
-  )
+  :bind
+  ("C-x /" . 'imenu-list-smart-toggle))
 
 ;;; Advanced appearance
 
@@ -289,7 +338,8 @@ The default tab-bar name uses the buffer name."
   (ligature-set-ligatures 't '("www"))
   ;; Enable all Cascadia Code ligatures in programming modes
   (ligature-set-ligatures
-   'prog-mode
+   ;; 'prog-mode
+   t
 	 '("|||>" "<|||" "<==>" "<!--" "####" "~~>" "***" "||=" "||>"
      ":::" "::=" "=:=" "===" "==>" "=!=" "=>>" "=<<" "=/=" "!=="
      "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
@@ -315,7 +365,8 @@ The default tab-bar name uses the buffer name."
   :init
   (setq olivetti-style nil)
   :hook
-  org-mode)
+  org-mode
+  gfm-mode)
 
 ;;; Version control
 
@@ -347,12 +398,34 @@ The default tab-bar name uses the buffer name."
 ;;; Extra color themes
 
 (use-package autothemer)
+;; TODO make these themes properly load autothemer
 (use-package isohedron-theme
   :straight '(isohedron-theme :type git :host github
 		                          :repo "duien/isohedron-theme"))
 (use-package caves-of-qud-theme
   :straight '(caves-of-qud-theme :type git :host github
-                                 :repo "duien/caves-of-qud-theme"))
+                                 :repo "duien/caves-of-qud-theme")
+  :config
+  (custom-theme-set-faces
+   'caves-of-qud
+   ;; faces for incomplete items
+   '(eh/org-keyword-todo     ((t :background "#009403" :inherit org-todo)))
+   '(eh/org-keyword-idea     ((t :background "#b154cf" :inherit org-todo)))
+   '(eh/org-keyword-question ((t :background "#0096ff" :inherit org-todo)))
+   '(eh/org-keyword-read     ((t :background "#98875f" :inherit org-todo)))
+   '(eh/org-keyword-next     ((t :background "#cfc041" :inherit org-todo)))
+   '(eh/org-keyword-halt     ((t :background "#f15f22" :inherit org-todo)))
+   ;; faces for complete items
+   '(eh/org-keyword-done     ((t :foreground "#009403" :inherit org-done)))
+   '(eh/org-keyword-kill     ((t :foreground "#a64a2e" :inherit org-done)))
+   '(eh/org-keyword-answer   ((t :foreground "#0096ff" :inherit org-done)))
+   '(eh/org-keyword-yes      ((t :foreground "#00c420" :inherit org-done)))
+   '(eh/org-keyword-no       ((t :foreground "#d74200" :inherit org-done)))
+   '(eh/org-keyword-rode     ((t :foreground "#98875f" :inherit org-done)))
+   ;; nano modeline faces
+   '(nano-modeline-active-status-** ((t :background "#cfc041" :inherit nano-modeline-active)))
+   '(nano-modeline-active-status-RO ((t :background "#a64a2e" :inherit nano-modeline-active)))
+   '(nano-modeline-active-status-RW ((t :background "#40a4b9" :inherit nano-modeline-active)))))
 
 ;;; Org
 
@@ -399,8 +472,25 @@ The default tab-bar name uses the buffer name."
           (type "IDEA(i)" "GOAL(g)" "|")
           (sequence "READ(R)" "|" "RODE(r)")
           ))
+  ;; load the complex keyword config
+  ;; TODO add the rest of my org stuff
+  (load "org-configuration")
+  (eh/define-org-keywords)
   :hook
   (org-mode . org-indent-mode))
+
+;; make org prettier
+(use-package org-superstar
+  :after (org)
+  :init
+  (setq org-superstar-cycle-headline-bullets nil
+        org-superstar-special-todo-items t
+        org-superstar-leading-fallback "·"
+        org-superstar-leading-bullet "·"
+        org-superstar-remove-leading-stars nil
+        org-superstar-prettify-item-bullets nil)
+  :hook
+  (org-mode . org-superstar-mode))
 
 ;;; Misc Stuff to be Organized
 
@@ -441,10 +531,36 @@ The default tab-bar name uses the buffer name."
           (if this-win-2nd (other-window 1))))))
 (bind-key "C-x w r" #'eh/toggle-window-split)
 
+(use-package nano-modeline
+  ;; :disabled
+  :init
+  (setq nano-modeline-position 'bottom)
+  (setq nano-modeline-prefix 'status)
+  ;; (setq nano-modeline-space-bottom -0.2)
+  (setq nano-modeline-space-top 0.1
+        nano-modeline-space-bottom 0)
+  :config (nano-modeline-mode))
+
+(use-package persistent-scratch
+  :init
+  ;; persistent-scratch-scratch-buffer-p-function
+  (with-current-buffer "*scratch*"
+    (emacs-lock-mode 'kill))
+  :config
+  ;; TODO the autosave seems to work, but minor mode isn't activated?
+  (persistent-scratch-setup-default))
+
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
-;; - project detection in scratch buffer
+;; ✓ project detection in scratch buffer
+;; - project files in consult-buffer default sources
+;; - go to buffer in default perspective
+;; - something like my org keyword definer for theme overlays
+
+;; - add-previous-buffer
+;; the equivalent of C-x 3 C-x [LEFT]
+;; (the previous buffer is opened in a left split and point is there
 
 
 ;; Local Variables:
