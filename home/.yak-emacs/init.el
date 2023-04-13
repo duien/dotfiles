@@ -212,6 +212,10 @@
     (plex
      :default-family "IBM Plex Mono"
      :variable-pitch-family "iA Writer Quattro V")
+    (operator
+     ;; NOTE: To make this work, enable _only_ the Light and Medium weights
+     :default-family "Operator Mono SSm"
+     :default-weight regular)
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -562,9 +566,11 @@
   :init
   (setq nano-modeline-position 'bottom)
   (setq nano-modeline-prefix 'status)
-  ;; (setq nano-modeline-space-bottom -0.2)
-  (setq nano-modeline-space-top 0.1
-        nano-modeline-space-bottom 0)
+  ;; TODO: set this up to change based on fontaine preset
+  (setq nano-modeline-space-top 0.2
+        nano-modeline-space-bottom -0.2)
+  ;; (setq nano-modeline-space-top 0.1
+  ;;       nano-modeline-space-bottom 0)
   :config (nano-modeline-mode))
 
 (use-package persistent-scratch

@@ -30,12 +30,14 @@
    :keywords '("DONE")
    ;; ✓✔︎
    :symbol '((comic-code . ?·)
+             (operator   . ?)
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
   (eh/org-register-keyword
    :keywords '("KILL" "CANCEL")
-   :symbol ?× ;; ✗ ;;× ×
+   :symbol '((operator . ?)
+             (t        . ?×)) ;; ✗ ;;× ×
    :face (defface eh/org-keyword-kill '((t :inherit org-done))
            "Face used for the KILL keyword in Org"))
   (eh/org-register-keyword
@@ -111,8 +113,12 @@
 
   ;; hack for now: move other symbol-setting into this function
   ;; for easier reset after font change
-  (setq org-ellipsis (if (eq fontaine-current-preset 'jetbrains)
-                         " ⋯" " ↓"))
+  ;; (setq org-ellipsis (if (eq fontaine-current-preset 'jetbrains)
+  ;;                        " ⋯" " ↓"))
+  (setq org-ellipsis (pcase fontaine-current-preset
+                       ('jetbrains " ⋯")
+                       ('operator  " >")
+                       (t          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
   (setq org-superstar-headline-bullets-list
