@@ -464,7 +464,7 @@
   :init
   ;; where to put things
   (setq org-directory "~/Org/"
-        org-adenda-files `(,org-directory) ;; could we just '(org-directory)?
+        org-agenda-files `(,org-directory) ;; could we just '(org-directory)?
         org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
   ;; logging
   (setq org-log-done t
@@ -481,7 +481,9 @@
         org-fold-catch-invisible-edits 'show
         org-src-preserve-indentation t
         org-blank-before-new-entry '((heading . nil)
-                                     (plain-list-item . nil)))
+                                     (plain-list-item . nil))
+        org-tags-column 0
+        org-auto-align-tags nil)
   ;; stars (combine with org-superstar)
   (setq org-hide-leading-stars nil
         org-indent-mode-turns-on-hiding-stars nil)
