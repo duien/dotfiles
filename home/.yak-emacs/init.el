@@ -38,6 +38,7 @@
       use-short-answers t
       bookmark-set-fringe-mark nil)
 (setq frame-inhibit-implied-resize t)
+(menu-bar-mode -1)
 
 (add-to-list 'load-path (concat user-emacs-directory
         (convert-standard-filename "lisp/")))
@@ -82,7 +83,6 @@
   (setq-default tab-width 2)
   (setq standard-indent 2)
   (setq js-indent-level 2)
-  (setq fish-indent-offset 2)
   (setq tab-always-indent t
 	      require-final-newline t))
 
@@ -153,6 +153,10 @@
                      :preview-key
                      '("M-."
                        :debounce 0.5 "<up>" "<down>"
+                       :debounce 1 any))
+  (consult-customize consult-line
+                     :preview-key
+                     '(:debounce 0.5 "<up>" "<down>"
                        :debounce 1 any))
   ;; (load "consult-tab-bar")
   :bind
@@ -339,7 +343,7 @@
      "!!." ">=>" ">>=" ">>>" ">>-" ">->" "->>" "-->" "---" "-<<"
      "<~~" "<~>" "<*>" "<||" "<|>" "<$>" "<==" "<=>" "<=<" "<->"
      "<--" "<-<" "<<=" "<<-" "<<<" "<+>" "</>" "###" "#_(" "..<"
-     "..." "+++" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
+     "..." "+++" ";;;" "/==" "///" "_|_" "www" "&&" "^=" "~~" "~@" "~="
      "~>" "~-" "**" "*>" "*/" "||" "|}" "|]" "|=" "|>" "|-" "{|"
      "[|" "]#" "::" ":=" ":>" ":<" "$>" "==" "=>" "!=" "!!" ">:"
      ">=" ">>" ">-" "-~" "-|" "->" "--" "-<" "<~" "<*" "<|" "<:"
@@ -379,12 +383,15 @@
 
 ;;; Languages
 
-(use-package fish-mode)
+(use-package fish-mode
+  :init
+  (setq fish-indent-offset 2))
 (use-package haml-mode)
 (use-package slim-mode)
 (use-package sass-mode)
 (use-package json-mode)
 (use-package yaml-mode)
+(use-package rspec-mode)
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
@@ -554,11 +561,10 @@
 (bind-key "C-x w r" #'eh/toggle-window-split)
 
 (use-package nano-modeline
-  ;; :disabled
   :init
   (setq nano-modeline-position 'bottom)
   (setq nano-modeline-prefix 'status)
-  ;; TODO: set this up to change based on fontaine preset
+  ;; TODO set this up to change based on fontaine preset
   (setq nano-modeline-space-top 0.2
         nano-modeline-space-bottom -0.2)
   ;; (setq nano-modeline-space-top 0.1
@@ -585,18 +591,30 @@
       ))
 (add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
 
-
+(use-package expand-region
+  :bind
+  ("C-=" . 'er/expand-region))
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
+;;   - separate binding to kill actual (logical?) line (oh, probably still just
+;;     kill-line or crux-kill-line)
+;; - crux altered key-binds in org-mode
+;; ✓ expand-region
 ;; ✓ project detection in scratch buffer
 ;; - project files in consult-buffer default sources
-;; - go to buffer in default perspective
+;; - go to buffer in default perspective (also from command line)
 ;; - something like my org keyword definer for theme overlays
-
+;; - save light and dark themes (like fontaine)
+;; - set up indent guide
+;;
+;; - try out embark
+;;
+;; - use-package imenu integration gets bogus marginalia annotations
+;;
 ;; - add-previous-buffer
-;; the equivalent of C-x 3 C-x [LEFT]
-;; (the previous buffer is opened in a left split and point is there
+;;   the equivalent of C-x 3 C-x [LEFT]
+;;   (the previous buffer is opened in a left split and point is there)
 
 
 ;; Local Variables:
