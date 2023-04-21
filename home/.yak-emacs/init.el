@@ -226,12 +226,6 @@
 
 ;; a theme for all seasons
 (use-package modus-themes
-  :preface
-  (defun eh/load-modus-appearance-theme (appearance)
-    "Load the appropriate light or dark modus theme based on APPEARANCE"
-    (pcase appearance
-      ('light (modus-themes-load-theme 'modus-operandi-tinted))
-      ('dark (modus-themes-load-theme 'modus-vivendi-tinted))))
   :init
   (setq modus-themes-italic-constructs t
 	      modus-themes-bold-constructs t
@@ -242,11 +236,7 @@
 	        (comment fg-dim)
 	        (string green)))
   (setq modus-vivendi-tinted-palette-overrides
-	      '((string cyan)))
-  (add-hook 'ns-system-appearance-change-functions #'eh/load-modus-appearance-theme)
-  :config
-  ;; TODO this may not be necessary since the hook is called on startup
-  (eh/load-modus-appearance-theme ns-system-appearance))
+	      '((string cyan))))
 
 ;;; Manage windows and buffers
 
@@ -583,6 +573,18 @@
   :config
   ;; TODO the autosave seems to work, but minor mode isn't activated?
   (persistent-scratch-setup-default))
+
+;; theme switching separated from modus
+(defun eh/load-appearance-theme (appearance)
+    "Load the appropriate light or dark theme based on APPEARANCE"
+    (pcase appearance
+      ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
+      ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
+      ('light (load-theme 'isohedron))
+      ('dark (load-theme 'caves-of-qud))
+      ))
+(add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
+
 
 
 ;;; TODO
