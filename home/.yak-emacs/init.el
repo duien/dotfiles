@@ -582,13 +582,14 @@
 
 ;; theme switching separated from modus
 (defun eh/load-appearance-theme (appearance)
-    "Load the appropriate light or dark theme based on APPEARANCE"
-    (pcase appearance
-      ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
-      ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
-      ('light (load-theme 'isohedron))
-      ('dark (load-theme 'caves-of-qud))
-      ))
+  "Load the appropriate light or dark theme based on APPEARANCE"
+  (mapc 'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
+    ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
+    ('light (enable-theme 'isohedron))
+    ('dark (enable-theme 'caves-of-qud))
+    ))
 (add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
 
 (use-package expand-region
