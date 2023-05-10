@@ -30,84 +30,107 @@
    :keywords '("DONE")
    ;; ✓✔︎
    :symbol '((comic-code . ?·)
+             (belinsky   . ?·)
              (operator   . ?)
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("KILL" "CANCEL")
-   :symbol '((operator . ?)
-             (t        . ?×)) ;; ✗ ;;× ×
+   :symbol ?× ;; ✗ ;;× ×
    :face (defface eh/org-keyword-kill '((t :inherit org-done))
            "Face used for the KILL keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("ANSWER" "ANSR")
    :symbol ?·
    :face (defface eh/org-keyword-answer '((t :inherit org-done))
            "Face used for the ANSR keywork in Org"))
+
   (eh/org-register-keyword
    :keywords '("MEH" "OK")
    :symbol ?·
    :face (defface eh/org-keyword-meh '((t :inherit org-done))
            "Face used for the OK keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("YES")
    :symbol ?·
    :face (defface eh/org-keyword-yes '((t :inherit eh/org-keyword-done))
            "Face used for the YES keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("NO")
    :symbol ?·
    :face (defface eh/org-keyword-no '((t :inherit eh/org-keyword-kill))
            "Face used for the NO keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("RODE")
    :symbol ?·
    :face (defface eh/org-keyword-rode '((t :inherit 'org-done))
            "Face used for RODE keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("BURY" "WAIT" "HOLD" "LATER")
    :symbol ?~
    :face (defface eh/org-keyword-bury '((t :inherit org-todo))
            "Face used for the WAIT keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("NEXT" "FLAG")
-   :symbol ?■ ;;◯ ;;☐ ;; ?◦●
+   :symbol '((operator . ?#)
+             (t        . ?■))
+   ;;◯ ;;☐ ;; ?◦●
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
            "Face used for the FLAG keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("TODO")
    :symbol '((comic-code . ?○)
              (cascadia   . ?○)
              (input      . ?○)
+             (codelia    . ?○)
+             (victor     . ?○)
              (recursive  . ?▷)
+             (operator   . ?*)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
            "Face used for the TODO keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("HALT" "BLOK" "BLOCK")
-   :symbol ?▲ ;;△ ;;◊▲
+   :symbol '((operator . ?!)
+             (t        . ?▲)) ;;△ ;;◊▲
    :face (defface eh/org-keyword-halt '((t :inherit org-todo))
            "Face used for the BLOK keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("QUEST" "QSTN" "QUESTION")
    :symbol '((comic-code . ?◊)
              (input      . ?◊)
+             (codelia    . ?◊)
+             (operator   . ??)
              (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("IDEA" "YAKS" "YAK")
    :symbol '((jetbrains-mono . ?◌)
              (cascadia . ?◌)
+             (operator . ?*)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
            "Face used for the IDEA keyword in Org"))
+
   (eh/org-register-keyword
    :keywords '("READ")
-   :symbol ?□  ;;◊ ;;◇□
+   :symbol '((operator . ?*)
+             (t        . ?□))  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
 
@@ -118,13 +141,20 @@
   (setq org-ellipsis (pcase fontaine-current-preset
                        ('jetbrains " ⋯")
                        ('operator  " >")
+                       ('belinsky  " ¶")
                        (t          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
   (setq org-superstar-headline-bullets-list
-        (if (eq fontaine-current-preset 'comic-code)
-            '("♦" "•")
-          '("◆" "•")))
+        (pcase fontaine-current-preset
+          ('comic-code '("♦" "•"))
+          ('codelia '("●" "•"))
+          ('belinsky '("•"))
+          ('operator '("•"))
+          (t  '("◆" "•"))))
+        ;; (if (eq fontaine-current-preset 'comic-code)
+        ;;     '("♦" "•")
+        ;;   '("◆" "•")))
   )
 ;; (let () (eh/define-org-keywords) (org-mode-restart) (org-superstar-restart))
 ;; □ ☐
