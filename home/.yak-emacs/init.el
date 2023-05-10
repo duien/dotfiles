@@ -85,7 +85,9 @@
   ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
   ([remap kill-line] . 'crux-smart-kill-line)
   ([remap open-line] . 'crux-smart-open-line)
-  ("C-x w s" . 'crux-swap-windows))
+  ("C-x w s" . 'crux-swap-windows)
+  (:map org-mode-map
+        ("C-o" . 'crux-smart-open-line)))
 
 ;; set up soft-wrapping
 (use-package emacs
@@ -229,10 +231,12 @@
 	   :default-weight light)
 	  (cascadia
 	   :default-family "Cascadia Code PL"
-     :default-height ,(+ eh/base-font-height 10)
+     ;; :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
     (comic-code
      :default-family "Comic Code Ligatures")
+    (codelia
+     :default-family "Codelia Ligatures")
     (input
      :default-family "Input Mono Narrow")
     (monolisa
@@ -244,6 +248,11 @@
      ;; NOTE: To make this work, enable _only_ the Light and Medium weights
      :default-family "Operator Mono SSm"
      :default-weight regular)
+    (belinsky
+     :default-family "Belinsky Text"
+     :default-weight regular)
+    (victor
+     :default-family "Victor Mono")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -419,6 +428,7 @@
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
+(use-package elixir-mode) ;; elixir-ts-mode
 
 ;;; Extra color themes
 
@@ -478,6 +488,8 @@
    '(eh/org-keyword-no       ((t :foreground "#d74200" :inherit org-done)))
    '(eh/org-keyword-rode     ((t :foreground "#98875f" :inherit org-done)))))
 
+(use-package ef-themes)
+
 ;;; Org
 
 (use-package org
@@ -491,7 +503,8 @@
   (setq org-log-done t
         org-log-into-drawer nil)
   ;; startup
-  (setq org-startup-truncated t)
+  (setq org-startup-truncated t
+        org-startup-folded 'showall)
   ;; how commands work - movement
   (setq org-insert-heading-respect-content t
         org-cycle-separator-lines 1
@@ -512,7 +525,8 @@
   (setq org-fontify-whole-block-delimiter-line t
         org-fontify-whole-heading-line t
         org-fontify-todo-headline t
-        org-fontify-done-headline t)
+        org-fontify-done-headline t
+        org-cycle-level-faces nil)
   ;; popup buffers
   (setq org-use-fast-todo-selection 'expert
         org-src-window-setup 'current-window
@@ -530,7 +544,8 @@
   (load "org-configuration")
   (eh/define-org-keywords)
   :hook
-  (org-mode . org-indent-mode))
+  (org-mode . org-indent-mode)
+  (fontaine-set-preset . eh/define-org-keywords))
 
 ;; make org prettier
 (use-package org-superstar
@@ -557,6 +572,7 @@
   :config
   (ws-butler-global-mode))
 
+(use-package ag)
 
 (defun eh/toggle-window-split ()
   (interactive)
@@ -583,6 +599,28 @@
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 (bind-key "C-x w r" #'eh/toggle-window-split)
+
+;; make various other-window functions prefer not to use this window
+(defun eh/toggle-window-dedication ()
+  "Toggles window dedication in the selected window."
+  (interactive)
+  (set-window-dedicated-p (selected-window)
+                          (not (window-dedicated-p (selected-window)))))
+(bind-key "C-x w d" #'eh/toggle-window-dedication)
+
+;; don't evaluate a whole buffer without confirmation
+(defun confirm-eval (&optional ARG PRED)
+  (interactive)
+  (if (use-region-p)
+      t
+    (yes-or-no-p "Evaluate buffer?")))
+(advice-add 'elisp-eval-region-or-buffer :before-while 'confirm-eval)
+
+;; restart org-mode preserving visibility
+(defun eh/org-mode-restart ()
+  "Restart org mode preserving visibility"
+  (interactive)
+  (org-save-outline-visibility 'use-markers (org-mode-restart)))
 
 (use-package nano-modeline
   :init
@@ -619,6 +657,16 @@
 (use-package expand-region
   :bind
   ("C-=" . 'er/expand-region))
+
+(use-package rainbow-mode)
+
+(use-package helpful
+  :bind
+  ("C-h f" . 'helpful-callable)
+  ("C-h v" . 'helpful-variable)
+  ("C-h k" . 'helpful-key))
+
+
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
