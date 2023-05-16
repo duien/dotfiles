@@ -85,9 +85,7 @@
   ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
   ([remap kill-line] . 'crux-smart-kill-line)
   ([remap open-line] . 'crux-smart-open-line)
-  ("C-x w s" . 'crux-swap-windows)
-  (:map org-mode-map
-        ("C-o" . 'crux-smart-open-line)))
+  ("C-x w s" . 'crux-swap-windows))
 
 ;; set up soft-wrapping
 (use-package emacs
@@ -98,6 +96,7 @@
   :config
   (setq-default word-wrap t)
   (setq-default truncate-lines t)
+  (setq comment-auto-fill-only-comments t)
   :hook
   (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
 
@@ -253,6 +252,9 @@
      :default-weight regular)
     (victor
      :default-family "Victor Mono")
+    (julia
+     :default-family "JuliaMono"
+     :default-weight regular)
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -543,9 +545,18 @@
   ;; TODO add the rest of my org stuff
   (load "org-configuration")
   (eh/define-org-keywords)
+  :config
+  (advice-add 'org-cycle-set-startup-visibility
+              :after 'eh/org-hide-done-entries-in-buffer)
+  :bind
+  (:map org-mode-map
+        ("C-o" . 'crux-smart-open-line))
+  (:map org-src-mode-map
+        ("C-c C-c" . 'org-edit-src-exit))
   :hook
   (org-mode . org-indent-mode)
-  (fontaine-set-preset . eh/define-org-keywords))
+  (fontaine-set-preset . eh/define-org-keywords)
+  (org-ctrl-c-ctrl-c . eh/hook-edit-src-block))
 
 ;; make org prettier
 (use-package org-superstar
@@ -666,7 +677,14 @@
   ("C-h v" . 'helpful-variable)
   ("C-h k" . 'helpful-key))
 
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
+(use-package spacemacs-theme
+  :config
+  (setq spacemacs-theme-comment-bg nil
+        spacemacs-theme-comment-italic t
+        spacemacs-theme-keyword-italic t
+        spacemacs-theme-org-height nil))
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map

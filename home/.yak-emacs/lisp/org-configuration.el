@@ -5,6 +5,83 @@
 
 ;; this must be loaded after fontaine
 
+;;; hook function to make C-c C-c open source block for editing instead of exec
+
+(defun eh/hook-edit-src-block ()
+  (cond ((org-in-src-block-p) (org-edit-src-code))))
+
+;;; collapse done entries
+
+(defun eh/org-get-folded-state ()
+    (cond
+        ((not (or (org-at-item-p) (org-at-heading-p)))
+            'not-at-node)
+        ((org-before-first-heading-p)
+            'not-at-node)
+        (t
+            (let (eoh eol eos has-children children-skipped struct)
+                ;; First, determine end of headline (EOH), end of subtree or item
+                ;; (EOS), and if item or heading has children (HAS-CHILDREN).
+                (save-excursion
+                    (if (org-at-item-p)
+                        (progn
+                            (beginning-of-line)
+                            (setq struct (org-list-struct))
+                            (setq eoh (point-at-eol))
+                            (setq eos (org-list-get-item-end-before-blank (point) struct))
+                            (setq has-children (org-list-has-child-p (point) struct)))
+                        (org-back-to-heading)
+                        (setq eoh (save-excursion (outline-end-of-heading) (point)))
+                        (setq eos (save-excursion (org-end-of-subtree t t)
+                                      (when (bolp) (backward-char)) (point)))
+                        (setq has-children
+                            (or (save-excursion
+                                    (let ((level (funcall outline-level)))
+                                        (outline-next-heading)
+                                        (and (org-at-heading-p t)
+                                            (> (funcall outline-level) level))))
+                                (save-excursion
+                                    (org-list-search-forward (org-item-beginning-re) eos t)))))
+                    ;; Determine end invisible part of buffer (EOL)
+                    (beginning-of-line 2)
+                    (while (and (not (eobp)) ;; this is like `next-line'
+                               (get-char-property (1- (point)) 'invisible))
+                        (goto-char (next-single-char-property-change (point) 'invisible))
+                        (and (eolp) (beginning-of-line 2)))
+                    (setq eol (point)))
+                (cond
+                    ((= eos eoh)
+                        'empty-node)
+                    ((or (>= eol eos)
+                         (not (string-match "\\S-" (buffer-substring eol eos))))
+                        'folded)
+                    (t
+                        'not-folded))))))
+
+(defun eh/org-tree-can-fold-p ()
+    (not (member (eh/org-get-folded-state) (list 'folded 'empty-node))))
+
+(defun eh/org-cycle-until-folded ()
+    (while (eh/org-tree-can-fold-p)
+        (org-cycle)))
+
+(defun eh/org-hide-done-entries-in-range (start end)
+    (save-excursion
+        (goto-char end)
+        (while (and (outline-previous-heading) (> (point) start))
+            (when (org-entry-is-done-p)
+                (eh/org-cycle-until-folded)))))
+
+(defun eh/org-hide-done-entries-in-region (start end)
+    (interactive "r")
+    (eh/org-hide-done-entries-in-range start end))
+
+(defun eh/org-hide-done-entries-in-buffer ()
+    (interactive)
+    (eh/org-hide-done-entries-in-range (point-min) (point-max)))
+
+;;; keyword management
+
 (cl-defun eh/org-register-keyword (&key keywords face symbol)
   (let ((symbol-for-face (if (listp symbol)
                              ;; with a list, car is a fontaine preset or `t' for fallback
@@ -94,7 +171,7 @@
              (codelia    . ?○)
              (victor     . ?○)
              (recursive  . ?▷)
-             (operator   . ?*)
+             (operator   . ?•)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -121,7 +198,7 @@
    :keywords '("IDEA" "YAKS" "YAK")
    :symbol '((jetbrains-mono . ?◌)
              (cascadia . ?◌)
-             (operator . ?*)
+             (operator . ?•)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
@@ -129,7 +206,7 @@
 
   (eh/org-register-keyword
    :keywords '("READ")
-   :symbol '((operator . ?*)
+   :symbol '((operator . ?•)
              (t        . ?□))  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
