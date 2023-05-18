@@ -1,6 +1,13 @@
 #!/bin/sh
 
 set -e
+
+# allow setting directory for firmware files
+if [ $1 ]
+then
+   cd $1
+fi
+
 # gh run download -n firmware
 if [ ! -f corneish_zen_v2_right-zmk.uf2 ] || [ ! -f corneish_zen_v2_left-zmk.uf2 ]
 then
