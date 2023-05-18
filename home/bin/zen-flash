@@ -17,7 +17,7 @@ do
     sleep 1
 done
 sleep 1
-mv corneish_zen_v2_left-zmk.uf2 /Volumes/CORNEISHZEN/
+cp corneish_zen_v2_left-zmk.uf2 /Volumes/CORNEISHZEN/
 echo "\n"
 
 
@@ -33,6 +33,6 @@ do
     sleep 1
 done
 sleep 1
-mv corneish_zen_v2_right-zmk.uf2 /Volumes/CORNEISHZEN/
+cp corneish_zen_v2_right-zmk.uf2 /Volumes/CORNEISHZEN/
 
 echo "\nDone!"
