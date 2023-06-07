@@ -543,7 +543,10 @@
   ;; where to put things
   (setq org-directory "~/Org/"
         org-agenda-files `(,org-directory) ;; could we just '(org-directory)?
-        org-refile-targets '((org-agenda-files . (:maxlevel . 5))))
+        org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
+        org-default-notes-file (concat org-directory "inbox.org"))
+  ;; archiving
+  (setq org-archive-location (concat org-directory "Archive/%s_archive::datetree/"))
   ;; logging
   (setq org-log-done t
         org-log-into-drawer nil)
@@ -583,6 +586,21 @@
           (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
           (type "IDEA(i)" "GOAL(g)" "|")
           (sequence "READ(R)" "|" "RODE(r)")
+          ))
+
+  ;; capture
+  (setq org-capture-templates
+        '(("t" "Some thing" entry (file+headline "~/Org/inbox.org" "Inbox")
+           "* TODO %?\n%u\n%i")
+          ("T" "Some thing (with context)" entry (file+headline "~/Org/inbox.org" "Inbox")
+           "* TODO %?\n%u\n%a\n%i")
+          ;; TODO Find a way to dynamically grab the latest dox file
+          ;; ("w" "Work thing" entry (file+headline "~/Org/dox-23Q4.org" "Inbox")
+          ;;  "* TODO %?\n%a\n%i")
+          ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
+           "* TODO %?\n%u\n%i")
+          ("Y" "Yaks thing (with context)" entry (file+headline "~/Org/yaks.org" "Inbox")
+           "* TODO %?\n%u\n%a\n%i")
           ))
   ;; load the complex keyword config
   ;; TODO add the rest of my org stuff
