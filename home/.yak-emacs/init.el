@@ -152,9 +152,9 @@
   ;; with text properties)
   (defun eh/tab-bar-tab-name-format-comfortable (tab i)
     (propertize (concat
-                 (propertize " " 'display `(raise ,nano-modeline-space-top))
+                 (propertize " " 'display '(raise 0.2))
                  (tab-bar-tab-name-format-default tab i)
-                 (propertize " " 'display `(raise ,nano-modeline-space-bottom))
+                 (propertize " " 'display '(raise -0.2))
                  )
                 'face (funcall tab-bar-tab-face-function tab)))
   :init
@@ -677,6 +677,8 @@
   (org-save-outline-visibility 'use-markers (org-mode-restart)))
 
 (use-package nano-modeline
+  :disabled
+  :straight (:type git :host github :repo "rougier/nano-modeline" :branch "main")
   :init
   (setq nano-modeline-position 'bottom)
   (setq nano-modeline-prefix 'status)
