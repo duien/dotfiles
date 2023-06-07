@@ -11,3 +11,4 @@ tmp
 .byebug_history
 *.code-workspace
 .nova
+.projectile
