@@ -244,36 +244,44 @@
   :demand ;; our hook won't activate the package but implies deferred loading
   :init
   (setq fontaine-presets
-	`((jetbrains
+	`((jetbrains ;; basic and functional, but attractive
 	   :default-family "JetBrains Mono"
 	   :default-weight light)
-	  (cascadia
+	  (cascadia ;; nice italic, readable but still fun
 	   :default-family "Cascadia Code PL"
      ;; :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
-    (comic-code
+    (comic-code ;; totally silly, line height is too big, but it's great
      :default-family "Comic Code Ligatures")
-    (codelia
+    (codelia ;; a good mix of personality and readability
      :default-family "Codelia Ligatures")
-    (input
-     :default-family "Input Mono Narrow")
-    (monolisa
+    (input ;; space-efficient, good variable pitch pairing options
+     :default-family "Input Mono Condensed"
+     :variable-pitch-family "Input Sans Narrow"
+     :default-weight light)
+    (monolisa ;; decent mix of personality and utility
      :default-family "MonoLisa")
-    (plex
+    (plex ;; nice italic, excellent variable pitch pairing
      :default-family "IBM Plex Mono"
      :variable-pitch-family "iA Writer Quattro V")
-    (operator
+    (operator ;; poor character coverage, but awesome
      ;; NOTE: To make this work, enable _only_ the Light and Medium weights
      :default-family "Operator Mono SSm"
      :default-weight regular)
-    (belinsky
+    (belinsky ;; weights don't have the same line-height
      :default-family "Belinsky Text"
      :default-weight regular)
-    (victor
+    (victor ;; a fun script italic
      :default-family "Victor Mono")
-    (julia
+    (julia ;; great character set, unexciting font
      :default-family "JuliaMono"
      :default-weight regular)
+    (apple-sf ;; very simple, very well done, good pairings
+     :default-family "SF Mono"
+     :variable-pitch-family "SF Pro Text"
+     ;; :variable-pitch-family "New York Small"
+     ;; :variable-pitch-height 1.1 ;; (for new york, but not working)
+     :default-weight light)
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -294,7 +302,10 @@
 	        (comment fg-dim)
 	        (string green)))
   (setq modus-vivendi-tinted-palette-overrides
-	      '((string cyan))))
+	      '((string cyan)))
+  ;; :config TODO is there a decent way to get something like
+  ;; `modus-themes-with-colors' without havint already activated a modus theme?
+  )
 
 ;;; Manage windows and buffers
 
@@ -463,6 +474,13 @@
   :config
   (custom-theme-set-faces
    'isohedron
+   ;; faces for custom telephone-based modeline
+   '(eh/telephone-line-status-locked
+     ((t :background "#FB6C6A")))
+   '(eh/telephone-line-status-normal
+     ((t :background "#554e6a")))
+   '(eh/telephone-line-status-unsaved
+     ((t :background "#F0B400")))
    ;; faces for incomplete items
    '(eh/org-keyword-todo
      ((t :background "#84bd00" :foreground "#f7f3ee" :inherit org-todo)))
@@ -496,6 +514,10 @@
   :config
   (custom-theme-set-faces
    'caves-of-qud
+   ;; faces for custom telephone-based modeline
+   '(eh/telephone-line-status-locked  ((t :background "#A64A2E")))
+   '(eh/telephone-line-status-normal  ((t :background "#40A4B9")))
+   '(eh/telephone-line-status-unsaved ((t :background "#E99F10")))
    ;; faces for incomplete items
    '(eh/org-keyword-todo     ((t :background "#009403" :inherit org-todo)))
    '(eh/org-keyword-idea     ((t :background "#b154cf" :inherit org-todo)))
@@ -706,11 +728,113 @@
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
 (use-package spacemacs-theme
-  :config
+  :init
   (setq spacemacs-theme-comment-bg nil
         spacemacs-theme-comment-italic t
         spacemacs-theme-keyword-italic t
-        spacemacs-theme-org-height nil))
+        spacemacs-theme-org-height nil)
+  :config
+  (load-theme 'spacemacs-light t t)
+  ;; TODO these aren't working quite right with the transition to custom
+  (custom-theme-set-faces
+   'spacemacs-light
+   ;; tab bar
+   '(tab-bar ((t :inherit tab-bar-tab-inactive
+                 :foreground unspecified
+                 :background unspecified
+                 :box nil)))
+   '(tab-bar-tab ((t :box unspecified :inherit default)))
+
+   ;; don't add a background to block begin/end
+   ;; TODO get other attributes from default
+   '(org-block-begin-line ((t :background "#fbf8ef")))
+   '(org-block-end-line ((t :background "#fbf8ef")))
+
+   ;; org keyword faces
+   ;; TODO these need to be fixed up some -- inheritance is funky
+   '(org-todo ((t :inverse-video t)))
+   '(eh/org-keyword-todo ((t :foreground "#42ae2c"
+                             :background "#edf2e9"
+                             ;; :inverse-video t
+                             :inherit org-todo)))
+   '(eh/org-keyword-idea ((t :foreground "#9380b2"
+                             :background "#efeae9"
+                             ;; :inverse-video t
+                             :inherit org-todo)))
+   '(eh/org-keyword-question ((t :foreground "#3a81c3"
+                                 :background "#edf1ed"
+                                 ;; :inverse-video t
+                                 :inherit org-todo)))
+   '(eh/org-keyword-read ((t :foreground "#b1951d"
+                             :background "#f6f1e1"
+                             ;; :inverse-video t
+                             :inherit org-todo)))
+   '(eh/org-keyword-next ((t :foreground "#dc752f"
+                             :background "#faede4"
+                             ;; :inverse-video t
+                             :inherit org-todo)))
+   '(eh/org-keyword-halt ((t :foreground "#e0211d"
+                             :background "#eed9d2"
+                             ;; :inverse-video t
+                             :inherit org-todo)))
+   '(eh/org-keyword-bury ((t :foreground "#a49da5"
+                             :background "#efeae9"
+                             :weight reset
+                             :inverse-video nil
+                             :inherit org-todo)))
+   '(eh/org-keyword-done ((t :inverse-video nil
+                             :weight reset
+                             :inherit eh/org-keyword-todo)))
+   '(eh/org-keyword-kill ((t :inverse-video nil
+                             :weight reset
+                             :inherit eh/org-keyword-halt
+                             :background "#faede4")))
+   '(eh/org-keyword-answer ((t :inverse-video nil
+                               :weight reset
+                               :inherit eh/org-keyword-question)))
+   '(eh/org-keyword-yes ((t :inverse-video nil
+                            :weight reset
+                            :inherit eh/org-keyword-done
+                            :background "#dae9d0")))
+   '(eh/org-keyword-no ((t :inverse-video nil
+                           :weight reset
+                           :inherit eh/org-keyword-kill
+                           :background "#eed8d2")))
+   '(eh/org-keyword-meh ((t :inverse-video nil
+                            :weight reset
+                            :inherit eh/org-keyword-bury)))
+   '(eh/org-keyword-rode ((t :inverse-video nil
+                             :weight reset
+                             :inherit eh/org-keyword-read)))
+   '(org-headline-done ((t :inherit font-lock-comment-face
+                           :foreground unspecified
+                           :weight reset)))
+   '(org-headline-todo ((t :foreground unspecified
+                           :background unspecified
+                           :weight reset)))
+   `(org-ellipsis ((t :weight ,(face-attribute 'default :weight) :slant normal)))
+   '(org-superstar-header-bullet ((t :weight reset)))
+   '(org-superstar-leading ((t :weight reset :foreground "#e3dedd" :foreground "#e3dedd")))
+   '(org-hide ((t :foreground "#fbf8ef" :distant-foreground "#fbf8ef")))
+   ;; '(nano-modeline-active-status-RW ((t :background nil)))
+   ;; '(nano-modeline-active-status-** ((t :background nil)))
+   ;; '(nano-modeline-active-status-RO ((t :background nil)))
+   '(mode-line-inactive ((t :background "#e8e3f0" :box nil)))
+   '(mode-line ((t :background "#9380b2" :foreground "#e8e3f0" :box nil)))
+   ;; '(mode-line-buffer-id ((t :foreground "#4e3163"))))
+   '(mode-line-buffer-id ((t :foreground "#e8e3f0" :weight bold))))
+  ;; This is not something that a theme should be setting (and it's not clear to
+  ;; me why it ends up sticking around after the theme is deactivated again)
+  (custom-theme-set-variables
+   'spacemacs-light
+   '(org-fontify-done-headline t)
+   '(org-fontify-todo-headline t))
+  ;; (custom-theme-set-variables
+  ;;  'spacemacs-dark
+  ;;  '(org-fontify-done-headline t)
+  ;;  '(org-fontify-todo-headline t))
+  )
+
 (use-package elec-pair
   :straight (:type built-in)
   :config (electric-pair-mode))
