@@ -32,6 +32,7 @@
 ;; use straight and use-package to manage config
 (setq straight-use-package-by-default t)
 (setq use-package-enable-imenu-support t)
+(setq straight-vc-git-default-protocol 'ssh)
 
 ;; quiet compilation warnings
 
@@ -62,10 +63,25 @@
       use-short-answers t
       bookmark-set-fringe-mark nil)
 (setq frame-inhibit-implied-resize t)
-(menu-bar-mode -1)
+
+;; Display menu-bar-mode only in GUI frames
+;; From https://emacs.stackexchange.com/a/29443/6853
+;; (menu-bar-mode -1)
+(defun eh/contextual-menubar (&optional frame)
+  "Display the menubar in FRAME (default: selected frame) if on a
+    graphical display, but hide it if in terminal."
+  (interactive)
+  (set-frame-parameter frame 'menu-bar-lines
+                             (if (display-graphic-p frame)
+                                  1 0)))
+(add-hook 'after-make-frame-functions 'eh/contextual-menubar)
 
 (add-to-list 'load-path (concat user-emacs-directory
-        (convert-standard-filename "lisp/")))
+                                (convert-standard-filename "lisp/")))
+
+;; TODO figure out how to get frame splitting reasonable
+;; (this it not it)
+;; (setq split-width-threshold 80)
 
 ;;; Some foundational pieces to make a functional UI
 
@@ -86,6 +102,9 @@
   ([remap kill-line] . 'crux-smart-kill-line)
   ([remap open-line] . 'crux-smart-open-line)
   ("C-x w s" . 'crux-swap-windows))
+
+;; disable pinch-to-zoom text scaling
+(global-unset-key (kbd "<pinch>"))
 
 ;; set up soft-wrapping
 (use-package emacs
@@ -304,7 +323,8 @@
   (defun eh/wrapped-project-name (before after &optional fallback)
     (let ((project-name (projectile-project-name)))
       (if (string= "-" project-name)
-          fallback (concat before (projectile-project-name) after))))
+          fallback
+        (concat before (projectile-project-name) after " " fallback))))
   (defun eh/name-tab-with-project-or-default ()
     (eh/wrapped-project-name "[" "]" (tab-bar-tab-name-current)))
   :init
@@ -334,6 +354,7 @@
   (projectile-add-known-project "~/Notes")
   (setq frame-title-format
       '("%b" (:eval (eh/wrapped-project-name " [" "]"))))
+  ;; '("%b" (:eval (eh/name-tab-with-project-or-default))))
   (projectile-mode)
   :bind
   (("C-x p" . 'projectile-command-map)
@@ -651,25 +672,30 @@
     (emacs-lock-mode 'kill))
   :config
   ;; TODO the autosave seems to work, but minor mode isn't activated?
-  (persistent-scratch-setup-default))
+  (persistent-scratch-setup-default)
+  (with-current-buffer "*scratch*"
+    (persistent-scratch-mode 1)))
 
-;; theme switching separated from modus
-(defun eh/load-appearance-theme (appearance)
-  "Load the appropriate light or dark theme based on APPEARANCE"
-  (mapc 'disable-theme custom-enabled-themes)
-  (pcase appearance
-    ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
-    ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
-    ('light (enable-theme 'isohedron))
-    ('dark (enable-theme 'caves-of-qud))
-    ))
-(add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
+;; automatically switch themes with system appearance change
+;; (defun eh/load-appearance-theme (appearance)
+;;   "Load the appropriate light or dark theme based on APPEARANCE"
+;;   (mapc 'disable-theme custom-enabled-themes)
+;;   (pcase appearance
+;;     ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
+;;     ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
+;;     ('light (enable-theme 'isohedron))
+;;     ('dark (enable-theme 'caves-of-qud))
+;;     ))
+;; (add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
 
 (use-package expand-region
   :bind
   ("C-=" . 'er/expand-region))
 
-(use-package rainbow-mode)
+(use-package rainbow-mode
+  :init
+  (setq rainbow-ansi-colors nil
+        rainbow-x-colors nil))
 
 (use-package helpful
   :bind
@@ -685,6 +711,9 @@
         spacemacs-theme-comment-italic t
         spacemacs-theme-keyword-italic t
         spacemacs-theme-org-height nil))
+(use-package elec-pair
+  :straight (:type built-in)
+  :config (electric-pair-mode))
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
@@ -697,11 +726,11 @@
 ;; - go to buffer in default perspective (also from command line)
 ;; - something like my org keyword definer for theme overlays
 ;; - save light and dark themes (like fontaine)
-;; - set up indent guide
-;;
+;; ✓ set up indent guide
+;; - bind frame-toggle-fullscreen
 ;; - try out embark
-;;
 ;; - use-package imenu integration gets bogus marginalia annotations
+;; -
 ;;
 ;; - add-previous-buffer
 ;;   the equivalent of C-x 3 C-x [LEFT]
