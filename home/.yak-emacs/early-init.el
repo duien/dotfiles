@@ -14,5 +14,6 @@
 (push '(vertical-scroll-bars . nil) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(width . 100) default-frame-alist)
+(push '(internal-border-width . 0) default-frame-alist)
 
 (setq straight-repository-branch "develop")
