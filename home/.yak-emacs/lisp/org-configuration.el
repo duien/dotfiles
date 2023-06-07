@@ -172,6 +172,7 @@
              (victor     . ?○)
              (recursive  . ?▷)
              (operator   . ?•)
+             (apple-sf   . ?○)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -190,6 +191,7 @@
              (input      . ?◊)
              (codelia    . ?◊)
              (operator   . ??)
+             (apple-sf   . ?◊)
              (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
@@ -222,12 +224,14 @@
                        (t          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
+  ;; • ▶ » ¶ § → ■ ● available in SF
   (setq org-superstar-headline-bullets-list
         (pcase fontaine-current-preset
           ('comic-code '("♦" "•"))
           ('codelia '("●" "•"))
           ('belinsky '("•"))
           ('operator '("•"))
+          ('apple-sf '("●" "•"))
           (t  '("◆" "•"))))
         ;; (if (eq fontaine-current-preset 'comic-code)
         ;;     '("♦" "•")
