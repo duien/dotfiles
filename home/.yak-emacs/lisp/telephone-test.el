@@ -6,16 +6,13 @@
 ;; these faces somehow make the whole segment not display...
 ;; got them working now, not sure what changed
 (defface eh/telephone-line-status-locked
-  ;; '((t :background "#FB6C6A"))
-  '((t :inherit mode-line-active))
+  '((t :background "red"))
   "face for a read-only file-visiting buffer")
 (defface eh/telephone-line-status-normal
-  ;; '((t :background "#554e6a"))
-  '((t :inherit mode-line-active))
+  '((t :background "gray65"))
   "face for a buffer without anything special")
 (defface eh/telephone-line-status-unsaved
-  ;; '((t :background "#F0B400"))
-  '((t :inherit mode-line-active))
+  '((t :background "gold"))
   "face for a buffer that has changes")
 
 (defun eh/buffer-status ()
