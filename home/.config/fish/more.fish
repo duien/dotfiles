@@ -2,7 +2,7 @@
 
 # Aliases
 alias gst        "git status"
-alias jk         "jekyll"
+alias jk         "bundle exec jekyll"
 alias rehash     "rbenv rehash"
 alias ll         "ls -lA"
 alias la         "ls -A"
@@ -17,6 +17,7 @@ prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
 prepend_if_exists PATH "$HOME/Code/Dox/dox-compose/bin"
 prepend_if_exists PATH "$HOME/.doom/bin"
+prepend_if_exists PATH "$HOME/.cargo/bin"
 
 set -x DOOMDIR "$HOME/.doom-config"
 # Set up homebrew packages that need to be prepended to path
