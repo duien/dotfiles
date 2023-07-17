@@ -103,8 +103,10 @@
   ([remap open-line] . 'crux-smart-open-line)
   ("C-x w s" . 'crux-swap-windows))
 
-;; disable pinch-to-zoom text scaling
+;; disable pinch-to-zoom and mouse wheel text scaling
 (global-unset-key (kbd "<pinch>"))
+(global-unset-key (kbd "C-<wheel-up>"))
+(global-unset-key (kbd "C-<wheel-down>"))
 
 ;; set up soft-wrapping
 (use-package emacs
@@ -129,6 +131,9 @@
   (setq js-indent-level 2)
   (setq tab-always-indent t
 	      require-final-newline t))
+
+;; typing with an active region replaces it
+(delete-selection-mode 1)
 
 ;; attempt to let someone else tame indentation
 (use-package editorconfig
