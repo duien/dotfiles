@@ -282,6 +282,8 @@
      ;; :variable-pitch-family "New York Small"
      ;; :variable-pitch-height 1.1 ;; (for new york, but not working)
      :default-weight light)
+    (pragmata ;; a classic for a reason
+     :default-family "PragmataPro Liga")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
