@@ -105,10 +105,11 @@
 
   (eh/org-register-keyword
    :keywords '("DONE")
-   ;; ✓✔︎
+   ;; ✓✔︎√
    :symbol '((comic-code . ?·)
              (belinsky   . ?·)
              (operator   . ?)
+             (pragmata   . ?√) ;; weirdly, this is square root which is usually bad
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
@@ -173,6 +174,7 @@
              (recursive  . ?▷)
              (operator   . ?•)
              (apple-sf   . ?○)
+             (pragmata   . ?○)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -200,6 +202,7 @@
    :keywords '("IDEA" "YAKS" "YAK")
    :symbol '((jetbrains-mono . ?◌)
              (cascadia . ?◌)
+             (pragmata . ?◌)
              (operator . ?•)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
@@ -219,6 +222,7 @@
   ;;                        " ⋯" " ↓"))
   (setq org-ellipsis (pcase fontaine-current-preset
                        ('jetbrains " ⋯")
+                       ('pragmata  " ⋯")
                        ('operator  " >")
                        ('belinsky  " ¶")
                        (t          " ↓")))
@@ -232,13 +236,7 @@
           ('belinsky '("•"))
           ('operator '("•"))
           ('apple-sf '("●" "•"))
-          (t  '("◆" "•"))))
-        ;; (if (eq fontaine-current-preset 'comic-code)
-        ;;     '("♦" "•")
-        ;;   '("◆" "•")))
-  )
-;; (let () (eh/define-org-keywords) (org-mode-restart) (org-superstar-restart))
-;; □ ☐
+          (t  '("◆" "•")))))
 
 ;; (set-face-attribute 'org-todo nil
 ;;                     :inverse-video t)
