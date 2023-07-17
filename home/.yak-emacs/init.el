@@ -78,6 +78,8 @@
 
 (add-to-list 'load-path (concat user-emacs-directory
                                 (convert-standard-filename "lisp/")))
+(setq custom-theme-directory (concat user-emacs-directory
+                                     (convert-standard-filename "themes/")))
 
 ;; TODO figure out how to get frame splitting reasonable
 ;; (this it not it)
