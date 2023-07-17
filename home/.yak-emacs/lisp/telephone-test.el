@@ -25,9 +25,12 @@
     ;;   (prin1-to-string `(,read-only ,file-modified ,modified))
     ;;   " ✗ ✓ *"
     (cond (buffer-file-name ;; for file-visiting buffers
-           (cond (buffer-read-only    '("✗" . locked))
+           (cond (buffer-read-only    '("×" . locked))
                  ((buffer-modified-p) '("*" . unsaved))
-                 (t                   '("✓" . normal))))
+                 (t                   '("=" . normal))))
+           ;; (cond (buffer-read-only    '("✗" . locked))
+           ;;       ((buffer-modified-p) '("*" . unsaved))
+           ;;       (t                   '("✓" . normal))))
           (t ;; for non-file-visiting
            (cond (buffer-read-only '("-" . normal))
                  (persistent-scratch-mode '("∞" . normal))
@@ -38,7 +41,8 @@
 (telephone-line-defsegment eh/buffer-status-segment ()
   (car (eh/buffer-status)))
 (telephone-line-defsegment eh/bare-line-number ()
-  "%l")
+  "%l")
+  ;; "%l")
 
 ;; TODO This (and similar telephone line built-in) show nothing for elisp
 (telephone-line-defsegment eh/simple-mode-segment ()
@@ -47,7 +51,8 @@
 (telephone-line-defsegment eh/vc-branch ()
   (if vc-mode
       ;; this is a hack -- remove the "Git-" at beginning with substring
-      (concat "#" (substring-no-properties vc-mode 5))
+      ;; (concat "#" (substring-no-properties vc-mode 5))
+      (concat " " (substring-no-properties vc-mode 5))
     nil))
 
 (defun telephone-line-status-face (active)
