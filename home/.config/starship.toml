@@ -12,14 +12,6 @@ $character"""
 
 command_timeout = 750 # milliseconds
 
-
-# Replace the "❯" symbol in the prompt with "➜"
-# [character]                            # The name of the module we are configuring is "character"
-# success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
-
-# Disable the package module, hiding it from the prompt completely
-# [package]
-# disabled = true
 [time]
 disabled = false
 format = "[\\[$time\\]]($style) "
@@ -29,10 +21,10 @@ time_format = "%R"
 [directory]
 truncation_length = 0
 style = "bright-blue"
-repo_root_style = "bold bright-blue"
-before_repo_root_style = "blue"
-truncate_to_repo = false
-# fish_style_pwd_dir_length = 2
+## Using these repo-related styles breaks in symlinked repos (no directory shown)
+# repo_root_style = "bold bright-blue"
+# before_repo_root_style = "blue"
+# truncate_to_repo = false
 truncation_symbol = "…/"
 
 [cmd_duration]
@@ -46,7 +38,7 @@ format = "[$duration]($style) "
 # success_symbol = "[►](bold green)"
 # error_symbol = "[►](bold red)"
 
-# arrow for jetbrains
+# arrow for most fonts
 success_symbol = "[▶](bold green)"
 error_symbol = "[▶](bold red)"
 
@@ -62,8 +54,9 @@ disabled = true
 [git_branch]
 # symbol = "🌱 "
 # always_show_remote = true
-symbol = "¬ "
+# symbol = "¬ "
 # symbol = "⌥ "
+symbol = " "
 style = "italic purple"
 format = "[$symbol$branch]($style) "
 only_attached = true
@@ -80,14 +73,15 @@ format = "($ahead_behind )$conflicted$renamed$modified$staged$deleted$untracked$
 ahead = "[↑](cyan)"
 behind = "[↓](bright-cyan)"
 diverged = "[↑↓](bold bright-cyan)"
-# untracked = "[·](blue)"
 untracked = "[+](blue)"
-# stashed = " [△ $count](bright-black)"
 stashed = " [∆ $count](bright-black)"
-# modified = "[◇](yellow)"
 modified = "[~](bright-yellow)"
-# staged = "[◆](green)"
 staged = "[+](green)"
 renamed = "[≈](blue)"
-# deleted = "[∙](red)"
 deleted = "[×](red)"
+
+# untracked = "[·](blue)"
+# stashed = " [△ $count](bright-black)"
+# modified = "[◇](yellow)"
+# staged = "[◆](green)"
+# deleted = "[∙](red)"
