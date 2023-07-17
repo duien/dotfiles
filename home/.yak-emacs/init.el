@@ -469,7 +469,11 @@
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
-(use-package elixir-mode) ;; elixir-ts-mode
+(use-package elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
+  ) ;; elixir-ts-mode
 
 ;;; Extra color themes
 
@@ -868,6 +872,13 @@
 (use-package elec-pair
   :straight (:type built-in)
   :config (electric-pair-mode))
+
+(use-package lua-mode
+  :init
+  (setq lua-indent-level 2))
+
+(use-package vterm)
+(use-package rust-mode)
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
