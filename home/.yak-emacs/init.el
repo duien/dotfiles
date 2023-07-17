@@ -566,6 +566,9 @@
                                      (plain-list-item . nil))
         org-tags-column 0
         org-auto-align-tags nil)
+  ;; how agenda works
+  (setq org-enforce-todo-dependencies t)
+  (setq org-agenda-dim-blocked-tasks t)
   ;; stars (combine with org-superstar)
   (setq org-hide-leading-stars nil
         org-indent-mode-turns-on-hiding-stars nil)

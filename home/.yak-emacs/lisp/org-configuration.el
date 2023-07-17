@@ -238,17 +238,61 @@
           ('apple-sf '("●" "•"))
           (t  '("◆" "•")))))
 
-;; (set-face-attribute 'org-todo nil
-;;                     :inverse-video t)
-;; (set-face-attribute 'org-headline-todo nil
-;;                     :weight 'reset
-;;                     :inherit nil)
-
-;; (set-face-attribute 'org-done nil
-;;                     :slant 'italic)
-;; (set-face-attribute 'org-headline-done nil
-;;                     :weight 'reset
-;;                     :inherit 'font-lock-comment-face)
-
-;; (set-face-attribute 'org-superstar-header-bullet nil
-;;                     :weight 'reset)
+(defun eh/org-skip-subtree-if-bury ()
+  "If this entry has the BURY keyword, skip it and its children"
+  (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (string= (org-get-todo-state) "BURY")
+        subtree-end
+      nil)))
+(setq org-agenda-custom-commands
+      '(("n" "Agenda and all TODOs"
+         ((agenda "")
+          (alltodo "")))
+        ("g" "Grouped agenda task list"
+         ((agenda "Calendar"
+                  ((org-agenda-span 1)
+                   (org-agenda-overriding-header "Today")
+                   (org-agenda-show-log t)
+                   (org-agenda-use-time-grid nil)))
+          (todo "NEXT|HALT" ((org-agenda-overriding-header "Look here first")))
+          (todo ""
+                ((org-agenda-overriding-header "Get things done")
+                 (org-agenda-sorting-strategy '(priority-down))
+                 (org-agenda-todo-ignore-with-date t)
+                 (org-agenda-skip-function
+                  '(or
+                    (eh/org-skip-subtree-if-bury)
+                    (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "IDEA" "BURY" "GOAL"))
+                    ))
+                 ))
+          (todo "READ|IDEA" ((org-agenda-overriding-header "Investigate")))
+          (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
+         (;(org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
+          (org-agenda-tag-filter-preset '("-meta" "-test"))
+          ;; (org-agenda-compact-blocks t)
+          (org-agenda-prefix-format "  %?s"))
+         )
+        ("y" "Yak-shaving task list"
+         ((agenda "Calendar"
+                  ((org-agenda-span 1)
+                   (org-agenda-overriding-header "Today")
+                   (org-agenda-show-log t)
+                   (org-agenda-use-time-grid nil)))
+          (todo "NEXT|HALT" ((org-agenda-overriding-header "Look here first")))
+          (todo ""
+                ((org-agenda-overriding-header "Get things done")
+                 (org-agenda-sorting-strategy '(priority-down))
+                 (org-agenda-todo-ignore-with-date t)
+                 (org-agenda-skip-function
+                  '(or
+                    (eh/org-skip-subtree-if-bury)
+                    (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "IDEA" "BURY" "GOAL"))
+                    ))
+                 ))
+          (todo "READ|IDEA" ((org-agenda-overriding-header "Investigate")))
+          (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
+         (;(org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
+          (org-agenda-tag-filter-preset '("-test"))
+          ;; (org-agenda-compact-blocks t)
+          (org-agenda-prefix-format "  %?s"))
+         )))
