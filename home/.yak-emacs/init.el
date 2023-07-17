@@ -129,6 +129,7 @@
   (setq-default tab-width 2)
   (setq standard-indent 2)
   (setq js-indent-level 2)
+  (setq css-indent-offset 2)
   (setq tab-always-indent t
 	      require-final-newline t))
 
