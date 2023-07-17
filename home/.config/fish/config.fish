@@ -19,9 +19,9 @@ if contains (whoami) duien ehyland
 end
 
 if [ -x '/opt/homebrew/bin/brew' ]
-  /opt/homebrew/bin/brew shellenv | source
+  /opt/homebrew/bin/brew shellenv fish | source
 else if [ -x '/usr/local/bin/brew' ]
-  /usr/local/bin/brew shellenv | source
+  /usr/local/bin/brew shellenv fish | source
 end
 
 # Load my aliases and environment
