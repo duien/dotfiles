@@ -1,6 +1,7 @@
 # Don't print a new line at the start of the prompt
 # add_newline = false
 format = """
+${custom.iterm}\
 $time\
 $directory\
 $git_branch\
@@ -85,3 +86,6 @@ deleted = "[×](red)"
 # modified = "[◇](yellow)"
 # staged = "[◆](green)"
 # deleted = "[∙](red)"
+
+[custom.iterm]
+command = "iterm2_prompt_mark"
