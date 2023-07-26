@@ -44,6 +44,12 @@
   "%l")
   ;; "%l")
 
+(telephone-line-defsegment eh/lock-status-segment ()
+  (with-current-buffer (or (buffer-base-buffer) (current-buffer))
+    (cond (emacs-lock-mode "")
+          ;; ("")
+          )))
+
 ;; TODO This (and similar telephone line built-in) show nothing for elisp
 (telephone-line-defsegment eh/simple-mode-segment ()
   "(%m)")
@@ -77,6 +83,7 @@
 
 (setq telephone-line-lhs
       '((status . (eh/buffer-status-segment))
+        (nil    . (eh/lock-status-segment))
         (nil    . (telephone-line-buffer-name-segment))
         ;; (nil    . (telephone-line-vc-segment))
         (nil . (eh/vc-branch))

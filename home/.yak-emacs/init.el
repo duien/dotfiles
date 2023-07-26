@@ -872,6 +872,12 @@
   ;;  '(org-fontify-todo-headline t))
   )
 
+;; (use-package variable-pitch
+;;   :straight (:type built-in)
+;;   :hook
+;;   gfm-mode
+;;   org-mode)
+
 (use-package elec-pair
   :straight (:type built-in)
   :config (electric-pair-mode))
