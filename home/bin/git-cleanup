@@ -1,4 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env fish
 
-git branch --merged master | grep -v -e "\*" -e "master" | xargs -n 1 git branch -d
+# Require the git config "custom.defaultbranch" in the repo
+
+# If config doesn't exist, prompt for it.
+# A default value in the prompt:
+# - if there's an "origin" remote, then rev-parse --symbolic origin/HEAD
+# - config --get init.defaultbranch
+
+set -l main_branch (git config --get custom.defaultbranch)
+
+if test -z "$main_branch"
+  echo "Default branch is not set. Configure `custom.defaultbranch' in git repo."
+  exit 1
+end
+
+# Verify the branch before doing more things
+if not git rev-parse --verify --quiet $main_branch > /dev/null
+  echo "Branch was set to '$main_branch' but it does not exist."
+  exit 1
+end
+
+git branch --merged $main_branch | grep -v -e "\*" -e "$main_branch" | xargs -n 1 git branch -d
 git remote prune origin
