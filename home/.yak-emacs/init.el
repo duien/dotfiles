@@ -188,9 +188,11 @@
   (minions-mode))
 
 ;; TODO Put this somewhere better
-(setq mode-line-position-line-format '(" %l"))
+;; (setq mode-line-position-line-format '(" %l"))
 ;; (setq mode-line-position-line-format '(" +%l"))
-;; (setq mode-line-position-column-line-format '(" +%l:%c"))
+(setq mode-line-percent-position nil)
+(setq mode-line-position-line-format '(" ℓ%l"))
+(setq mode-line-position-column-line-format '(" +%l:%c"))
 
 
 ;;; Minibuffer completion
