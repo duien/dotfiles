@@ -108,6 +108,10 @@
    ;; ✓✔︎√
    :symbol '((comic-code . ?·)
              (belinsky   . ?·)
+             (antikor    . ?·)
+             ;; (belinsky   . ?∕)
+             ;; (belinsky   . ?¬)
+             ;; (belinsky   . ?⁄)
              (operator   . ?)
              (pragmata   . ?√) ;; weirdly, this is square root which is usually bad
              (t          . ?✓))
@@ -116,7 +120,10 @@
 
   (eh/org-register-keyword
    :keywords '("KILL" "CANCEL")
-   :symbol ?× ;; ✗ ;;× ×
+   ;; :symbol ?× ;; ✗ ;;× ×
+   :symbol '((belinsky . ?·)
+             (antikor  . ?·)
+             (t        . ?×))
    :face (defface eh/org-keyword-kill '((t :inherit org-done))
            "Face used for the KILL keyword in Org"))
 
@@ -159,6 +166,9 @@
   (eh/org-register-keyword
    :keywords '("NEXT" "FLAG")
    :symbol '((operator . ?#)
+             ;; (belinsky . ?#)
+             (belinsky . ?∆)
+             (antikor  . ?∆)
              (t        . ?■))
    ;;◯ ;;☐ ;; ?◦●
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
@@ -172,6 +182,9 @@
              (codelia    . ?○)
              (victor     . ?○)
              (recursive  . ?▷)
+             ;; (belinsky   . ?•)
+             (belinsky   . ?∕)
+             (antikor    . ?∕)
              (operator   . ?•)
              (apple-sf   . ?○)
              (pragmata   . ?○)
@@ -183,6 +196,9 @@
   (eh/org-register-keyword
    :keywords '("HALT" "BLOK" "BLOCK")
    :symbol '((operator . ?!)
+             ;; (belinsky . ?!)
+             (belinsky . ?∆)
+             (antikor  . ?∆)
              (t        . ?▲)) ;;△ ;;◊▲
    :face (defface eh/org-keyword-halt '((t :inherit org-todo))
            "Face used for the BLOK keyword in Org"))
@@ -193,6 +209,10 @@
              (input      . ?◊)
              (codelia    . ?◊)
              (operator   . ??)
+             ;; (belinsky   . ??)
+             ;; (belinsky   . ?•)
+             (belinsky   . ?∕)
+             (antikor    . ?∕)
              (apple-sf   . ?◊)
              (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
@@ -204,6 +224,10 @@
              (cascadia . ?◌)
              (pragmata . ?◌)
              (operator . ?•)
+             ;; (belinsky . ?•)
+             (belinsky   . ?∕)
+             (antikor    . ?∕)
+             ;; (belinsky  . ?∞)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
@@ -212,6 +236,10 @@
   (eh/org-register-keyword
    :keywords '("READ")
    :symbol '((operator . ?•)
+             ;; (belinsky . ?•)
+             ;; (belinsky  . ?÷)
+             (belinsky   . ?∕)
+             (antikor    . ?∕)
              (t        . ?□))  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
@@ -225,6 +253,7 @@
                        ('pragmata  " ⋯")
                        ('operator  " >")
                        ('belinsky  " ¶")
+                       ('antikor   " ↩")
                        (t          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
@@ -233,10 +262,13 @@
         (pcase fontaine-current-preset
           ('comic-code '("♦" "•"))
           ('codelia '("●" "•"))
-          ('belinsky '("•"))
+          ;; ('belinsky '("◊" "•"))
+          ('belinsky '("§" "•"))
+          ('antikor  '("§" "•"))
           ('operator '("•"))
           ('apple-sf '("●" "•"))
           (t  '("◆" "•")))))
+;; (eh/define-org-keywords)
 
 (defun eh/org-skip-subtree-if-bury ()
   "If this entry has the BURY keyword, skip it and its children"
