@@ -308,6 +308,7 @@
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
   (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps))
+;; (diff-hl-maybe-redefine-bitmaps)
 
 ;; Set up a variable and hook to automatically load a theme after another theme
 ;; is enabled (this allows for more robust customizations to themes than what
@@ -405,6 +406,7 @@
 ;; integrate projectile with perspectives and tabs
 (use-package perspective
   ;; this doesn't work when opening files from the command-line, so disable
+  ;; (this also disables the two following, since they have an `after')
   :disabled
   :init
   (setq persp-suppress-no-prefix-key-warning t)
@@ -520,7 +522,7 @@
   :config
   (add-hook 'elixir-mode-hook
             (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
-  ) ;; elixir-ts-mode
+  ) ;; (use-package elixir-ts-mode)
 
 ;;; Extra color themes
 
@@ -940,6 +942,10 @@
 
 (use-package vterm)
 (use-package rust-mode)
+(use-package julia-mode)
+(use-package swift-mode
+  :init
+  (setq swift-mode:basic-offset 2))
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
