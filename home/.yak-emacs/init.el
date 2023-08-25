@@ -64,6 +64,11 @@
       bookmark-set-fringe-mark nil)
 (setq frame-inhibit-implied-resize t)
 
+;; disable automatic `distant-foreground' switch
+;; TODO Maybe consider tweaking specific faces that fail with a generous
+;;      threshold (8000 seemed reasonable) instead of disabling totally
+(setq face-near-same-color-threshold 0)
+
 ;; Display menu-bar-mode only in GUI frames
 ;; From https://emacs.stackexchange.com/a/29443/6853
 ;; (menu-bar-mode -1)
