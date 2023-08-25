@@ -775,49 +775,50 @@
   :config
   (load-theme 'spacemacs-light t t)
   ;; TODO these aren't working quite right with the transition to custom
+  ;; (they aren't registering unless I redo them again after loading the theme)
   (custom-theme-set-faces
    'spacemacs-light
    ;; tab bar
    '(tab-bar ((t :inherit tab-bar-tab-inactive
                  :foreground unspecified
-                 :background unspecified
+                 :background "#e3dedd"                 ; bg3
                  :box nil)))
    '(tab-bar-tab ((t :box unspecified :inherit default)))
 
    ;; don't add a background to block begin/end
    ;; TODO get other attributes from default
-   '(org-block-begin-line ((t :background "#fbf8ef")))
-   '(org-block-end-line ((t :background "#fbf8ef")))
+   '(org-block-begin-line ((t :background "#fbf8ef"))) ; bg1
+   '(org-block-end-line ((t :background "#fbf8ef")))   ; bg1
 
    ;; org keyword faces
    ;; TODO these need to be fixed up some -- inheritance is funky
-   '(org-todo ((t :inverse-video t)))
-   '(eh/org-keyword-todo ((t :foreground "#42ae2c"
-                             :background "#edf2e9"
+   '(org-todo ((t :inverse-video t :weight bold)))
+   '(eh/org-keyword-todo ((t :foreground "#42ae2c"     ; suc
+                             :background "#edf2e9"     ; green-bg
                              ;; :inverse-video t
                              :inherit org-todo)))
-   '(eh/org-keyword-idea ((t :foreground "#9380b2"
-                             :background "#efeae9"
+   '(eh/org-keyword-idea ((t :foreground "#9380b2"     ; cblk-ln
+                             :background "#efeae9"     ; bg-alt
                              ;; :inverse-video t
                              :inherit org-todo)))
-   '(eh/org-keyword-question ((t :foreground "#3a81c3"
-                                 :background "#edf1ed"
+   '(eh/org-keyword-question ((t :foreground "#3a81c3" ; blue / keyword / head1
+                                 :background "#edf1ed" ; blue-bg
                                  ;; :inverse-video t
                                  :inherit org-todo)))
-   '(eh/org-keyword-read ((t :foreground "#b1951d"
-                             :background "#f6f1e1"
+   '(eh/org-keyword-read ((t :foreground "#b1951d"     ; yellow
+                             :background "#f6f1e1"     ; yellow-bg
                              ;; :inverse-video t
                              :inherit org-todo)))
-   '(eh/org-keyword-next ((t :foreground "#dc752f"
-                             :background "#faede4"
+   '(eh/org-keyword-next ((t :foreground "#dc752f"     ; war
+                             :background "#faede4"     ; red-bg
                              ;; :inverse-video t
                              :inherit org-todo)))
-   '(eh/org-keyword-halt ((t :foreground "#e0211d"
-                             :background "#eed9d2"
+   '(eh/org-keyword-halt ((t :foreground "#e0211d"     ; err
+                             :background "#eed9d2"     ; red-bg-s
                              ;; :inverse-video t
                              :inherit org-todo)))
-   '(eh/org-keyword-bury ((t :foreground "#a49da5"
-                             :background "#efeae9"
+   '(eh/org-keyword-bury ((t :foreground "#a49da5"     ; comment-light
+                             :background "#efeae9"     ; bg-2
                              :weight reset
                              :inverse-video nil
                              :inherit org-todo)))
@@ -827,18 +828,18 @@
    '(eh/org-keyword-kill ((t :inverse-video nil
                              :weight reset
                              :inherit eh/org-keyword-halt
-                             :background "#faede4")))
+                             :background "#faede4")))  ; red-bg
    '(eh/org-keyword-answer ((t :inverse-video nil
                                :weight reset
                                :inherit eh/org-keyword-question)))
    '(eh/org-keyword-yes ((t :inverse-video nil
                             :weight reset
                             :inherit eh/org-keyword-done
-                            :background "#dae9d0")))
+                            :background "#dae9d0")))   ; green-bg-s
    '(eh/org-keyword-no ((t :inverse-video nil
                            :weight reset
                            :inherit eh/org-keyword-kill
-                           :background "#eed8d2")))
+                           :background "#eed8d2")))    ; red-bg-s
    '(eh/org-keyword-meh ((t :inverse-video nil
                             :weight reset
                             :inherit eh/org-keyword-bury)))
@@ -853,15 +854,22 @@
                            :weight reset)))
    `(org-ellipsis ((t :weight ,(face-attribute 'default :weight) :slant normal)))
    '(org-superstar-header-bullet ((t :weight reset)))
-   '(org-superstar-leading ((t :weight reset :foreground "#e3dedd" :foreground "#e3dedd")))
-   '(org-hide ((t :foreground "#fbf8ef" :distant-foreground "#fbf8ef")))
+   '(org-superstar-leading ((t :weight reset
+                               :foreground "#e3dedd"))); bg-3
+   '(org-hide ((t :foreground "#fbf8ef"                ; bg-1
+                  :distant-foreground "#fbf8ef")))     ; bg-1
    ;; '(nano-modeline-active-status-RW ((t :background nil)))
    ;; '(nano-modeline-active-status-** ((t :background nil)))
    ;; '(nano-modeline-active-status-RO ((t :background nil)))
-   '(mode-line-inactive ((t :background "#e8e3f0" :box nil)))
-   '(mode-line ((t :background "#9380b2" :foreground "#e8e3f0" :box nil)))
+   '(fill-column-indicator ((t :foreground "#efeae9"   ; bg-2
+                               :background "#efeae9"))); bg-2
+   '(mode-line-inactive ((t :background "#e8e3f0"      ; cblk-bg
+                            :box nil)))
+   '(mode-line ((t :background "#9380b2"               ; cblk-ln
+                   :foreground "#e8e3f0" :box nil)))   ; cblk-bg
    ;; '(mode-line-buffer-id ((t :foreground "#4e3163"))))
-   '(mode-line-buffer-id ((t :foreground "#e8e3f0" :weight bold))))
+   '(mode-line-buffer-id ((t :foreground "#e8e3f0"     ; cblk-bg
+                             :weight bold))))
   ;; This is not something that a theme should be setting (and it's not clear to
   ;; me why it ends up sticking around after the theme is deactivated again)
   (custom-theme-set-variables
