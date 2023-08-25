@@ -203,11 +203,13 @@
   (setq consult-preview-key "M-.")
   (setq consult-narrow-key "<")
   :config
-  (consult-customize consult-theme
-                     :preview-key
-                     '("M-."
-                       :debounce 0.5 "<up>" "<down>"
-                       :debounce 1 any))
+  ;; disable automatic preview for consult-theme until I find a way to make it
+  ;; play nice with having multiple themes enabled
+  ;; (consult-customize consult-theme
+  ;;                    :preview-key
+  ;;                    '("M-."
+  ;;                      :debounce 0.5 "<up>" "<down>"
+  ;;                      :debounce 1 any))
   (consult-customize consult-line
                      :preview-key
                      '(:debounce 0.5 "<up>" "<down>"
@@ -302,6 +304,18 @@
   (fontaine-set-preset . fontaine-store-latest-preset)
   (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps))
 
+;; Set up a variable and hook to automatically load a theme after another theme
+;; is enabled (this allows for more robust customizations to themes than what
+;; can be done with a second call to `custom-theme-set-faces')
+
+(defvar linked-themes '() "Alist of theme to another theme to load automatically after it.")
+(defun eh/load-linked-user-theme (theme)
+  "Check `linked-themes' for THEME and load the associated theme if present."
+  (let ((theme-to-load (cdr (assoc theme linked-themes))))
+    (if theme-to-load
+        (load-theme theme-to-load))))
+(add-hook 'enable-theme-functions 'eh/load-linked-user-theme)
+
 ;; a theme for all seasons
 (use-package modus-themes
   :init
@@ -315,9 +329,9 @@
 	        (string green)))
   (setq modus-vivendi-tinted-palette-overrides
 	      '((string cyan)))
-  ;; :config TODO is there a decent way to get something like
-  ;; `modus-themes-with-colors' without havint already activated a modus theme?
-  )
+  (add-to-list 'linked-themes '(modus-operandi-tinted . modus-operandi-tinted-user))
+  :config
+  (load-theme 'modus-operandi-tinted))
 
 ;;; Manage windows and buffers
 
