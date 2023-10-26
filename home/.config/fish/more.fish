@@ -6,7 +6,6 @@ alias jk         "bundle exec jekyll"
 alias rehash     "rbenv rehash"
 alias more-fish "source ~/.config/fish/more.fish"
 alias ffpull "git switch master ; and git pull ; and git switch - ; and git merge master --ff-only"
-alias xm         "exercism"
 # Experiment with exa as ls alternative
 # only install these aliases if exa actually exists
 if test -x /opt/homebrew/bin/exa
