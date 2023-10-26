@@ -41,14 +41,19 @@
 (telephone-line-defsegment eh/buffer-status-segment ()
   (car (eh/buffer-status)))
 (telephone-line-defsegment eh/bare-line-number ()
-  "%l")
+  ;; "%l"
+  mode-line-position-line-format
+  )
   ;; "%l")
 
-(telephone-line-defsegment eh/lock-status-segment ()
-  (with-current-buffer (or (buffer-base-buffer) (current-buffer))
-    (cond (emacs-lock-mode "")
-          ;; ("")
-          )))
+;; (telephone-line-defsegment eh/lock-status-segment ()
+;;   (with-current-buffer (or (buffer-base-buffer) (current-buffer))
+;;     (cond (emacs-lock-mode
+;;            ""
+;;            ;; ""
+;;            )
+;;           ;; ("")
+;;           )))
 
 ;; TODO This (and similar telephone line built-in) show nothing for elisp
 (telephone-line-defsegment eh/simple-mode-segment ()
@@ -57,8 +62,9 @@
 (telephone-line-defsegment eh/vc-branch ()
   (if vc-mode
       ;; this is a hack -- remove the "Git-" at beginning with substring
-      ;; (concat "#" (substring-no-properties vc-mode 5))
-      (concat " " (substring-no-properties vc-mode 5))
+      (concat "#" (substring-no-properties vc-mode 5))
+      ;; (concat " " (substring-no-properties vc-mode 5))
+      ;; (concat "¬ " (substring-no-properties vc-mode 5))
     nil))
 
 (defun telephone-line-status-face (active)
@@ -83,7 +89,7 @@
 
 (setq telephone-line-lhs
       '((status . (eh/buffer-status-segment))
-        (nil    . (eh/lock-status-segment))
+        ;; (nil    . (eh/lock-status-segment))
         (nil    . (telephone-line-buffer-name-segment))
         ;; (nil    . (telephone-line-vc-segment))
         (nil . (eh/vc-branch))

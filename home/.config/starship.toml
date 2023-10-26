@@ -40,8 +40,13 @@ format = "[$duration]($style) "
 # error_symbol = "[►](bold red)"
 
 # arrow for most fonts
-success_symbol = "[▶](bold green)"
-error_symbol = "[▶](bold red)"
+# success_symbol = "[▶](bold green)"
+# success_symbol = "[▷](bold green)"
+# error_symbol = "[▶](bold red)"
+
+# arrow for very limited fonts
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
 
 [status]
 format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
@@ -55,9 +60,9 @@ disabled = true
 [git_branch]
 # symbol = "🌱 "
 # always_show_remote = true
-# symbol = "¬ "
+symbol = "¬ "
 # symbol = "⌥ "
-symbol = " "
+# symbol = " "
 style = "italic purple"
 format = "[$symbol$branch]($style) "
 only_attached = true
@@ -71,9 +76,12 @@ format = "([$tag](green)) [$hash]($style) "
 
 [git_status]
 format = "($ahead_behind )$conflicted$renamed$modified$staged$deleted$untracked$stashed "
-ahead = "[↑](cyan)"
-behind = "[↓](bright-cyan)"
-diverged = "[↑↓](bold bright-cyan)"
+# ahead = "[↑](cyan)"
+# behind = "[↓](bright-cyan)"
+# diverged = "[↑↓](bold bright-cyan)"
+ahead = "[+](cyan)"
+behind = "[-](bright-cyan)"
+diverged = "[±](bold bright-cyan)"
 untracked = "[+](blue)"
 stashed = " [∆ $count](bright-black)"
 modified = "[~](bright-yellow)"

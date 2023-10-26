@@ -188,7 +188,9 @@
 ;; don't junk up the mode-line
 (use-package minions
   :init
-  (setq minions-mode-line-lighter "≡")
+  (setq minions-mode-line-lighter "#")
+  ;; other chars: м ≡ ‡
+  (setq minions-mode-line-delimiters '("" . ""))
   :config
   (minions-mode))
 
@@ -196,8 +198,20 @@
 ;; (setq mode-line-position-line-format '(" %l"))
 ;; (setq mode-line-position-line-format '(" +%l"))
 (setq mode-line-percent-position nil)
-(setq mode-line-position-line-format '(" ℓ%l"))
+;; (setq mode-line-position-line-format '(" ℓ%l"))
+(setq mode-line-position-line-format '(" %l"))
 (setq mode-line-position-column-line-format '(" +%l:%c"))
+
+(use-package mood-line
+  :config
+  ;; override their non-customizable cursor position segment
+  (defun mood-line-segment-cursor-position ()
+    (propertize (car mode-line-position-line-format)
+                'face 'mood-line-unimportant))
+  (defun mood-line-segment-major-mode ()
+    "Displays the current major mode in the mode-line."
+    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) "  "))
+  (mood-line-mode 1))
 
 
 ;;; Minibuffer completion
@@ -255,8 +269,9 @@
 (use-package fontaine
   :preface
   (defvar eh/base-font-height
-    (if (> (x-display-pixel-width) 2500)
-        160 140)
+    ;; (if (> (x-display-pixel-width) 2500)
+    ;;     160 140)
+    140
     "The main font size, based on display resolution.")
   :demand ;; our hook won't activate the package but implies deferred loading
   :init
@@ -295,12 +310,24 @@
      :default-weight regular)
     (apple-sf ;; very simple, very well done, good pairings
      :default-family "SF Mono"
-     :variable-pitch-family "SF Pro Text"
-     ;; :variable-pitch-family "New York Small"
-     ;; :variable-pitch-height 1.1 ;; (for new york, but not working)
+     ;; :variable-pitch-family "SF Pro Text"
+     :variable-pitch-family "New York Small"
+     :variable-pitch-height 1.1 ;; (for new york, but not working)
      :default-weight light)
     (pragmata ;; a classic for a reason
      :default-family "PragmataPro Liga")
+    (antikor ;; line-height is kind of busted
+     :default-family "Antikor Mono"
+     :default-weight normal)
+    (montreal
+     :default-family "PP Neue Montreal Mono"
+     :default-weight regular)
+    (iosevka
+     :default-family "Iosevka Custom")
+    (vctr
+     :default-family "VCTR Mono Trial v0.12"
+     ;; :default-weight light
+     :default-height ,(+ eh/base-font-height 20))
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -743,6 +770,8 @@
                           (not (window-dedicated-p (selected-window)))))
 (bind-key "C-x w d" #'eh/toggle-window-dedication)
 
+(bind-key "C-x w f" #'toggle-frame-fullscreen)
+
 ;; don't evaluate a whole buffer without confirmation
 (defun confirm-eval (&optional ARG PRED)
   (interactive)
@@ -926,11 +955,12 @@
   ;;  '(org-fontify-todo-headline t))
   )
 
-;; (use-package variable-pitch
-;;   :straight (:type built-in)
-;;   :hook
-;;   gfm-mode
-;;   org-mode)
+(use-package variable-pitch
+  :straight (:type built-in)
+  :disabled
+  :hook
+  gfm-mode
+  org-mode)
 
 (use-package elec-pair
   :straight (:type built-in)
@@ -946,8 +976,10 @@
 (use-package swift-mode
   :init
   (setq swift-mode:basic-offset 2))
+(use-package raku-mode)
 
 (use-package embark
+  :disabled
   :ensure t
 
   :bind
@@ -980,7 +1012,13 @@
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package elpher)
 
+
+;;; Finally
+
+(require 'server)
+(unless (server-running-p) (server-start))
 
 ;;; TODO
 ;; - kill-visual-line in visual-line-mode-map
