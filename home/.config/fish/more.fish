@@ -4,11 +4,18 @@
 alias gst        "git status"
 alias jk         "bundle exec jekyll"
 alias rehash     "rbenv rehash"
-alias ll         "ls -lA"
-alias la         "ls -A"
 alias more-fish "source ~/.config/fish/more.fish"
 alias ffpull "git switch master ; and git pull ; and git switch - ; and git merge master --ff-only"
 alias xm         "exercism"
+# Experiment with exa as ls alternative
+# only install these aliases if exa actually exists
+if test -x /opt/homebrew/bin/exa
+  alias ls         "exa --group-directories-first -sName"
+  alias ll         "ls --long --all --git"
+else
+  alias ll         "ls -lA"
+  alias la         "ls -A"
+end
 
 # Basic environment
 prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/Code/Dox $HOME/.homesick/repos
