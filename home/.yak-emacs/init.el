@@ -1037,6 +1037,22 @@
   :hook (elixir-mode . company-mode)
   :hook (elixir-ts-mode . company-mode))
 
+;; When I create a buffer, I don't want it silently deleted, but there don't
+;; seem to be any smooth ways to make that happen. My current best attempt:
+;; - if the buffer is not visiting a file
+;;   (because then this would already happen)
+;; - and it's not a hidden or special buffer as identified by name prefix
+;; - then set the `buffer-offer-save' local variable that causes emacs to
+;;   prompt for saving it before quitting
+;; this will not affect manually killing the buffer
+(defun eh/set-offer-save-in-created-buffers ()
+    (unless (or buffer-file-name
+            (string-match-p "^ " (buffer-name))
+            (string-match-p "^*" (buffer-name)))
+      (setq buffer-offer-save t)))
+(add-hook 'first-change-hook #'eh/set-offer-save-in-created-buffers)
+
+
 
 ;;; Finally
 
