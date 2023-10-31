@@ -362,7 +362,7 @@
 	        (string green)))
   (setq modus-vivendi-tinted-palette-overrides
 	      '((string cyan)))
-  (add-to-list 'linked-themes '(modus-operandi-tinted . modus-operandi-tinted-user))
+  (add-to-list 'linked-themes '(modus-operandi-tinted . user-modus-operandi-tinted))
   :config
   (load-theme 'modus-operandi-tinted))
 
