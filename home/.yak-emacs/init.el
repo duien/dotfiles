@@ -388,7 +388,11 @@
   :config (winner-mode))
 
 ;; projects defined mostly by git repos
+;; load project before projectile to prevent project from over-writing the
+;; projectile binding I set up when something else loads it later
+(use-package project)
 (use-package projectile
+  :after (project)
   :preface
   (defun eh/wrapped-project-name (before after &optional fallback)
     (let ((project-name (projectile-project-name)))
@@ -549,7 +553,13 @@
   :config
   (add-hook 'elixir-mode-hook
             (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
-  ) ;; (use-package elixir-ts-mode)
+  ) ;;
+(use-package elixir-ts-mode
+  :straight '(:type git :host github :repo "duien/elixir-ts-mode")
+  :config
+  (add-hook 'elixir-ts-mode-hook
+            (lambda () (add-hook 'before-save-hook 'elixir-format nil t))))
+
 
 ;;; Extra color themes
 
@@ -1013,6 +1023,19 @@
   (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package elpher)
+
+(use-package combobulate)
+
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '((elixir-ts-mode elixir-mode) "elixir-ls"))
+  :hook (elixir-mode . eglot-ensure)
+  :hook (elixir-ts-mode . eglot-ensure)
+  )
+
+(use-package company-mode
+  :hook (elixir-mode . company-mode)
+  :hook (elixir-ts-mode . company-mode))
 
 
 ;;; Finally
