@@ -109,6 +109,7 @@
    :symbol '((comic-code . ?·)
              (belinsky   . ?·)
              (antikor    . ?·)
+             (vctr       . ?·)
              ;; (belinsky   . ?∕)
              ;; (belinsky   . ?¬)
              ;; (belinsky   . ?⁄)
@@ -123,6 +124,7 @@
    ;; :symbol ?× ;; ✗ ;;× ×
    :symbol '((belinsky . ?·)
              (antikor  . ?·)
+             ;; (monolisa . ?✗)
              (t        . ?×))
    :face (defface eh/org-keyword-kill '((t :inherit org-done))
            "Face used for the KILL keyword in Org"))
@@ -169,6 +171,9 @@
              ;; (belinsky . ?#)
              (belinsky . ?∆)
              (antikor  . ?∆)
+             (plex     . ?∆)
+             (monolisa . ?◉)
+             (vctr     . ?#)
              (t        . ?■))
    ;;◯ ;;☐ ;; ?◦●
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
@@ -186,8 +191,11 @@
              (belinsky   . ?∕)
              (antikor    . ?∕)
              (operator   . ?•)
+             (vctr       . ?•)
              (apple-sf   . ?○)
              (pragmata   . ?○)
+             (monolisa   . ?○)
+             (plex       . ?∕)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -196,9 +204,11 @@
   (eh/org-register-keyword
    :keywords '("HALT" "BLOK" "BLOCK")
    :symbol '((operator . ?!)
+             (vctr     . ?!)
              ;; (belinsky . ?!)
              (belinsky . ?∆)
              (antikor  . ?∆)
+             (plex     . ?∆)
              (t        . ?▲)) ;;△ ;;◊▲
    :face (defface eh/org-keyword-halt '((t :inherit org-todo))
            "Face used for the BLOK keyword in Org"))
@@ -211,9 +221,11 @@
              (operator   . ??)
              ;; (belinsky   . ??)
              ;; (belinsky   . ?•)
+             (vctr       . ??)
              (belinsky   . ?∕)
              (antikor    . ?∕)
              (apple-sf   . ?◊)
+             (plex       . ?∕)
              (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
@@ -223,11 +235,14 @@
    :symbol '((jetbrains-mono . ?◌)
              (cascadia . ?◌)
              (pragmata . ?◌)
+             (monolisa . ?◌)
              (operator . ?•)
+             (vctr     . ?•)
              ;; (belinsky . ?•)
              (belinsky   . ?∕)
              (antikor    . ?∕)
              ;; (belinsky  . ?∞)
+             (plex       . ?∕)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
@@ -236,10 +251,12 @@
   (eh/org-register-keyword
    :keywords '("READ")
    :symbol '((operator . ?•)
+             (vctr     . ?•)
              ;; (belinsky . ?•)
              ;; (belinsky  . ?÷)
              (belinsky   . ?∕)
              (antikor    . ?∕)
+             (plex       . ?∕)
              (t        . ?□))  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
@@ -254,6 +271,8 @@
                        ('operator  " >")
                        ('belinsky  " ¶")
                        ('antikor   " ↩")
+                       ('plex      " ↲")
+                       ('monolisa  " ↲")
                        (t          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
@@ -267,6 +286,8 @@
           ('antikor  '("§" "•"))
           ('operator '("•"))
           ('apple-sf '("●" "•"))
+          ('plex     '("§" "•"))
+          ('vctr     '("§" "•"))
           (t  '("◆" "•")))))
 ;; (eh/define-org-keywords)
 
