@@ -34,6 +34,9 @@
 (setq use-package-enable-imenu-support t)
 (setq straight-vc-git-default-protocol 'ssh)
 
+;; load uncompiled lisp if it's newer
+(setq load-prefer-newer t)
+
 ;; quiet compilation warnings
 
 ;; utf-8 everywhere hopefully
@@ -157,6 +160,12 @@
   :hook
   prog-mode)
 
+(use-package display-fill-column-indicator
+  :straight nil
+  :hook
+  (prog-mode . display-fill-column-indicator-mode)
+  )
+
 ;; show tabs
 (use-package tab-bar
   :straight nil
@@ -233,7 +242,6 @@
                      :preview-key
                      '(:debounce 0.5 "<up>" "<down>"
                        :debounce 1 any))
-  ;; (load "consult-tab-bar")
   :bind
   ("C-x b" . 'consult-buffer)
   ("C-x 4 b" . 'consult-buffer-other-window)
@@ -316,17 +324,8 @@
      :default-weight light)
     (pragmata ;; a classic for a reason
      :default-family "PragmataPro Liga")
-    (antikor ;; line-height is kind of busted
-     :default-family "Antikor Mono"
-     :default-weight normal)
-    (montreal
-     :default-family "PP Neue Montreal Mono"
-     :default-weight regular)
-    (iosevka
-     :default-family "Iosevka Custom")
     (vctr
-     :default-family "VCTR Mono Trial v0.12"
-     ;; :default-weight light
+     :default-family "VCTR Mono"
      :default-height ,(+ eh/base-font-height 20))
 	  (t
 	   :default-height ,eh/base-font-height)))
@@ -435,28 +434,20 @@
   (("C-x p" . 'projectile-command-map)
    ("C-x p b" . 'consult-project-buffer)))
 
-;; integrate projectile with perspectives and tabs
-(use-package perspective
-  ;; this doesn't work when opening files from the command-line, so disable
-  ;; (this also disables the two following, since they have an `after')
-  :disabled
-  :init
-  (setq persp-suppress-no-prefix-key-warning t)
-  (setq persp-show-modestring nil)
-  :config (persp-mode))
-(use-package perspective-tabs
-  :after (perspective)
-  :straight (:host sourcehut :repo "woozong/perspective-tabs")
-  :config (perspective-tabs-mode))
-(use-package persp-projectile
-  :after (perspective projectile))
-
 ;;; Utilities
 
 ;; show imenu entries in a sidebar
 (use-package imenu-list
   :bind
   ("C-x /" . 'imenu-list-smart-toggle))
+
+;; don't save white-space, but allow it to persist in the buffer after saving
+(use-package ws-butler
+  :config
+  (ws-butler-global-mode))
+
+;; search with ag
+(use-package ag)
 
 ;;; Advanced appearance
 
@@ -578,6 +569,13 @@
   (add-to-list 'linked-themes '(caves-of-qud . user-qud)))
 
 (use-package ef-themes)
+(use-package spacemacs-theme
+  :init
+  (setq spacemacs-theme-comment-bg nil
+        spacemacs-theme-comment-italic t
+        spacemacs-theme-keyword-italic t
+        spacemacs-theme-org-height nil)
+  (add-to-list 'linked-themes '(spacemacs-light . user-spacemacs-light)))
 
 ;;; Org
 
@@ -687,11 +685,6 @@
   (setq outline-blank-line t
         outline-minor-mode-use-buttons 'in-margins))
 
-(use-package ws-butler
-  :config
-  (ws-butler-global-mode))
-
-(use-package ag)
 
 (defun eh/toggle-window-split ()
   (interactive)
@@ -743,41 +736,15 @@
   (interactive)
   (org-save-outline-visibility 'use-markers (org-mode-restart)))
 
-(use-package nano-modeline
-  :disabled
-  :straight (:type git :host github :repo "rougier/nano-modeline" :branch "main")
-  :init
-  (setq nano-modeline-position 'bottom)
-  (setq nano-modeline-prefix 'status)
-  ;; TODO set this up to change based on fontaine preset
-  (setq nano-modeline-space-top 0.2
-        nano-modeline-space-bottom -0.2)
-  ;; (setq nano-modeline-space-top 0.1
-  ;;       nano-modeline-space-bottom 0)
-  :config (nano-modeline-mode))
-
 (use-package persistent-scratch
   :init
-  ;; persistent-scratch-scratch-buffer-p-function
+  ;; only allow killing scratch when killing all of emacs
   (with-current-buffer "*scratch*"
     (emacs-lock-mode 'kill))
   :config
-  ;; TODO the autosave seems to work, but minor mode isn't activated?
   (persistent-scratch-setup-default)
   (with-current-buffer "*scratch*"
     (persistent-scratch-mode 1)))
-
-;; automatically switch themes with system appearance change
-;; (defun eh/load-appearance-theme (appearance)
-;;   "Load the appropriate light or dark theme based on APPEARANCE"
-;;   (mapc 'disable-theme custom-enabled-themes)
-;;   (pcase appearance
-;;     ;; ('light (modus-themes-load-theme 'modus-operandi-tinted))
-;;     ;; ('dark (modus-themes-load-theme 'modus-vivendi-tinted))
-;;     ('light (enable-theme 'isohedron))
-;;     ('dark (enable-theme 'caves-of-qud))
-;;     ))
-;; (add-hook 'ns-system-appearance-change-functions #'eh/load-appearance-theme)
 
 (use-package expand-region
   :bind
@@ -794,29 +761,6 @@
   ("C-h v" . 'helpful-variable)
   ("C-h k" . 'helpful-key))
 
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-
-(use-package spacemacs-theme
-  :init
-  (setq spacemacs-theme-comment-bg nil
-        spacemacs-theme-comment-italic t
-        spacemacs-theme-keyword-italic t
-        spacemacs-theme-org-height nil)
-  (add-to-list 'linked-themes '(spacemacs-light . user-spacemacs-light))
-  :config
-  ;; (load-theme 'spacemacs-light t t)
-  ;; TODO these aren't working quite right with the transition to custom
-  ;; (they aren't registering unless I redo them again after loading the theme)
-
-  )
-
-(use-package variable-pitch
-  :straight (:type built-in)
-  :disabled
-  :hook
-  gfm-mode
-  org-mode)
-
 (use-package elec-pair
   :straight (:type built-in)
   :config (electric-pair-mode))
@@ -826,46 +770,16 @@
   (setq lua-indent-level 2))
 
 (use-package vterm)
+
 (use-package rust-mode)
+
 (use-package julia-mode)
+
 (use-package swift-mode
   :init
   (setq swift-mode:basic-offset 2))
+
 (use-package raku-mode)
-
-(use-package embark
-  :disabled
-  :ensure t
-
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-  :init
-
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-
-  ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-  ;; strategy, if you want to see the documentation from multiple providers.
-  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-  ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-  :config
-
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-;; Consult users will also want the embark-consult package.
-(use-package embark-consult
-  :after (embark consult)
-  :ensure t ; only need to install it, embark loads it after consult if found
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
 
 (use-package elpher)
 
