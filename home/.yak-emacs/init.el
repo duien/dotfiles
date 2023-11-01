@@ -891,10 +891,11 @@
 ;;   prompt for saving it before quitting
 ;; this will not affect manually killing the buffer
 (defun eh/set-offer-save-in-created-buffers ()
-    (unless (or buffer-file-name
-            (string-match-p "^ " (buffer-name))
-            (string-match-p "^*" (buffer-name)))
-      (setq buffer-offer-save t)))
+  (unless (or buffer-file-name
+              (string-match-p "^magit" (buffer-name))
+              (string-match-p "^ " (buffer-name))
+              (string-match-p "^*" (buffer-name)))
+    (setq buffer-offer-save t)))
 (add-hook 'first-change-hook #'eh/set-offer-save-in-created-buffers)
 
 
