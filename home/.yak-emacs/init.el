@@ -363,6 +363,7 @@
   (setq modus-vivendi-tinted-palette-overrides
 	      '((string cyan)))
   (add-to-list 'linked-themes '(modus-operandi-tinted . user-modus-operandi-tinted))
+  (add-to-list 'linked-themes '(modus-vivendi-tinted . user-modus-vivendi-tinted))
   :config
   (load-theme 'modus-operandi-tinted))
 
@@ -568,67 +569,13 @@
 (use-package isohedron-theme
   :straight '(isohedron-theme :type git :host github
 		                          :repo "duien/isohedron-theme")
-  :config
-  (custom-theme-set-faces
-   'isohedron
-   ;; faces for custom telephone-based modeline
-   '(eh/telephone-line-status-locked
-     ((t :background "#FB6C6A")))
-   '(eh/telephone-line-status-normal
-     ((t :background "#554e6a")))
-   '(eh/telephone-line-status-unsaved
-     ((t :background "#F0B400")))
-   ;; faces for incomplete items
-   '(eh/org-keyword-todo
-     ((t :background "#84bd00" :foreground "#f7f3ee" :inherit org-todo)))
-   '(eh/org-keyword-idea
-     ((t :background "#ce5cff" :foreground "#f7f3ee" :inherit org-todo)))
-   '(eh/org-keyword-read
-     ((t :background "#b9a992" :foreground "#f7f3ee" :inherit org-todo)))
-   '(eh/org-keyword-question
-     ((t :background "#75a3ff" :foreground "#f7f3ee" :inherit org-todo)))
-   '(eh/org-keyword-bury
-     ((t :background "#f1ece4" :foreground "#93836c" :inherit org-todo)))
-   '(eh/org-keyword-next
-     ((t :background "#f0b400" :foreground "#f7f3ee" :inherit org-todo)))
-   '(eh/org-keyword-halt
-     ((t :background "#f08c00" :foreground "#f7f3ee" :inherit org-todo)))
-   ;; faces for complete items
-   '(eh/org-keyword-done
-     ((t :foreground "#81895d" :inherit org-done)))
-   '(eh/org-keyword-kill
-     ((t :foreground "#957f5f" :inherit org-done)))
-   '(eh/org-keyword-yes
-     ((t :background "#e2e9ca" :foreground "#84bd00" :inherit org-done)))
-   '(eh/org-keyword-no
-     ((t :background "#f6e1ca" :foreground "#fb6c6a" :inherit org-done)))
-   '(eh/org-keyword-answer
-     ((t :background "#dde3f2" :foreground "#75a3ff" :inherit org-done)))
-   ))
+  :init
+  (add-to-list 'linked-themes '(isohedron . user-isohedron)))
 (use-package caves-of-qud-theme
   :straight '(caves-of-qud-theme :type git :host github
                                  :repo "duien/caves-of-qud-theme")
-  :config
-  (custom-theme-set-faces
-   'caves-of-qud
-   ;; faces for custom telephone-based modeline
-   '(eh/telephone-line-status-locked  ((t :background "#A64A2E")))
-   '(eh/telephone-line-status-normal  ((t :background "#40A4B9")))
-   '(eh/telephone-line-status-unsaved ((t :background "#E99F10")))
-   ;; faces for incomplete items
-   '(eh/org-keyword-todo     ((t :background "#009403" :inherit org-todo)))
-   '(eh/org-keyword-idea     ((t :background "#b154cf" :inherit org-todo)))
-   '(eh/org-keyword-question ((t :background "#0096ff" :inherit org-todo)))
-   '(eh/org-keyword-read     ((t :background "#98875f" :inherit org-todo)))
-   '(eh/org-keyword-next     ((t :background "#cfc041" :inherit org-todo)))
-   '(eh/org-keyword-halt     ((t :background "#f15f22" :inherit org-todo)))
-   ;; faces for complete items
-   '(eh/org-keyword-done     ((t :foreground "#009403" :inherit org-done)))
-   '(eh/org-keyword-kill     ((t :foreground "#a64a2e" :inherit org-done)))
-   '(eh/org-keyword-answer   ((t :foreground "#0096ff" :inherit org-done)))
-   '(eh/org-keyword-yes      ((t :foreground "#00c420" :inherit org-done)))
-   '(eh/org-keyword-no       ((t :foreground "#d74200" :inherit org-done)))
-   '(eh/org-keyword-rode     ((t :foreground "#98875f" :inherit org-done)))))
+  :init
+  (add-to-list 'linked-themes '(caves-of-qud . user-qud)))
 
 (use-package ef-themes)
 
@@ -855,114 +802,12 @@
         spacemacs-theme-comment-italic t
         spacemacs-theme-keyword-italic t
         spacemacs-theme-org-height nil)
+  (add-to-list 'linked-themes '(spacemacs-light . user-spacemacs-light))
   :config
-  (load-theme 'spacemacs-light t t)
+  ;; (load-theme 'spacemacs-light t t)
   ;; TODO these aren't working quite right with the transition to custom
   ;; (they aren't registering unless I redo them again after loading the theme)
-  (custom-theme-set-faces
-   'spacemacs-light
-   ;; tab bar
-   '(tab-bar ((t :inherit tab-bar-tab-inactive
-                 :foreground unspecified
-                 :background "#e3dedd"                 ; bg3
-                 :box nil)))
-   '(tab-bar-tab ((t :box unspecified :inherit default)))
 
-   ;; don't add a background to block begin/end
-   ;; TODO get other attributes from default
-   '(org-block-begin-line ((t :background "#fbf8ef"))) ; bg1
-   '(org-block-end-line ((t :background "#fbf8ef")))   ; bg1
-
-   ;; org keyword faces
-   ;; TODO these need to be fixed up some -- inheritance is funky
-   '(org-todo ((t :inverse-video t :weight bold)))
-   '(eh/org-keyword-todo ((t :foreground "#42ae2c"     ; suc
-                             :background "#edf2e9"     ; green-bg
-                             ;; :inverse-video t
-                             :inherit org-todo)))
-   '(eh/org-keyword-idea ((t :foreground "#9380b2"     ; cblk-ln
-                             :background "#efeae9"     ; bg-alt
-                             ;; :inverse-video t
-                             :inherit org-todo)))
-   '(eh/org-keyword-question ((t :foreground "#3a81c3" ; blue / keyword / head1
-                                 :background "#edf1ed" ; blue-bg
-                                 ;; :inverse-video t
-                                 :inherit org-todo)))
-   '(eh/org-keyword-read ((t :foreground "#b1951d"     ; yellow
-                             :background "#f6f1e1"     ; yellow-bg
-                             ;; :inverse-video t
-                             :inherit org-todo)))
-   '(eh/org-keyword-next ((t :foreground "#dc752f"     ; war
-                             :background "#faede4"     ; red-bg
-                             ;; :inverse-video t
-                             :inherit org-todo)))
-   '(eh/org-keyword-halt ((t :foreground "#e0211d"     ; err
-                             :background "#eed9d2"     ; red-bg-s
-                             ;; :inverse-video t
-                             :inherit org-todo)))
-   '(eh/org-keyword-bury ((t :foreground "#a49da5"     ; comment-light
-                             :background "#efeae9"     ; bg-2
-                             :weight reset
-                             :inverse-video nil
-                             :inherit org-todo)))
-   '(eh/org-keyword-done ((t :inverse-video nil
-                             :weight reset
-                             :inherit eh/org-keyword-todo)))
-   '(eh/org-keyword-kill ((t :inverse-video nil
-                             :weight reset
-                             :inherit eh/org-keyword-halt
-                             :background "#faede4")))  ; red-bg
-   '(eh/org-keyword-answer ((t :inverse-video nil
-                               :weight reset
-                               :inherit eh/org-keyword-question)))
-   '(eh/org-keyword-yes ((t :inverse-video nil
-                            :weight reset
-                            :inherit eh/org-keyword-done
-                            :background "#dae9d0")))   ; green-bg-s
-   '(eh/org-keyword-no ((t :inverse-video nil
-                           :weight reset
-                           :inherit eh/org-keyword-kill
-                           :background "#eed8d2")))    ; red-bg-s
-   '(eh/org-keyword-meh ((t :inverse-video nil
-                            :weight reset
-                            :inherit eh/org-keyword-bury)))
-   '(eh/org-keyword-rode ((t :inverse-video nil
-                             :weight reset
-                             :inherit eh/org-keyword-read)))
-   '(org-headline-done ((t :inherit font-lock-comment-face
-                           :foreground unspecified
-                           :weight reset)))
-   '(org-headline-todo ((t :foreground unspecified
-                           :background unspecified
-                           :weight reset)))
-   `(org-ellipsis ((t :weight ,(face-attribute 'default :weight) :slant normal)))
-   '(org-superstar-header-bullet ((t :weight reset)))
-   '(org-superstar-leading ((t :weight reset
-                               :foreground "#e3dedd"))); bg-3
-   '(org-hide ((t :foreground "#fbf8ef"                ; bg-1
-                  :distant-foreground "#fbf8ef")))     ; bg-1
-   ;; '(nano-modeline-active-status-RW ((t :background nil)))
-   ;; '(nano-modeline-active-status-** ((t :background nil)))
-   ;; '(nano-modeline-active-status-RO ((t :background nil)))
-   '(fill-column-indicator ((t :foreground "#efeae9"   ; bg-2
-                               :background "#efeae9"))); bg-2
-   '(mode-line-inactive ((t :background "#e8e3f0"      ; cblk-bg
-                            :box nil)))
-   '(mode-line ((t :background "#9380b2"               ; cblk-ln
-                   :foreground "#e8e3f0" :box nil)))   ; cblk-bg
-   ;; '(mode-line-buffer-id ((t :foreground "#4e3163"))))
-   '(mode-line-buffer-id ((t :foreground "#e8e3f0"     ; cblk-bg
-                             :weight bold))))
-  ;; This is not something that a theme should be setting (and it's not clear to
-  ;; me why it ends up sticking around after the theme is deactivated again)
-  (custom-theme-set-variables
-   'spacemacs-light
-   '(org-fontify-done-headline t)
-   '(org-fontify-todo-headline t))
-  ;; (custom-theme-set-variables
-  ;;  'spacemacs-dark
-  ;;  '(org-fontify-done-headline t)
-  ;;  '(org-fontify-todo-headline t))
   )
 
 (use-package variable-pitch
