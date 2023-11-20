@@ -35,6 +35,7 @@
 (setq straight-vc-git-default-protocol 'ssh)
 
 ;; load uncompiled lisp if it's newer
+;; (does this need to happen later to not interfere with initial compilation?)
 (setq load-prefer-newer t)
 
 ;; quiet compilation warnings
@@ -55,9 +56,12 @@
 ;; make home the default directory regardless of where emacs is started from
 (cd "~/")
 
+;; set org directory early so it can be used in other setup
+(setq org-directory "~/Org/")
+
 
 (setq-default fill-column 80)
-(setq sentence-end-double-space t
+(setq sentence-end-double-space nil
       vc-follow-symlinks t
       dired-use-ls-dired nil
       mouse-wheel-flip-direction t
@@ -66,6 +70,7 @@
       use-short-answers t
       bookmark-set-fringe-mark nil)
 (setq frame-inhibit-implied-resize t)
+(setq inhibit-startup-screen t)
 
 ;; disable automatic `distant-foreground' switch
 ;; TODO Maybe consider tweaking specific faces that fail with a generous
@@ -279,7 +284,8 @@
   (defvar eh/base-font-height
     ;; (if (> (x-display-pixel-width) 2500)
     ;;     160 140)
-    140
+    ;; 140
+    160
     "The main font size, based on display resolution.")
   :demand ;; our hook won't activate the package but implies deferred loading
   :init
@@ -326,7 +332,40 @@
      :default-family "PragmataPro Liga")
     (vctr
      :default-family "VCTR Mono"
-     :default-height ,(+ eh/base-font-height 20))
+     ;; :default-height ,(+ eh/base-font-height 20)
+     )
+    (berkeley
+     :default-family "Berkeley Mono")
+    (md-io
+     :default-family "MD IO Trial"
+     :default-weight light)
+    ;; The Monas
+    ;; Argon   - Humanist Sans
+    ;; Krypton - Mechanical Sans
+    ;; Neon    - Neo-grotesque Sans
+    ;; Radon   - Handwriting
+    ;; Xenon   - Slab Serif
+    (mona-super
+     :default-family "Monaspace Argon"
+     :default-weight light
+     :fixed-pitch-serif-family "Monaspace Xenon"
+     :italic-family "Monaspace Radon"
+     :italic-slant normal)
+    (mona-argon
+     :default-family "Monaspace Argon"
+     :default-weight light)
+    (mona-krypton
+     :default-family "Monaspace Krypton"
+     :default-weight light)
+    (mona-neon
+     :default-family "Monaspace Neon"
+     :default-weight light)
+    (mona-radon
+     :default-family "Monaspace Radon"
+     :default-weight light)
+    (mona-xenon
+     :default-family "Monaspace Xenon"
+     :default-weight light)
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -377,7 +416,8 @@
 	      `(,(expand-file-name "straight/build/" user-emacs-directory)
           ,(expand-file-name "eln-cache/" user-emacs-directory)
           ,(expand-file-name "etc/" user-emacs-directory)
-          ,(expand-file-name "var/" user-emacs-directory)))
+          ,(expand-file-name "var/" user-emacs-directory)
+          ,(expand-file-name "init.org" org-directory)))
   :config (recentf-mode)
   :hook
   (buffer-list-update . recentf-track-opened-file))
@@ -421,6 +461,12 @@
           "occur-mode"))
   ;; (bind-key "C-x p" 'projectile-command-map)
   :config
+  ;; try out a permissive bottom-up project search
+  ;; (pretty much prevents ever using top-down)
+  (setq projectile-project-root-files-bottom-up
+        (append
+         (remove "TAGS" (remove "DESCRIPTION" projectile-project-root-files))
+         projectile-project-root-files-bottom-up))
   ;; the `Project.toml' file used to detect a julia project is also used to
   ;; configure Maestro, and was clobbering rails
   (projectile-update-project-type 'julia :precedence 'low)
@@ -583,8 +629,7 @@
   :straight (:type built-in)
   :init
   ;; where to put things
-  (setq org-directory "~/Org/"
-        org-agenda-files `(,org-directory) ;; could we just '(org-directory)?
+  (setq org-agenda-files `(,org-directory) ;; could we just '(org-directory)?
         org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
         org-default-notes-file (concat org-directory "inbox.org"))
   ;; archiving
@@ -816,6 +861,7 @@
 
 ;;; Finally
 
+;; ensure a server is started (for opening from dock)
 (require 'server)
 (unless (server-running-p) (server-start))
 
@@ -824,15 +870,9 @@
 ;;   - separate binding to kill actual (logical?) line (oh, probably still just
 ;;     kill-line or crux-kill-line)
 ;; - crux altered key-binds in org-mode
-;; ✓ expand-region
-;; ✓ project detection in scratch buffer
 ;; - project files in consult-buffer default sources
 ;; - go to buffer in default perspective (also from command line)
-;; - something like my org keyword definer for theme overlays
 ;; - save light and dark themes (like fontaine)
-;; ✓ set up indent guide
-;; - bind frame-toggle-fullscreen
-;; - try out embark
 ;; - use-package imenu integration gets bogus marginalia annotations
 ;; -
 ;;
