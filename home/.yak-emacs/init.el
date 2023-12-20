@@ -203,6 +203,7 @@
 (use-package minions
   :init
   (setq minions-mode-line-lighter "#")
+  ;; (setq minions-mode-line-lighter "≡")
   ;; other chars: м ≡ ‡
   (setq minions-mode-line-delimiters '("" . ""))
   :config
@@ -217,11 +218,41 @@
 (setq mode-line-position-column-line-format '(" +%l:%c"))
 
 (use-package mood-line
+  :init
+  (setq mood-line-format '((" "
+                            (mood-line-segment-modal)
+                            " "
+                            (or
+                             (mood-line-segment-buffer-status)
+                             " ")
+                            " "
+                            (mood-line-segment-buffer-name)
+                            "  "
+                            (mood-line-segment-anzu)
+                            "  "
+                            (mood-line-segment-multiple-cursors)
+                            "  "
+                            (mood-line-segment-cursor-position)
+                            ;; " "
+                            ;; (mood-line-segment-scroll)
+                            "")
+                           ((mood-line-segment-vc)
+                            "  "
+                            (mood-line-segment-major-mode)
+                            "  "
+                            (mood-line-segment-misc-info)
+                            "  "
+                            (mood-line-segment-checker)
+                            "  "
+                            (mood-line-segment-process)
+                            "  " " ")))
   :config
   ;; override their non-customizable cursor position segment
   (defun mood-line-segment-cursor-position ()
-    (propertize (car mode-line-position-line-format)
-                'face 'mood-line-unimportant))
+    ;; (propertize (car mode-line-position-line-format)
+                ;; 'face 'mood-line-unimportant)
+    (format-mode-line (car mode-line-position-line-format) 'mood-line-unimportant)
+    )
   (defun mood-line-segment-major-mode ()
     "Displays the current major mode in the mode-line."
     (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) "  "))
@@ -298,7 +329,8 @@
      ;; :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
     (comic-code ;; totally silly, line height is too big, but it's great
-     :default-family "Comic Code Ligatures")
+     :default-family "Comic Code Ligatures"
+     :default-height ,(- eh/base-font-height 20))
     (codelia ;; a good mix of personality and readability
      :default-family "Codelia Ligatures")
     (input ;; space-efficient, good variable pitch pairing options
@@ -339,33 +371,8 @@
     (md-io
      :default-family "MD IO Trial"
      :default-weight light)
-    ;; The Monas
-    ;; Argon   - Humanist Sans
-    ;; Krypton - Mechanical Sans
-    ;; Neon    - Neo-grotesque Sans
-    ;; Radon   - Handwriting
-    ;; Xenon   - Slab Serif
-    (mona-super
-     :default-family "Monaspace Argon"
-     :default-weight light
-     :fixed-pitch-serif-family "Monaspace Xenon"
-     :italic-family "Monaspace Radon"
-     :italic-slant normal)
-    (mona-argon
-     :default-family "Monaspace Argon"
-     :default-weight light)
-    (mona-krypton
-     :default-family "Monaspace Krypton"
-     :default-weight light)
-    (mona-neon
-     :default-family "Monaspace Neon"
-     :default-weight light)
-    (mona-radon
-     :default-family "Monaspace Radon"
-     :default-weight light)
-    (mona-xenon
-     :default-family "Monaspace Xenon"
-     :default-weight light)
+    (dank
+     :default-family "Dank Mono")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -387,6 +394,14 @@
         (load-theme theme-to-load))))
 (add-hook 'enable-theme-functions 'eh/load-linked-user-theme)
 
+;; Also set automatic appearance-switching so that the title bar text stays visible.
+;; This runs an excessive number of times, but that doesn't really seem to be a problem
+(defun eh/set-ns-appearance-from-theme (theme)
+  (let ((appearance (frame-parameter nil 'background-mode)))
+    (modify-all-frames-parameters `((ns-appearance . ,appearance)))))
+(add-hook 'enable-theme-functions 'eh/set-ns-appearance-from-theme)
+(add-hook 'ns-appearance-change-functions 'eh/set-ns-appearance-from-theme)
+
 ;; a theme for all seasons
 (use-package modus-themes
   :init
@@ -402,8 +417,9 @@
 	      '((string cyan)))
   (add-to-list 'linked-themes '(modus-operandi-tinted . user-modus-operandi-tinted))
   (add-to-list 'linked-themes '(modus-vivendi-tinted . user-modus-vivendi-tinted))
-  :config
-  (load-theme 'modus-operandi-tinted))
+  ;; :config
+  ;; (load-theme 'modus-operandi-tinted)
+  )
 
 ;;; Manage windows and buffers
 
@@ -419,8 +435,12 @@
           ,(expand-file-name "var/" user-emacs-directory)
           ,(expand-file-name "init.org" org-directory)))
   :config (recentf-mode)
-  :hook
-  (buffer-list-update . recentf-track-opened-file))
+  ;; TODO Does removing this stop the issue with tracking `init.org' even though
+  ;; it should be ignored? It doesn's seem like it should since I think the
+  ;; other ignores actually are working (...or are they?)
+  ;; :hookf
+  ;; (buffer-list-update . recentf-track-opened-file)
+  )
 
 ;; allow undoing and redoing window layout changes
 (use-package winner
@@ -607,7 +627,9 @@
   :straight '(isohedron-theme :type git :host github
 		                          :repo "duien/isohedron-theme")
   :init
-  (add-to-list 'linked-themes '(isohedron . user-isohedron)))
+  (add-to-list 'linked-themes '(isohedron . user-isohedron))
+  :config
+  (load-theme 'isohedron))
 (use-package caves-of-qud-theme
   :straight '(caves-of-qud-theme :type git :host github
                                  :repo "duien/caves-of-qud-theme")

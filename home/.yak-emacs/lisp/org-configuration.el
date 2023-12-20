@@ -114,6 +114,7 @@
              ;; (belinsky   . ?¬)
              ;; (belinsky   . ?⁄)
              (operator   . ?)
+             (dank       . ?·)
              (pragmata   . ?√) ;; weirdly, this is square root which is usually bad
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
@@ -175,6 +176,7 @@
              (monolisa . ?◉)
              (vctr     . ?#)
              (md-io    . ?#)
+             (dank     . ?△)
              (t        . ?■))
    ;;◯ ;;☐ ;; ?◦●
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
@@ -199,6 +201,7 @@
              (md-io      . ?○)
              (plex       . ?∕)
              (berkeley   . ?•)
+             (dank       . ?○)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -266,6 +269,7 @@
              (belinsky   . ?∕)
              (antikor    . ?∕)
              (plex       . ?∕)
+             (dank       . ?·)
              (t        . ?□))  ;;◊ ;;◇□
    :face (defface eh/org-keyword-read '((t :inherit org-todo))
            "Face used for the READ keyword in Org"))
@@ -332,6 +336,34 @@
           (todo "READ|IDEA" ((org-agenda-overriding-header "Investigate")))
           (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
          (;(org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
+          (org-agenda-tag-filter-preset '("-meta" "-test"))
+          ;; (org-agenda-compact-blocks t)
+          (org-agenda-prefix-format "  %?s"))
+         )
+        ("w" "Work task list"
+         ((agenda "Calendar"
+                  ((org-agenda-span 1)
+                   (org-agenda-overriding-header "Today")
+                   (org-agenda-show-log t)
+                   (org-agenda-use-time-grid nil)))
+          (todo "NEXT|HALT" ((org-agenda-overriding-header "Look here first")))
+          (todo ""
+                ((org-agenda-overriding-header "Get things done")
+                 (org-agenda-sorting-strategy '(priority-down))
+                 (org-agenda-todo-ignore-with-date t)
+                 (org-agenda-skip-function
+                  '(or
+                    (eh/org-skip-subtree-if-bury)
+                    (org-agenda-skip-entry-if 'todo '("NEXT" "READ" "IDEA" "BURY" "GOAL"))
+                    ))
+                 ))
+          (todo "READ|IDEA" ((org-agenda-overriding-header "Investigate")))
+          (todo "BURY" ((org-agenda-overriding-header "Burried tasks"))))
+         (;(org-agenda-files (file-expand-wildcards "~/Org/dox-*.org"))
+          (org-agenda-files
+           (append
+            (file-expand-wildcards "~/Org/skylight/*.org")
+            '("~/Org/skylight.org")))
           (org-agenda-tag-filter-preset '("-meta" "-test"))
           ;; (org-agenda-compact-blocks t)
           (org-agenda-prefix-format "  %?s"))
