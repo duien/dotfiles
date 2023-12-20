@@ -28,4 +28,6 @@ end
 source ~/.config/fish/more.fish
 
 source ("starship" init fish --print-full-init | psub)
-source ~/.iterm2_shell_integration.fish
+if [ -x '~/.iterm2_shell_integration.fish' ]
+  source ~/.iterm2_shell_integration.fish
+end
