@@ -2,6 +2,7 @@
 
 # Aliases
 alias gst        "git status"
+alias gits       "git switch"
 alias jk         "bundle exec jekyll"
 alias rehash     "rbenv rehash"
 alias more-fish  "source ~/.config/fish/more.fish"
@@ -17,20 +18,14 @@ else
 end
 
 # Basic environment
-prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/Code/Dox $HOME/.homesick/repos
-prepend_if_exists PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/.homesick/repos
 
 prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
-prepend_if_exists PATH "$HOME/Code/Dox/dox-compose/bin"
 prepend_if_exists PATH "$HOME/.doom/bin"
 prepend_if_exists PATH "$HOME/.cargo/bin"
 
 set -x DOOMDIR "$HOME/.doom-config"
-# Set up homebrew packages that need to be prepended to path
-prepend_if_exists fish_user_paths "/usr/local/opt/postgresql@9.6/bin" "/usr/local/opt/openssl@1.1/bin"
-# This was in universal variables, which are not a great idea for my setup
-prepend_if_exists fish_user_paths "/usr/local/opt/openssl/bin" "/usr/local/opt/postgresql@9.4/bin" "/Users/duien/.yarn/bin"
 
 set -x EDITOR ew
 set -x VISUAL ew
