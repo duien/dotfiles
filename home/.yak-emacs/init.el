@@ -165,11 +165,21 @@
   :hook
   prog-mode)
 
+;; show fill column in programming modes
 (use-package display-fill-column-indicator
   :straight nil
   :hook
   (prog-mode . display-fill-column-indicator-mode)
   )
+
+;; show indent guides in programming modes
+(use-package highlight-indent-guides
+  :init
+  (setq highlight-indent-guides-method 'bitmap) ; character, column, bitmap, or fill
+  (setq highlight-indent-guides-responsive 'top) ; nil, top, or stack
+  (setq highlight-indent-guides-bitmap-function 'highlight-indent-guides--bitmap-line)
+  :hook
+  (prog-mode . highlight-indent-guides-mode))
 
 ;; show tabs
 (use-package tab-bar
@@ -323,7 +333,8 @@
   (setq fontaine-presets
 	`((jetbrains ;; basic and functional, but attractive
 	   :default-family "JetBrains Mono"
-	   :default-weight light)
+	   :default-weight light
+     :default-height ,(- eh/base-font-height 10))
 	  (cascadia ;; nice italic, readable but still fun
 	   :default-family "Cascadia Code PL"
      ;; :default-height ,(+ eh/base-font-height 10)
@@ -607,6 +618,10 @@
 (use-package markdown-mode
   :mode
   (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
+
+;; (treesit-language-available-p 'ruby)
+;; (setq major-mode-remap-alist '((ruby-mode . ruby-ts-mode)))
+
 (use-package elixir-mode
   :config
   (add-hook 'elixir-mode-hook
@@ -651,7 +666,7 @@
   :straight (:type built-in)
   :init
   ;; where to put things
-  (setq org-agenda-files `(,org-directory) ;; could we just '(org-directory)?
+  (setq org-agenda-files `(,org-directory ,(concat org-directory "skylight/"))
         org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
         org-default-notes-file (concat org-directory "inbox.org"))
   ;; archiving

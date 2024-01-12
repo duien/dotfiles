@@ -94,7 +94,14 @@
                  :foreground "#e8e3f0" :box nil)))   ; cblk-bg
  ;; '(mode-line-buffer-id ((t :foreground "#4e3163"))))
  '(mode-line-buffer-id ((t :foreground "#e8e3f0"     ; cblk-bg
-                           :weight bold))))
+                           :weight bold)))
+ '(highlight-indent-guides-odd-face ((t :background "#fbf8ef")))
+ '(highlight-indent-guides-even-face ((t :background "#fbf8ef")))
+ '(highlight-indent-guides-top-odd-face ((t :background "#efeae9")))
+ '(highlight-indent-guides-top-even-face ((t :background "#efeae9")))
+ '(highlight-indent-guides-character-face ((t :foreground "#fbf8ef")))
+ '(highlight-indent-guides-top-character-face ((t :foreground "#efeae9")))
+ )
 ;; This is not something that a theme should be setting (and it's not clear to
 ;; me why it ends up sticking around after the theme is deactivated again)
 (custom-theme-set-variables

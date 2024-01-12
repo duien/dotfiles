@@ -35,5 +35,20 @@
      ((t :background "#f6e1ca" :foreground "#fb6c6a" :inherit org-done)))
    '(eh/org-keyword-answer
      ((t :background "#dde3f2" :foreground "#75a3ff" :inherit org-done)))
+
+   ;; make only top indent guide visible
+   '(highlight-indent-guides-character-face ((t :foreground "#f7f3ee")))
+   '(highlight-indent-guides-top-character-face ((t :foreground "#f1ece4")))
+
+   ;; fix font weights in mood-line
+   '(mood-line-buffer-name ((t :inherit bold)))
+   '(mood-line-buffer-status-modified ((t :background "#fb6c6a" :foreground "#f7f3ee"))) ; iso-ui-red
+   '(mood-line-buffer-status-narrowed ((t :background "#df870c" :foreground "#f7f3ee"))) ; iso-ui-orange
+   '(mood-line-buffer-status-read-only ((t :background "#fb6c6a" :foreground "#f7f3ee")))
+   '(mood-line-unimportant ((t :inherit shadow)))
+   '(mood-line-major-mode ((t :inherit bold)))
+   '(mood-line-status-error ((t :foreground "#fb6c6a" :weight reset)))
+   '(mood-line-status-warning ((t :foreground "#df870c" :weight reset)))
+   '(mood-line-status-success ((t :foreground "#8aa60b" :weight reset)))
    )
 (provide-theme 'user-isohedron)
