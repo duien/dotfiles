@@ -212,8 +212,8 @@
 ;; don't junk up the mode-line
 (use-package minions
   :init
-  (setq minions-mode-line-lighter "#")
-  ;; (setq minions-mode-line-lighter "≡")
+  ;; (setq minions-mode-line-lighter "#")
+  (setq minions-mode-line-lighter "≡")
   ;; other chars: м ≡ ‡
   (setq minions-mode-line-delimiters '("" . ""))
   :config
@@ -223,8 +223,8 @@
 ;; (setq mode-line-position-line-format '(" %l"))
 ;; (setq mode-line-position-line-format '(" +%l"))
 (setq mode-line-percent-position nil)
-;; (setq mode-line-position-line-format '(" ℓ%l"))
-(setq mode-line-position-line-format '(" %l"))
+(setq mode-line-position-line-format '(" ℓ%l"))
+;; (setq mode-line-position-line-format '(" %l"))
 (setq mode-line-position-column-line-format '(" +%l:%c"))
 
 (use-package mood-line
@@ -253,9 +253,10 @@
                             (mood-line-segment-misc-info)
                             "  "
                             (mood-line-segment-checker)
-                            "  "
-                            (mood-line-segment-process)
-                            "  " " ")))
+                            ;; "  "
+                            ;; (mood-line-segment-process)
+                            ;; "  " " "
+                            )))
   :config
   ;; override their non-customizable cursor position segment
   (defun mood-line-segment-cursor-position ()
