@@ -24,6 +24,7 @@
     stat = diff --stat
     patch = add --patch
     cm = commit -m
+    ff = merge --ff-only
 [format]
     pretty = format:%C(brightyellow)%h %C(cyan)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
 [difftool]
