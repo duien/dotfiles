@@ -1,36 +1,36 @@
 [user]
-	email = hello@duien.com
-	name = Emily Hyland
+    email = hello@duien.com
+    name = Emily Hyland
 [color]
     ui = auto
 [pull]
     default = matching
-	ff = only
+    ff = only
 [push]
-	default = simple
+    default = simple
 [core]
     excludesfile = ~/.gitignore
-	editor = em -w
-	attributesfile = /Users/ehyland/.gitattributes
+    editor = em -w
+    attributesfile = /Users/ehyland/.gitattributes
 [alias]
     vis = "log --graph --pretty=format:\"%C(yellow bold)%h%Creset by %C(red)%an%Creset (%ar)%C(blue bold)%d%Creset%n%s%n%b\" --all"
     hist = "log --oneline --decorate --graph"
-	co = checkout
+    co = checkout
     pr = "pull --rebase"
     wdiff = "diff --color-words"
     amend = commit --amend --no-edit
     edit = commit --amend --edit
     cached = diff --cached
     stat = diff --stat
-	patch = add --patch
-	cm = commit -m
+    patch = add --patch
+    cm = commit -m
 [format]
     pretty = format:%C(brightyellow)%h %C(cyan)%aN%Creset %C(blue)%d%Creset %s %C(magenta)(%ad)
 [difftool]
-	prompt = false
+    prompt = false
 [diff]
     algorithm = patience
-	compactionHeuristic = true
+    compactionHeuristic = true
 [github]
     user = duien
 [branch]
@@ -38,36 +38,36 @@
 [mailmap]
     file = /Users/eprice/.gitmailmap
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 [hub]
-	protocol = https
+    protocol = https
 [mergetool]
-	prompt = false
+    prompt = false
 [filter "media"]
-	clean = git media clean %f
-	smudge = git media smudge %f
-	required = true
+    clean = git media clean %f
+    smudge = git media smudge %f
+    required = true
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	required = true
-	process = git-lfs filter-process
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    required = true
+    process = git-lfs filter-process
 [clean]
-	requireForce = false
+    requireForce = false
 
 # use vscode for diff/merge
 [merge]
     tool = vscode
-	conflictstyle = zdiff3
+    conflictstyle = zdiff3
 [diff]
-	tool = vscode
+    tool = vscode
 [mergetool "vscode"]
     cmd = code --wait $MERGED
 [difftool "vscode"]
-	cmd = code --wait --diff $LOCAL $REMOTE
+    cmd = code --wait --diff $LOCAL $REMOTE
 [diff "rspec"]
-	xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
+    xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 [advice]
-	detachedHead = false
+    detachedHead = false
 [init]
-	defaultBranch = main
+    defaultBranch = main
