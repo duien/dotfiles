@@ -9,9 +9,13 @@ status = {
   name: nil
 }
 
-if input =~ /^\d{3}$/ and input = input.to_i and Rack::Utils::HTTP_STATUS_CODES.key?(input)
-  puts "#{input} #{Rack::Utils::HTTP_STATUS_CODES[input]} (:#{Rack::Utils::SYMBOL_TO_STATUS_CODE.invert[input]})"
-elsif input.nil? or input.empty?
+if input =~ /^\d{3}$/ and input = input.to_i
+  if Rack::Utils::HTTP_STATUS_CODES.key?(input)
+    puts "#{input} #{Rack::Utils::HTTP_STATUS_CODES[input]} (:#{Rack::Utils::SYMBOL_TO_STATUS_CODE.invert[input]})"
+  else
+    puts "Not a standard HTTP status code: #{input}"
+  end
+elsif input.nil? || input.strip.empty?
   puts "Provide a numeric HTTP status code"
 elsif (res = input.match(/^(\d)\*\*$/)) and series = res[1].to_i
   codes = Rack::Utils::HTTP_STATUS_CODES.select{ |c,n| c / 100 == series }
