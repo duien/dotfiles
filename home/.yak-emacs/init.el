@@ -228,6 +228,9 @@
 
 (use-package mood-line
   :after (fontaine)
+  :preface
+  (defun eh/mood-line-segment-dedicated ()
+      (if (window-dedicated-p (selected-window)) "◆"))
   :init
   ;; TODO Put general mode line config somewhere better
   (setq mode-line-percent-position nil)
@@ -236,34 +239,55 @@
           ('jetbrains '(" ℓ%l"))
           (t          '(" +%l"))))
   (setq mode-line-position-column-line-format '(" +%l:%c"))
-  (setq mood-line-format '((" "
-                            (mood-line-segment-modal)
-                            " "
-                            (or
-                             (mood-line-segment-buffer-status)
-                             " ")
-                            " "
-                            (mood-line-segment-buffer-name)
-                            "  "
-                            (mood-line-segment-anzu)
-                            "  "
-                            (mood-line-segment-multiple-cursors)
-                            "  "
-                            (mood-line-segment-cursor-position)
-                            ;; " "
-                            ;; (mood-line-segment-scroll)
-                            "")
-                           ((mood-line-segment-vc)
-                            "  "
-                            (mood-line-segment-major-mode)
-                            "  "
-                            (mood-line-segment-misc-info)
-                            "  "
-                            (mood-line-segment-checker)
-                            ;; "  "
-                            ;; (mood-line-segment-process)
-                            ;; "  " " "
-                            )))
+  (setq mood-line-format
+        (mood-line-defformat
+         :left
+         ( " "
+          ((mood-line-segment-modal) . " ")
+          ((mood-line-segment-buffer-status) . " ")
+          ((mood-line-segment-buffer-name) . " ")
+          ((mood-line-segment-cursor-position) . " ")
+          )
+         :right
+         (
+          ((mood-line-segment-vc) . " ")
+          ;; ((mood-line-segment-major-mode) . " ")
+          (mood-line-segment-major-mode)
+          ;; ((mood-line-segment-misc-info) . " ")
+          (eh/mood-line-segment-dedicated)
+          )
+         :padding ""
+         ))
+  ;; (setq mood-line-format '(((mood-line-segment-buffer-name))))
+  ;; (setq mood-line-format '((" "
+  ;;                           (mood-line-segment-modal)
+  ;;                           " "
+  ;;                           (or
+  ;;                            (mood-line-segment-buffer-status)
+  ;;                            " ")
+  ;;                           " "
+  ;;                           (mood-line-segment-buffer-name)
+  ;;                           "  "
+  ;;                           (mood-line-segment-anzu)
+  ;;                           "  "
+  ;;                           (mood-line-segment-multiple-cursors)
+  ;;                           "  "
+  ;;                           (mood-line-segment-cursor-position)
+  ;;                           ;; " "
+  ;;                           ;; (mood-line-segment-scroll)
+  ;;                           "")
+  ;;                          ((mood-line-segment-vc)
+  ;;                           "  "
+  ;;                           (mood-line-segment-major-mode)
+  ;;                           "  "
+  ;;                           (mood-line-segment-misc-info)
+  ;;                           "  "
+  ;;                           (mood-line-segment-checker)
+  ;;                           "  "
+  ;;                           (mood-line-segment-process)
+  ;;                           "  "
+  ;;                           (eh/mood-line-segment-dedicated)
+  ;;                           " ")))
   :config
   ;; override their non-customizable cursor position segment
   (defun mood-line-segment-cursor-position ()
@@ -273,7 +297,7 @@
     )
   (defun mood-line-segment-major-mode ()
     "Displays the current major mode in the mode-line."
-    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) "  "))
+    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) ""))
   (mood-line-mode 1))
 
 
