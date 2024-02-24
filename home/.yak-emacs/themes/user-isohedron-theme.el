@@ -39,6 +39,9 @@
    ;; make only top indent guide visible
    '(highlight-indent-guides-character-face ((t :foreground "#f7f3ee")))
    '(highlight-indent-guides-top-character-face ((t :foreground "#f1ece4")))
+   ;; '(highlight-indent-guides-face ((t :background "#f7f3ee")))
+   '(highlight-indent-guides-top-even-face ((t :background "red")))
+   ;; '(highlight-indent-guides-top-face ((t :background "#f1ece4")))
 
    ;; fix font weights in mood-line
    '(mood-line-buffer-name ((t :inherit bold)))

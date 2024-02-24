@@ -109,7 +109,7 @@
    :symbol '((comic-code . ?·)
              (belinsky   . ?·)
              (antikor    . ?·)
-             (vctr       . ?·)
+             (vctr       . ?·) ; vctr has a private-use checkbox, but width is wrong
              ;; (belinsky   . ?∕)
              ;; (belinsky   . ?¬)
              ;; (belinsky   . ?⁄)

@@ -162,8 +162,7 @@
   :init
   (setq-default display-line-numbers-widen t
                 display-line-numbers-width 3)
-  :hook
-  prog-mode)
+  :hook prog-mode)
 
 ;; show fill column in programming modes
 (use-package display-fill-column-indicator
@@ -174,6 +173,7 @@
 
 ;; show indent guides in programming modes
 (use-package highlight-indent-guides
+  :disabled
   :init
   (setq highlight-indent-guides-method 'bitmap) ; character, column, bitmap, or fill
   (setq highlight-indent-guides-responsive 'top) ; nil, top, or stack
@@ -211,24 +211,31 @@
 
 ;; don't junk up the mode-line
 (use-package minions
+  :after (fontaine)
   :init
   ;; (setq minions-mode-line-lighter "#")
-  (setq minions-mode-line-lighter "≡")
+  ;; (setq minions-mode-line-lighter "≡")
   ;; other chars: м ≡ ‡
+  ;; TODO Find a way to hook this up to auto-refresh with fontaine change
+  (setq minions-mode-line-lighter
+        (pcase fontaine-current-preset
+          ('jetbrains "≡")
+          (t          "#")))
+
   (setq minions-mode-line-delimiters '("" . ""))
   :config
   (minions-mode))
 
-;; TODO Put this somewhere better
-;; (setq mode-line-position-line-format '(" %l"))
-;; (setq mode-line-position-line-format '(" +%l"))
-(setq mode-line-percent-position nil)
-(setq mode-line-position-line-format '(" ℓ%l"))
-;; (setq mode-line-position-line-format '(" %l"))
-(setq mode-line-position-column-line-format '(" +%l:%c"))
-
 (use-package mood-line
+  :after (fontaine)
   :init
+  ;; TODO Put general mode line config somewhere better
+  (setq mode-line-percent-position nil)
+  (setq mode-line-position-line-format
+        (pcase fontaine-current-preset
+          ('jetbrains '(" ℓ%l"))
+          (t          '(" +%l"))))
+  (setq mode-line-position-column-line-format '(" +%l:%c"))
   (setq mood-line-format '((" "
                             (mood-line-segment-modal)
                             " "
@@ -350,7 +357,9 @@
      :variable-pitch-family "Input Sans Narrow"
      :default-weight light)
     (monolisa ;; decent mix of personality and utility
-     :default-family "MonoLisa")
+     :default-family "MonoLisa"
+     ;; :default-weight light
+     :default-height ,(- eh/base-font-height 10))
     (plex ;; nice italic, excellent variable pitch pairing
      :default-family "IBM Plex Mono"
      :variable-pitch-family "iA Writer Quattro V")
@@ -385,6 +394,8 @@
      :default-weight light)
     (dank
      :default-family "Dank Mono")
+    (poly
+     :default-family "PolySans Trial")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config
@@ -622,6 +633,10 @@
 
 ;; (treesit-language-available-p 'ruby)
 ;; (setq major-mode-remap-alist '((ruby-mode . ruby-ts-mode)))
+(use-package ruby-mode
+  :straight (:type built-in)
+  :init
+  (setq ruby-method-call-indent nil))
 
 (use-package elixir-mode
   :config
@@ -633,7 +648,6 @@
   :config
   (add-hook 'elixir-ts-mode-hook
             (lambda () (add-hook 'before-save-hook 'elixir-format nil t))))
-
 
 ;;; Extra color themes
 
@@ -697,6 +711,14 @@
   ;; stars (combine with org-superstar)
   (setq org-hide-leading-stars nil
         org-indent-mode-turns-on-hiding-stars nil)
+  ;; emphasis markers
+  (setq org-emphasis-alist
+        '(("*" bold)
+          ("_" italic)
+          ("=" org-verbatim verbatim)
+          ("~" org-code verbatim)
+          ("+"
+           (:strike-through t))))
   ;; fontification
   (setq org-fontify-whole-block-delimiter-line t
         org-fontify-whole-heading-line t
@@ -759,6 +781,12 @@
         org-superstar-prettify-item-bullets nil)
   :hook
   (org-mode . org-superstar-mode))
+
+;; (use-package org-appear
+;;   :after (org)
+;;   :hook (org-mode . org-appear-mode))
+;; ;; TEST
+;; (setq org-hide-emphasis-markers t)
 
 ;;; Misc Stuff to be Organized
 
@@ -895,7 +923,15 @@
     (setq buffer-offer-save t)))
 (add-hook 'first-change-hook #'eh/set-offer-save-in-created-buffers)
 
-
+;; Highlight todo comments in programming modes
+(use-package hl-todo
+  :init
+  (setq hl-todo-keyword-faces
+        '(("TODO" . eh/org-keyword-todo)
+          ("FIXME" . eh/org-keyword-halt)
+          ("NOTE" . eh/org-keyword-read)
+          ("HACK" . eh/org-keyword-idea)))
+  :hook prog-mode)
 
 ;;; Finally
 
