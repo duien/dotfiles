@@ -6,7 +6,8 @@
 
   (black                      "#0e0d15") ;; ansi-background
   (deep                       "#08002e") ;; ansi-black
-  (dark                       "#07053B")
+  (dark                       "#12133E")
+  ;; (dark                       "#07053B")
 
   (violet                     "#302387")
   (blue-violet                "#3342A1")
@@ -24,7 +25,8 @@
   (magenta-light              "#CF65AC")
   (pink-light                 "#f12aae") ;; ansi-brmagenta
   (pink                       "#b7077e") ;; ansi-magenta
-  (pink-dark                  "#64002c") ;; ansi-red
+  ;; (pink-dark                  "#64002c") ;; ansi-red
+  (pink-dark                  "#880B3E")
   (red                        "#d02063") ;; ansi-brred
 
   (green                      "#5d731a") ;; ansi-green
@@ -84,13 +86,20 @@
   ;;; Font Lock Faces
   (font-lock-comment-face (:foreground purple :slant 'italic))
   (font-lock-comment-delimiter-face (:foreground purple-muted :inherit 'font-lock-comment-face))
-  (font-lock-string-face (:foreground chalk-green :slant 'italic))
-  (font-lock-keyword-face (:foreground chalk-magenta))
-  (font-lock-builtin-face (:foreground chalk-violet))
-  (font-lock-constant-face (:foreground chalk-gray))
-  (font-lock-function-name-face (:foreground chalk-pink))
-  (font-lock-variable-name-face (:foreground chalk-blue))
-  (font-lock-type-face (:foreground chalk-orange))
+  ;; (font-lock-string-face (:foreground chalk-green :slant 'italic))
+  ;; (font-lock-keyword-face (:foreground chalk-magenta))
+  ;; (font-lock-builtin-face (:foreground chalk-violet))
+  ;; (font-lock-constant-face (:foreground chalk-gray))
+  ;; (font-lock-function-name-face (:foreground chalk-pink))
+  ;; (font-lock-variable-name-face (:foreground chalk-blue))
+  ;; (font-lock-type-face (:foreground chalk-orange))
+  (font-lock-string-face (:foreground green-light :slant 'italic))
+  (font-lock-keyword-face (:foreground magenta))
+  (font-lock-builtin-face (:foreground yellow))
+  (font-lock-constant-face (:foreground blue-light))
+  (font-lock-function-name-face (:foreground pink-light))
+  (font-lock-variable-name-face (:foreground cyan))
+  (font-lock-type-face (:foreground orange))
 
   ;; ;;; Basic Faces
   (highlight (:background magenta-purple))
@@ -102,9 +111,9 @@
   ;; ;;; Package-specific faces
 
   ;; ;; Diff markers in fringe
-  ;; (diff-hl-change (:background blue :foreground blue))
-  ;; (diff-hl-insert (:background dark-green :foreground dark-green))
-  ;; (diff-hl-delete (:background crimson :foreground crimson))
+  (diff-hl-change (:background blue :foreground blue))
+  (diff-hl-insert (:background green :foreground green))
+  (diff-hl-delete (:background pink :foreground pink))
 
   ;; ;; Vue/MMM
   ;; (mmm-default-submode-face (:background 'unspecified))
@@ -115,48 +124,74 @@
   ;; (nano-modeline-active-status-RW (:background dark-cyan :inherit 'nano-modeline-active))
 
   ;; ;; Org-Mode
-  ;; (org-document-title (:foreground white :height 1.25))
-  ;; (org-level-1 (:foreground white :background darker-gray :extend t :inherit 'bold :height 1.125))
-  ;; ;; (org-level-1 (:foreground purple :inherit 'bold :height 1.125))
-  ;; (org-level-2 (:foreground white :inherit 'bold))
-  ;; (org-level-3 (:inherit 'org-level-2))
-  ;; (org-level-4 (:inherit 'org-level-2))
-  ;; (org-level-5 (:inherit 'org-level-2))
-  ;; (org-level-6 (:inherit 'org-level-2))
-  ;; (org-level-7 (:inherit 'org-level-2))
-  ;; (org-level-8 (:inherit 'org-level-2))
-  ;; (org-block (:background deepest))
-  ;; (org-hide (:foreground viridian))
+  (org-document-title (:foreground cosmic-green :height 1.25))
+  (org-level-1 (:foreground chalk-green-beige :inherit 'bold :height 1.125))
+  (org-level-2 (:foreground chalk-green :inherit 'bold))
+  (org-level-3 (:foreground chalk-pink :inherit 'org-level-2))
+  (org-level-4 (:foreground chalk-blue :inherit 'org-level-2))
+  (org-level-5 (:foreground chalk-magenta :inherit 'org-level-2))
+  (org-level-6 (:foreground chalk-violet :inherit 'org-level-2))
+  (org-level-7 (:foreground chalk-orange :inherit 'org-level-2))
+  (org-level-8 (:foreground chalk-brown :inherit 'org-level-2))
+  (org-block (:background dark))
+  (org-hide (:foreground deep))
   ;; (org-block-begin-line (:foreground dark-gray))
   ;; (org-block-end-line (:inherit 'org-block-begin-line))
-  ;; (org-ellipsis (:inherit 'shadow :background viridian :underline nil :weight 'normal)) ;; TODO weight
-  ;; (org-headline-todo (:weight 'reset :slant 'reset :foreground lighter-gray))
-  ;; (org-headline-done (:inherit '(italic) :weight 'reset :foreground dark-gray))
-  ;; (org-todo (:foreground viridian :background dark-gray :inherit 'bold))
-  ;; (org-done (:foreground dark-gray :background deepest :weight 'reset))
-  ;; (org-superstar-leading (:foreground darker-gray))
-  ;; (org-superstar-header-bullet (:weight 'reset))
-  ;; (org-agenda-done (:inherit 'org-headline-done))
-  ;; (org-scheduled-today (:inherit '(bold org-headline-todo)))
+  (org-ellipsis (:foreground purple :background deep :underline nil :weight 'normal)) ;; TODO weight
+  (org-headline-todo (:weight 'reset :slant 'reset :foreground chalk-beige))
+  (org-headline-done (:inherit '(italic) :weight 'reset :foreground blue-violet))
+  (org-todo (:foreground cosmic-green :background cyan-dark :inherit 'bold))
+  (org-done (:foreground purple-muted :background dark :weight 'reset))
+  (org-superstar-leading (:foreground purple-muted))
+  (org-superstar-header-bullet (:weight 'reset))
+  (org-agenda-done (:inherit 'org-headline-done))
+  (org-scheduled-today (:inherit '(bold org-headline-todo)))
+  (org-code (:foreground blue-light))
+  (org-verbatim (:foreground cyan))
 
-  ;; ;; Terminal
-  ;; (ansi-color-red (:foreground crimson :background crimson))
-  ;; (ansi-color-blue (:foreground dark-blue :background dark-blue))
-  ;; (ansi-color-cyan (:foreground dark-cyan :background dark-cyan))
-  ;; (ansi-color-black (:foreground darker-gray :background darker-gray))
-  ;; (ansi-color-green (:foreground dark-green :background dark-green))
-  ;; (ansi-color-white (:foreground lighter-gray :background lighter-gray))
-  ;; (ansi-color-yellow (:foreground brown :background brown))
-  ;; (ansi-color-magenta (:foreground purple :background purple))
+  ;; TODO Move these out to user customizations
+  (eh/org-keyword-todo (:foreground green-light :background green :inherit 'org-todo))
+  (eh/org-keyword-idea (:foreground magenta  :background magenta-purple :inherit 'org-todo))
+  (eh/org-keyword-question (:foreground blue-light :background blue :inherit 'org-todo))
+  (eh/org-keyword-read (:foreground purple :background purple-dark :inherit 'org-todo))
+  (eh/org-keyword-next (:foreground orange :background yellow :inherit 'org-todo))
+  (eh/org-keyword-halt (:foreground pink-dark :background red :inherit 'org-todo))
+  (eh/org-keyword-bury (:foreground purple :inherit 'org-done))
+  (eh/org-keyword-done (:foreground green :inherit 'org-done))
+  (eh/org-keyword-answer (:foreground blue-light :inherit 'org-done))
+  (eh/org-keyword-kill (:foreground pink-dark :inherit 'org-done))
+  (eh/org-keyword-yes (:foreground green-light :inherit 'org-done))
+  (eh/org-keyword-no (:foreground red :inherit 'org-done))
+  (eh/org-keyword-meh (:foreground blue :inherit 'org-done))
+  (eh/org-keyword-rode (:foreground purple :inherit 'org-done))
 
-  ;; (ansi-color-bright-red (:foreground scarlet :background scarlet))
-  ;; (ansi-color-bright-blue (:foreground blue :background blue))
-  ;; (ansi-color-bright-cyan (:foreground cyan :background cyan))
-  ;; (ansi-color-bright-black (:foreground dark-gray :background dark-gray))
-  ;; (ansi-color-bright-green (:foreground green :background green))
-  ;; (ansi-color-bright-white (:foreground white :background white))
-  ;; (ansi-color-bright-yellow (:foreground yellow :background yellow))
-  ;; (ansi-color-bright-magenta (:foreground magenta :background magenta))
+  ;; Terminal
+  (ansi-color-red (:foreground pink-dark :background pink-dark))
+  (ansi-color-blue (:foreground blue :background blue))
+  (ansi-color-cyan (:foreground cyan-dark :background cyan-dark))
+  (ansi-color-black (:foreground deep :background deep))
+  (ansi-color-green (:foreground green :background green))
+  (ansi-color-white (:foreground chalk-beige-dark :background chalk-beige-dark))
+  (ansi-color-yellow (:foreground orange :background orange))
+  (ansi-color-magenta (:foreground pink :background pink))
+
+  (ansi-color-bright-red (:foreground red :background red))
+  (ansi-color-bright-blue (:foreground blue-light :background blue-light))
+  (ansi-color-bright-cyan (:foreground cyan :background cyan))
+  (ansi-color-bright-black (:foreground magenta-dark :background magenta-dark))
+  (ansi-color-bright-green (:foreground green-light :background green-light))
+  (ansi-color-bright-white (:foreground chalk-beige :background chalk-beige))
+  (ansi-color-bright-yellow (:foreground yellow :background yellow))
+  (ansi-color-bright-magenta (:foreground pink-light :background pink-light))
+
+  (vterm-color-black   (:foreground deep             :background magenta-dark))
+  (vterm-color-red     (:foreground pink-dark        :background red))
+  (vterm-color-green   (:foreground green            :background green-light))
+  (vterm-color-yellow  (:foreground orange           :background yellow))
+  (vterm-color-blue    (:foreground blue             :background blue-light))
+  (vterm-color-magenta (:foreground pink             :background pink-light))
+  (vterm-color-cyan    (:foreground cyan-dark        :background cyan))
+  (vterm-color-white   (:foreground chalk-beige-dark :background chalk-beige))
 
   ;; ;; Magit
   ;; ;; (magit-blame-date nil)
