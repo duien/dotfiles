@@ -34,6 +34,8 @@ function xm
     return 1
   end
 
+  echo "Found track: $track"
+
   set -l exercise
   if test -n "$_flag_exercise"
     set exercise $_flag_exercise
@@ -45,9 +47,12 @@ function xm
     echo "Can't figure out what exercise to open"
     return 1
   end
+  echo "Starting '$exercise' in '$track'..."
+
   exercism download -t$track -e$exercise 2> /dev/null > /dev/null
 
   cd "$workspace/$track/$exercise"
   set -l solution (cat .exercism/config.json | jq -r '.files.solution[]')
-  $EDITOR (pwd) $solution
+  # $EDITOR (pwd) $solution
+  em $solution
 end
