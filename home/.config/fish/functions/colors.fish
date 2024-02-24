@@ -4,9 +4,18 @@ function colors -d "What do my terminal colors look like?"
   for color in $colors
     set_color --background $color
     set_color --bold
-    echo -n " $color"
+    # echo -n " "
+    echo -n $(string pad -c" " -w7 $color)
+    set_color normal
+    set_color br$color --background $color
+    echo -n " on "
     set_color --bold br$color
-    echo -n " on self "
+    echo -n "self "
+    set_color normal
+    set_color br$color --background $color -r
+    echo -n " and "
+    set_color --bold
+    echo -n "reversed "
     set_color normal
     set_color $color
     echo -n " regular"
