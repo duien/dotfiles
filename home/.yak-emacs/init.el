@@ -239,6 +239,7 @@
           ('jetbrains '(" ℓ%l"))
           (t          '(" +%l"))))
   (setq mode-line-position-column-line-format '(" +%l:%c"))
+  :config
   (setq mood-line-format
         (mood-line-defformat
          :left
@@ -288,7 +289,7 @@
   ;;                           "  "
   ;;                           (eh/mood-line-segment-dedicated)
   ;;                           " ")))
-  :config
+  ;; :config
   ;; override their non-customizable cursor position segment
   (defun mood-line-segment-cursor-position ()
     ;; (propertize (car mode-line-position-line-format)
