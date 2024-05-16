@@ -6,3 +6,5 @@
 --ignore-dir=coverage
 --ignore-dir=node_modules
 --ignore-dir=vendor
+--color
+--group

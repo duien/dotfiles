@@ -31,6 +31,10 @@ set -x EDITOR ew
 set -x VISUAL ew
 set -x GEMEDITOR ew
 
+# Interpret ANSI color codes in piped input to `more' or `less'
+set -x LESS -R
+set -x MORE -R
+
 # Source color theme setup
 source ~/.config/fish/color-theme.fish
 
