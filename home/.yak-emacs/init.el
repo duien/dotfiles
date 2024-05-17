@@ -252,49 +252,16 @@
          :right
          (
           ((mood-line-segment-vc) . " ")
-          ;; ((mood-line-segment-major-mode) . " ")
           (mood-line-segment-major-mode)
-          ;; ((mood-line-segment-misc-info) . " ")
           (eh/mood-line-segment-dedicated)
           )
          :padding ""
          ))
-  ;; (setq mood-line-format '(((mood-line-segment-buffer-name))))
-  ;; (setq mood-line-format '((" "
-  ;;                           (mood-line-segment-modal)
-  ;;                           " "
-  ;;                           (or
-  ;;                            (mood-line-segment-buffer-status)
-  ;;                            " ")
-  ;;                           " "
-  ;;                           (mood-line-segment-buffer-name)
-  ;;                           "  "
-  ;;                           (mood-line-segment-anzu)
-  ;;                           "  "
-  ;;                           (mood-line-segment-multiple-cursors)
-  ;;                           "  "
-  ;;                           (mood-line-segment-cursor-position)
-  ;;                           ;; " "
-  ;;                           ;; (mood-line-segment-scroll)
-  ;;                           "")
-  ;;                          ((mood-line-segment-vc)
-  ;;                           "  "
-  ;;                           (mood-line-segment-major-mode)
-  ;;                           "  "
-  ;;                           (mood-line-segment-misc-info)
-  ;;                           "  "
-  ;;                           (mood-line-segment-checker)
-  ;;                           "  "
-  ;;                           (mood-line-segment-process)
-  ;;                           "  "
-  ;;                           (eh/mood-line-segment-dedicated)
-  ;;                           " ")))
   ;; :config
   ;; override their non-customizable cursor position segment
   (defun mood-line-segment-cursor-position ()
-    ;; (propertize (car mode-line-position-line-format)
-                ;; 'face 'mood-line-unimportant)
-    (format-mode-line (car mode-line-position-line-format) 'mood-line-unimportant)
+    (format-mode-line (car mode-line-position-column-line-format) 'mood-line-unimportant)
+    ;; (format-mode-line (car mode-line-position-line-format) 'mood-line-unimportant)
     )
   (defun mood-line-segment-major-mode ()
     "Displays the current major mode in the mode-line."
@@ -370,6 +337,8 @@
      :default-height ,(- eh/base-font-height 10))
 	  (cascadia ;; nice italic, readable but still fun
 	   :default-family "Cascadia Code PL"
+     :default-weight light
+     :line-spacing 1
      ;; :default-height ,(+ eh/base-font-height 10)
 	   :default-weight normal)
     (comic-code ;; totally silly, line height is too big, but it's great
@@ -410,7 +379,7 @@
      :default-family "PragmataPro Liga")
     (vctr
      :default-family "VCTR Mono"
-     ;; :default-height ,(+ eh/base-font-height 20)
+     :default-weight light
      )
     (berkeley
      :default-family "Berkeley Mono")
@@ -434,6 +403,10 @@
 ;; is enabled (this allows for more robust customizations to themes than what
 ;; can be done with a second call to `custom-theme-set-faces')
 
+;; quickly swap to added window and modeline padding
+(use-package spacious-padding)
+;; (set-face-attribute 'mode-line-active nil :inherit 'mode-line)
+
 (defvar linked-themes '() "Alist of theme to another theme to load automatically after it.")
 (defun eh/load-linked-user-theme (theme)
   "Check `linked-themes' for THEME and load the associated theme if present."
@@ -452,6 +425,7 @@
 
 ;; a theme for all seasons
 (use-package modus-themes
+  :straight (modus-themes :type git :host github :repo "protesilaos/modus-themes")
   :init
   (setq modus-themes-italic-constructs t
 	      modus-themes-bold-constructs t
@@ -662,12 +636,14 @@
   :straight (:type built-in)
   :init
   (setq ruby-method-call-indent nil))
+(use-package enh-ruby-mode
+  :init
+  (setq major-mode-remap-alist '((ruby-mode . enh-ruby-mode)))) ;; not enabled by default yet, but has some advantages
 
 (use-package elixir-mode
   :config
   (add-hook 'elixir-mode-hook
-            (lambda () (add-hook 'before-save-hook 'elixir-format nil t)))
-  ) ;;
+            (lambda () (add-hook 'before-save-hook 'elixir-format nil t))))
 (use-package elixir-ts-mode
   :straight '(:type git :host github :repo "duien/elixir-ts-mode")
   :config
@@ -691,7 +667,8 @@
   :init
   (add-to-list 'linked-themes '(caves-of-qud . user-qud)))
 
-(use-package ef-themes)
+(use-package ef-themes
+  :straight (ef-themes :type git :host github :repo "protesilaos/ef-themes"))
 (use-package spacemacs-theme
   :init
   (setq spacemacs-theme-comment-bg nil
