@@ -10,6 +10,3 @@ Homesick never really ends up being the first thing installed, since it's necess
 
     set -gx RBENV_ROOT /usr/local/var/rbenv
 
-## Footnotes
- 
- `mg` function from [Open Emacs magit from command line](https://trycatchchris.co.uk/post/view/Open-Emacs-magit-from-command-line)
