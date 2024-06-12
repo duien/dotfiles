@@ -354,6 +354,9 @@
      :default-family "MonoLisa"
      ;; :default-weight light
      :default-height ,(- eh/base-font-height 10))
+    (monolisa-script
+     :default-family "MonoLisa Script"
+     :default-height ,(- eh/base-font-height 10))
     (plex ;; nice italic, excellent variable pitch pairing
      :default-family "IBM Plex Mono"
      :variable-pitch-family "iA Writer Quattro V")
@@ -390,6 +393,14 @@
      :default-family "Dank Mono")
     (poly
      :default-family "PolySans Trial")
+    (dolph
+     :default-family "Dolph YY Test"
+     :variable-pitch-family "Dolph KOO Test"
+     :default-height ,(- eh/base-font-height 10))
+    (name
+     :default-family "AT Name Mono Trial")
+    (dico
+     :default-family "Dico Mono TEST")
 	  (t
 	   :default-height ,eh/base-font-height)))
   :config

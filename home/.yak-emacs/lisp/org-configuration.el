@@ -116,6 +116,7 @@
              (operator   . ?)
              (dank       . ?·)
              (pragmata   . ?√) ;; weirdly, this is square root which is usually bad
+             (dolph      . ?·)
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
@@ -202,6 +203,7 @@
              (plex       . ?∕)
              (berkeley   . ?•)
              (dank       . ?○)
+             (dolph      . ?○)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -254,6 +256,7 @@
              (antikor   . ?∕)
              ;; (belinsky  . ?∞)
              (plex      . ?∕)
+             (dolph     . ?⁄)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
