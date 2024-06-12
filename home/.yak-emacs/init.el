@@ -647,9 +647,10 @@
   :straight (:type built-in)
   :init
   (setq ruby-method-call-indent nil))
-(use-package enh-ruby-mode
-  :init
-  (setq major-mode-remap-alist '((ruby-mode . enh-ruby-mode)))) ;; not enabled by default yet, but has some advantages
+
+;; (use-package enh-ruby-mode
+;;   :init
+;;   (setq major-mode-remap-alist '((ruby-mode . enh-ruby-mode)))) ;; not enabled by default yet, but has some advantages
 
 (use-package elixir-mode
   :config
