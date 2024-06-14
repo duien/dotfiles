@@ -396,6 +396,7 @@
     (dolph
      :default-family "Dolph YY Test"
      :variable-pitch-family "Dolph KOO Test"
+     :default-weight light
      :default-height ,(- eh/base-font-height 10))
     (name
      :default-family "AT Name Mono Trial")
@@ -478,6 +479,8 @@
 ;; allow undoing and redoing window layout changes
 (use-package winner
   :straight (:type built-in)
+  :bind ("C-x w <left>" . 'winner-undo)
+  :bind ("C-x w <right>" . 'winner-redo)
   :config (winner-mode))
 
 ;; projects defined mostly by git repos
