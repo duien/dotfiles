@@ -411,13 +411,12 @@
   (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps))
 ;; (diff-hl-maybe-redefine-bitmaps)
 
+;; quickly swap to added window and modeline padding
+(use-package spacious-padding)
+
 ;; Set up a variable and hook to automatically load a theme after another theme
 ;; is enabled (this allows for more robust customizations to themes than what
 ;; can be done with a second call to `custom-theme-set-faces')
-
-;; quickly swap to added window and modeline padding
-(use-package spacious-padding)
-;; (set-face-attribute 'mode-line-active nil :inherit 'mode-line)
 
 (defvar linked-themes '() "Alist of theme to another theme to load automatically after it.")
 (defun eh/load-linked-user-theme (theme)
@@ -853,9 +852,7 @@
 ;; don't evaluate a whole buffer without confirmation
 (defun confirm-eval (&optional ARG PRED)
   (interactive)
-  (if (use-region-p)
-      t
-    (yes-or-no-p "Evaluate buffer?")))
+  (if (use-region-p) t (yes-or-no-p "Evaluate buffer?")))
 (advice-add 'elisp-eval-region-or-buffer :before-while 'confirm-eval)
 
 ;; restart org-mode preserving visibility
