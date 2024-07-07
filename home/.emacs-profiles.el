@@ -13,4 +13,6 @@
  ("yak" . ((user-emacs-directory . "~/.yak-emacs")
            (server-name . "yak")
            (straight-p . t)))
+ ("el30" . ((user-emacs-directory . "~/.elpaca30")
+            (server-name . "el30")))
  )

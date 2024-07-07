@@ -49,3 +49,7 @@ home/.minimal-config/straight/
 /home/.scratch-config/tramp
 /home/.scratch-config/tree-sitter/
 /home/.yak-emacs/tree-sitter/
+
+
+/home/.elpaca30/eln-cache/
+/home/.elpaca30/elpaca/
