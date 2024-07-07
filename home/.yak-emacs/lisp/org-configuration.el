@@ -290,7 +290,7 @@
                        ('plex      " ↲")
                        ('monolisa  " ↲")
                        ('md-io     " ⤶")
-                       (t          " ↓")))
+                       (_          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
   ;; • ▶ » ¶ § → ■ ● available in SF
@@ -306,7 +306,7 @@
           ('md-io    '("●" "•"))
           ('plex     '("§" "•"))
           ('vctr     '("§" "•"))
-          (t  '("◆" "•")))))
+          (_  '("◆" "•")))))
 ;; (eh/define-org-keywords)
 
 (defun eh/org-skip-subtree-if-bury ()

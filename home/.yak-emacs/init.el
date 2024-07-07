@@ -220,7 +220,7 @@
   (setq minions-mode-line-lighter
         (pcase fontaine-current-preset
           ('jetbrains "≡")
-          (t          "#")))
+          (_          "#")))
 
   (setq minions-mode-line-delimiters '("" . ""))
   :config
@@ -237,7 +237,7 @@
   (setq mode-line-position-line-format
         (pcase fontaine-current-preset
           ('jetbrains '(" ℓ%l"))
-          (t          '(" +%l"))))
+          (_          '(" +%l"))))
   (setq mode-line-position-column-line-format '(" +%l:%c"))
   :config
   (setq mood-line-format
@@ -363,7 +363,7 @@
     (operator ;; poor character coverage, but awesome
      ;; NOTE: To make this work, enable _only_ the Light and Medium weights
      :default-family "Operator Mono SSm"
-     :default-weight regular)
+     :default-weight light)
     (belinsky ;; weights don't have the same line-height
      :default-family "Belinsky Text"
      :default-weight regular)
