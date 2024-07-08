@@ -1,38 +1,436 @@
-(defvar elpaca-installer-version 0.7)
-(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-                              :ref nil :depth 1
-                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-                              :build (:not elpaca--activate-package)))
-(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-       (build (expand-file-name "elpaca/" elpaca-builds-directory))
-       (order (cdr elpaca-order))
-       (default-directory repo))
-  (add-to-list 'load-path (if (file-exists-p build) build repo))
-  (unless (file-exists-p repo)
-    (make-directory repo t)
-    (when (< emacs-major-version 28) (require 'subr-x))
-    (condition-case-unless-debug err
-        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-                 ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-                                                 ,@(when-let ((depth (plist-get order :depth)))
-                                                     (list (format "--depth=%d" depth) "--no-single-branch"))
-                                                 ,(plist-get order :repo) ,repo))))
-                 ((zerop (call-process "git" nil buffer t "checkout"
-                                       (or (plist-get order :ref) "--"))))
-                 (emacs (concat invocation-directory invocation-name))
-                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-                 ((require 'elpaca))
-                 ((elpaca-generate-autoloads "elpaca" repo)))
-            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-          (error "%s" (with-current-buffer buffer (buffer-string))))
-      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
-  (unless (require 'elpaca-autoloads nil t)
-    (require 'elpaca)
-    (elpaca-generate-autoloads "elpaca" repo)
-    (load "./elpaca-autoloads")))
-(add-hook 'after-init-hook #'elpaca-process-queues)
-(elpaca `(,@elpaca-order))
+;; -*- lexical-binding: t -*-
+
+;; Set up load path
+(add-to-list 'load-path (concat user-emacs-directory
+                                (convert-standard-filename "lisp/")))
+
+;; Must be set before use-package is loaded
+(setq use-package-enable-imenu-support t)
+
+;; Initialize elpaca
+(load "elpaca-init")
+
+;; Install use-package support
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode))
+
+;; Basic emacs variables
+(use-package emacs
+  :ensure nil
+  :config
+  (setq custom-file (make-temp-file ""))
+  (setq user-full-name "Emily Hyland"
+	      user-mail-address "hello@duien.com")
+  (setq org-directory "~/Org/")
+  (prefer-coding-system 'utf-8)
+  (setq-default fill-column 80)
+  (setq sentence-end-double-space nil
+	      vc-follow-symlinks t
+	      dired-use-ls-dired nil
+	      mouse-wheel-flip-direction t
+	      mouse-wheel-tilt-scroll t
+	      ;; custom-safe-themes t
+	      use-short-answers t
+	      bookmark-set-fringe-mark nil)
+  (setq frame-inhibit-implied-resize t)
+  (setq inhibit-startup-screen t)
+  (setq face-near-same-color-threshold 0)
+  (setq custom-theme-directory (concat user-emacs-directory
+                                       (convert-standard-filename "themes/"))))
+
+;; Have packages put files in reasonable places
+;; I don't think waiting is necessary, but seems safer?
+(use-package no-littering
+  :ensure (:wait t))
+
+;; FONT FUCKERY
+;; for some reason, 30 can't load this font if I set the family, only if I set the font :shrug:
+;; (this seems to be true for any font with some of its variants disabled in Font Book)
+;; probably this will all be replaced by fontaine again at some point but maybe not?
+(use-package emacs
+  :ensure nil
+  :init
+  (setq modus-themes-italic-constructs t
+	      modus-themes-bold-constructs t)
+  (setq modus-themes-common-palette-overrides
+        '((border-mode-line-inactive unspecified)
+          (border-mode-line-active unspecified)
+          (comment fg-dim)
+          (string green)))
+  (setq modus-vivendi-tinted-palette-overrides
+	      '((string cyan)))
+  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
+  :config
+  (set-face-attribute 'default nil :font "VCTR Mono" :weight 'light :height 160)
+  (load-theme 'modus-operandi-tinted))
+
+;; get rid of weird scaling shortcuts
+(use-package emacs
+  :ensure nil
+  :config
+  (global-unset-key (kbd "<pinch>"))
+  (global-unset-key (kbd "C-<wheel-up>"))
+  (global-unset-key (kbd "C-<wheel-down>")))
+
+;; set up soft-wrapping
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun eh/disable-horiz-scroll-with-visual-line ()
+    (setq-local mouse-wheel-tilt-scroll (not visual-line-mode)))
+  :config
+  (setq-default word-wrap t)
+  (setq-default truncate-lines t)
+  (setq comment-auto-fill-only-comments t)
+  :hook
+  (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
+
+;; Display menu-bar-mode only in GUI frames
+;; From https://emacs.stackexchange.com/a/29443/6853
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun eh/contextual-menubar (&optional frame)
+    "Display the menubar in FRAME (default: selected frame) if on a
+    graphical display, but hide it if in terminal."
+    (interactive)
+    (set-frame-parameter frame 'menu-bar-lines
+                         (if (display-graphic-p frame)
+                             1 0)))
+  :hook
+  (after-make-frame . 'eh/contextual-menubar))
+
+(use-package imenu
+  :ensure nil
+  :config (setq imenu-flatten 'annotation))
+
+(use-package repeat
+  :ensure nil
+  :config (repeat-mode))
+
+(use-package mode-line-bell
+  :ensure t
+  :config
+  (mode-line-bell-mode))
+
+(use-package crux
+  :ensure t
+  :bind
+  ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
+  ([remap kill-line] . 'crux-smart-kill-line)
+  ([remap open-line] . 'crux-smart-open-line)
+  ("C-x w s" . 'crux-swap-windows))
+
+(use-package persistent-scratch
+  :ensure t
+  :init
+  ;; only allow killing scratch when killing all of emacs
+  (with-current-buffer "*scratch*"
+    (emacs-lock-mode 'kill))
+  :config
+  (persistent-scratch-setup-default)
+  (with-current-buffer "*scratch*"
+    (persistent-scratch-mode 1)))
+
+(use-package which-key
+  :ensure nil
+  :config
+  (which-key-mode))
+
+;; tame indentation
+(use-package editorconfig
+  :ensure nil
+  :hook
+  (prog-mode . editorconfig-mode))
+
+(use-package emacs
+  :ensure nil
+  :init
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
+  (setq standard-indent 2)
+  (setq js-indent-level 2)
+  (setq css-indent-offset 2)
+  (setq tab-always-indent t
+	      require-final-newline t))
+
+;; show line numbers in programming modes
+(use-package display-line-numbers
+  :ensure nil
+  :init
+  (setq-default display-line-numbers-widen t
+                display-line-numbers-width 3)
+  :hook prog-mode)
+
+;; show fill column in programming modes
+(use-package display-fill-column-indicator
+  :ensure nil
+  :hook
+  (prog-mode . display-fill-column-indicator-mode)
+  )
+
+
+;; show tabs
+(use-package tab-bar
+  :ensure nil
+  :preface
+  ;; add spaces around the tab name (horizontally with spaces, and vertically
+  ;; with text properties)
+  (defun eh/tab-bar-tab-name-format-comfortable (tab i)
+    (propertize (concat
+                 (propertize " " 'display '(raise 0.2))
+                 (tab-bar-tab-name-format-default tab i)
+                 (propertize " " 'display '(raise -0.2))
+                 )
+                'face (funcall tab-bar-tab-face-function tab)))
+  :init
+  (setq tab-bar-tab-name-format-function #'eh/tab-bar-tab-name-format-comfortable)
+  (setq tab-bar-close-button-show nil
+        tab-bar-auto-width nil)
+  (setq tab-bar-new-tab-choice "*scratch*")
+  (setq tab-bar-format
+        '(tab-bar-format-history
+          tab-bar-format-tabs
+          tab-bar-separator))
+  :bind
+  ("C-x t n" . tab-bar-new-tab))
+
+(use-package minions
+  :ensure t
+  :init
+  (setq mode-line-position-column-line-format '(" +%l:%c"))
+  (setq minions-mode-line-lighter "#"
+        minions-mode-line-delimiters '("" . ""))
+  :config
+  (minions-mode))
+
+(use-package mood-line
+  :ensure t
+  :preface
+  (defun eh/mood-line-segment-major-mode ()
+    "Displays the current major mode in the mode-line."
+    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) ""))
+  (defun eh/mood-line-segment-cursor-position ()
+    "Displays the line and column position of the cursor"
+    (format-mode-line (car mode-line-position-column-line-format) 'mood-line-unimportant))
+  :config
+  (setq mood-line-format
+        (mood-line-defformat
+         :left ( " "
+                 ((mood-line-segment-modal) . " ")
+                 ((mood-line-segment-buffer-status) . " ")
+                 ((mood-line-segment-buffer-name) . " ")
+                 ((eh/mood-line-segment-cursor-position) . " "))
+         :right (((mood-line-segment-vc) . " ")
+                 (eh/mood-line-segment-major-mode)
+                 (mood-line-segment-misc-info))))
+  (mood-line-mode))
+
+;; Complete bits of words in any order
+(use-package orderless
+  :ensure t
+  :config
+  ;; previously I've been using just orderless-regexp
+  (setq orderless-matching-styles '(orderless-regexp orderless-prefixes orderless-initialism))
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+
+;; Show a vertical list of completion candidates immediately
+(use-package vertico
+  :ensure t
+  :config (vertico-mode))
+
+;; Skipping consult and marginalia for now
+
+;; Skipping linked thetmes and ns-appearance-change hooks
+
+;; Keep track of recently opened files
+(use-package recentf
+  :ensure nil
+  :init
+  (setq recentf-max-saved-items 100)
+  (setq recentf-exclude
+	      `(,(expand-file-name "elpaca/builds/" user-emacs-directory)
+          ,(expand-file-name "eln-cache/" user-emacs-directory)
+          ,(expand-file-name "etc/" user-emacs-directory)
+          ,(expand-file-name "var/" user-emacs-directory)
+          ,(expand-file-name "init.org" org-directory)))
+  :config (recentf-mode))
+
+;; Allow undoing and redoing window layout changes
+(use-package winner
+  :ensure nil
+  :bind ("C-x w <left>" . 'winner-undo)
+  :bind ("C-x w <right>" . 'winner-redo)
+  :config (winner-mode))
+
+;; don't save white-space, but allow it to persist in the buffer after saving
+(use-package ws-butler
+  :ensure t
+  :config
+  (ws-butler-global-mode))
+
+(use-package ag
+  :ensure t)
+
+;; skipping ligatures for now
+
+;; Use a readable, centered width and soft wrap for text-heavy modes
+(use-package olivetti
+  :ensure t
+  :init
+  (setq olivetti-style nil)
+  :hook
+  org-mode
+  gfm-mode)
+
+;; Best git interface
+(use-package magit
+  :ensure t)
+
+;; Show git status in the fringe
+(use-package diff-hl
+  :ensure t
+  :config
+  (global-diff-hl-mode)
+  :hook
+  (magit-pre-refresh . diff-hl-magit-pre-refresh)
+  (magit-post-refresh . diff-hl-magit-post-refresh))
+
+;; Various small language modes that don't need config
+(use-package fish-mode :ensure t :init (setq fish-indent-offset 2))
+(use-package haml-mode :ensure t)
+(use-package sass-mode :ensure t)
+(use-package json-mode :ensure t)
+(use-package yaml-mode :ensure t)
+(use-package rspec-mode :ensure t) ;; this likely needs some config
+(use-package lua-mode :ensure t :init (setq lua-indent-level 2))
+(use-package rust-mode :ensure t)
+(use-package swift-mode :ensure t :init (setq swift-mode:basic-offset 2))
+
+
+(use-package markdown-mode
+  :ensure t
+    :mode
+    (("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . gfm-mode)))
+
+(use-package ruby-mode
+  :ensure nil
+  :init
+  (setq ruby-method-call-indent nil)
+  :config
+  (if (treesit-language-available-p 'ruby)
+      (add-to-list 'major-mode-remap-alist '(ruby-mode . ruby-ts-mode))))
+;; enh-ruby-mode does some things better, but hoping ts will become configurable
+;; enough to not need it
+
+;; skipping elixir because I know ts situation changed
+
+(use-package autothemer :ensure t)
+(use-package isohedron-theme
+  :ensure (:host github :repo "duien/isohedron-theme"))
+
+;; skip org for now because that need so much config! and that config needs
+;; refactored badly
+
+(use-package outline
+  :ensure nil
+  :init
+  (setq outline-blank-line t
+        outline-minor-mode-use-buttons 'in-margins))
+
+;; Some additional window management
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun eh/toggle-window-split ()
+    (interactive)
+    (if (= (count-windows) 2)
+        (let* ((this-win-buffer (window-buffer))
+               (next-win-buffer (window-buffer (next-window)))
+               (this-win-edges (window-edges (selected-window)))
+               (next-win-edges (window-edges (next-window)))
+               (this-win-2nd (not (and (<= (car this-win-edges)
+                                           (car next-win-edges))
+                                       (<= (cadr this-win-edges)
+                                           (cadr next-win-edges)))))
+               (splitter
+                (if (= (car this-win-edges)
+                       (car (window-edges (next-window))))
+                    'split-window-horizontally
+                  'split-window-vertically)))
+          (delete-other-windows)
+          (let ((first-win (selected-window)))
+            (funcall splitter)
+            (if this-win-2nd (other-window 1))
+            (set-window-buffer (selected-window) this-win-buffer)
+            (set-window-buffer (next-window) next-win-buffer)
+            (select-window first-win)
+            (if this-win-2nd (other-window 1))))))
+  :bind
+  ("C-x w r" . 'eh/toggle-window-split)
+  ("C-x w f" . 'toggle-frame-fullscreen))
+
+;; TODO is there a ts-aware version of this?
+(use-package expand-region
+  :ensure t
+  :bind
+  ("C-=" . 'er/expand-region))
+
+;; allow highlighting hex codes without getting color names
+(use-package rainbow-mode
+  :ensure t
+  :init
+  (setq rainbow-ansi-colors nil
+        rainbow-x-colors nil))
+
+;; auto-close parens and such
+(use-package elec-pair
+  :ensure nil
+  :config (electric-pair-mode))
+
+(use-package vterm
+  :ensure t)
+
+;; some other skipped things:
+;; elpher, combobulate, eglot, company
+
+;; don't silently delete buffers I've created and entered text in
+;; (affects only quitting, not manually killing the buffer)
+(use-package emacs
+  :ensure nil
+  :preface
+  (defun eh/set-offer-save-in-created-buffers ()
+    (unless (or buffer-file-name
+                (string-match-p "^magit" (buffer-name))
+                (string-match-p "^ " (buffer-name))
+                (string-match-p "^*" (buffer-name)))
+      (setq buffer-offer-save t)))
+  :hook
+  (first-change . eh/set-offer-save-in-created-buffers))
+
+;; ;; highlight todo comments in prog modes
+;; ;; TODO Default formatting until org is set up
+(use-package hl-todo
+  :ensure t
+  :init
+  ;; (setq hl-todo-keyword-faces
+  ;;       '(("TODO" . eh/org-keyword-todo)
+  ;;         ("FIXME" . eh/org-keyword-halt)
+  ;;         ("NOTE" . eh/org-keyword-read)
+  ;;         ("HACK" . eh/org-keyword-idea)))
+  :hook prog-mode)
+
+;;; FINALLY
+
+;; ensure a server is started (for opening from dock)
+(use-package server
+  :ensure nil
+  :config
+  (unless (server-running-p) (server-start)))
+
+
+;;; IDEAS
+;; completion annotation buffer file path (project path?)
+;; outline

@@ -8,5 +8,5 @@
 (push '(ns-transparent-titlebar . t) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
-(push '(width . 200) default-frame-alist)
+(push '(width . 128) default-frame-alist)
 (push '(internal-border-width . 0) default-frame-alist)
