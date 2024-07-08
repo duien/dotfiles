@@ -1,49 +1,120 @@
 ;; -*- lexical-binding: t -*-
 
-;; Set up load path
+;;; Initialize package management
+
 (add-to-list 'load-path (concat user-emacs-directory
                                 (convert-standard-filename "lisp/")))
 
-;; Must be set before use-package is loaded
-(setq use-package-enable-imenu-support t)
+(setq use-package-enable-imenu-support t) ;; Must be set before use-package is loaded
 
-;; Initialize elpaca
 (load "elpaca-init")
 
-;; Install use-package support
 (elpaca elpaca-use-package
+  ;; Install use-package support for all subsequent package configurations
   (elpaca-use-package-mode))
 
-;; Basic emacs variables
+;;; Configure a sane environment
+
 (use-package emacs
+  ;; Set basic variables that should happen early in the process and/or aren't
+  ;; specifically associated with some other configuration group
   :ensure nil
   :config
-  (setq custom-file (make-temp-file ""))
-  (setq user-full-name "Emily Hyland"
-	      user-mail-address "hello@duien.com")
-  (setq org-directory "~/Org/")
   (prefer-coding-system 'utf-8)
-  (setq-default fill-column 80)
-  (setq sentence-end-double-space nil
-	      vc-follow-symlinks t
-	      dired-use-ls-dired nil
-	      mouse-wheel-flip-direction t
-	      mouse-wheel-tilt-scroll t
-	      ;; custom-safe-themes t
-	      use-short-answers t
-	      bookmark-set-fringe-mark nil)
-  (setq frame-inhibit-implied-resize t)
-  (setq inhibit-startup-screen t)
-  (setq face-near-same-color-threshold 0)
-  (setq custom-theme-directory (concat user-emacs-directory
-                                       (convert-standard-filename "themes/"))))
+  (setq org-directory "~/Org/") ;; set up very early for other dependencies
+  :custom
+  (custom-file (make-temp-file "emacs-custom-") "Prevent configuration ghosts originating from customize")
+  (user-full-name "Emily Hyland")
+  (user-mail-address "hello@duien.com")
+  (fill-column 80 "This may not work here, but it seems like it does?")
+  (sentence-end-double-space nil)
+  (vc-follow-symlinks t)
+  (dired-us-ls-dired nil)
+  (use-short-answers t)
+  (bookmark-set-fringe-mark nil)
+  (frame-inhibit-implied-resize t)
+  (inhibit-startup-screen t)
+  (face-near-same-color-threshold 0 "Prevent weird issuse from `distant-foreground' color specifications")
+  (custom-theme-directory (concat user-emacs-directory (convert-standard-filename "themes/"))))
 
-;; Have packages put files in reasonable places
-;; I don't think waiting is necessary, but seems safer?
+(use-package mode-line-bell
+  ;; Please do not beep every time I hit escape
+  :ensure t
+  :config
+  (mode-line-bell-mode))
+
 (use-package no-littering
+  ;; Have packages put files in reasonable places
+  ;; I don't think waiting is necessary, but seems safer?
   :ensure (:wait t))
 
-;; FONT FUCKERY
+;;; UI BASICS
+
+(use-package emacs ; contextual menu bar
+  ;; Display menu-bar-mode only in GUI frames
+  ;; From https://emacs.stackexchange.com/a/29443/6853
+  :ensure nil
+  :preface
+  (defun eh/contextual-menubar (&optional frame)
+    "Display the menubar in FRAME (default: selected frame) if on a
+    graphical display, but hide it if in terminal."
+    (interactive)
+    (set-frame-parameter frame 'menu-bar-lines (if (display-graphic-p frame) 1 0)))
+  :hook
+  (after-make-frame . 'eh/contextual-menubar))
+
+;;;; Wrap/scale/scroll
+
+(use-package emacs
+  ;; Get rid of weird scaling shortcuts
+  :ensure nil
+  :config
+  (global-unset-key (kbd "<pinch>"))
+  (global-unset-key (kbd "C-<wheel-up>"))
+  (global-unset-key (kbd "C-<wheel-down>")))
+
+(use-package emacs
+  ;; Make the mouse wheel work the way I want
+  :ensure nil
+  :custom
+  (mouse-wheel-flip-direction t)
+  (mouse-wheel-tilt-scroll t))
+
+;;;; Editing utilities
+
+(use-package imenu
+  :ensure nil
+  :config (setq imenu-flatten 'annotation))
+
+(use-package repeat
+  :ensure nil
+  :config (repeat-mode))
+
+(use-package crux
+  :ensure t
+  :bind
+  ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
+  ([remap kill-line] . 'crux-smart-kill-line)
+  ([remap open-line] . 'crux-smart-open-line)
+  ("C-x w s" . 'crux-swap-windows))
+
+(use-package emacs
+  ;; Set up soft-wrapping and don't let horizontal scroll interfere
+  :ensure nil
+  :preface
+  (defun eh/disable-horiz-scroll-with-visual-line ()
+    (setq-local mouse-wheel-tilt-scroll (not visual-line-mode)))
+  :custom
+  (word-wrap t)
+  (truncate-lines t)
+  ;; (comment-auto-fill-only-comments t)
+  :hook
+  (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
+
+
+;;; UNSORTED PAST HERE
+
+;;;; FONT FUCKERY
 ;; for some reason, 30 can't load this font if I set the family, only if I set the font :shrug:
 ;; (this seems to be true for any font with some of its variants disabled in Font Book)
 ;; probably this will all be replaced by fontaine again at some point but maybe not?
@@ -64,62 +135,8 @@
   (set-face-attribute 'default nil :font "VCTR Mono" :weight 'light :height 160)
   (load-theme 'modus-operandi-tinted))
 
-;; get rid of weird scaling shortcuts
-(use-package emacs
-  :ensure nil
-  :config
-  (global-unset-key (kbd "<pinch>"))
-  (global-unset-key (kbd "C-<wheel-up>"))
-  (global-unset-key (kbd "C-<wheel-down>")))
 
-;; set up soft-wrapping
-(use-package emacs
-  :ensure nil
-  :preface
-  (defun eh/disable-horiz-scroll-with-visual-line ()
-    (setq-local mouse-wheel-tilt-scroll (not visual-line-mode)))
-  :config
-  (setq-default word-wrap t)
-  (setq-default truncate-lines t)
-  (setq comment-auto-fill-only-comments t)
-  :hook
-  (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
 
-;; Display menu-bar-mode only in GUI frames
-;; From https://emacs.stackexchange.com/a/29443/6853
-(use-package emacs
-  :ensure nil
-  :preface
-  (defun eh/contextual-menubar (&optional frame)
-    "Display the menubar in FRAME (default: selected frame) if on a
-    graphical display, but hide it if in terminal."
-    (interactive)
-    (set-frame-parameter frame 'menu-bar-lines
-                         (if (display-graphic-p frame)
-                             1 0)))
-  :hook
-  (after-make-frame . 'eh/contextual-menubar))
-
-(use-package imenu
-  :ensure nil
-  :config (setq imenu-flatten 'annotation))
-
-(use-package repeat
-  :ensure nil
-  :config (repeat-mode))
-
-(use-package mode-line-bell
-  :ensure t
-  :config
-  (mode-line-bell-mode))
-
-(use-package crux
-  :ensure t
-  :bind
-  ([remap move-beginning-of-line] . 'crux-move-beginning-of-line)
-  ([remap kill-line] . 'crux-smart-kill-line)
-  ([remap open-line] . 'crux-smart-open-line)
-  ("C-x w s" . 'crux-swap-windows))
 
 (use-package persistent-scratch
   :ensure t
@@ -291,6 +308,7 @@
 
 ;; Show git status in the fringe
 (use-package diff-hl
+  :after (magit)
   :ensure t
   :config
   (global-diff-hl-mode)
@@ -433,4 +451,9 @@
 
 ;;; IDEAS
 ;; completion annotation buffer file path (project path?)
-;; outline
+;; use `:custom' keyword instead of `setq' in `:config'
+;;     (variable-name value "optional description string")
+
+;; Local Variables:
+;; eval: (outline-minor-mode)
+;; End:
