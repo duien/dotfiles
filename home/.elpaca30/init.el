@@ -4,6 +4,8 @@
 
 (add-to-list 'load-path (concat user-emacs-directory
                                 (convert-standard-filename "lisp/")))
+(setq custom-theme-directory (concat user-emacs-directory
+                                     (convert-standard-filename "themes/")))
 
 (setq use-package-enable-imenu-support t) ;; Must be set before use-package is loaded
 
@@ -82,6 +84,10 @@
 
 ;;;; Editing utilities
 
+(use-package delsel
+  :ensure nil
+  :config (delete-selection-mode))
+
 (use-package imenu
   :ensure nil
   :config (setq imenu-flatten 'annotation))
@@ -133,7 +139,10 @@
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
   :config
   (set-face-attribute 'default nil :font "VCTR Mono" :weight 'light :height 160)
-  (load-theme 'modus-operandi-tinted))
+  ;; (set-face-attribute 'default nil :font "VCTR Mono" :weight 'regular :height 160)
+  ;; (set-face-attribute 'default nil :font "Input" :weight 'light :height 160)
+  ;; (load-theme 'modus-operandi-tinted)
+  )
 
 
 
@@ -292,6 +301,32 @@
   :ensure t)
 
 ;; skipping ligatures for now
+(use-package ligature
+  :ensure t
+  :config (ligature-set-ligatures
+           t ;; all modes
+           '("!!" "!=" "!==" "!!!" "!≡" "!≡≡" "!>" "!=<" "#("
+     "#_" "#{" "#?" "#>" "##" "#_(" "%=" "%>" "%>%" "%<%"
+     "&%" "&&" "&*" "&+" "&-" "&/" "&=" "&&&" "&>" "$>"
+     "***" "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
+     "-<" "-<<" "-=" "->" "->>" "---" "-->" "-+-" "-\\/"
+     "-|>" "-<|" ".." "..." "..<" ".>" ".~" ".=" "/*" "//"
+     "/>" "/=" "/==" "///" "/**" ":::" "::" ":=" ":≡" ":>"
+     ":=>" ":(" ":-(" ":)" ":-)" ":/" ":\\" ":3" ":D" ":P"
+     ":>:" ":<:" "<$>" "<*" "<*>" "<+>" "<-" "<<" "<<<" "<<="
+     "<=" "<=>" "<>" "<|>" "<<-" "<|" "<=<" "<~" "<~~" "<<~"
+     "<$" "<+" "<!>" "<@>" "<#>" "<%>" "<^>" "<&>" "<?>" "<.>"
+     "</>" "<\\>" "<\">" "<:>" "<~>" "<**>" "<<^" "<!" "<@"
+     "<#" "<%" "<^" "<&" "<?" "<." "</" "<\\" "<\"" "<:" "<->"
+     "<!--" "<--" "<~<" "<==>" "<|-" "<<|" "<-<" "<-->" "<<=="
+     "<==" "=<<" "==" "===" "==>" "=>" "=~" "=>>" "=/=" "=~="
+     "==>>" "≡≡" "≡≡≡" "≡:≡" ">-" ">=" ">>" ">>-" ">>=" ">>>"
+     ">=>" ">>^" ">>|" ">!=" ">->" "??" "?~" "?=" "?>" "???"
+     "?." "^=" "^." "^?" "^.." "^<<" "^>>" "^>" "\\\\" "\\>"
+     "\\/-" "@>" "|=" "||" "|>" "|||" "|+|" "|->" "|-->" "|=>"
+     "|==>" "|>-" "|<<" "||>" "|>>" "|-" "||-" "~=" "~>" "~~>"
+     "~>>" "[[" "]]" "\">" "_|_")                       )
+  (global-ligature-mode))
 
 ;; Use a readable, centered width and soft wrap for text-heavy modes
 (use-package olivetti
@@ -347,7 +382,9 @@
 
 (use-package autothemer :ensure t)
 (use-package isohedron-theme
-  :ensure (:host github :repo "duien/isohedron-theme"))
+  :ensure (:host github :repo "duien/isohedron-theme")
+  :config
+  (load-theme 'isohedron t))
 
 ;; skip org for now because that need so much config! and that config needs
 ;; refactored badly
