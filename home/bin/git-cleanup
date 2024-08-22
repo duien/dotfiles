@@ -23,6 +23,6 @@ end
 # delete branches fully merged into main
 git branch --merged $main_branch | grep -v -e "\*" -e "$main_branch" | xargs -n 1 git branch -d
 # delete branches corresponding to recently merged PRs
-git branch --format '%(refname:lstrip=2)' --list (gh pr list --author "@me" --state merged --json 'headRefName' | jq '.[] | .headRefName' --raw-output) | xargs git branch -D
+git branch --format '%(refname:lstrip=2)' --list (gh pr list --state merged --json 'headRefName' | jq '.[] | .headRefName' --raw-output) | xargs git branch -D
 # prune remote-tracking branches on origin
 git remote prune origin
