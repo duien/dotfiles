@@ -117,35 +117,52 @@
   :hook
   (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
 
+;;;;; Themes and appearance
 
-;;; UNSORTED PAST HERE
+(use-package fontaine
+  :ensure t
+  :init
+  (setq fontaine-presets
+        ;; these can have some issues in 30 if some weights are disabled, but
+        ;; it also seems to do better with actually loading the intended weights
+        '((source :default-family "Source Code Pro")
+          (vctr   :default-family "VCTR Mono")
+          (input  :default-family "Input Mono Narrow")
+          (comic  :default-family "Comic Code Ligatures") ;; needs to be smaller
+          (t
+           :default-height 140
+           :default-weight light)))
+  :config
+  (fontaine-set-preset (fontaine-restore-latest-preset))
+  :hook
+  (fontaine-set-preset . fontaine-store-latest-preset))
 
-;;;; FONT FUCKERY
-;; for some reason, 30 can't load this font if I set the family, only if I set the font :shrug:
-;; (this seems to be true for any font with some of its variants disabled in Font Book)
-;; probably this will all be replaced by fontaine again at some point but maybe not?
-(use-package emacs
-  :ensure nil
+(use-package modus-themes
+  :ensure nil ;; built in version
   :init
   (setq modus-themes-italic-constructs t
-	      modus-themes-bold-constructs t)
+        modus-themes-bold-constructs t)
   (setq modus-themes-common-palette-overrides
         '((border-mode-line-inactive unspecified)
-          (border-mode-line-active unspecified)
           (comment fg-dim)
           (string green)))
   (setq modus-vivendi-tinted-palette-overrides
-	      '((string cyan)))
-  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
-  :config
-  (set-face-attribute 'default nil :font "VCTR Mono" :weight 'light :height 160)
-  ;; (set-face-attribute 'default nil :font "VCTR Mono" :weight 'regular :height 160)
-  ;; (set-face-attribute 'default nil :font "Input" :weight 'light :height 160)
-  ;; (load-theme 'modus-operandi-tinted)
-  )
+        '((string cyan)))
+  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
 
+(use-package autothemer :ensure t) ;; improperly specified dependency
+(use-package isohedron-theme
+  :ensure (:host github :repo "duien/isohedron-theme"))
+(use-package caves-of-qud-theme
+  :ensure (:host github :repo "duien/caves-of-qud-theme"))
 
+;; actually set a theme on startup
 
+(load-theme 'isohedron t)
+;; TODO give this a memory like fontaine (and set up other niceties like the
+;; enable/disable, user overrides, and menu bar color)
+
+;;; UNSORTED PAST HERE
 
 (use-package persistent-scratch
   :ensure t
@@ -379,12 +396,6 @@
 ;; enough to not need it
 
 ;; skipping elixir because I know ts situation changed
-
-(use-package autothemer :ensure t)
-(use-package isohedron-theme
-  :ensure (:host github :repo "duien/isohedron-theme")
-  :config
-  (load-theme 'isohedron t))
 
 ;; skip org for now because that need so much config! and that config needs
 ;; refactored badly
