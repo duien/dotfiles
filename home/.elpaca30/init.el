@@ -48,7 +48,8 @@
 (use-package no-littering
   ;; Have packages put files in reasonable places
   ;; I don't think waiting is necessary, but seems safer?
-  :ensure (:wait t))
+  :ensure (:wait t)
+  :config (message "loaded no-littering"))
 
 ;;; UI BASICS
 
@@ -121,6 +122,7 @@
 
 (use-package fontaine
   :ensure t
+  :demand t
   :init
   (setq fontaine-presets
         ;; these can have some issues in 30 if some weights are disabled, but
@@ -137,12 +139,10 @@
            :default-height 150
            :default-weight light)))
   :config
-  (message "Setting fontaine preset...")
   (fontaine-set-preset (fontaine-restore-latest-preset))
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
-  ;; (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps) ;; TODO diff-hl not loaded, giving errors
-  )
+  (enable-theme-functions . fontaine-apply-current-preset))
 
 (use-package emacs ;; modus-themes
   :ensure nil ;; built in version
@@ -161,13 +161,14 @@
 
 (use-package autothemer :ensure t) ;; improperly specified dependency
 (use-package isohedron-theme
-  :ensure (:host github :repo "duien/isohedron-theme"))
+  :ensure (:host github :repo "duien/isohedron-theme")
+  :config (load-theme 'isohedron t))
 (use-package caves-of-qud-theme
   :ensure (:host github :repo "duien/caves-of-qud-theme"))
 
 ;; actually set a theme on startup
 
-(load-theme 'isohedron t)
+;; (load-theme 'isohedron t)
 ;; TODO give this a memory like fontaine (and set up other niceties like the
 ;; enable/disable, user overrides, and menu bar color)
 
@@ -371,11 +372,13 @@
 (use-package diff-hl
   :after (magit)
   :ensure t
+  :demand t
   :config
   (global-diff-hl-mode)
   :hook
   (magit-pre-refresh . diff-hl-magit-pre-refresh)
-  (magit-post-refresh . diff-hl-magit-post-refresh))
+  (magit-post-refresh . diff-hl-magit-post-refresh)
+  (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps))
 
 ;; Various small language modes that don't need config
 (use-package fish-mode :ensure t :init (setq fish-indent-offset 2))
