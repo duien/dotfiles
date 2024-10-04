@@ -41,7 +41,7 @@ source ~/.config/fish/color-theme.fish
 # Setting up other random crap
 
 # Set up ruby gems to use Homebrew's readline
-set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) --with-openssl-dir=(brew --prefix openssl@1.1)
+# set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) --with-openssl-dir=(brew --prefix openssl@1.1)
 # set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) -W0
 
 # If `.private.sh` exists, load it
