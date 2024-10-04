@@ -127,17 +127,24 @@
         ;; it also seems to do better with actually loading the intended weights
         '((source :default-family "Source Code Pro")
           (vctr   :default-family "VCTR Mono")
-          (input  :default-family "Input Mono Narrow")
-          (comic  :default-family "Comic Code Ligatures") ;; needs to be smaller
+          (input  :default-family "Input Mono Narrow"
+                  :default-weight light)
+          (comic  :default-family "Comic Code Ligatures"
+                  :default-height 130)
+          (codelia :default-family "Codelia Ligatures"
+                   :default-height 140)
           (t
-           :default-height 140
+           :default-height 150
            :default-weight light)))
   :config
+  (message "Setting fontaine preset...")
   (fontaine-set-preset (fontaine-restore-latest-preset))
   :hook
-  (fontaine-set-preset . fontaine-store-latest-preset))
+  (fontaine-set-preset . fontaine-store-latest-preset)
+  ;; (fontaine-set-preset . diff-hl-maybe-redefine-bitmaps) ;; TODO diff-hl not loaded, giving errors
+  )
 
-(use-package modus-themes
+(use-package emacs ;; modus-themes
   :ensure nil ;; built in version
   :init
   (setq modus-themes-italic-constructs t
@@ -149,6 +156,8 @@
   (setq modus-vivendi-tinted-palette-overrides
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
+
+(use-package ef-themes :ensure t)
 
 (use-package autothemer :ensure t) ;; improperly specified dependency
 (use-package isohedron-theme
@@ -274,7 +283,7 @@
   :ensure t
   :config
   ;; previously I've been using just orderless-regexp
-  (setq orderless-matching-styles '(orderless-regexp orderless-prefixes orderless-initialism))
+  (setq orderless-matching-styles '(orderless-regexp))
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
