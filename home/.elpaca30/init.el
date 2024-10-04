@@ -294,7 +294,22 @@
   :ensure t
   :config (vertico-mode))
 
-;; Skipping consult and marginalia for now
+(use-package consult
+  :ensure t
+  :config
+  (consult-customize consult-line
+                     :preview-key
+                     '(:debounce 0.5 "<up>" "<down>"
+                                 :debounce 1 any))
+  :bind
+  ("C-x b" . 'consult-buffer)
+  ("C-x 4 b" . 'consult-buffer-other-window)
+  ("C-x 5 b" . 'consult-buffer-other-frame)
+  ("C-x i" . 'consult-imenu)
+  ("C-h t" . 'consult-theme)
+  ("C-h i" . 'consult-info))
+
+;; Skipping marginalia for now
 
 ;; Skipping linked thetmes and ns-appearance-change hooks
 
