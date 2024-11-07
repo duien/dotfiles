@@ -120,6 +120,16 @@
 
 ;;;;; Themes and appearance
 
+(use-package emacs ;; keep title bar visible in light or dark themes
+  ;; TODO Figure out a way to reset on theme disable?
+  :ensure nil
+  :preface
+  (defun eh/set-ns-appearance-from-theme (theme)
+    (let ((appearance (frame-parameter nil 'background-mode)))
+      (modify-all-frames-parameters `((ns-appearance . ,appearance)))))
+  :hook
+  (enable-theme-functions . eh/set-ns-appearance-from-theme))
+
 (use-package fontaine
   :ensure t
   :demand t
@@ -128,7 +138,8 @@
         ;; these can have some issues in 30 if some weights are disabled, but
         ;; it also seems to do better with actually loading the intended weights
         '((source :default-family "Source Code Pro")
-          (vctr   :default-family "VCTR Mono")
+          (vctr   :default-family "VCTR Mono"
+                  :default-height 160)
           (input  :default-family "Input Mono Narrow"
                   :default-weight light)
           (comic  :default-family "Comic Code Ligatures"
