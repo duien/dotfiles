@@ -44,6 +44,10 @@ source ~/.config/fish/color-theme.fish
 # set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) --with-openssl-dir=(brew --prefix openssl@1.1)
 # set -x RUBY_CONFIGURE_OPTS --with-readline-dir=(brew --prefix readline) -W0
 
+# Work around a weird ruby forking thing
+# https://blog.phusion.nl/2017/10/13/why-ruby-app-servers-break-on-macos-high-sierra-and-what-can-be-done-about-it/
+set -x OBJC_DISABLE_INITIALIZE_FORK_SAFETY YES
+
 # If `.private.sh` exists, load it
 # This file is for ENV variables that shouldn't be checked in, such as tokens and API keys
 if test -s "$HOME/.private.sh" ; source "$HOME/.private.sh" ; end
