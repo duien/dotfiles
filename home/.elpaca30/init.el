@@ -31,7 +31,7 @@
   (fill-column 80 "This may not work here, but it seems like it does?")
   (sentence-end-double-space nil)
   (vc-follow-symlinks t)
-  (dired-us-ls-dired nil)
+  (dired-use-ls-dired nil)
   (use-short-answers t)
   (bookmark-set-fringe-mark nil)
   (frame-inhibit-implied-resize t)
@@ -146,6 +146,8 @@
                   :default-height 130)
           (codelia :default-family "Codelia Ligatures"
                    :default-height 140)
+          (belinsky :default-family "Belinsky Text"
+                    :default-height 140)
           (t
            :default-height 150
            :default-weight light)))
@@ -170,7 +172,6 @@
 
 (use-package ef-themes :ensure t)
 
-(use-package autothemer :ensure t) ;; improperly specified dependency
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
   :config (load-theme 'isohedron t))
