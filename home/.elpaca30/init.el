@@ -137,17 +137,20 @@
   (setq fontaine-presets
         ;; these can have some issues in 30 if some weights are disabled, but
         ;; it also seems to do better with actually loading the intended weights
-        '((source :default-family "Source Code Pro")
-          (vctr   :default-family "VCTR Mono"
-                  :default-height 160)
-          (input  :default-family "Input Mono Narrow"
-                  :default-weight light)
-          (comic  :default-family "Comic Code Ligatures"
-                  :default-height 130)
-          (codelia :default-family "Codelia Ligatures"
-                   :default-height 140)
+        '((source   :default-family "Source Code Pro")
+          (vctr     :default-family "VCTR Mono"
+                    :default-height 160)
+          (input    :default-family "Input Mono Narrow"
+                    :default-weight light)
+          (comic    :default-family "Comic Code Ligatures"
+                    :default-height 130)
+          (codelia  :default-family "Codelia Ligatures"
+                    :default-height 140)
           (belinsky :default-family "Belinsky Text"
                     :default-height 140)
+          (pragprog :default-family "PragmataPro Liga"
+                    :default-weight normal)
+          (jet      :default-family "Jetbrains Mono")
           (t
            :default-height 150
            :default-weight light)))
@@ -156,6 +159,8 @@
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
   (enable-theme-functions . fontaine-apply-current-preset))
+
+(use-package spacious-padding :ensure t)
 
 (use-package emacs ;; modus-themes
   :ensure nil ;; built in version
