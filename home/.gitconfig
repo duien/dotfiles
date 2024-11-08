@@ -36,12 +36,8 @@
     user = duien
 [branch]
     autosetupmerge = true
-[mailmap]
-    file = /Users/eprice/.gitmailmap
 [credential]
     helper = osxkeychain
-[hub]
-    protocol = https
 [mergetool]
     prompt = false
 [filter "media"]
@@ -55,17 +51,6 @@
     process = git-lfs filter-process
 [clean]
     requireForce = false
-
-# use vscode for diff/merge
-[merge]
-    tool = vscode
-    conflictstyle = zdiff3
-[diff]
-    tool = vscode
-[mergetool "vscode"]
-    cmd = code --wait $MERGED
-[difftool "vscode"]
-    cmd = code --wait --diff $LOCAL $REMOTE
 [diff "rspec"]
     xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 [advice]
