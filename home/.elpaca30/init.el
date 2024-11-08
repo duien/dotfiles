@@ -392,8 +392,8 @@
   gfm-mode)
 
 ;; Best git interface
-(use-package magit
-  :ensure t)
+(use-package transient :ensure t)
+(use-package magit :ensure t)
 
 ;; Show git status in the fringe
 (use-package diff-hl
