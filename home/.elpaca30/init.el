@@ -151,6 +151,8 @@
           (pragprog :default-family "PragmataPro Liga"
                     :default-weight normal)
           (jet      :default-family "Jetbrains Mono")
+          (plex     :default-family "IBM Plex Mono")
+          (sf       :default-family "SF Mono")
           (t
            :default-height 150
            :default-weight light)))
@@ -175,7 +177,14 @@
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
 
-(use-package ef-themes :ensure t)
+(use-package ef-themes :ensure t
+  :init
+  (setq ef-dream-palette-overrides
+        '((string green-faint)
+          (type red-faint)))
+  (setq ef-reverie-palette-overrides
+        '((string green-faint)
+          (type red-faint))))
 
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
