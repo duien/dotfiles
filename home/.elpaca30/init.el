@@ -130,10 +130,36 @@
   :hook
   (enable-theme-functions . eh/set-ns-appearance-from-theme))
 
+;; Load mood-line before enabling a theme to prevent weirdness?
+(use-package mood-line
+  :ensure t
+  :preface
+  (defun eh/mood-line-segment-major-mode ()
+    "Displays the current major mode in the mode-line."
+    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) ""))
+  (defun eh/mood-line-segment-cursor-position ()
+    "Displays the line and column position of the cursor"
+    (format-mode-line (car mode-line-position-column-line-format) 'mood-line-unimportant))
+  :config
+  (setq mood-line-format
+        (mood-line-defformat
+         :left ( " "
+                 ((mood-line-segment-modal) . " ")
+                 ((mood-line-segment-buffer-status) . " ")
+                 ((mood-line-segment-buffer-name) . " ")
+                 ((eh/mood-line-segment-cursor-position) . " "))
+         :right (((mood-line-segment-vc) . " ")
+                 (eh/mood-line-segment-major-mode)
+                 (mood-line-segment-misc-info))))
+  (mood-line-mode))
+
+
 (use-package fontaine
   :ensure t
   :demand t
   :init
+  ;; Not really fontaine, but needed to make everything come together correctly
+  (set-face-attribute 'fixed-pitch nil :family 'unspecified)
   (setq fontaine-presets
         ;; these can have some issues in 30 if some weights are disabled, but
         ;; it also seems to do better with actually loading the intended weights
@@ -170,9 +196,19 @@
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
   (setq modus-themes-common-palette-overrides
-        '((border-mode-line-inactive unspecified)
+        '(;(border-mode-line-inactive unspecified)
           (comment fg-dim)
           (string green)))
+  (setq modus-operandi-palette-overrides
+      `(
+        (bg-mode-line-active bg-blue-intense)
+        (fg-mode-line-active fg-main)
+        (border-mode-line-active bg-mode-line-active)
+        (border-mode-line-inactive bg-mode-line-inactive)
+        (string green)
+        (comment fg-dim)
+        ;; ,@modus-themes-preset-overrides-intense
+        ))
   (setq modus-vivendi-tinted-palette-overrides
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
@@ -188,7 +224,8 @@
 
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
-  :config (load-theme 'isohedron t))
+  :config (load-theme 'isohedron t)
+  )
 (use-package caves-of-qud-theme
   :ensure (:host github :repo "duien/caves-of-qud-theme"))
 
@@ -282,28 +319,6 @@
         minions-mode-line-delimiters '("" . ""))
   :config
   (minions-mode))
-
-(use-package mood-line
-  :ensure t
-  :preface
-  (defun eh/mood-line-segment-major-mode ()
-    "Displays the current major mode in the mode-line."
-    (concat (format-mode-line minions-mode-line-modes 'mood-line-major-mode) ""))
-  (defun eh/mood-line-segment-cursor-position ()
-    "Displays the line and column position of the cursor"
-    (format-mode-line (car mode-line-position-column-line-format) 'mood-line-unimportant))
-  :config
-  (setq mood-line-format
-        (mood-line-defformat
-         :left ( " "
-                 ((mood-line-segment-modal) . " ")
-                 ((mood-line-segment-buffer-status) . " ")
-                 ((mood-line-segment-buffer-name) . " ")
-                 ((eh/mood-line-segment-cursor-position) . " "))
-         :right (((mood-line-segment-vc) . " ")
-                 (eh/mood-line-segment-major-mode)
-                 (mood-line-segment-misc-info))))
-  (mood-line-mode))
 
 ;; Complete bits of words in any order
 (use-package orderless
