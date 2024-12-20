@@ -177,7 +177,9 @@
           (pragprog :default-family "PragmataPro Liga"
                     :default-weight normal)
           (jet      :default-family "Jetbrains Mono")
-          (plex     :default-family "IBM Plex Mono")
+          (plex     :default-family "IBM Plex Mono"
+                    :default-weight normal
+                    :variable-pitch-family "iA Writer Quattro V")
           (sf       :default-family "SF Mono")
           (t
            :default-height 150
@@ -445,6 +447,7 @@
 (use-package rspec-mode :ensure t) ;; this likely needs some config
 (use-package lua-mode :ensure t :init (setq lua-indent-level 2))
 (use-package rust-mode :ensure t)
+(use-package rustic :ensure t)
 (use-package swift-mode :ensure t :init (setq swift-mode:basic-offset 2))
 
 
