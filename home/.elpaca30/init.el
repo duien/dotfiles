@@ -453,9 +453,15 @@
 (use-package yaml-mode :ensure t)
 (use-package rspec-mode :ensure t) ;; this likely needs some config
 (use-package lua-mode :ensure t :init (setq lua-indent-level 2))
-(use-package rust-mode :ensure t)
-(use-package rustic :ensure t)
 (use-package swift-mode :ensure t :init (setq swift-mode:basic-offset 2))
+
+;; Setting up rust
+(use-package rust-mode :ensure t)
+(use-package lsp-mode :ensure t) ;; rustic needs it
+(use-package rustic :ensure t
+  :after (rust-mode)
+  :init
+  (setq rust-mode-treesitter-derive t))
 
 
 (use-package markdown-mode
