@@ -4,8 +4,6 @@
 
 (add-to-list 'load-path (concat user-emacs-directory
                                 (convert-standard-filename "lisp/")))
-(setq custom-theme-directory (concat user-emacs-directory
-                                     (convert-standard-filename "themes/")))
 
 (setq use-package-enable-imenu-support t) ;; Must be set before use-package is loaded
 
@@ -37,7 +35,8 @@
   (frame-inhibit-implied-resize t)
   (inhibit-startup-screen t)
   (face-near-same-color-threshold 0 "Prevent weird issuse from `distant-foreground' color specifications")
-  (custom-theme-directory (concat user-emacs-directory (convert-standard-filename "themes/"))))
+  (custom-theme-directory (concat user-emacs-directory (convert-standard-filename "themes/")))
+  (custom-safe-themes t))
 
 (use-package mode-line-bell
   ;; Please do not beep every time I hit escape
@@ -120,6 +119,8 @@
 
 ;;;;; Themes and appearance
 
+(load "theme-utils")
+
 (use-package emacs ;; keep title bar visible in light or dark themes
   ;; TODO Figure out a way to reset on theme disable?
   :ensure nil
@@ -192,15 +193,19 @@
 
 (use-package spacious-padding :ensure t)
 
-(use-package emacs ;; modus-themes
-  :ensure nil ;; built in version
+(use-package modus-themes
+  :ensure t
   :init
+  (add-to-list 'linked-themes '(modus-operandi-tinted . user-modus-operandi-tinted))
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
   (setq modus-themes-common-palette-overrides
         '(;(border-mode-line-inactive unspecified)
           (comment fg-dim)
-          (string green)))
+          ;; (string green)
+          ))
+  (setq modus-operandi-tinted-palette-overrides
+        '((string green)))
   (setq modus-operandi-palette-overrides
       `(
         (bg-mode-line-active bg-blue-intense)
@@ -226,7 +231,9 @@
 
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
-  :config (load-theme 'isohedron t)
+  :init
+  (add-to-list 'linked-themes '(isohedron . user-isohedron))
+  ;; :config (load-theme 'isohedron t)
   )
 (use-package caves-of-qud-theme
   :ensure (:host github :repo "duien/caves-of-qud-theme"))
