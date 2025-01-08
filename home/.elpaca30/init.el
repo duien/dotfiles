@@ -351,6 +351,7 @@
                      :preview-key
                      '(:debounce 0.5 "<up>" "<down>"
                                  :debounce 1 any))
+  (consult-customize consult-theme :preview-key nil)
   :bind
   ("C-x b" . 'consult-buffer)
   ("C-x 4 b" . 'consult-buffer-other-window)
