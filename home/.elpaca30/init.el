@@ -48,7 +48,9 @@
   ;; Have packages put files in reasonable places
   ;; I don't think waiting is necessary, but seems safer?
   :ensure (:wait t)
-  :config (message "loaded no-littering"))
+  :config
+  (message "loaded no-littering")
+  (no-littering-theme-backups))
 
 ;;; UI BASICS
 
