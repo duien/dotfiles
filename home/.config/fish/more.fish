@@ -25,6 +25,8 @@ prepend_if_exists PATH "$HOME/.bin"
 prepend_if_exists PATH "$HOME/.doom/bin"
 prepend_if_exists PATH "$HOME/.cargo/bin"
 
+prepend_if_exists INFOPATH "/opt/homebrew/share/info/emacs"
+
 set -x DOOMDIR "$HOME/.doom-config"
 
 set -x EDITOR ew
