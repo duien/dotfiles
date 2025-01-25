@@ -184,6 +184,7 @@
                     :default-weight normal
                     :variable-pitch-family "iA Writer Quattro V")
           (sf       :default-family "SF Mono")
+          (berkeley :default-family "Berkeley Mono")
           (t
            :default-height 150
            :default-weight light)))
@@ -207,7 +208,10 @@
           ;; (string green)
           ))
   (setq modus-operandi-tinted-palette-overrides
-        '((string green)))
+        '((string green)
+          (bg-mode-line-active bg-blue-intense)
+          (border-mode-line-active bg-mode-line-active)
+          (border-mode-line-inactive bg-mode-line-inactive)))
   (setq modus-operandi-palette-overrides
       `(
         (bg-mode-line-active bg-blue-intense)
