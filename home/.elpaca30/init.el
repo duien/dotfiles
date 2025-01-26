@@ -352,6 +352,8 @@
 
 (use-package consult
   :ensure t
+  :init
+  (setq consult-project-function (lambda (_) (projectile-project-root)))
   :config
   (consult-customize consult-line
                      :preview-key
@@ -391,10 +393,29 @@
   :config (winner-mode))
 
 ;; don't save white-space, but allow it to persist in the buffer after saving
+;; TODO something is wrong here that sometimes prevents cleanup
 (use-package ws-butler
   :ensure t
   :config
   (ws-butler-global-mode))
+
+(use-package project :demand t) ;; load project first
+(use-package projectile
+  :after (project) ;; so we ensure projectile is after it
+  :ensure t
+  :demand t
+  :init
+  :bind (:map projectile-mode-map
+              ("C-x p" . projectile-command-map)
+              ("C-x p b" . consult-project-buffer))
+  :config
+  (projectile-mode))
+(use-package consult-projectile
+  :ensure t
+  :demand t
+  :after (consult projectile)
+  :bind (:map projectile-mode-map
+              ("C-x p p" . consult-projectile)))
 
 (use-package ag
   :ensure t)
