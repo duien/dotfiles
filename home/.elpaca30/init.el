@@ -161,8 +161,6 @@
   :ensure t
   :demand t
   :init
-  ;; Not really fontaine, but needed to make everything come together correctly
-  (set-face-attribute 'fixed-pitch nil :family 'unspecified)
   (setq fontaine-presets
         ;; these can have some issues in 30 if some weights are disabled, but
         ;; it also seems to do better with actually loading the intended weights
@@ -184,7 +182,8 @@
                     :default-weight normal
                     :variable-pitch-family "iA Writer Quattro V")
           (sf       :default-family "SF Mono")
-          (berkeley :default-family "Berkeley Mono")
+          (berkeley :default-family "Berkeley Mono"
+                    :default-weight semilight)
           (t
            :default-height 150
            :default-weight light)))
@@ -192,9 +191,11 @@
   (fontaine-set-preset (fontaine-restore-latest-preset))
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
-  (enable-theme-functions . fontaine-apply-current-preset))
+  ;; (enable-theme-functions . fontaine-apply-current-preset)
+  )
 
-(use-package spacious-padding :ensure t)
+;; temporarily disabled because of weird fontaine incompatibility
+(use-package spacious-padding :disabled t :after (fontaine) :ensure t)
 
 (use-package modus-themes
   :ensure t
