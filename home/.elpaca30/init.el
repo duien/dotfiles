@@ -146,11 +146,12 @@
   :config
   (setq mood-line-format
         (mood-line-defformat
-         :left ( " "
-                 ((mood-line-segment-modal) . " ")
-                 ((mood-line-segment-buffer-status) . " ")
-                 ((mood-line-segment-buffer-name) . " ")
-                 ((eh/mood-line-segment-cursor-position) . " "))
+         :left ((propertize " " 'display '(raise 0.2))
+                ((mood-line-segment-modal) . " ")
+                ((mood-line-segment-buffer-status) . " ")
+                ((mood-line-segment-buffer-name) . " ")
+                ((eh/mood-line-segment-cursor-position) . " ")
+                (propertize " " 'display '(raise -0.2)))
          :right (((mood-line-segment-vc) . " ")
                  (eh/mood-line-segment-major-mode)
                  (mood-line-segment-misc-info))))
