@@ -205,25 +205,18 @@
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
   (setq modus-themes-common-palette-overrides
-        '(;(border-mode-line-inactive unspecified)
-          (comment fg-dim)
-          ;; (string green)
+        '((comment fg-dim)
+          (border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)
           ))
   (setq modus-operandi-tinted-palette-overrides
         '((string green)
-          (bg-mode-line-active bg-blue-intense)
-          (border-mode-line-active bg-mode-line-active)
-          (border-mode-line-inactive bg-mode-line-inactive)))
+          (bg-mode-line-active bg-blue-intense)))
   (setq modus-operandi-palette-overrides
-      `(
-        (bg-mode-line-active bg-blue-intense)
+      `((bg-mode-line-active bg-blue-intense)
         (fg-mode-line-active fg-main)
-        (border-mode-line-active bg-mode-line-active)
-        (border-mode-line-inactive bg-mode-line-inactive)
         (string green)
-        (comment fg-dim)
-        ;; ,@modus-themes-preset-overrides-intense
-        ))
+        (comment fg-dim)))
   (setq modus-vivendi-tinted-palette-overrides
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
@@ -235,7 +228,9 @@
           (type red-faint)))
   (setq ef-reverie-palette-overrides
         '((string green-faint)
-          (type red-faint))))
+          (type red-faint)))
+  (add-to-list 'linked-themes '(ef-dream . user-ef))
+  (add-to-list 'linked-themes '(ef-reverie . user-ef)))
 
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
@@ -468,6 +463,8 @@
   :after (magit)
   :ensure t
   :demand t
+  :init
+  (setq diff-hl-draw-borders nil)
   :config
   (global-diff-hl-mode)
   :hook
