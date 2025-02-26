@@ -184,7 +184,7 @@
                     :variable-pitch-family "iA Writer Quattro V")
           (sf       :default-family "SF Mono")
           (berkeley :default-family "Berkeley Mono"
-                    :default-weight semilight)
+                    :default-weight light)
           (t
            :default-height 150
            :default-weight light)))
