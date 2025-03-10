@@ -185,6 +185,8 @@
           (sf       :default-family "SF Mono")
           (berkeley :default-family "Berkeley Mono"
                     :default-weight light)
+          (md-io    :default-family "MD IO Trial"
+                    :default-weight light)
           (t
            :default-height 150
            :default-weight light)))
@@ -484,11 +486,12 @@
 
 ;; Setting up rust
 (use-package rust-mode :ensure t)
-(use-package lsp-mode :ensure t) ;; rustic needs it
-(use-package rustic :ensure t
-  :after (rust-mode)
-  :init
-  (setq rust-mode-treesitter-derive t))
+;; TODO These are no longer found for some reason?
+;; (use-package lsp-mode :ensure t) ;; rustic needs it
+;; (use-package rustic :ensure t
+;;   :after (rust-mode)
+;;   :init
+;;   (setq rust-mode-treesitter-derive t))
 
 
 (use-package markdown-mode
