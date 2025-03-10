@@ -511,6 +511,113 @@
 ;; skip org for now because that need so much config! and that config needs
 ;; refactored badly
 
+(use-package org
+  :ensure nil
+  :init
+  ;; where to put things
+  (setq org-agenda-files `(,org-directory ,(concat org-directory "skylight/"))
+        org-refile-targets '((org-agenda-files . (:maxlevel . 5)))
+        org-default-notes-file (concat org-directory "inbox.org"))
+  ;; archiving
+  (setq org-archive-location (concat org-directory "Archive/%s_archive::datetree/"))
+  ;; logging
+  (setq org-log-done t
+        org-log-into-drawer nil)
+  ;; startup
+  (setq org-startup-truncated t
+        org-startup-folded 'showall)
+  ;; how commands work - movement
+  (setq org-insert-heading-respect-content t
+        org-cycle-separator-lines 1
+        org-M-RET-may-split-lines '((default . t)
+                                    (item . nil)))
+  ;; how commands work - editing
+  (setq org-ctrl-k-protect-subtree t
+        org-fold-catch-invisible-edits 'show
+        org-src-preserve-indentation t
+        org-blank-before-new-entry '((heading . nil)
+                                     (plain-list-item . nil))
+        org-tags-column 0
+        org-auto-align-tags nil)
+  ;; how agenda works
+  (setq org-enforce-todo-dependencies t)
+  (setq org-agenda-dim-blocked-tasks t)
+  ;; stars (combine with org-superstar)
+  (setq org-hide-leading-stars nil
+        org-indent-mode-turns-on-hiding-stars nil)
+  ;; emphasis markers
+  (setq org-emphasis-alist
+        '(("*" bold)
+          ("_" italic)
+          ("=" org-verbatim verbatim)
+          ("~" org-code verbatim)
+          ("+"
+           (:strike-through t))))
+  ;; fontification
+  (setq org-fontify-whole-block-delimiter-line t
+        org-fontify-whole-heading-line t
+        org-fontify-todo-headline t
+        org-fontify-done-headline t
+        org-cycle-level-faces nil)
+  ;; popup buffers
+  (setq org-use-fast-todo-selection 'expert
+        org-src-window-setup 'current-window
+        org-agenda-window-setup 'other-window
+        org-agenda-restore-windows-after-quit t)
+  ;; todo keywords - current suggested
+  (setq org-todo-keywords
+        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d)" "KILL(k@)")
+          (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
+          (type "IDEA(i)" "GOAL(g)" "|")
+          (sequence "READ(R)" "|" "RODE(r)")
+          ))
+
+  ;; capture
+  (setq org-capture-templates
+        '(("t" "Some thing" entry (file+headline "~/Org/inbox.org" "Inbox")
+           "* TODO %?\n%u\n%i")
+          ("T" "Some thing (with context)" entry (file+headline "~/Org/inbox.org" "Inbox")
+           "* TODO %?\n%u\n%a\n%i")
+          ;; TODO Find a way to dynamically grab the latest dox file
+          ;; ("w" "Work thing" entry (file+headline "~/Org/dox-23Q4.org" "Inbox")
+          ;;  "* TODO %?\n%a\n%i")
+          ("y" "Yaks thing" entry (file+headline "~/Org/yaks.org" "Inbox")
+           "* TODO %?\n%u\n%i")
+          ("Y" "Yaks thing (with context)" entry (file+headline "~/Org/yaks.org" "Inbox")
+           "* TODO %?\n%u\n%a\n%i")
+          ))
+  ;; load the complex keyword config
+  ;; TODO add the rest of my org stuff
+  (load "org-configuration")
+  (eh/define-org-keywords)
+  :config
+  (advice-add 'org-cycle-set-startup-visibility
+              :after 'eh/org-hide-done-entries-in-buffer)
+  :bind
+  (:map org-mode-map
+        ("C-o" . 'crux-smart-open-line))
+  (:map org-src-mode-map
+        ("C-c C-c" . 'org-edit-src-exit))
+  :hook
+  (org-mode . org-indent-mode)
+  (fontaine-set-preset . eh/define-org-keywords)
+  (org-ctrl-c-ctrl-c . eh/hook-edit-src-block))
+
+;; make org prettier
+(use-package org-superstar
+  :ensure t
+  :after (org)
+  :init
+  (setq org-superstar-cycle-headline-bullets nil
+        org-superstar-special-todo-items t
+        org-superstar-leading-fallback "·"
+        org-superstar-leading-bullet "·"
+        org-superstar-remove-leading-stars nil
+        org-superstar-prettify-item-bullets nil)
+  :hook
+  (org-mode . org-superstar-mode))
+
+
 (use-package outline
   :ensure nil
   :init
