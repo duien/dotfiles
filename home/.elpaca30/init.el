@@ -404,6 +404,8 @@
   :ensure t
   :demand t
   :init
+  ;; (setq projectile-auto-discover nil)
+  (setq projectile-track-known-projects-automatically nil)
   :bind (:map projectile-mode-map
               ("C-x p" . projectile-command-map)
               ("C-x p b" . consult-project-buffer))
@@ -419,7 +421,6 @@
 (use-package ag
   :ensure t)
 
-;; skipping ligatures for now
 (use-package ligature
   :ensure t
   :config (ligature-set-ligatures
@@ -516,6 +517,7 @@
 
 (use-package org
   :ensure nil
+  :after (fontaine)
   :init
   ;; where to put things
   (setq org-agenda-files `(,org-directory ,(concat org-directory "skylight/"))
