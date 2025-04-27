@@ -26,7 +26,7 @@ style = "bright-blue"
 # repo_root_style = "bold bright-blue"
 # before_repo_root_style = "blue"
 # truncate_to_repo = false
-truncation_symbol = "…/"
+truncation_symbol = "… /"
 
 [cmd_duration]
 format = "[$duration]($style) "
@@ -41,12 +41,12 @@ format = "[$duration]($style) "
 
 # arrow for most fonts
 # success_symbol = "[▶](bold green)"
-# success_symbol = "[▷](bold green)"
-# error_symbol = "[▶](bold red)"
+success_symbol = "[▷](bold green)"
+error_symbol = "[▶](bold red)"
 
 # arrow for very limited fonts
-success_symbol = "[>](bold green)"
-error_symbol = "[>](bold red)"
+# success_symbol = "[>](bold green)"
+# error_symbol = "[>](bold red)"
 
 [status]
 format = "[$symbol$common_meaning$signal_name$maybe_int]($style) "
@@ -85,7 +85,7 @@ diverged = "[±](bold bright-cyan)"
 untracked = "[+](blue)"
 stashed = " [∆ $count](bright-black)"
 modified = "[~](bright-yellow)"
-staged = "[+](green)"
+staged = "[^](green)"
 renamed = "[≈](blue)"
 deleted = "[×](red)"
 

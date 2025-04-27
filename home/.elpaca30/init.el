@@ -176,8 +176,8 @@
                     :default-height 140)
           (belinsky :default-family "Belinsky Text"
                     :default-height 140)
-          (pragprog :default-family "PragmataPro Liga"
-                    :default-weight normal)
+          (pragmata :default-family "PragmataPro VF Liga"
+                    :default-weight extralight)
           (jet      :default-family "Jetbrains Mono")
           (plex     :default-family "IBM Plex Mono"
                     :default-weight normal
@@ -187,6 +187,8 @@
                     :default-weight light)
           (md-io    :default-family "MD IO Trial"
                     :default-weight light)
+          (radon    :default-family "Monaspace Radon Frozen"
+                    :default-weight extralight)
           (t
            :default-height 150
            :default-weight light)))
@@ -232,7 +234,8 @@
         '((string green-faint)
           (type red-faint)))
   (add-to-list 'linked-themes '(ef-dream . user-ef))
-  (add-to-list 'linked-themes '(ef-reverie . user-ef)))
+  (add-to-list 'linked-themes '(ef-reverie . user-ef))
+  (add-to-list 'linked-themes '(ef-reverie . user-ef-reverie)))
 
 (use-package isohedron-theme
   :ensure (:host github :repo "duien/isohedron-theme")
@@ -256,6 +259,7 @@
   :init
   ;; only allow killing scratch when killing all of emacs
   (with-current-buffer "*scratch*"
+    (setq default-directory "~/") ;; not related, but experimenting
     (emacs-lock-mode 'kill))
   :config
   (persistent-scratch-setup-default)
@@ -404,8 +408,9 @@
   :ensure t
   :demand t
   :init
-  ;; (setq projectile-auto-discover nil)
+  (setq projectile-auto-discover t)
   (setq projectile-track-known-projects-automatically nil)
+  ;; (setq projectile-globally-ignored-buffers )
   :bind (:map projectile-mode-map
               ("C-x p" . projectile-command-map)
               ("C-x p b" . consult-project-buffer))

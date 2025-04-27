@@ -22,8 +22,8 @@ prepend_if_exists CDPATH . $HOME $HOME/Code $HOME/.homesick/repos
 
 prepend_if_exists PATH "$HOME/bin"
 prepend_if_exists PATH "$HOME/.bin"
-prepend_if_exists PATH "$HOME/.doom/bin"
-prepend_if_exists PATH "$HOME/.cargo/bin"
+prepend_if_exists PATH "$HOME/.cargo/bin" # for rust
+prepend_if_exists PATH "$HOME/.local/bin" # for pipx
 
 prepend_if_exists INFOPATH "/opt/homebrew/share/info/emacs"
 
