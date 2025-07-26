@@ -189,14 +189,20 @@
                     :default-weight light)
           (radon    :default-family "Monaspace Radon Frozen"
                     :default-weight extralight)
+          (degular  :default-family "Degular Mono"
+                    :default-weight light)
           (t
            :default-height 150
            :default-weight light)))
   :config
-  (fontaine-set-preset (fontaine-restore-latest-preset))
+  ;; (fontaine-set-preset (fontaine-restore-latest-preset))
+  (eh/fontaine-apply-current-preset)
+  :preface
+  (defun eh/fontaine-apply-current-preset (&optional _theme)
+    (fontaine-set-preset (fontaine-restore-latest-preset)))
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
-  ;; (enable-theme-functions . fontaine-apply-current-preset)
+  (enable-theme-functions . eh/fontaine-apply-current-preset)
   )
 
 ;; temporarily disabled because of weird fontaine incompatibility
@@ -223,7 +229,10 @@
         (comment fg-dim)))
   (setq modus-vivendi-tinted-palette-overrides
         '((string cyan)))
-  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted)))
+  (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
+  :config
+  (load-theme 'modus-operandi-tinted t)
+  )
 
 (use-package ef-themes :ensure t
   :init
@@ -433,7 +442,8 @@
            '("!!" "!=" "!==" "!!!" "!≡" "!≡≡" "!>" "!=<" "#("
      "#_" "#{" "#?" "#>" "##" "#_(" "%=" "%>" "%>%" "%<%"
      "&%" "&&" "&*" "&+" "&-" "&/" "&=" "&&&" "&>" "$>"
-     "***" "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
+     ;; "***"
+     "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
      "-<" "-<<" "-=" "->" "->>" "---" "-->" "-+-" "-\\/"
      "-|>" "-<|" ".." "..." "..<" ".>" ".~" ".=" "/*" "//"
      "/>" "/=" "/==" "///" "/**" ":::" "::" ":=" ":≡" ":>"
@@ -450,7 +460,7 @@
      "?." "^=" "^." "^?" "^.." "^<<" "^>>" "^>" "\\\\" "\\>"
      "\\/-" "@>" "|=" "||" "|>" "|||" "|+|" "|->" "|-->" "|=>"
      "|==>" "|>-" "|<<" "||>" "|>>" "|-" "||-" "~=" "~>" "~~>"
-     "~>>" "[[" "]]" "\">" "_|_")                       )
+     "~>>" "[[" "]]" "\">" "_|_"))
   (global-ligature-mode))
 
 ;; Use a readable, centered width and soft wrap for text-heavy modes
@@ -709,12 +719,23 @@
 (use-package hl-todo
   :ensure t
   :init
-  ;; (setq hl-todo-keyword-faces
-  ;;       '(("TODO" . eh/org-keyword-todo)
-  ;;         ("FIXME" . eh/org-keyword-halt)
-  ;;         ("NOTE" . eh/org-keyword-read)
-  ;;         ("HACK" . eh/org-keyword-idea)))
+  (setq hl-todo-keyword-faces
+        '(("TODO" . eh/org-keyword-todo)
+          ("FIXME" . eh/org-keyword-halt)
+          ("NOTE" . eh/org-keyword-read)
+          ("HACK" . eh/org-keyword-idea)))
   :hook prog-mode)
+
+;; bind this to something
+(defun eh/kill-project-path-or-buffer-name ()
+  "Add to the kill-ring the project-relative path of the current file, the full path of the current file, or the name of the current buffer"
+  (interactive)
+  (let* ((buffer-file (buffer-file-name))
+         (project-dir (projectile-project-p buffer-file))
+         (path (if (and buffer-file project-dir)
+                   (file-relative-name buffer-file project-dir)
+                 buffer-file)))
+    (kill-new (or path (buffer-name)))))
 
 ;;; FINALLY
 
