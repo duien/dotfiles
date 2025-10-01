@@ -4,7 +4,10 @@
 (ef-themes-with-colors
   (custom-theme-set-faces
    'user-ef-reverie
+   '(mode-line ((t :box nil)))
+   '(mode-line-inactive ((t :box nil)))
    '(font-lock-string-face ((t :inherit 'italic)))
+
    '(org-headline-todo ((t :inherit nil :weight reset)))
    '(org-headline-done ((t :inherit font-lock-comment-face :weight reset)))
    '(org-ellipsis ((t :inherit (shadow default))))

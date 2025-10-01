@@ -175,20 +175,20 @@
           (codelia  :default-family "Codelia Ligatures"
                     :default-height 140)
           (belinsky :default-family "Belinsky Text"
-                    :default-height 140)
+                    :default-height 140
+                    :default-weight regular)
           (pragmata :default-family "PragmataPro VF Liga"
                     :default-weight extralight)
           (jet      :default-family "Jetbrains Mono")
           (plex     :default-family "IBM Plex Mono"
                     :default-weight normal
                     :variable-pitch-family "iA Writer Quattro V")
-          (sf       :default-family "SF Mono")
+          (sf       :default-family "SF Mono"
+                    :variable-pitch-family "SF Pro Text")
           (berkeley :default-family "Berkeley Mono"
                     :default-weight light)
           (md-io    :default-family "MD IO Trial"
                     :default-weight light)
-          (radon    :default-family "Monaspace Radon Frozen"
-                    :default-weight extralight)
           (degular  :default-family "Degular Mono"
                     :default-weight light)
           (t
@@ -213,7 +213,8 @@
   :init
   (add-to-list 'linked-themes '(modus-operandi-tinted . user-modus-operandi-tinted))
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs t)
+        modus-themes-bold-constructs t
+        modus-themes-mixed-fonts t)
   (setq modus-themes-common-palette-overrides
         '((comment fg-dim)
           (border-mode-line-active unspecified)
@@ -221,6 +222,7 @@
           ))
   (setq modus-operandi-tinted-palette-overrides
         '((string green)
+          (type green-faint)
           (bg-mode-line-active bg-blue-intense)))
   (setq modus-operandi-palette-overrides
       `((bg-mode-line-active bg-blue-intense)
@@ -254,6 +256,10 @@
   )
 (use-package caves-of-qud-theme
   :ensure (:host github :repo "duien/caves-of-qud-theme"))
+
+(use-package doric-themes :ensure t
+  :init
+  (add-to-list 'linked-themes '(doric-beach . user-doric)))
 
 ;; actually set a theme on startup
 
@@ -440,7 +446,7 @@
   :config (ligature-set-ligatures
            t ;; all modes
            '("!!" "!=" "!==" "!!!" "!≡" "!≡≡" "!>" "!=<" "#("
-     "#_" "#{" "#?" "#>" "##" "#_(" "%=" "%>" "%>%" "%<%"
+     "#_" "#{" "#?" "#>" "##" "###" "#_(" "%=" "%>" "%>%" "%<%"
      "&%" "&&" "&*" "&+" "&-" "&/" "&=" "&&&" "&>" "$>"
      ;; "***"
      "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
