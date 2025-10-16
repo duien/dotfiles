@@ -233,6 +233,7 @@
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
   :config
+  (modus-themes-include-derivatives-mode t)
   (load-theme 'modus-operandi-tinted t)
   )
 

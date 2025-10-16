@@ -1,7 +1,7 @@
 (deftheme user-ef-reverie
   "Customizations to any of the ef themes")
 
-(ef-themes-with-colors
+(modus-themes-with-colors
   (custom-theme-set-faces
    'user-ef-reverie
    '(mode-line ((t :box nil)))
