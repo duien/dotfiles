@@ -20,3 +20,10 @@
     (modify-all-frames-parameters `((ns-appearance . ,appearance)))))
 (add-hook 'enable-theme-functions 'eh/set-ns-appearance-from-theme)
 (add-hook 'ns-appearance-change-functions 'eh/set-ns-appearance-from-theme)
+
+;; To be used as an after-save hook in buffers defining themes for easy iteration, eg:
+;; eval: (when (fboundp 'load-theme-if-enabled) (add-hook 'after-save-hook #'load-theme-if-enabled nil t))
+(defun load-theme-if-enabled ()
+  "If the theme defined in the current buffer is currently enabled, then load that theme"
+  (when-let* ((theme-from-buffer (intern-soft (string-replace "-theme.el" "" (file-name-nondirectory buffer-file-name)))))
+    (when (member theme-from-buffer custom-enabled-themes) (load-theme theme-from-buffer))))
