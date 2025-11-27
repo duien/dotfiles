@@ -106,7 +106,7 @@
   (eh/org-register-keyword
    :keywords '("DONE")
    ;; ✓✔︎√
-   :symbol '((comic-code . ?·)
+   :symbol '((comic      . ?·)
              (belinsky   . ?·)
              (antikor    . ?·)
              (vctr       . ?·) ; vctr has a private-use checkbox, but width is wrong
@@ -185,7 +185,7 @@
 
   (eh/org-register-keyword
    :keywords '("TODO")
-   :symbol '((comic-code . ?○)
+   :symbol '((comic      . ?○)
              (cascadia   . ?○)
              (input      . ?○)
              (codelia    . ?○)
@@ -224,7 +224,7 @@
 
   (eh/org-register-keyword
    :keywords '("QUEST" "QSTN" "QUESTION")
-   :symbol '((comic-code . ?◊)
+   :symbol '((comic      . ?◊)
              (input      . ?◊)
              (codelia    . ?◊)
              (operator   . ??)
@@ -296,7 +296,7 @@
   ;; • ▶ » ¶ § → ■ ● available in SF
   (setq org-superstar-headline-bullets-list
         (pcase fontaine-current-preset
-          ('comic-code '("♦" "•"))
+          ('comic    '("♦" "•"))
           ('codelia '("●" "•"))
           ;; ('belinsky '("◊" "•"))
           ('belinsky '("§" "•"))
