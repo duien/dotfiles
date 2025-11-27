@@ -262,7 +262,7 @@
   :init
   (add-to-list 'linked-themes '(doric-beach . user-doric)))
 
-(use-package gruvbox-themes :ensure t
+(use-package gruvbox-theme :ensure t
   :init
   (setq gruvbox-bold-constructs t)
   (add-to-list 'linked-themes '(gruvbox-dark-medium . user-gruvbox-dark)))
