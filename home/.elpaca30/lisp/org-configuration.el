@@ -312,7 +312,11 @@
           ('plex     '("§" "•"))
           ('vctr     '("§" "•"))
           ('input    '("●" "•"))
-          (_  '("◆" "•")))))
+          (_  '("◆" "•"))))
+  ;; restart all org buffers
+  (mapc (lambda (buffer)
+        (with-current-buffer buffer (eh/org-mode-restart)))
+      (match-buffers '(derived-mode . org-mode))))
 ;; (eh/define-org-keywords)
 
 (defun eh/org-skip-subtree-if-bury ()
