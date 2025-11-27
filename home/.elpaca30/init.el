@@ -262,6 +262,11 @@
   :init
   (add-to-list 'linked-themes '(doric-beach . user-doric)))
 
+(use-package gruvbox-themes :ensure t
+  :init
+  (setq gruvbox-bold-constructs t)
+  (add-to-list 'linked-themes '(gruvbox-dark-medium . user-gruvbox-dark)))
+
 ;; actually set a theme on startup
 
 ;; (load-theme 'isohedron t)
