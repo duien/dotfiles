@@ -10,6 +10,11 @@
 (defun eh/hook-edit-src-block ()
   (cond ((org-in-src-block-p) (org-edit-src-code))))
 
+(defun eh/org-mode-restart ()
+  "Restart org mode preserving visibility"
+  (interactive)
+  (org-save-outline-visibility 'use-markers (org-mode-restart)))
+
 ;;; collapse done entries
 
 (defun eh/org-get-folded-state ()
