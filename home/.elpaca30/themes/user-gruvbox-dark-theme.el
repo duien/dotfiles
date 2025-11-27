@@ -9,8 +9,11 @@
  '(org-ellipsis ((t :foreground unspecified :inherit (shadow default))))
  '(org-superstar-leading ((t :foreground "#3c3836")))
  '(org-superstar-header-bullet ((t :foreground "#bdae93" :weight reset)))
+ '(org-code ((t :foreground "#d3869b")))
+ '(org-verbatim ((t :foreground "#8ec07c")))
+ '(org-link ((t :foreground "#458588")))
+ '(org-tag ((t :foreground "#fe8019" :background "#3c3836")))
 
- ;; '(org-headline-todo ((t :foreground "#ebdbb2")))
  '(org-headline-todo ((t :foreground "#fdf4c1" :weight reset)))
  '(org-headline-done ((t :foreground unspecified
                          :weight reset
