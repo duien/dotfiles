@@ -534,6 +534,9 @@
   :config
   (if (treesit-language-available-p 'ruby)
       (add-to-list 'major-mode-remap-alist '(ruby-mode . ruby-ts-mode))))
+
+(use-package treesit-fold
+  :ensure t)
 ;; enh-ruby-mode does some things better, but hoping ts will become configurable
 ;; enough to not need it
 
