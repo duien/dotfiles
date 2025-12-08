@@ -41,8 +41,3 @@
  '(eh/org-keyword-meh ((t :inherit org-done :foreground "#7c6f64")))
  '(eh/org-keyword-rode ((t :inherit org-done :foreground "#a89984")))
  )
-
-;; Local Variables:
-;; eval: (when (fboundp 'rainbow-mode) (rainbow-mode +1))
-;; eval: (when (fboundp 'load-theme-if-enabled) (add-hook 'after-save-hook #'load-theme-if-enabled nil t))
-;; End:
