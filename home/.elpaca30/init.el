@@ -553,6 +553,7 @@
 (use-package org
   :ensure nil
   :after (fontaine)
+  :demand t
   :init
   ;; where to put things
   (setq org-agenda-files `(,org-directory ,(concat org-directory "skylight/"))
