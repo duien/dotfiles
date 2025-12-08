@@ -36,6 +36,7 @@
   (inhibit-startup-screen t)
   (face-near-same-color-threshold 0 "Prevent weird issuse from `distant-foreground' color specifications")
   (custom-theme-directory (concat user-emacs-directory (convert-standard-filename "themes/")))
+  (safe-local-variable-directories `(,(expand-file-name custom-theme-directory)))
   (custom-safe-themes t))
 
 (use-package mode-line-bell
@@ -167,15 +168,18 @@
         ;; it also seems to do better with actually loading the intended weights
         '((source   :default-family "Source Code Pro")
           (vctr     :default-family "VCTR Mono"
-                    :default-height 160)
+                    ;; :default-height 160
+                    )
           (input    :default-family "Input Mono Narrow"
                     :default-weight light)
           (comic    :default-family "Comic Code Ligatures"
-                    :default-height 130)
+                    ;; :default-height 130
+                    )
           (codelia  :default-family "Codelia Ligatures"
-                    :default-height 140)
+                    ;; :default-height 140
+                    )
           (belinsky :default-family "Belinsky Text"
-                    :default-height 140
+                    ;; :default-height 140
                     :default-weight regular)
           (pragmata :default-family "PragmataPro VF Liga"
                     :default-weight extralight)
@@ -192,7 +196,8 @@
           (degular  :default-family "Degular Mono"
                     :default-weight light)
           (t
-           :default-height 150
+           ;; :default-height 150
+           :default-height 160
            :default-weight light)))
   :config
   ;; (fontaine-set-preset (fontaine-restore-latest-preset))
