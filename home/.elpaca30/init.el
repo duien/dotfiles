@@ -261,7 +261,9 @@
   ;; :config (load-theme 'isohedron t)
   )
 (use-package caves-of-qud-theme
-  :ensure (:host github :repo "duien/caves-of-qud-theme"))
+  :ensure (:host github :repo "duien/caves-of-qud-theme")
+  :init
+  (add-to-list 'linked-themes '(caves-of-qud . user-qud)))
 
 (use-package doric-themes :ensure t
   :init
