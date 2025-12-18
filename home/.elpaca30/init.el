@@ -518,6 +518,7 @@
 (use-package rspec-mode :ensure t) ;; this likely needs some config
 (use-package lua-mode :ensure t :init (setq lua-indent-level 2))
 (use-package swift-mode :ensure t :init (setq swift-mode:basic-offset 2))
+(use-package dockerfile-mode :ensure t)
 
 ;; Setting up rust
 (use-package rust-mode :ensure t)
@@ -548,9 +549,6 @@
 ;; enough to not need it
 
 ;; skipping elixir because I know ts situation changed
-
-;; skip org for now because that need so much config! and that config needs
-;; refactored badly
 
 (use-package org
   :ensure nil
