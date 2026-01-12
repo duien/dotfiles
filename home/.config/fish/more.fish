@@ -9,8 +9,8 @@ alias more-fish  "source ~/.config/fish/more.fish"
 
 # Experiment with exa as ls alternative
 # only install these aliases if exa actually exists
-if test -x /opt/homebrew/bin/exa
-  alias ls         "exa --group-directories-first -sName"
+if test -x /opt/homebrew/bin/eza
+  alias ls         "eza --group-directories-first -sName"
   alias ll         "ls --long --all --git"
 else
   alias ll         "ls -lA"
