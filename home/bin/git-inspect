@@ -1,0 +1,10 @@
+#!/usr/bin/env fish
+
+set -l main_branch (git config --get custom.defaultbranch)
+
+for branch in (git branch --no-contains=$main_branch)
+  set -l trimmed (string trim $branch)
+  echo (set_color -o)$trimmed(set_color normal)
+  git log ..$trimmed
+  echo
+end
