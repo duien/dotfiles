@@ -262,6 +262,7 @@
              ;; (belinsky  . ?∞)
              (plex      . ?∕)
              (dolph     . ?⁄)
+             (maple     . ?◌)
              (t         . ?¤))
    ;; ∞ ҩ ¤ φ ♡
    :face (defface eh/org-keyword-idea '((t :inherit org-todo))
@@ -272,6 +273,7 @@
    :symbol '((operator . ?•)
              (vctr     . ?•)
              (md-io    . ?•)
+             (berkeley . ?•)
              ;; (belinsky . ?•)
              ;; (belinsky  . ?÷)
              (belinsky   . ?∕)
@@ -313,6 +315,7 @@
           ('vctr     '("§" "•"))
           ('input    '("●" "•"))
           (_  '("◆" "•"))))
+
   ;; restart all org buffers
   (mapc (lambda (buffer)
         (with-current-buffer buffer (eh/org-mode-restart)))

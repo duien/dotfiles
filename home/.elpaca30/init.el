@@ -195,8 +195,10 @@
                     :default-weight light)
           (degular  :default-family "Degular Mono"
                     :default-weight light)
+          (cascadia :default-family "Cascadia Code")
+          (maple    :default-family "Maple Mono"
+                    :default-weight thin)
           (t
-           ;; :default-height 150
            :default-height 160
            :default-weight light)))
   :config
@@ -207,7 +209,8 @@
     (fontaine-set-preset (fontaine-restore-latest-preset)))
   :hook
   (fontaine-set-preset . fontaine-store-latest-preset)
-  (enable-theme-functions . eh/fontaine-apply-current-preset)
+  ;; why was this necessary?
+  ;; (enable-theme-functions . eh/fontaine-apply-current-preset)
   )
 
 ;; temporarily disabled because of weird fontaine incompatibility
@@ -747,7 +750,7 @@
           ("HACK" . eh/org-keyword-idea)))
   :hook prog-mode)
 
-;; bind this to something
+;; TODO bind this to something
 (defun eh/kill-project-path-or-buffer-name ()
   "Add to the kill-ring the project-relative path of the current file, the full path of the current file, or the name of the current buffer"
   (interactive)
