@@ -200,6 +200,7 @@
           (cascadia :default-family "Cascadia Code")
           (maple    :default-family "Maple Mono"
                     :default-weight thin)
+          (intel    :default-family "Intel One Mono")
           (t
            :default-height 160
            :default-weight light)))
