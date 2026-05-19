@@ -118,7 +118,6 @@
   :custom
   (word-wrap t)
   (truncate-lines t)
-  ;; (comment-auto-fill-only-comments t)
   :hook
   (visual-line-mode . eh/disable-horiz-scroll-with-visual-line))
 
@@ -138,7 +137,7 @@
 
 ;; Load mood-line before enabling a theme to prevent weirdness?
 (use-package mood-line
-  :ensure t
+  :ensure (:wait t)
   :preface
   (defun eh/mood-line-segment-major-mode ()
     "Displays the current major mode in the mode-line."
@@ -175,7 +174,7 @@
           (input    :default-family "Input Mono Narrow"
                     :default-weight light)
           (comic    :default-family "Comic Code Ligatures"
-                    ;; :default-height 130
+                    :default-height 140
                     )
           (codelia  :default-family "Codelia Ligatures"
                     ;; :default-height 140
@@ -184,7 +183,7 @@
                     ;; :default-height 140
                     :default-weight regular)
           (pragmata :default-family "PragmataPro VF Liga"
-                    :default-weight extralight)
+                    :default-weight light)
           (jet      :default-family "Jetbrains Mono")
           (plex     :default-family "IBM Plex Mono"
                     :default-weight normal
@@ -205,7 +204,6 @@
            :default-height 160
            :default-weight light)))
   :config
-  ;; (fontaine-set-preset (fontaine-restore-latest-preset))
   (eh/fontaine-apply-current-preset)
   :preface
   (defun eh/fontaine-apply-current-preset (&optional _theme)
@@ -244,11 +242,10 @@
         '((string cyan)))
   (setq modus-themes-to-toggle '(modus-operandi-tinted modus-vivendi-tinted))
   :config
-  (modus-themes-include-derivatives-mode t)
-  (load-theme 'modus-operandi-tinted t)
-  )
+  (modus-themes-include-derivatives-mode t))
 
-(use-package ef-themes :ensure t
+(use-package ef-themes
+  :ensure t
   :init
   (setq ef-dream-palette-overrides
         '((string green-faint)
@@ -271,11 +268,13 @@
   :init
   (add-to-list 'linked-themes '(caves-of-qud . user-qud)))
 
-(use-package doric-themes :ensure t
+(use-package doric-themes
+  :ensure t
   :init
   (add-to-list 'linked-themes '(doric-beach . user-doric)))
 
-(use-package gruvbox-theme :ensure t
+(use-package gruvbox-theme
+  :ensure t
   :init
   (setq gruvbox-bold-constructs t)
   (add-to-list 'linked-themes '(gruvbox-dark-medium . user-gruvbox-dark)))
@@ -287,11 +286,12 @@
   (add-to-list 'linked-themes '(tokyonight-storm . user-tokyonight-storm))
   )
 
-;; actually set a theme on startup
-
-;; (load-theme 'isohedron t)
-;; TODO give this a memory like fontaine (and set up other niceties like the
-;; enable/disable, user overrides, and menu bar color)
+;; Actually enable a theme now that they're all installed
+(elpaca-process-queues) ; ensure they're all actually installed
+(load-theme 'modus-operandi-tinted t)
+;; (load-theme 'gruvbox-dark-medium t)
+;; set a font with the non-fontaine experimental method
+;; (load-theme 'font-monaspace t)
 
 ;;; UNSORTED PAST HERE
 
@@ -620,8 +620,8 @@
         org-agenda-restore-windows-after-quit t)
   ;; todo keywords - current suggested
   (setq org-todo-keywords
-        '((sequence "BURY(b)" "NEXT(n)" "TODO(t)" "HALT(h)" "|" "DONE(d)" "KILL(k@)")
-          (sequence "QUEST(q)" "|" "MEH(m)" "YES(Y)" "NO(N)" "ANSWER(a@)")
+        '((sequence "BURY(b)" "NEXT(N)" "TODO(t)" "HALT(h)" "|" "DONE(d)" "KILL(k@)")
+          (sequence "QUEST(q)" "|" "MEH(m)" "YES(y)" "NO(n)" "ANSWER(a@)")
           (type "IDEA(i)" "GOAL(g)" "|")
           (sequence "READ(R)" "|" "RODE(r)")
           ))
@@ -649,7 +649,9 @@
               :after 'eh/org-hide-done-entries-in-buffer)
   :bind
   (:map org-mode-map
-        ("C-o" . 'crux-smart-open-line))
+        ("C-o" . 'crux-smart-open-line)
+        ("C-c ." . 'org-timestamp-inactive)
+        ("C-c !" . 'org-timestamp))
   (:map org-src-mode-map
         ("C-c C-c" . 'org-edit-src-exit))
   :hook

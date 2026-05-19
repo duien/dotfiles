@@ -10,6 +10,17 @@
  '(tab-bar-tab ((t :background "#282828")))
  '(tab-bar-tab-inactive ((t :background "#504945" :foreground "#bdae93")))
 
+ '(font-lock-variable-name-face ((t :foreground "#8ec07c")))
+ '(font-lock-constant-face ((t :foreground "#86a598")))
+
+ '(markdown-markup-face ((t :inherit shadow)))
+ '(markdown-header-face-1 ((t :inherit 'markdown-header-face)))
+ '(markdown-header-face-2 ((t :inherit 'markdown-header-face)))
+ '(markdown-header-face-3 ((t :inherit 'markdown-header-face)))
+ '(markdown-header-face-4 ((t :inherit 'markdown-header-face)))
+ '(markdown-header-face-5 ((t :inherit 'markdown-header-face)))
+ '(markdown-header-face-6 ((t :inherit 'markdown-header-face)))
+
  '(org-ellipsis ((t :foreground unspecified :inherit (shadow default))))
  '(org-superstar-leading ((t :foreground "#3c3836")))
  '(org-superstar-header-bullet ((t :foreground "#bdae93" :weight reset)))

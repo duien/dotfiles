@@ -6,11 +6,13 @@ for my personal preferences and org keywords")
   (custom-theme-set-faces
    'user-modus-operandi-tinted
 
+   `(fringe ((t :background unspecified)))
+   `(olivetti-fringe ((t :background unspecified)))
    `(fill-column-indicator ((t :height 1 :foreground ,bg-dim :background ,bg-dim)))
    `(font-lock-string-face ((t :inherit italic)))
 
    `(org-headline-todo ((t :weight reset :foreground reset)))
-   `(org-headline-done ((t :inherit font-lock-comment-face :weight reset :foreground nil)))
+   `(org-headline-done ((t :inherit font-lock-comment-face :weight reset :foreground unspecified)))
    `(org-checkbox ((t :foreground ,yellow-warmer :background ,bg-dim)))
    `(org-checkbox-statistics-todo ((t :foreground ,rust :background ,bg-dim :weight bold :inherit modus-themes-fixed-pitch)))
    `(org-checkbox-statistics-done ((t :foreground ,border :background ,bg-dim :weight reset :slant italic :inherit modus-themes-fixed-pitch)))
@@ -21,6 +23,7 @@ for my personal preferences and org keywords")
    `(org-superstar-leading ((t :foreground ,bg-inactive :distant-foreground ,bg-inactive :inherit modus-themes-fixed-pitch)))
    `(org-hide ((t :foreground ,bg-main :distant-foreground ,bg-main :inherit modus-themes-fixed-pitch)))
    ;; `(org-document-info-)
+   `(org-agenda-dimmed-todo-face ((t :foreground unspecified :slant italic)))
 
    `(org-todo ((t :weight bold :background ,rust :foreground ,bg-main :inherit modus-themes-fixed-pitch)))
    `(eh/org-keyword-todo ((t :inherit org-todo :background ,olive)))

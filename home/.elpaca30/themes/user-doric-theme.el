@@ -7,6 +7,8 @@
  '(font-lock-string-face ((t :inherit 'italic)))
  '(mode-line ((t :box nil)))
  '(mode-line-inactive ((t :box nil)))
+ '(mood-line-unimportant ((t :weight unspecified)))
+ '(mood-line-status-info ((t :weight unspecified)))
  '(font-lock-comment-face ((t :foreground "#8E8570")))
  '(font-lock-comment-delimiter-face ((t :inherit 'font-lock-comment-face :foreground nil)))
 

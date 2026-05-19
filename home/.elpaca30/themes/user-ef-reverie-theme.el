@@ -1,5 +1,5 @@
 (deftheme user-ef-reverie
-  "Customizations to any of the ef themes")
+  "Customizations to ef-reverie theme")
 
 (modus-themes-with-colors
   (custom-theme-set-faces
@@ -9,11 +9,12 @@
    '(font-lock-string-face ((t :inherit 'italic)))
 
    '(org-headline-todo ((t :inherit nil :weight reset)))
-   '(org-headline-done ((t :inherit font-lock-comment-face :weight reset)))
+   '(org-headline-done ((t :inherit font-lock-comment-face :foreground unspecified :weight reset)))
    '(org-ellipsis ((t :inherit (shadow default))))
    `(org-superstar-header-bullet ((t :weight reset :inherit ef-themes-fixed-pitch)))
    `(org-superstar-leading ((t :foreground ,bg-inactive :distant-foreground ,bg-inactive :inherit ef-themes-fixed-pitch)))
    `(org-hide ((t :foreground ,bg-main :distant-foreground ,bg-main :inherit ef-themes-fixed-pitch)))
+   `(org-agenda-dimmed-todo-face ((t :foreground unspecified :slant italic)))
 
    `(org-todo ((t :weight bold :background ,fg-dim :foreground ,bg-inactive :inherit ef-themes-fixed-pitch)))
    `(eh/org-keyword-todo ((t :inherit org-todo :background ,green :foreground ,bg-main)))
