@@ -280,6 +280,13 @@
   (setq gruvbox-bold-constructs t)
   (add-to-list 'linked-themes '(gruvbox-dark-medium . user-gruvbox-dark)))
 
+(use-package tokyonight-themes
+  :vc (:url "https://github.com/xuchengpeng/tokyonight-themes")
+  :config
+  ;; (load-theme 'tokyonight-moon :no-confirm)
+  (add-to-list 'linked-themes '(tokyonight-storm . user-tokyonight-storm))
+  )
+
 ;; actually set a theme on startup
 
 ;; (load-theme 'isohedron t)
