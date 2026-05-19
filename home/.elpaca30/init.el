@@ -13,6 +13,8 @@
   ;; Install use-package support for all subsequent package configurations
   (elpaca-use-package-mode))
 
+(use-package compat :ensure t)
+
 ;;; Configure a sane environment
 
 (use-package emacs
