@@ -23,6 +23,27 @@
                         "product_id": 24926,
                         "vendor_id": 7504
                     }
+                },
+                {
+                    "disable_built_in_keyboard_if_exists": true,
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 2,
+                        "vendor_id": 48875
+                    },
+                    "ignore": false,
+                    "manipulate_caps_lock_led": false
+                },
+                {
+                    "disable_built_in_keyboard_if_exists": true,
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 2,
+                        "vendor_id": 48875
+                    },
+                    "ignore_vendor_events": true,
+                    "manipulate_caps_lock_led": false
                 }
             ],
             "name": "Zen",
