@@ -22,9 +22,18 @@ end
 
 # delete branches fully merged into main
 git branch --merged $main_branch | grep -v -e "\*" -e "$main_branch" | xargs -n 1 git branch -d
+
 # delete branches corresponding to recently merged PRs
-git branch --format '%(refname:lstrip=2)' --list (gh pr list --state merged --json 'headRefName' --limit 50 -S 'sort:updated-desc' | jq '.[] | .headRefName' --raw-output) | xargs git branch -D
+set -l merged_branches (gh pr list --state merged --json 'headRefName' --limit 50 -S 'sort:updated-desc' | jq '.[] | .headRefName' --raw-output)
+if test -n "$merged_branches"
+  git branch --format '%(refname:lstrip=2)' --list $merged_branches | xargs git branch -D
+end
+
 # do the same thing with just my merged PRs (in case I haven't run it in a while)
-git branch --format '%(refname:lstrip=2)' --list (gh pr list --state merged --author duien --json 'headRefName' --limit 50 -S 'sort:updated-desc' | jq '.[] | .headRefName' --raw-output) | xargs git branch -D
+set -l my_merged_branches (gh pr list --state merged --author duien --json 'headRefName' --limit 50 -S 'sort:updated-desc' | jq '.[] | .headRefName' --raw-output)
+if test -n "$my_merged_branches"
+  git branch --format '%(refname:lstrip=2)' --list $my_merged_branches | xargs git branch -D
+end
+
 # prune remote-tracking branches on origin
 git remote prune origin
