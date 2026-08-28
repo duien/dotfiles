@@ -568,9 +568,13 @@
   :ensure nil
   :init
   (setq ruby-method-call-indent nil)
+  (setq ruby-align-to-stmt-keywords '(def if))
+  (setq ruby-align-chained-calls t)
   :config
   (if (treesit-language-available-p 'ruby)
       (add-to-list 'major-mode-remap-alist '(ruby-mode . ruby-ts-mode))))
+(use-package ruby-ts-mode :ensure nil)
+
 
 (use-package treesit-fold
   :ensure t)
