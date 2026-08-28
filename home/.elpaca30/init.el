@@ -159,6 +159,22 @@
                  (mood-line-segment-misc-info))))
   (mood-line-mode))
 
+;; highlight todo comments in prog modes
+(use-package hl-todo
+  :ensure t
+  :preface
+  (defun eh/set-hl-todo-faces (_theme)
+    (setq hl-todo-keyword-faces eh/hl-todo-keyword-faces))
+  :init
+  (setq eh/hl-todo-keyword-faces
+        '(("TODO" . eh/org-keyword-todo)
+          ("FIXME" . eh/org-keyword-halt)
+          ("NOTE" . eh/org-keyword-read)
+          ("HACK" . eh/org-keyword-idea)))
+  :hook prog-mode
+  ;; this is annoying, but switching themes seems to overwrite my settings most
+  ;; of the time for whatever stupid reason
+  (enable-theme-functions . eh/set-hl-todo-faces))
 
 (use-package fontaine
   :ensure t
@@ -749,18 +765,6 @@
       (setq buffer-offer-save t)))
   :hook
   (first-change . eh/set-offer-save-in-created-buffers))
-
-;; ;; highlight todo comments in prog modes
-;; ;; TODO Default formatting until org is set up
-(use-package hl-todo
-  :ensure t
-  :init
-  (setq hl-todo-keyword-faces
-        '(("TODO" . eh/org-keyword-todo)
-          ("FIXME" . eh/org-keyword-halt)
-          ("NOTE" . eh/org-keyword-read)
-          ("HACK" . eh/org-keyword-idea)))
-  :hook prog-mode)
 
 ;; TODO bind this to something
 (defun eh/kill-project-path-or-buffer-name ()
