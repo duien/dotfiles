@@ -122,6 +122,7 @@
              (dank       . ?·)
              (pragmata   . ?√) ;; weirdly, this is square root which is usually bad
              (dolph      . ?·)
+             (charon     . ?√)
              (t          . ?✓))
    :face (defface eh/org-keyword-done '((t :inherit org-done))
            "Face used for the DONE keyword in Org"))
@@ -131,7 +132,7 @@
    ;; :symbol ?× ;; ✗ ;;× ×
    :symbol '((belinsky . ?·)
              (antikor  . ?·)
-             ;; (monolisa . ?✗)
+             (monolisa . ?✗)
              (t        . ?×))
    :face (defface eh/org-keyword-kill '((t :inherit org-done))
            "Face used for the KILL keyword in Org"))
@@ -179,13 +180,16 @@
              (belinsky . ?∆)
              (antikor  . ?∆)
              (plex     . ?∆)
-             (monolisa . ?◉)
+             (monolisa . ?➡)
+             ;; (monolisa . ?∆)
+             ;; (monolisa . ?◉)
              (vctr     . ?#)
              (md-io    . ?#)
              (intel    . ?#)
              (dank     . ?△)
+             (charon   . ?∆)
              (t        . ?■))
-   ;;◯ ;;☐ ;; ?◦●
+   ;;◯ ;;☐ ;; ?◦● ∎
    :face (defface eh/org-keyword-next '((t :inherit org-todo))
            "Face used for the FLAG keyword in Org"))
 
@@ -204,13 +208,14 @@
              (vctr       . ?•)
              (sf         . ?○)
              (pragmata   . ?○)
-             (monolisa   . ?○)
+             (monolisa   . ?⭘)
              (md-io      . ?○)
              (plex       . ?∕)
              (berkeley   . ?•)
              (intel      . ?•)
              (dank       . ?○)
              (dolph      . ?○)
+             (charon     . ?•)
              (t          . ?◯))
    ;;☐ ;; ?◦ ○
    :face (defface eh/org-keyword-todo '((t :inherit org-todo))
@@ -226,7 +231,8 @@
              (belinsky . ?∆)
              (antikor  . ?∆)
              (plex     . ?∆)
-             (t        . ?▲)) ;;△ ;;◊▲
+             (charon   . ?∎)
+             (t        . ?▲)) ;;△ ;;◊▲ ∎
    :face (defface eh/org-keyword-halt '((t :inherit org-todo))
            "Face used for the BLOK keyword in Org"))
 
@@ -238,6 +244,7 @@
              (operator   . ??)
              ;; (belinsky   . ??)
              ;; (belinsky   . ?•)
+             (monolisa   . ?◊)
              (vctr       . ??)
              (md-io      . ??)
              (intel      . ??)
@@ -246,6 +253,7 @@
              (sf         . ?◊)
              (plex       . ?∕)
              (berkeley   . ?◊)
+             (charon     . ?•)
              (t          . ?◇))
    :face (defface eh/org-keyword-question '((t :inherit org-todo))
            "Face used for the QSTN keyword in Org"))
@@ -280,6 +288,8 @@
              (md-io    . ?•)
              (berkeley . ?•)
              (intel    . ?•)
+             (charon   . ?•)
+             (monolisa . ?☐)
              ;; (belinsky . ?•)
              ;; (belinsky  . ?÷)
              (belinsky   . ?∕)
@@ -300,10 +310,14 @@
                        ('operator  " >")
                        ('belinsky  " ¶")
                        ('intel     " ¶")
+                       ('input     " …")
                        ('antikor   " ↩")
                        ('plex      " ↲")
-                       ('monolisa  " ↲")
+                       ('monolisa  " ↵")
                        ('md-io     " ⤶")
+                       ('sf        " ⏎")
+                       ('charon    " ⋯")
+                       ('maple     " ↲")   ;; ↲
                        (_          " ↓")))
   ;; ↵ ⏎ ¶ ⌄ ▶ § ⋱ ◁ ◀ ∷ ⋯ ≡
   ;; ⤵ ⬎ [+] ▼ ↯
@@ -322,6 +336,7 @@
           ('plex     '("§" "•"))
           ('vctr     '("§" "•"))
           ('input    '("●" "•"))
+          ('charon   '("♦" "•"))
           (_  '("◆" "•"))))
 
   ;; restart all org buffers

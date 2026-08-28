@@ -183,20 +183,15 @@
   (setq fontaine-presets
         ;; these can have some issues in 30 if some weights are disabled, but
         ;; it also seems to do better with actually loading the intended weights
-        '((source   :default-family "Source Code Pro")
-          (vctr     :default-family "VCTR Mono"
-                    ;; :default-height 160
-                    )
-          (input    :default-family "Input Mono Narrow"
+        '((source   :default-family "Source Code Pro"
+                    :default-weight regular)
+          (vctr     :default-family "VCTR Mono")
+          (input    :default-family "Input Mono Condensed"
                     :default-weight light)
           (comic    :default-family "Comic Code Ligatures"
-                    :default-height 140
-                    )
-          (codelia  :default-family "Codelia Ligatures"
-                    ;; :default-height 140
-                    )
+                    :default-height 140)
+          (codelia  :default-family "Codelia Ligatures")
           (belinsky :default-family "Belinsky Text"
-                    ;; :default-height 140
                     :default-weight regular)
           (pragmata :default-family "PragmataPro VF Liga"
                     :default-weight light)
@@ -216,6 +211,10 @@
           (maple    :default-family "Maple Mono"
                     :default-weight thin)
           (intel    :default-family "Intel One Mono")
+          (charon   :default-family "Iosevka Charon Mono")
+          (monolisa :default-family "MonoLisaCode"
+                    :default-weight light
+                    :default-height 150)
           (t
            :default-height 160
            :default-weight light)))

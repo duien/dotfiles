@@ -26,7 +26,7 @@ style = "bright-blue"
 # repo_root_style = "bold bright-blue"
 # before_repo_root_style = "blue"
 # truncate_to_repo = false
-truncation_symbol = "… /"
+truncation_symbol = "…/"
 
 [cmd_duration]
 format = "[$duration]($style) "
@@ -40,8 +40,8 @@ format = "[$duration]($style) "
 # error_symbol = "[►](bold red)"
 
 # arrow for most fonts
-# success_symbol = "[▶](bold green)"
-success_symbol = "[▷](bold green)"
+success_symbol = "[▶](bold green)"
+# success_symbol = "[▷](bold green)"
 error_symbol = "[▶](bold red)"
 
 # arrow for very limited fonts
