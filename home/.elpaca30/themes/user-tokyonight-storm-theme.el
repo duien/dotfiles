@@ -6,6 +6,11 @@
    '(line-number ((t :foreground "#3b4261")))
    '(shadow ((t :foreground "#737aa2")))
 
+   '(tab-bar-tab-inactive ((t :foreground "#c0caf5" :background "#25283b")))
+   '(tab-bar-tab ((t :background "#414868" :inherit bold)))
+
+   '(mode-line ((t :background "#3d59a1" :box nil)))
+
    '(outline-1 ((t :inherit bold :foreground "#bb9af7" :background "#1f2335")))
    '(outline-2 ((t :inherit bold :foreground "#41a6b5")))
    '(outline-3 ((t :inherit bold :foreground "#73daca")))
@@ -23,9 +28,10 @@
    '(markdown-header-face-6 ((t :inherit outline-6)))
    '(markdown-markup-face ((t :foreground "#545c7e")))
 
-   '(org-ellipsis ((t :weight reset))) ;; TODO not working
-   ;; '(org-hide ((t :foreground "#3b4261")))
+   '(org-superstar-header-bullet ((t :weight reset)))
+   '(org-ellipsis ((t :inherit (shadow default))))
    '(org-superstar-leading ((t :foreground "#3b4261")))
+
    '(org-level-1 ((t :inherit outline-1 :foreground unspecified)))
    '(org-level-2 ((t :inherit outline-2 :foreground unspecified)))
    '(org-level-3 ((t :inherit outline-3 :foreground unspecified)))
@@ -46,7 +52,7 @@
    '(eh/org-keyword-read     ((t :background "#e0af68" :inherit org-todo)))
    '(eh/org-keyword-next     ((t :background "#f7768e" :inherit org-todo)))
    '(eh/org-keyword-halt     ((t :background "#db4b4b" :inherit org-todo)))
-   '(eh/org-keyword-bury     ((t :background "#545c7e" :foreground "#a9b1d6" :weight reset)))
+   '(eh/org-keyword-bury     ((t :background "#3b4261" :foreground "#a9b1d6" :weight reset)))
 
    ;; ;; faces for complete items
    '(org-done ((t :background "#292e42" :foreground "#a9b1d6" :weight reset)))

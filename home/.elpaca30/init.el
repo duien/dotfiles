@@ -296,6 +296,7 @@
 
 (use-package tokyonight-themes
   :vc (:url "https://github.com/xuchengpeng/tokyonight-themes")
+  :ensure t
   :config
   ;; (load-theme 'tokyonight-moon :no-confirm)
   (add-to-list 'linked-themes '(tokyonight-storm . user-tokyonight-storm))
